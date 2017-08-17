@@ -1,6 +1,7 @@
 # codeklavier-python
-CodeKlavier (experimental Python flavour of CodeKlavier)
+CodeKlavier (experimental Python 3 flavour of CodeKlavier)
 
 
-libs:
+libs (install with pip3):
 1. python-rtmidi
+2. pynput

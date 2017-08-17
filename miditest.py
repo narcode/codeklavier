@@ -1,8 +1,8 @@
 import time
 import rtmidi
 
-midiout = rtmidi.MidiOut()
-ports = midiout.get_ports()
+midiin = rtmidi.MidiIn()
+ports = midiin.get_ports()
 
 for i in range(1, 5):
     num = 20+(1)
@@ -25,12 +25,22 @@ choice = int(choice)
 print("You have chosen: ", ports[choice])
 
 if ports:
-    midiout.open_port(choice)
+    midiin.open_port(choice)
 
-noteOn = [0x90, 60, 112]
-noteOff = [0x80, 60, 0]
-midiout.send_message(noteOn)
-time.sleep(1)
-midiout.send_message(noteOff)
+print("CodeKlavier is ON. Press Control-C to exit.")
+try:
+    timer = time.time()
+    while True:
+        msg = midiin.get_message()
 
-del midiout
+        if msg:
+            message, deltatime = msg
+            print('deltatime: ', deltatime, 'msg: ', message)
+
+        time.sleep(0.01)
+except KeyboardInterrupt:
+    print('')
+finally:
+    print("Bye-Bye :(")
+    midiin.close_port()
+del midiin
