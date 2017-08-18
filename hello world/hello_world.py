@@ -106,7 +106,7 @@ def mapping(midinumber):
     elif midinumber == 56:
         keyboard.press(Key.space),
     elif midinumber == 32:
-        evaluateSC(),
+        keyboard.press(Key.enter),
     elif midinumber == 50:
         keyboard.type('~'),
     elif midinumber == 51:
