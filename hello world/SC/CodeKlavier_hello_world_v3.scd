@@ -11,6 +11,8 @@ m = MIDIOut.newByName("IAC Driver", "Bus 1");
 s.sync;
 // hello world \\
 (
+	t=TempoClock.default;
+	s.sync;
 "setting variables and ostinatos...".postln;
 ~pitch = 0;~pitch1 = 0;~pitch2 = 0; ~pulsepitch = 0;
 // adjust the quant;
