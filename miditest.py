@@ -2,10 +2,11 @@
 
 """miditest.py
 
-This file is a parser for the midisignals from your input device. It helps you
-to set up, check all your connections, and to get an overview of available midi
-ports and devices. If you cannot get any output from this script, there is no
-point on getting any other CodeKlavies script running.
+This file is a tester for the midisignals from your input device. It quickly helps you 
+check if your midi input device is being registered and it's messages received. 
+This file is not a formal part of the CodeKlavier. However, if you can see the 
+midi messages being printed after running this script then you can rest assured that
+the CodeKlavier will run with your midi setup.
 """
 
 #TODO: add docstrings and comments
