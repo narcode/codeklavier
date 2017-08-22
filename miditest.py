@@ -54,7 +54,7 @@ def open_port(midi, ports, pnum):
     else:
         raise Exception("No midi ports! Don't know what to do!")
 
-def run(midi, midi_portnum):
+def run(midi):
     print("CodeKlavier is ON. Press Control-C to exit.")
     try:
         timer = time.time()
@@ -83,7 +83,7 @@ def main():
     my_midiport = get_port_from_user(ports)
     if my_midiport >= 0:
         open_port(midiin, ports, my_midiport)
-        run(midiin, my_midiport)
+        run(midiin)
 
 if __name__ == "__main__":
     main()
