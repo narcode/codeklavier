@@ -1,47 +1,23 @@
 import time
 from pynput.keyboard import Key, Controller
 import rtmidi
+from CodeKlavier.Setup import Setup
 
-midiin = rtmidi.MidiIn()
-ports = midiin.get_ports()
+codeK = Setup()
+myPort = codeK.perform_setup()
 
-for i in range(1, 5):
-    num = 20+(1)
-    print('##'*num)
-    time.sleep(0.2)
-
-print('\n', "Welcome to the Codeklavier Setup... this are your detected MIDI devices:", '\n')
-
-for port in ports:
-    print(ports.index(port), " -> ", port)
-
-print('\n')
-choice = input("Please choose the MIDI device (number) you want to use and hit Enter:")
-
-while int(choice) >= len(ports) or int(choice) < 0:
-    print("Invalid number, please try again:")
-    choice = input("Please choose the MIDI device (number) you want to use and hit Enter:")
-
-choice = int(choice)
-print("You have chosen: ", ports[choice])
-
-if ports:
-    midiin.open_port(choice)
-
-# get device id
-print('\nplease play 1 key on your MIDI keyboard')
-
+#TODO: abstract this get_device_id to a seperate class
 counter = 0
 try:
     while counter < 1:
-        msg = midiin.get_message()
+        msg = codeK.get_message()
         if msg:
             message, deltatime = msg
             device_id = message[0]
             counter += 1
-finally:
-    print('your device id is: ', device_id, '\n')
+print('your device id is: ', device_id, '\n')
 
+#TODO: move this keyboard stuff to a seperate class (including evaluateSC and mapping)
 # midinumber to alphanumerical characters
 keyboard = Controller()
 
@@ -143,23 +119,18 @@ class HelloWorld(object):
             if (message[0] == device_id):
                 mapping(message[1])
 
-print("\nCodeKlavier is ready and ON. Press Control-C to exit.")
-midiin.set_callback(HelloWorld(0))
+print("\nCodeKlavier is ready and ON.")
+print("You are performing: HELLO WORLD")
+print("\nPress Control-C to exit.")
+
+codeK.set_callback(HelloWorld(myPort))
 
 try:
     timer = time.time()
     while True:
-        # msg = midiin.get_message()
-        #
-        # if msg:
-        #     message, deltatime = msg
-        #     print('deltatime: ', deltatime, 'msg: ', message)
-
         time.sleep(0.01)
 except KeyboardInterrupt:
     print('')
 finally:
     print("Bye-Bye :(")
-    midiin.close_port()
-
-del midiin
+    codeK.end()

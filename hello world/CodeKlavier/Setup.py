@@ -53,6 +53,15 @@ class Setup(object):
     def get_message(self):
         return self.__midiin.get_message()
 
+    def set_callback(self,cb):
+        self.__midiin.set_callback(cb)
+
+    def perform_setup(self):
+        self.print_welcome()
+        self.show_ports()
+        myPort = self.get_port_from_user()
+        return myPort
+
     def end(self):
         print("Bye bye from CodeKlavier setup.")
         self.close_port()
@@ -60,10 +69,8 @@ class Setup(object):
 
 def main():
     codeK = Setup()
+    my_midiport = codeK.perform_setup()
 
-    codeK.print_welcome()
-    codeK.show_ports()
-    my_midiport = codeK.get_port_from_user()
     if my_midiport >= 0:
         codeK.open_port(my_midiport)
         print("CodeKlavier is ON. Press Control-C to exit.")
