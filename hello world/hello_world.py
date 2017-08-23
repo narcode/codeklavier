@@ -1,20 +1,29 @@
 import time
 from pynput.keyboard import Key, Controller
 import rtmidi
+
+# Use trick to import from parrentdir
+import sys
+import os
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
 from CodeKlavier.Setup import Setup
 
+# Start the CodeKlavier
 codeK = Setup()
 myPort = codeK.perform_setup()
 
 #TODO: abstract this get_device_id to a seperate class
 counter = 0
-try:
-    while counter < 1:
-        msg = codeK.get_message()
-        if msg:
-            message, deltatime = msg
-            device_id = message[0]
-            counter += 1
+while counter < 1: #TODO: change counter to something like while not msg
+    msg = codeK.get_message()
+    if msg:
+        message, deltatime = msg
+        device_id = message[0]
+        counter += 1
+
 print('your device id is: ', device_id, '\n')
 
 #TODO: move this keyboard stuff to a seperate class (including evaluateSC and mapping)
