@@ -57,11 +57,14 @@ class Setup(object):
         self.__midiin.set_callback(cb)
 
     def get_device_id(self):
-        msg = self.get_message()
-        if msg: #do we need this if?
-            message, deltatime = msg
-            device_id = message[0]
-            return device_id
+        print("Hit any note to get the device_id.")
+        while True:
+            msg = self.get_message()
+            if msg:
+                message, deltatime = msg
+                device_id = message[0]
+                if device_id:
+                    return device_id
 
     def perform_setup(self):
         self.print_welcome()
@@ -77,6 +80,7 @@ class Setup(object):
 def main():
     codeK = Setup()
     my_midiport = codeK.perform_setup()
+    codeK.open_port(my_midiport)
 
     if my_midiport >= 0:
         codeK.open_port(my_midiport)
