@@ -56,6 +56,13 @@ class Setup(object):
     def set_callback(self,cb):
         self.__midiin.set_callback(cb)
 
+    def get_device_id(self):
+        msg = self.get_message()
+        if msg: #do we need this if?
+            message, deltatime = msg
+            device_id = message[0]
+            return device_id
+
     def perform_setup(self):
         self.print_welcome()
         self.show_ports()

@@ -14,16 +14,7 @@ from CodeKlavier.Setup import Setup
 # Start the CodeKlavier
 codeK = Setup()
 myPort = codeK.perform_setup()
-
-#TODO: abstract this get_device_id to a seperate class
-counter = 0
-while counter < 1: #TODO: change counter to something like while not msg
-    msg = codeK.get_message()
-    if msg:
-        message, deltatime = msg
-        device_id = message[0]
-        counter += 1
-
+device_id = codeK.get_device_id()
 print('your device id is: ', device_id, '\n')
 
 #TODO: move this keyboard stuff to a seperate class (including evaluateSC and mapping)

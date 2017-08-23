@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+#TODO: use CodeKlavier module
+
 """miditest.py
 
 This file is a tester for the midisignals from your input device. It quickly helps you 
