@@ -8,3 +8,6 @@ Install with pip3
 2. pynput
 
 Run ``pip3 install -r requirements.txt`` to install the required libraries.
+
+## Test run
+After installing the libraries, plug in your midi device and run the miditest by ``python3 miditest.py``. After you complete the setup and configuration, you will see the midi messages on the screen. After that: try playing a ``hello world`` piece. Move into the ``hello world`` directory and run ``python3 hello_world.py``.
