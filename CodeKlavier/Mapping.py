@@ -11,7 +11,7 @@ class Mapping_HelloWorld:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
 
-    def mapping(self,midinumber):
+    def mapping(self, midinumber):
         # chars and nums
         if midinumber == 69:
             self.__keyboard.type('h')
@@ -116,17 +116,16 @@ class Mapping_HelloWorld_NKK:
         elif what == 'enter':
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
-    
+
     def enter(self):
         self.__keyboard.press(Key.enter)
         self.__keyboard.release(Key.enter)
-    
+
     def delete(self):
         self.__keyboard.press(Key.backspace)
         self.__keyboard.release(Key.backspace)
-    
-    
-    def mapping(midinumber):
+
+    def mapping(self, midinumber):
         # chars and nums
         if midinumber == 87:
             self.__keyboard.type('h')
@@ -159,21 +158,21 @@ class Mapping_HelloWorld_NKK:
         elif midinumber == 89:
             self.__keyboard.type('r')
         elif midinumber == 103:
-            self.__keyboard.type('-'),
+            self.__keyboard.type('-')
         elif midinumber == 105:
-            self.__keyboard.type('+'),
+            self.__keyboard.type('+')
         elif midinumber == 107:
             delete(),
        # special keys
         elif midinumber == 85:
-            self.__keyboard.type('~'),
+            self.__keyboard.type('~')
         elif midinumber == 96:
-            self.__keyboard.type('='),
+            self.__keyboard.type('=')
         elif midinumber == 98:
             self.evaluateSC('stop')
         elif midinumber == 99:
-            self.__keyboard.type('.tempo'),
+            self.__keyboard.type('.tempo')
         elif midinumber == 97:
             self.evaluateSC('play')
         elif midinumber == 108:
-            self.evaluateSC('enter'),
+            self.evaluateSC('enter')
