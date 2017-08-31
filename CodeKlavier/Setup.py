@@ -13,14 +13,14 @@ class Setup(object):
             print('##'*num)
             #TODO: add codeKlavier logo
             time.sleep(0.2)
-        
+
         print('\n', "Welcome to the Codeklavier...", '\n')
-    
+
     def show_ports(self):
         print("These are your detected MIDI devices:", '\n')
         for port in self.__ports:
             print(self.__ports.index(port), " -> ", port)
-    
+
     def get_port_from_user(self):
         selected_midiport = -1
         while selected_midiport < 0:
@@ -33,14 +33,14 @@ class Setup(object):
                 else:
                     return selected_midiport
             except KeyboardInterrupt:
-                print('\n', "You want to quit? Fine with me!. Bye bye.")
+                print('\n', "You want to quit? ¯\('…')/¯  ok, Bye bye.")
                 exit()
             except ValueError:
                 print("Sorry, type a valid port numer!")
-    
+
     def open_port(self, pnum):
         print("You have chosen: ", self.__ports[pnum])
-        
+
         if self.__ports:
             #TODO: do we need to check on the existence of ports?
             self.__midiin.open_port(pnum)
@@ -89,11 +89,11 @@ def main():
             timer = time.time()
             while True:
                 msg = codeK.get_message()
-                
+
                 if msg:
                     message, deltatime = msg
                     print('deltatime: ', deltatime, 'msg: ', message)
-        
+
                 time.sleep(0.01)
 
         except KeyboardInterrupt:
