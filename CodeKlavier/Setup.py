@@ -83,7 +83,6 @@ def main():
     codeK.open_port(my_midiport)
 
     if my_midiport >= 0:
-        # codeK.open_port(my_midiport)
         print("CodeKlavier is ON. Press Control-C to exit.")
         try:
             timer = time.time()
