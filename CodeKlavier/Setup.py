@@ -73,7 +73,7 @@ class Setup(object):
         return myPort
 
     def end(self):
-        print("Bye bye from CodeKlavier setup.")
+        print("Bye bye from CodeKlavier setup :(")
         self.close_port()
         del self.__midiin
 
