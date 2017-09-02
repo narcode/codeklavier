@@ -1,7 +1,7 @@
 import time
 import rtmidi
 
-# Use trick to import from parrentdir
+# Use trick to import from parentdir
 import sys
 import os
 import inspect
@@ -30,8 +30,10 @@ class HelloWorld(object):
     def __call__(self, event, data=None):
         message, deltatime = event
         if message[2] > 0: #only noteOn
-            if (message[0] == device_id or message[0] == 176): #hardcoded pedal id (not pretty)
+            if (message[0] == device_id):
                 mapping.mapping(message[1])
+            if (message[0] == 176) #hardcoded pedal id (not pretty)
+                mapping.stopSC(message[1])
 
 print("\nCodeKlavier is ready and ON.")
 print("You are performing: HELLO WORLD")

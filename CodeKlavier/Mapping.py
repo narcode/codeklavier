@@ -117,11 +117,11 @@ class Mapping_HelloWorld_NKK:
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
 
-    def stopSC(self):
-        self.__keyboard.press(Key.cmd)
-        self.__keyboard.type('.')
-        self.__keyboard.release(Key.cmd)
-        self.__keyboard.type('stopped SC')
+    def stopSC(self, midinumber):
+        if midinumber == 66:
+            self.__keyboard.press(Key.cmd)
+            self.__keyboard.type('.')
+            self.__keyboard.release(Key.cmd)
 
     def enter(self):
         self.__keyboard.press(Key.enter)
@@ -182,5 +182,5 @@ class Mapping_HelloWorld_NKK:
             self.evaluateSC('play')
         elif midinumber == 108:
             self.evaluateSC('enter')
-        elif midinumber == 66:
-            self.stopSC()
+#        elif midinumber == 66:
+#            self.stopSC()
