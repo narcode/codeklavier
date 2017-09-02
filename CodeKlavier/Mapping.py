@@ -181,5 +181,5 @@ class Mapping_HelloWorld_NKK:
             self.evaluateSC('play')
         elif midinumber == 108:
             self.evaluateSC('enter')
-        elif midinumber == 176:
+        elif midinumber == 64:
             self.stopSC()
