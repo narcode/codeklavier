@@ -119,7 +119,7 @@ class Mapping_HelloWorld_NKK:
 
     def stopSC(self):
         self.__keyboard.press(Key.cmd)
-        self.__keyboard.press(Key.type('.'))
+        self.__keyboard.type('.')
         self.__keyboard.release(Key.cmd)
 
     def enter(self):
