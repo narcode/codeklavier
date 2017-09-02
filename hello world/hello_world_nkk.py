@@ -30,7 +30,7 @@ class HelloWorld(object):
     def __call__(self, event, data=None):
         message, deltatime = event
         if message[2] > 0: #only noteOn
-            if (message[0] == device_id):
+            if (message[0] == device_id or message[0] == 176): #hardcoded pedal id (not pretty)
                 mapping.mapping(message[1])
 
 print("\nCodeKlavier is ready and ON.")
