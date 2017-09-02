@@ -117,7 +117,7 @@ class Mapping_HelloWorld_NKK:
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
 
-    def stopSC():
+    def stopSC(self):
         self.__keyboard.press(Key.cmd)
         self.__keyboard.press(Key.type('.'))
         self.__keyboard.release(Key.cmd)
