@@ -162,7 +162,7 @@ class Mapping_HelloWorld_NKK:
         elif midinumber == 105:
             self.__keyboard.type('+')
         elif midinumber == 107:
-            delete(),
+            self.delete(),
        # special keys
         elif midinumber == 85:
             self.__keyboard.type('~')
