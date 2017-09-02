@@ -121,6 +121,7 @@ class Mapping_HelloWorld_NKK:
         self.__keyboard.press(Key.cmd)
         self.__keyboard.type('.')
         self.__keyboard.release(Key.cmd)
+        self.__keyboard.type('stopped SC')
 
     def enter(self):
         self.__keyboard.press(Key.enter)
@@ -138,7 +139,7 @@ class Mapping_HelloWorld_NKK:
             self.__keyboard.type('l')
         elif midinumber == 90:
             self.__keyboard.type('e')
-        elif midinumber ==94:
+        elif midinumber == 94:
             self.__keyboard.type('o')
         elif midinumber == 95:
             self.__keyboard.type('p')
