@@ -1,7 +1,7 @@
 // midi mappings:
 s.waitForBoot({
-	"starting MIDI...".postln;
-	MIDIIn.connectAll;
+"starting MIDI...".postln;
+MIDIIn.connectAll;
 s.sync;
 MIDIClient.init;
 s.sync;
@@ -74,9 +74,34 @@ s.sync;
 	s.sync;
 );
 (
+"variables for fx".postln;
+~eamp=0;~eamp2=0;~eamp3=0;
+~del=1;~del2=1;~del3=3;
+~r3=1;
+	);
+(
 	"starting routine for re-pitching with piano pedal...".postln;
 	/// re-pitching:
 SkipJack({
+
+// fx
+Tdef(\maps1, {
+	inf.do{
+		/*"debug".postln;*/
+	Ndef(\fx).map(\del, Ndef(\krd, ~del));
+	Ndef(\fx).map(\amp, Ndef(\kra, ~eamp));
+
+	Ndef(\fx1).map(\del, Ndef(\krd2, ~del2));
+	Ndef(\fx1).map(\amp, Ndef(\kra2, ~eamp2));
+
+	Ndef(\fx2).map(\del, Ndef(\krd3, ~del3));
+	Ndef(\fx2).map(\amp, Ndef(\kra3, ~eamp3));
+	Ndef(\fx2).map(\rate, Ndef(\krr3, ~r3));
+0.1.wait;
+}
+	}).play;
+
+
 	/*var key = "narcode".scramble;
 Tdef(key.asSymbol, {*/
 	1.do {
