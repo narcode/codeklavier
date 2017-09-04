@@ -71,11 +71,12 @@ class Mapping_HelloWorld:
             self.__keyboard.type('9')
        # special keys
         elif midinumber == 56:
-            self.__keyboard.press(Key.space),
+            self.__keyboard.press(Key.space)
+            self.__keyboard.release(Key.space),
         elif midinumber == 32:
-            self.evaluateSC()
             self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.enter),
+            self.__keyboard.release(Key.enter)
+            self.evaluateSC(),
         elif midinumber == 50:
             self.__keyboard.type('~'),
         elif midinumber == 51:
@@ -89,7 +90,8 @@ class Mapping_HelloWorld:
         elif midinumber == 105:
             self.__keyboard.type('.!'),
         elif midinumber == 95:
-            self.__keyboard.press(Key.backspace),
+            self.__keyboard.press(Key.backspace)
+            self.__keyboard.release(Key.backspace),
       # supercollider commands:
         elif midinumber == 33:
             self.evaluateSC(),
