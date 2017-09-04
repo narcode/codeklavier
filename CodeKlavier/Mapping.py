@@ -11,6 +11,12 @@ class Mapping_HelloWorld:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
 
+    def stopSC(self, midinumber):
+        if midinumber == 66:
+            self.__keyboard.press(Key.cmd)
+            self.__keyboard.type('.')
+            self.__keyboard.release(Key.cmd)
+
     def mapping(self, midinumber):
         # chars and nums
         if midinumber == 69:

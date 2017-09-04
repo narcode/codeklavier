@@ -32,6 +32,8 @@ class HelloWorld(object):
         if message[2] > 0: #only noteOn
             if (message[0] == device_id):
                 mapping.mapping(message[1])
+            if (message[0] == 176) #hardcoded pedal id (not pretty)
+                mapping.stopSC(message[1])
 
 print("\nCodeKlavier is ready and ON.")
 print("You are performing: HELLO WORLD")
