@@ -73,7 +73,9 @@ class Mapping_HelloWorld:
         elif midinumber == 56:
             self.__keyboard.press(Key.space),
         elif midinumber == 32:
-            self.__keyboard.press(Key.enter),
+            self.evaluateSC()
+            self.__keyboard.press(Key.enter)
+            self.__keyboard.release(Key.enter),
         elif midinumber == 50:
             self.__keyboard.type('~'),
         elif midinumber == 51:
