@@ -7,7 +7,7 @@ MIDIClient.init;
 s.sync;
 MIDIIn.connectAll;
 s.sync;
-m = MIDIOut.newByName("Track16", "MIDI Port");
+m = MIDIOut.newByName("USB MIDI Interface", "USB MIDI Interface");
 s.sync;
 // hello world \\
 (
@@ -16,7 +16,7 @@ s.sync;
 "setting variables and ostinatos...".postln;
 ~pitch = 0;~pitch1 = 0;~pitch2 = 0; ~pulsepitch = 0;
 // adjust the quant;
-~quant=1/4;
+~quant=1/3;
 s.sync;
 // ostinatos:
 ~ost=Pdef(\ostinato1, {Pbind(\dur, Pseq([Pfuncn({1/h}, 1), Pfuncn({1/e},1), Pfuncn({1/l},1)], inf), \ctranspose, Pfunc{~pitch},

@@ -69,6 +69,8 @@ class Mapping_HelloWorld:
             self.__keyboard.type('8')
         elif midinumber == 94:
             self.__keyboard.type('9')
+        elif midinumber == 104:
+            self.__keyboard.type('k'),
        # special keys
         elif midinumber == 56:
             self.__keyboard.press(Key.space)
