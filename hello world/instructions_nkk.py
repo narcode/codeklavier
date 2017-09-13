@@ -36,12 +36,12 @@ class HelloWorld(object):
         if message[2] > 0: #only noteOn
             if (message[0] == device_id):
                 mapping.mapping(message[1])
-                # forwarding only note on messages:
-                codeK.send_message([message[0], message[1], message[2]])
-            if (message[0] == 176): #hardcoded pedal id (not pretty)
-                mapping.stopSC(message[1])
 
 codeK.set_callback(HelloWorld(myPort))
+
+tutorial.do_tutorial()
+codeK.send_message([0x90, 108, 127]) #send enter to codespace
+tutorial.level_four()
 
 # Loop to program to keep listening for midi input
 try:

@@ -9,9 +9,16 @@ class Setup(object):
         self.__ports = self.__midiin.get_ports()
         self.__ports_out = self.__midiout.get_ports()
 
-    def print_welcome(self):
+    def print_lines(self, length, lines):
+        for i in range(1, lines):
+            num = length+(1)
+            print('##'*num)
+            #TODO: add codeKlavier logo
+            time.sleep(0.2)
+
+    def print_welcome(self, length):
         for i in range(1, 5):
-            num = 20+(1)
+            num = length+(1)
             print('##'*num)
             #TODO: add codeKlavier logo
             time.sleep(0.2)
@@ -79,7 +86,7 @@ class Setup(object):
                     return device_id
 
     def perform_setup(self):
-        self.print_welcome()
+        self.print_welcome(20)
         self.show_ports()
         myPort = self.get_port_from_user()
         return myPort

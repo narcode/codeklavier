@@ -9,7 +9,7 @@ class Mapping_HelloWorld:
     def evaluateSC(self):
         with self.__keyboard.pressed(Key.shift):
             self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.enter)
+            self.__keyboard.release(Key.shift)
 
     def stopSC(self, midinumber):
         if midinumber == 66:
@@ -107,15 +107,15 @@ class Mapping_HelloWorld:
 class Mapping_HelloWorld_NKK:
 
     def __init__(self):
-        print("Using the Hello World mapping (NKK)")
+        # print("Using the Hello World mapping (NKK)")
         self.__keyboard = Controller()
 
     def evaluateSC(self, what):
         if what == 'play':
             self.__keyboard.type('.play')
-            with self.__keyboard.pressed(Key.shift):
-                self.__keyboard.press(Key.enter)
-                self.__keyboard.release(Key.enter)
+            with self.__keyboard.pressed(Key.cmd):
+                self.__keyboard.type('e')
+                self.__keyboard.release(Key.cmd)
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
         elif what == 'stop':
@@ -125,6 +125,10 @@ class Mapping_HelloWorld_NKK:
                 self.__keyboard.release(Key.enter)
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
+        elif what == 'eval':
+            with self.__keyboard.pressed(Key.cmd):
+                self.__keyboard.type('e')
+                self.__keyboard.release(Key.cmd)
         elif what == 'enter':
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
@@ -201,6 +205,7 @@ class Mapping_HelloWorld_NKK:
             self.__keyboard.type('2')
         elif midinumber == 81:
             self.__keyboard.type('3')
+
 
 #        elif midinumber == 66:
 #            self.stopSC()
