@@ -15,6 +15,7 @@ from CodeKlavier.Mapping import Mapping_HelloWorld_NKK
 codeK = Setup()
 myPort = codeK.perform_setup()
 codeK.open_port(myPort)
+codeK.open_port_out(myPort)
 device_id = codeK.get_device_id()
 print('your device id is: ', device_id, '\n')
 
@@ -29,9 +30,12 @@ class HelloWorld(object):
 
     def __call__(self, event, data=None):
         message, deltatime = event
+        # print(message)
         if message[2] > 0: #only noteOn
             if (message[0] == device_id):
                 mapping.mapping(message[1])
+                # forwarding only note on messages:
+                codeK.send_message([0x90, message[1], message[2]])
             if (message[0] == 176): #hardcoded pedal id (not pretty)
                 mapping.stopSC(message[1])
 
