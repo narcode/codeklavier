@@ -184,7 +184,7 @@ class Mapping_HelloWorld_NKK:
        # special keys
         elif midinumber == 85:
             self.__keyboard.type('~')
-        elif midinumber == 96:
+        elif midinumber == 101:
             self.__keyboard.type('=')
         elif midinumber == 98:
             self.evaluateSC('stop')
@@ -194,5 +194,13 @@ class Mapping_HelloWorld_NKK:
             self.evaluateSC('play')
         elif midinumber == 108:
             self.evaluateSC('enter')
+       # numbers keys
+        elif midinumber == 77:
+            self.__keyboard.type('1')
+        elif midinumber == 79:
+            self.__keyboard.type('2')
+        elif midinumber == 81:
+            self.__keyboard.type('3')
+
 #        elif midinumber == 66:
 #            self.stopSC()
