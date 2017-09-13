@@ -16,7 +16,7 @@ s.sync;
 "setting variables and ostinatos...".postln;
 ~pitch = 0;~pitch1 = 0;~pitch2 = 0; ~pulsepitch = 0;
 // adjust the quant;
-~quant=1/3;
+~quant=1/4;
 s.sync;
 // ostinatos:
 ~ost=Pdef(\ostinato1, {Pbind(\dur, Pseq([Pfuncn({1/h}, 1), Pfuncn({1/e},1), Pfuncn({1/l},1)], inf), \ctranspose, Pfunc{~pitch},
@@ -30,7 +30,7 @@ s.sync;
 ~ost2=Pdef(\ostinato3, {Pbind(\dur, Pseq([Pfuncn({1/d}, 1), Pfuncn({1/a},1), Pfuncn({1/n},1)], inf), \ctranspose, Pfunc{~pitch2},
 \midinote, Pseq(["ab3".namemidi, "B3".namemidi, "C4".namemidi, "gb3".namemidi, "f3".namemidi, "db3".namemidi, "C4".namemidi]-20, inf),
 \type, \midi, \midiout, m)});
-~ost2quant=~quant;
+~ost2.quant=~quant;
 s.sync;
 // random ostinatos
 
