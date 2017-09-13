@@ -5,7 +5,9 @@ class Setup(object):
 
     def __init__(self):
         self.__midiin = rtmidi.MidiIn()
+        self.__midiout = rtmidi.MidiOut()
         self.__ports = self.__midiin.get_ports()
+        self.__ports_out = self.__midiout.get_ports()
 
     def print_welcome(self):
         for i in range(1, 5):
@@ -47,11 +49,21 @@ class Setup(object):
         else:
             raise Exception("No midi ports! Don't know what to do!")
 
+    def open_port_out(self, num):
+        print("opened midi out port")
+
+        if self.__ports_out:
+            self.__midiout.open_port(num)
+
     def close_port(self):
         self.__midiin.close_port()
+        #TODO: add close out port too
 
     def get_message(self):
         return self.__midiin.get_message()
+
+    def send_message(self, message):
+        return self.__midiout.send_message(message)
 
     def set_callback(self,cb):
         self.__midiin.set_callback(cb)

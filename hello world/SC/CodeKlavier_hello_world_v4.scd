@@ -7,7 +7,7 @@ MIDIClient.init;
 s.sync;
 MIDIIn.connectAll;
 s.sync;
-m = MIDIOut.newByName("Track16", "MIDI Port");
+m = MIDIOut.newByName("USB MIDI Interface", "USB MIDI Interface");
 s.sync;
 // hello world \\
 (
