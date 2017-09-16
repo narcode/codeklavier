@@ -19,8 +19,7 @@ myPort = codeK.perform_setup()
 codeK.open_port(myPort)
 codeK.open_port_out(myPort)
 device_id = codeK.get_device_id()
-print('your device id is: ', device_id, '\n')
-
+print('your device id is: ', device_id, '\n\n')
 # Use your favourite mapping of the keys
 mapping = Mapping_HelloWorld_NKK()
 
@@ -36,7 +35,7 @@ class HelloWorld(object):
         if message[2] > 0: #only noteOn
             if (message[0] == device_id):
                 mapping.mapping(message[1])
-                # forwarding only note on messages:
+                # forwarding only note on messages to tutorial terminal for NKK:
                 codeK.send_message([message[0], message[1], message[2]])
             if (message[0] == 176): #hardcoded pedal id (not pretty)
                 mapping.stopSC(message[1])
@@ -45,8 +44,10 @@ codeK.set_callback(HelloWorld(myPort))
 
 # Loop to program to keep listening for midi input
 try:
-    timer = time.time()
+    # timer = time.time()
     while True:
+        if tutorial.mode():
+            break
         time.sleep(0.01)
 except KeyboardInterrupt:
     print('')

@@ -1,3 +1,4 @@
+import time
 from pynput.keyboard import Key, Controller
 
 class Mapping_HelloWorld:
@@ -112,26 +113,40 @@ class Mapping_HelloWorld_NKK:
 
     def evaluateSC(self, what):
         if what == 'play':
-            self.__keyboard.type('.play')
             with self.__keyboard.pressed(Key.cmd):
-                self.__keyboard.type('e')
-                self.__keyboard.release(Key.cmd)
+                self.__keyboard.press(Key.right)
+                self.__keyboard.release(Key.right)
+            time.sleep(0.01)
+            self.__keyboard.type('.play')
+            with self.__keyboard.pressed(Key.shift):
+                self.__keyboard.press(Key.enter)
+                self.__keyboard.release(Key.enter)
+            time.sleep(0.01)
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
         elif what == 'stop':
+            with self.__keyboard.pressed(Key.cmd):
+                self.__keyboard.press(Key.right)
+                self.__keyboard.release(Key.right)
+            time.sleep(0.01)
             self.__keyboard.type('.stop')
             with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
+            time.sleep(0.01)
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
-        elif what == 'eval':
+        elif what == 'alt_eval':
             with self.__keyboard.pressed(Key.cmd):
                 self.__keyboard.type('e')
                 self.__keyboard.release(Key.cmd)
-        elif what == 'enter':
+        elif what == 'eval':
+            with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
+            time.sleep(0.01)
+            self.__keyboard.press(Key.enter)
+            self.__keyboard.release(Key.enter)
 
     def stopSC(self, midinumber):
         if midinumber == 66:
@@ -197,7 +212,7 @@ class Mapping_HelloWorld_NKK:
         elif midinumber == 97:
             self.evaluateSC('play')
         elif midinumber == 108:
-            self.evaluateSC('enter')
+            self.evaluateSC('eval')
        # numbers keys
         elif midinumber == 77:
             self.__keyboard.type('1')

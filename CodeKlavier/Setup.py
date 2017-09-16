@@ -23,7 +23,7 @@ class Setup(object):
             #TODO: add codeKlavier logo
             time.sleep(0.2)
 
-        print('\n', "Welcome to the Codeklavier...", '\n')
+        print("\nWelcome to the Codeklavier!\n")
 
     def show_ports(self):
         print("These are your detected MIDI devices:", '\n')
@@ -54,7 +54,7 @@ class Setup(object):
             #TODO: do we need to check on the existence of ports?
             self.__midiin.open_port(pnum)
         else:
-            raise Exception("No midi ports! Don't know what to do!")
+            raise Exception("No midi ports! Maybe open a virtual device?")
 
     def open_port_out(self, num):
         print("opened midi out port")
