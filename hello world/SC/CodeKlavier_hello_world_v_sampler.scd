@@ -1,8 +1,6 @@
 // midi mappings:
 s.waitForBoot({
 "starting MIDI...".postln;
-MIDIIn.connectAll;
-s.sync;
 MIDIClient.init;
 s.sync;
 MIDIIn.connectAll;
