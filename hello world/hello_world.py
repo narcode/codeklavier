@@ -26,7 +26,7 @@ print("\nCodeKlavier is ready and ON.")
 print("You are performing: HELLO WORLD")
 print("\nPress Control-C to exit.")
 
-codeK.set_callback(HelloWorld(myPort, mapping))
+codeK.set_callback(HelloWorld(myPort, mapping, device_id))
 
 # Loop to program to keep listening for midi input
 try:
