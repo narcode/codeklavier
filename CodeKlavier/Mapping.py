@@ -220,7 +220,62 @@ class Mapping_HelloWorld_NKK:
             self.__keyboard.type('2')
         elif midinumber == 81:
             self.__keyboard.type('3')
-
-
 #        elif midinumber == 66:
 #            self.stopSC()
+
+class Mapping_Motippets:
+
+    def __init__(self):
+        print("Using the mapping for Motippets")
+        self.__keyboard = Controller()
+
+    def evaluateSC(self, what):
+        if what == 'play':
+            with self.__keyboard.pressed(Key.cmd):
+                self.__keyboard.press(Key.right)
+                self.__keyboard.release(Key.right)
+            time.sleep(0.01)
+            self.__keyboard.type('.play')
+            with self.__keyboard.pressed(Key.shift):
+                self.__keyboard.press(Key.enter)
+                self.__keyboard.release(Key.enter)
+            time.sleep(0.01)
+            self.__keyboard.press(Key.enter)
+            self.__keyboard.release(Key.enter)
+        elif what == 'stop':
+            with self.__keyboard.pressed(Key.cmd):
+                self.__keyboard.press(Key.right)
+                self.__keyboard.release(Key.right)
+            time.sleep(0.01)
+            self.__keyboard.type('.stop')
+            with self.__keyboard.pressed(Key.shift):
+                self.__keyboard.press(Key.enter)
+                self.__keyboard.release(Key.enter)
+            time.sleep(0.01)
+            self.__keyboard.press(Key.enter)
+            self.__keyboard.release(Key.enter)
+        elif what == 'alt_eval':
+            with self.__keyboard.pressed(Key.cmd):
+                self.__keyboard.type('e')
+                self.__keyboard.release(Key.cmd)
+        elif what == 'eval':
+            with self.__keyboard.pressed(Key.shift):
+                self.__keyboard.press(Key.enter)
+                self.__keyboard.release(Key.enter)
+            time.sleep(0.01)
+            self.__keyboard.press(Key.enter)
+            self.__keyboard.release(Key.enter)
+
+    def enter(self):
+        self.__keyboard.press(Key.enter)
+        self.__keyboard.release(Key.enter)
+
+    def delete(self):
+        self.__keyboard.press(Key.backspace)
+        self.__keyboard.release(Key.backspace)
+
+    def mapping(self, midinumber):
+        # out of trouble with pedal:
+        # TODO: check with Anne
+        if midinumber == 66:
+            self.evaluateSC('eval')
