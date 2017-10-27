@@ -3,13 +3,13 @@
 (hradcoded) Motifs for Motippets
 
 """
-
+#comment 
 class Motifs(object):
     
-    def chromatic(self):
+    def motif_1(self):
         return [30, 35, 36, 37, 38, 39, 40, 41, 42, 43, 42, 41, 40, 39, 38, 37, 36, 35]
     
-    def chordal(self):
+    def motif_2(self):
         return [63,72,60,68,51,44,60,63,61,58,55,49]
     
     def mini_motif_1_low(self):
