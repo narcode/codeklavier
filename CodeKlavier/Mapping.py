@@ -262,7 +262,7 @@ class Mapping_Motippets:
             with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
-            time.sleep(0.01)
+            time.sleep(0.2)
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
 
@@ -279,3 +279,44 @@ class Mapping_Motippets:
         # TODO: check with Anne
         if midinumber == 66:
             self.evaluateSC('eval')
+
+    def snippets(self, num):
+        if num == 1:
+            self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=400,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ~amp1}).play(0,2);(1/ev.rit).wait;}}).play(quant:0);')
+            self.evaluateSC('eval')
+        elif num == 2:
+            self.__keyboard.type('~snippet2 = Ndef(\\acc, {|note=500, amp=0.1, cut=200, bw=0.5, fx=0.1| BPF.ar(Resonz.ar(SinOsc.ar([note.lag(1), note.lag(2)*3/2, note*2, note.lag(1.5)*4/3]), (note*LFTri.kr(fx).range(1/2, 8))+80, bw), 600, 0.8) * amp.lag(0.5)}).play(0,2);')
+            self.evaluateSC('eval')            
+    
+    def miniSnippets(self, snippet_num, pianosection):
+        if snippet_num == 1 and pianosection == 'hi':
+            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\fx, Ndef(\\krm3));}')
+            self.evaluateSC('eval')
+        if snippet_num == 1 and pianosection == 'mid':
+            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\pitch, Ndef(\\krm1));}')
+            self.evaluateSC('eval')
+        if snippet_num == 1 and pianosection == 'low':
+            self.__keyboard.type('~map_rhythm = true;')
+            self.evaluateSC('eval')
+        # for snippet 2:
+        if snippet_num == 2 and pianosection == 'hi':
+            self.__keyboard.type('Ndef(\\acc).map(\\fx, Ndef(\\krm2_3));')
+            self.evaluateSC('eval')
+        if snippet_num == 2 and pianosection == 'mid':
+            self.__keyboard.type('Ndef(\\acc).map(\\note, Ndef(\\krm2_1));')
+            self.evaluateSC('eval')
+        if snippet_num == 2 and pianosection == 'low':
+            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
+            self.evaluateSC('eval')            
+            
+            
+            
+    def tremolo(self, pianoregister, value):
+        if pianoregister == 'hi':
+            self.__keyboard.type('~tremoloH = ' + str(value))
+        elif pianoregister == 'mid':
+            self.__keyboard.type('~tremoloM = ' + str(value))
+        elif pianoregister == 'low':
+            self.__keyboard.type('~tremoloL = ' + str(value))               
+        self.evaluateSC('eval')
+        
