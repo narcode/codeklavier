@@ -9,7 +9,8 @@ Install with pip3
 
 Run ``pip3 install -r requirements.txt`` to install the required libraries.
 
-## SuperCollider is used as audio engine and coding space
+## SuperCollider
+Is used as audio engine and coding space.
 
 Please install [SuperCollider](http://supercollider.github.io)
 
