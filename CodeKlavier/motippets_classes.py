@@ -22,6 +22,8 @@ class Motippets(object):
         self.__motif2_counter = 0
         self.__motif1_played = False #maybe not needed
         self.__intervalsArray = []
+        self.__unmapCounter1 = 0
+        self.__unmapCounter2 = 0
 
     def parse_midi(self, event, section):
         message, deltatime = event
@@ -36,10 +38,10 @@ class Motippets(object):
                 
                 if section == 'low':
                     if note <= self.__pianosectons[0]:
-                        self.memorize(note, 20, False, 'Low: ')
+                        self.memorize(note, 20, True, 'Low: ')
 
                         # see if motif_1 is played:
-                        self.__motif1_played = self.compareMotif(self.__memory, 'big', Motifs().motif_1(), note, True)
+                        self.__motif1_played = self.compareMotif(self.__memory, 'big', Motifs().motif_1(), note, False)
                         if self.__motif1_played:
                             if self.__motif1_counter == 0:
                                 self.mapscheme.snippets(1)
@@ -48,10 +50,15 @@ class Motippets(object):
                         mini_motif_1_Low_played = self.compareMotif(self.__memory, 'mini', Motifs().mini_motif_1_low(), note, True)
                         mini_motif_2_Low_played = self.compareMotif(self.__memory, 'mini2', Motifs().mini_motif_2_low(), note, True)
                         
-                        if mini_motif_1_Low_played:
+                        if mini_motif_1_Low_played and self.__unmapCounter2 == 0:
                             self.mapscheme.miniSnippets(1, 'low')
-                        elif mini_motif_2_Low_played:
+                        elif mini_motif_1_Low_played and self.__unmapCounter2 > 0:
+                            self.mapscheme.miniSnippets(1, 'low with unmap')                            
+                        elif mini_motif_2_Low_played and self.__unmapCounter1 == 0:
                             self.mapscheme.miniSnippets(2, 'low')
+                        elif mini_motif_2_Low_played and self.__unmapCounter1 > 0:
+                            self.mapscheme.miniSnippets(2, 'low with unmap')                            
+                            
                                                         
                 elif section == 'mid':
                     if note > self.__pianosectons[0] and note <= self.__pianosectons[1]:
@@ -60,24 +67,33 @@ class Motippets(object):
                         mini_motif_1_Mid_played = self.compareMotif(self.__memory, 'mini', Motifs().mini_motif_1_mid(), note, False)
                         mini_motif_2_Mid_played = self.compareMotif(self.__memory, 'mini2', Motifs().mini_motif_2_mid(), note, False)
                         #if self.__motif1_played: ??? make a delegate?
-                        if mini_motif_1_Mid_played:
+                        if mini_motif_1_Mid_played and self.__unmapCounter2 == 0:
                             self.mapscheme.miniSnippets(1, 'mid')
-                        elif mini_motif_2_Mid_played:
+                        elif mini_motif_1_Mid_played and self.__unmapCounter2 > 0:
+                            print("Mini motif 1 mid played " + str(self.__unmapCounter) ++ " times")                            
+                            self.mapscheme.miniSnippets(1, 'mid with unmap')    
+                        elif mini_motif_2_Mid_played and self.__unmapCounter1 == 0:
                             self.mapscheme.miniSnippets(2, 'mid')
+                        elif mini_motif_2_Mid_played and self.__unmapCounter1 > 0:
+                            self.mapscheme.miniSnippets(2, 'mid with unmap')                            
                             
                                 
                 elif section == 'hi':
                     if note > self.__pianosectons[1]:
-                        self.memorize(note, 20, False, 'Hi: ')
+                        self.memorize(note, 20, True, 'Hi: ')
                         
-                        mini_motif_1_Hi_played = self.compareMotif(self.__memory, 'mini', Motifs().mini_motif_1_hi(), note, False)
-                        mini_motif_2_Hi_played = self.compareMotif(self.__memory, 'mini2', Motifs().mini_motif_2_hi(), note, False)
+                        mini_motif_1_Hi_played = self.compareMotif(self.__memory, 'mini', Motifs().mini_motif_1_hi(), note, True)
+                        mini_motif_2_Hi_played = self.compareMotif(self.__memory, 'mini2', Motifs().mini_motif_2_hi(), note, True)
                         
-                        if mini_motif_1_Hi_played:
+                        if mini_motif_1_Hi_played and self.__unmapCounter2 == 0:
                             self.mapscheme.miniSnippets(1, 'hi')
-                        elif mini_motif_2_Hi_played:
+                        elif mini_motif_1_Hi_played and self.__unmapCounter2 > 0:
+                            self.mapscheme.miniSnippets(1, 'hi with unmap')                            
+                        elif mini_motif_2_Hi_played and self.__unmapCounter1 == 0:
                             self.mapscheme.miniSnippets(2, 'hi')                            
-
+                        elif mini_motif_2_Hi_played and self.__unmapCounter1 > 0:
+                            self.mapscheme.miniSnippets(2, 'hi with unmap')                 
+                            
                 elif section == 'tremoloHi':
                     if note > self.__pianosectons[1]:
                         self.memorize(note, 4, False, 'Tremolo Hi: ')
@@ -145,6 +161,7 @@ class Motippets(object):
                 self.__miniMotifs = self.__miniMotifs[-len(motif):]
                 if self.__miniMotifs == motif:
                     compare = True
+                    self.__unmapCounter1 += 1
                 else:
                     compare = False
                 
@@ -163,6 +180,7 @@ class Motippets(object):
                 self.__miniMotifs2 = self.__miniMotifs2[-len(motif):]
                 if self.__miniMotifs2 == motif:
                     compare = True
+                    self.__unmapCounter2 += 1                    
                 else:
                     compare = False
                     
