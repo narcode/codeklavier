@@ -5,7 +5,7 @@ Second prototype of the CodeKlavier
 """
 import rtmidi
 from functools import reduce
-from CodeKlavier.Motifs import Motifs
+from .motifs_interface import Motifs
 
 # class to handle the midi input
 class Motippets(object):
