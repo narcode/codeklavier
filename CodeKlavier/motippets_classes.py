@@ -70,7 +70,6 @@ class Motippets(object):
                         if mini_motif_1_Mid_played and self.__unmapCounter2 == 0:
                             self.mapscheme.miniSnippets(1, 'mid')
                         elif mini_motif_1_Mid_played and self.__unmapCounter2 > 0:
-                            print("Mini motif 1 mid played " + str(self.__unmapCounter) ++ " times")                            
                             self.mapscheme.miniSnippets(1, 'mid with unmap')    
                         elif mini_motif_2_Mid_played and self.__unmapCounter1 == 0:
                             self.mapscheme.miniSnippets(2, 'mid')
