@@ -14,7 +14,7 @@ class Motifs(object):
         return [63, 72, 60, 68, 51, 44, 60, 63, 61, 58, 55, 49]
     
     def mini_motif_1_low(self):
-        return [24, 31, 32, 27, 26] ## check: 36, 43, 44, 39, 38
+        return [24, 31, 32, 27, 26] 
     
     def mini_motif_2_low(self):
         return [26, 32, 35, 38]
@@ -52,8 +52,8 @@ class Motifs_Anne(object):
         return [63, 72, 60, 68, 51, 44, 60, 63, 61, 58, 55, 49]
 
     def mini_motif_1_low(self):
-        return [35, 38, 44] ## check: 36, 43, 44, 39, 38
-
+        return [35, 38, 44] 
+    
     def mini_motif_2_low(self):
         return [26, 32, 35, 38]
 
