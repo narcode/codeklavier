@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from CodeKlavier.Motifs import Motifs
+from CodeKlavier.Motifs import Motifs_Anne
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -47,15 +47,7 @@ class Motippets(object):
                 if section == 'low':
                     if note <= self._pianosectons[0]:
                         self.memorize(note, 20, True, 'Low: ')
-                        
-                        # see if motif_1 is played:
-                        motif1_played = self.compare_motif(
-                                            self._memory, 'big',
-                                            Motifs().motif_1(), note, False)
-                        if motif1_played and self._motif1_counter == 0:
-                            self.mapscheme.snippets(1)
-                            self._motif1_counter = 1
-                            
+                                                    
                         mini_motif_1_Low_played = self.compare_motif(
                                                     self._memory, 'mini',
                                                     Motifs().mini_motif_1_low(),
@@ -83,6 +75,15 @@ class Motippets(object):
                     if (note > self._pianosectons[0] and
                         note <= self._pianosectons[1]):
                         self.memorize(note, 20, False, 'Mid: ')
+                        
+                        # see if motif_1 is played:
+                        motif1_played = self.compare_motif(
+                                                self._memory, 'big',
+                                                Motifs().motif_1(), 
+                                                note, False)
+                        if motif1_played and self._motif1_counter == 0:
+                            self.mapscheme.snippets(1)
+                            self._motif1_counter = 1                        
                         
                         mini_motif_1_Mid_played = self.compare_motif(
                                                     self._memory, 'mini',
