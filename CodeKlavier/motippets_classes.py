@@ -29,7 +29,7 @@ class Motippets(object):
     def parse_midi(self, event, section):
         """Parse the midi signal and process it depending on the register.
         
-        event: describes the midi event that was triggered
+        event: describes the midi event that was triggered\n
         section: the MIDI piano range (i.e. low register, mid or high)
         """
         message, deltatime = event
@@ -178,7 +178,10 @@ class Motippets(object):
     def memorize(self, midinote, length, debug=False, debugname="Motippets"):
         """Store the incoming midi notes by appending to the memory array.
 
-        TODO: Describe input params
+        midinote: the incoming MIDI note message\n
+        length: the size of the array to store the midinotes\n
+        debug: flag to print console debug messages\n
+        debugname: prefix for the debug messages
         """
         self._memory.append(midinote)
         
