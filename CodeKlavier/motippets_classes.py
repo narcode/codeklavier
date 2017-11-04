@@ -27,10 +27,10 @@ class Motippets(object):
         self._unmapCounter2 = 0
 
     def parse_midi(self, event, section):
-        """Parse the midi signal and store it into the motifs sections.
+        """Parse the midi signal and process it depending on the register.
         
         event: describes the midi event that was triggered
-        section: TODO - describe input param
+        section: the MIDI piano range (i.e. low register, mid or high)
         """
         message, deltatime = event
         if message[2] > 0: #only noteOn
