@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from .motifs_interface import Motifs
+from CodeKlavier.Motifs import Motifs
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -331,4 +331,3 @@ class Motippets(object):
                         self.mapscheme.tremolo('mid', interval)
                     elif pianosection == 'low':
                         self.mapscheme.tremolo('low', interval)
-
