@@ -357,3 +357,7 @@ class Mapping_Motippets:
             self.__keyboard.type('~tremoloL = ' + str(value))               
         self.evaluateSC('eval')
         
+    def conditional(self, conditional_num):
+        if conditional_num == 1:
+            self.__keyboard.type('\\\ setting up a conditional: \\n if number of notes in 10 seconds > 100:');
+            self.enter();

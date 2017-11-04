@@ -39,6 +39,9 @@ tremoloHi = Motippets(myPort, mapping, device_id)
 tremoloMid = Motippets(myPort, mapping, device_id)
 tremoloLow = Motippets(myPort, mapping, device_id)
 
+#midi listening for conditionals 
+conditionals = Motippets(myPort, mapping, device_id)
+
 
 # Loop to program to keep listening for midi input
 try:
@@ -48,14 +51,16 @@ try:
 
         if msg:
             #motifs:
-            mainMem.parse_midi(msg, '')
+            mainMem.parse_midi(msg, 'full')
             memLow.parse_midi(msg, 'low')
             memMid.parse_midi(msg, 'mid')
             memHi.parse_midi(msg, 'hi')
             #tremolos:
             tremoloHi.parse_midi(msg, 'tremoloHi')
             tremoloMid.parse_midi(msg, 'tremoloMid')
-            tremoloLow.parse_midi(msg, 'tremoloLow')            
+            tremoloLow.parse_midi(msg, 'tremoloLow')
+            #conditionals
+            conditionals.parse_midi(msg, 'full_conditionals')
 
         time.sleep(0.01)
 except KeyboardInterrupt:

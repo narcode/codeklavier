@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from CodeKlavier.Motifs import Motifs_Anne
+from .Motifs import Motifs_Anne as Motifs
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -46,16 +46,16 @@ class Motippets(object):
                 ### LOW SECTION
                 if section == 'low':
                     if note <= self._pianosectons[0]:
-                        self.memorize(note, 20, True, 'Low: ')
+                        self.memorize(note, 20, False, 'Low: ')
                                                     
                         mini_motif_1_Low_played = self.compare_motif(
                                                     self._memory, 'mini',
                                                     Motifs().mini_motif_1_low(),
-                                                    note, True)
+                                                    note, False)
                         mini_motif_2_Low_played = self.compare_motif(
                                                     self._memory, 'mini2',
                                                     Motifs().mini_motif_2_low(),
-                                                    note, True)
+                                                    note, False)
                         
                         if (mini_motif_1_Low_played and
                             self._unmapCounter2 == 0):
@@ -77,10 +77,9 @@ class Motippets(object):
                         self.memorize(note, 20, False, 'Mid: ')
                         
                         # see if motif_1 is played:
-                        motif1_played = self.compare_motif(
-                                                self._memory, 'big',
-                                                Motifs().motif_1(), 
-                                                note, False)
+                        motif1_played = self.compare_chordal_motif(
+                                                self._memory, Motifs().motif_1(), 
+                                                note, True)
                         if motif1_played and self._motif1_counter == 0:
                             self.mapscheme.snippets(1)
                             self._motif1_counter = 1                        
@@ -134,7 +133,7 @@ class Motippets(object):
                               self._unmapCounter1 > 0):
                             self.mapscheme.miniSnippets(2, 'hi with unmap')
                             
-                # TEMOLO
+                ### TEMOLO
                 elif section == 'tremoloHi':
                     if note > self._pianosectons[1]:
                         self.memorize(note, 4, False, 'Tremolo Hi: ')
@@ -162,8 +161,9 @@ class Motippets(object):
                             self.tremolo_value(
                                 [self._memory[2], self._memory[3]], 'low',
                                 deltatime, 0.1, False)
-                else:
-                    #memorize the last 20 notes of the complete register:
+
+                ### FULL REGISTER            
+                elif section == 'full':
                     self.memorize(note, 20, False, 'Main Memory: ')
                     
                     # check if motif_2 is played:
@@ -174,6 +174,19 @@ class Motippets(object):
                         if self._motif2_counter == 0:
                             self.mapscheme.snippets(2)
                             self._motif2_counter = 1
+                            
+                ### CONDITONALS
+                elif section == 'full_conditionals':
+                    self.memorize(note, 20, True, 'Conditional Memory: ')
+                    
+                    conditional1_played = self.compare_motif(
+                                            self._memory, 'conditional 1',
+                                            Motifs().conditional_1(),
+                                            note, True)
+                    
+                    if conditional1_played:
+                        self.mapscheme.conditional(1)                    
+                        
 
     def memorize(self, midinote, length, debug=False, debugname="Motippets"):
         """Store the incoming midi notes by appending to the memory array.
@@ -326,7 +339,7 @@ class Motippets(object):
                                 (lambda total, sumnotes: total - sumnotes),
                                 self._intervalsArray)
             
-            if (interval_reduce != 0 and if interval > 0):
+            if (interval_reduce != 0 and interval > 0):
                     if debug:
                         print('interval ' + pianosection + ': ' + str(interval))
                     if pianosection == 'hi':
