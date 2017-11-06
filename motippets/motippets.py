@@ -17,8 +17,8 @@ myPort = codeK.perform_setup()
 codeK.open_port(myPort)
 device_id = codeK.get_device_id()
 note_count = 0
-live_bomb = False
-#set the number of notes that can be pares once the bomb is enabled
+bomb_is_armed = False
+#set the number of notes that can be parsed once the bomb is enabled
 bomb_countdown = 10
 
 print('your device id is: ', device_id, '\n')
@@ -74,18 +74,18 @@ try:
 
             note_count = note_count + 1 if trigger_count else note_count
             #Optional:
-            print("Notes played: {0}".format(note_count))
+            #print("Notes played: {0}".format(note_count))
 
             #bomb is activated when 10 notes are played.
             #TODO: add motif or other pattern to trigger the activation
             if note_count == 10:
-                live_bomb = True
+                bomb_is_armed = True
 
-            if live_bomb and trigger_count:
+            if bomb_is_armed and trigger_count:
                 #Decrease countdown after playing and parsing a note
                 bomb_countdown -= 1
                 #Optional:
-                print("Notes left to play: {0}".format(bomb_countdown))
+                #print("Notes left to play: {0}".format(bomb_countdown))
 
             if bomb_countdown == 0:
                 print("")
@@ -98,6 +98,7 @@ try:
                 print("")
 
                 #TODO: add more actions when bomb explodes and CodeKlavier stops
+                #TODO: when this becomes elaborate: put it into a function
                 break
 
         time.sleep(0.01)
