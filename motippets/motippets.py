@@ -16,6 +16,11 @@ codeK = Setup()
 myPort = codeK.perform_setup()
 codeK.open_port(myPort)
 device_id = codeK.get_device_id()
+note_count = 0
+live_bomb = False
+#set the number of notes that can be pares once the bomb is enabled
+bomb_countdown = 10
+
 print('your device id is: ', device_id, '\n')
 
 # Use your favourite mapping of the keys
@@ -50,17 +55,50 @@ try:
         msg = codeK.get_message()
 
         if msg:
+            trigger_count = False
             #motifs:
-            mainMem.parse_midi(msg, 'full')
-            memLow.parse_midi(msg, 'low')
-            memMid.parse_midi(msg, 'mid')
-            memHi.parse_midi(msg, 'hi')
+            trigger_count = mainMem.parse_midi(msg, 'full') or trigger_count
+            trigger_count = memLow.parse_midi(msg, 'low') or trigger_count
+            trigger_count = memMid.parse_midi(msg, 'mid') or trigger_count
+            trigger_count = memHi.parse_midi(msg, 'hi') or trigger_count
             #tremolos:
-            tremoloHi.parse_midi(msg, 'tremoloHi')
-            tremoloMid.parse_midi(msg, 'tremoloMid')
-            tremoloLow.parse_midi(msg, 'tremoloLow')
+            trigger_count = tremoloHi.parse_midi(msg, 'tremoloHi') \
+                                or trigger_count
+            trigger_count = tremoloMid.parse_midi(msg, 'tremoloMid') \
+                                or trigger_count
+            trigger_count = tremoloLow.parse_midi(msg, 'tremoloLow') \
+                                or trigger_count
             #conditionals
-            conditionals.parse_midi(msg, 'full_conditionals')
+            trigger_count = conditionals.parse_midi(msg, 'full_conditionals') \
+                                or trigger_count
+
+            note_count = note_count + 1 if trigger_count else note_count
+            #Optional:
+            print("Notes played: {0}".format(note_count))
+
+            #bomb is activated when 10 notes are played.
+            #TODO: add motif or other pattern to trigger the activation
+            if note_count == 10:
+                live_bomb = True
+
+            if live_bomb and trigger_count:
+                #Decrease countdown after playing and parsing a note
+                bomb_countdown -= 1
+                #Optional:
+                print("Notes left to play: {0}".format(bomb_countdown))
+
+            if bomb_countdown == 0:
+                print("")
+                print("  ____   ____   ____  __  __ _ ")
+                print(" |  _ \ / __ \ / __ \|  \/  | |")
+                print(" | |_) | |  | | |  | | \  / | |")
+                print(" |  _ <| |  | | |  | | |\/| | |")
+                print(" | |_) | |__| | |__| | |  | |_|")
+                print(" |____/ \____/ \____/|_|  |_(_)")
+                print("")
+
+                #TODO: add more actions when bomb explodes and CodeKlavier stops
+                break
 
         time.sleep(0.01)
 except KeyboardInterrupt:

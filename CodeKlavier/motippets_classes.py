@@ -31,14 +31,15 @@ class Motippets(object):
         
         event: describes the midi event that was triggered\n
         section: the MIDI piano range (i.e. low register, mid or high)
+
+        returns True on succesful parse.
         """
         message, deltatime = event
         if message[2] > 0: #only noteOn
             if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                 note = message[1]
                 self.mapscheme.mapping(note)
-                # @narcode: return? Or is it necessary to go through the rest
-                # of the function?
+                return True
                 
             if (message[0] == self.noteonid):
                 note = message[1]
@@ -69,6 +70,8 @@ class Motippets(object):
                         elif (mini_motif_2_Low_played and
                               self._unmapCounter1 > 0):
                             self.mapscheme.miniSnippets(2, 'low with unmap')
+
+                        return True
                             
                 ### MID SECTION
                 elif section == 'mid':
@@ -106,6 +109,8 @@ class Motippets(object):
                               self._unmapCounter1 > 0):
                             self.mapscheme.miniSnippets(2, 'mid with unmap')
                             
+                        return True
+
                 ### HI SECTION
                 elif section == 'hi':
                     if note > self._pianosectons[1]:
@@ -133,6 +138,8 @@ class Motippets(object):
                               self._unmapCounter1 > 0):
                             self.mapscheme.miniSnippets(2, 'hi with unmap')
                             
+                        return True
+
                 ### TEMOLO
                 elif section == 'tremoloHi':
                     if note > self._pianosectons[1]:
@@ -143,6 +150,8 @@ class Motippets(object):
                                 [self._memory[2], self._memory[3]], 'hi',
                                 deltatime, 0.1, False)
                 
+                    return True
+
                 elif section == 'tremoloMid':
                     if (note > self._pianosectons[0] and
                         note <= self._pianosectons[1]):
@@ -152,6 +161,8 @@ class Motippets(object):
                             self.tremolo_value(
                                 [self._memory[2], self._memory[3]], 'mid',
                                 deltatime, 0.1, False)
+
+                        return True
                     
                 elif section == 'tremoloLow':
                     if note <= self._pianosectons[0]:
@@ -161,6 +172,8 @@ class Motippets(object):
                             self.tremolo_value(
                                 [self._memory[2], self._memory[3]], 'low',
                                 deltatime, 0.1, False)
+
+                        return True
 
                 ### FULL REGISTER            
                 elif section == 'full':
@@ -175,6 +188,8 @@ class Motippets(object):
                             self.mapscheme.snippets(2)
                             self._motif2_counter = 1
                             
+                    return True
+
                 ### CONDITONALS
                 elif section == 'full_conditionals':
                     self.memorize(note, 20, True, 'Conditional Memory: ')
@@ -187,6 +202,10 @@ class Motippets(object):
                     if conditional1_played:
                         self.mapscheme.conditional(1)                    
                         
+
+                    return True
+
+            return False
 
     def memorize(self, midinote, length, debug=False, debugname="Motippets"):
         """Store the incoming midi notes by appending to the memory array.
