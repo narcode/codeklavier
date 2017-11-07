@@ -1,6 +1,6 @@
 import time
 import rtmidi
-from multiprocessing import Process
+from threading import Thread
 
 import sys
 import os
@@ -44,22 +44,20 @@ tremoloLow = Motippets(myPort, mapping, device_id)
 conditionals = Motippets(myPort, mapping, device_id)
 noteBuffer = Motippets(myPort, mapping, device_id)
 
-#global variable
+#multiprocessing vars
 counter = 0
-
-def parallelism():
-    print('i started')
+ 
+def parallelism(debug=True):
+    print('thread started')
+    
     for s in range(0, 10):
         if counter > 100:
             mapping.result(2, 'code')
-        print(counter)
+            break
+        if debug:        
+            print(counter)
         time.sleep(1)
         
-#if conditionals.parse_midi(msg, 'conditionals') == "2 on":
-    #if __name__ == '__main__':
-        #p = Process(target=parallelism, args=(noteBuffer.parse_midi(msg, 'conditional_results'),))
-        #p.start()
-                
 # Loop to program to keep listening for midi input
 try:
     timer = time.time()
@@ -67,7 +65,6 @@ try:
         msg = codeK.get_message()
 
         if msg:
-            #counter here
             counter += 1
             
             #motifs:
@@ -80,7 +77,13 @@ try:
             tremoloMid.parse_midi(msg, 'tremoloMid')
             tremoloLow.parse_midi(msg, 'tremoloLow')
             #conditionals               
-
+            
+            if conditionals.parse_midi(msg, 'conditionals') == "2 on":
+                counter = 0 # reset the counter
+                if __name__ == '__main__':
+                    p = Thread(target=parallelism, name='conditional note counter thread')
+                    p.start()      
+                    
 except KeyboardInterrupt:
     print('')
 finally:

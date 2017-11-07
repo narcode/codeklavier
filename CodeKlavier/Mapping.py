@@ -359,7 +359,7 @@ class Mapping_Motippets:
         
     def conditional(self, conditional_num):
         if conditional_num == 2:
-            self.__keyboard.type('// setting up a conditional: \\n if number of notes in 5 seconds > 100:');
+            self.__keyboard.type('// setting up a conditional: \\n if number of notes in the 10 seconds > 100:');
             self.enter();
             
     def result(self, result_num, text):

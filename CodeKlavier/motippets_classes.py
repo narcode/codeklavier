@@ -183,12 +183,12 @@ class Motippets(object):
                 elif section == 'conditionals': 
                             
                     if note <= self._pianosections[0]:
-                        self.memorize(note, 20, True, 'Conditional Memory: ')
+                        self.memorize(note, 20, False, 'Conditional Memory: ')
                     
                         conditional2_played = self.compare_chordal_motif(
                                             self._memory,
                                             Motifs().conditional_2(),
-                                            note, False)
+                                            note, True)
                     
                         if conditional2_played:
                             if self._conditional_counter == 0:
@@ -203,7 +203,7 @@ class Motippets(object):
                         result2_played = self.compare_motif(
                                         self._memory, 'conditional result 2',
                                         Motifs().conditional_result_2(),
-                                        note, False)
+                                        note, True)
                         
                         if result2_played and self._resultCounter == 0: 
                             if self._conditional_counter > 0:
