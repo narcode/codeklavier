@@ -358,6 +358,16 @@ class Mapping_Motippets:
         self.evaluateSC('eval')
         
     def conditional(self, conditional_num):
-        if conditional_num == 1:
-            self.__keyboard.type('\\\ setting up a conditional: \\n if number of notes in 10 seconds > 100:');
+        if conditional_num == 2:
+            self.__keyboard.type('// setting up a conditional: \\n if number of notes in 5 seconds > 100:');
             self.enter();
+            
+    def result(self, result_num, text):
+        if result_num == 2:
+            if text == 'comment':
+                self.__keyboard.type('// if true -> stop ~snippet1');
+                self.enter();            
+            elif text == 'code':
+                self.__keyboard.type('~snippet1.stop;');
+                self.evaluateSC('eval')
+            

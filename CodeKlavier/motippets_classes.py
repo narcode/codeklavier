@@ -19,12 +19,16 @@ class Motippets(object):
         self._mainMotifs = []
         self._miniMotifs = []
         self._miniMotifs2 = []
-        self._pianosectons = [47, 78, 108]
+        self._pianosections = [47, 78, 108]
         self._motif1_counter = 0
         self._motif2_counter = 0
         self._intervalsArray = []
         self._unmapCounter1 = 0
         self._unmapCounter2 = 0
+        self._conditional_counter = 0
+        self._conditionalsBuffer = []
+        self._resultCounter = 0
+        self._conditionalStatus = ""
 
     def parse_midi(self, event, section):
         """Parse the midi signal and process it depending on the register.
@@ -45,7 +49,7 @@ class Motippets(object):
                 
                 ### LOW SECTION
                 if section == 'low':
-                    if note <= self._pianosectons[0]:
+                    if note <= self._pianosections[0]:
                         self.memorize(note, 20, False, 'Low: ')
                                                     
                         mini_motif_1_Low_played = self.compare_motif(
@@ -72,8 +76,8 @@ class Motippets(object):
                             
                 ### MID SECTION
                 elif section == 'mid':
-                    if (note > self._pianosectons[0] and
-                        note <= self._pianosectons[1]):
+                    if (note > self._pianosections[0] and
+                        note <= self._pianosections[1]):
                         self.memorize(note, 20, False, 'Mid: ')
                         
                         # see if motif_1 is played:
@@ -108,8 +112,8 @@ class Motippets(object):
                             
                 ### HI SECTION
                 elif section == 'hi':
-                    if note > self._pianosectons[1]:
-                        self.memorize(note, 20, True, 'Hi: ')
+                    if note > self._pianosections[1]:
+                        self.memorize(note, 20, False, 'Hi: ')
                         
                         mini_motif_1_Hi_played = self.compare_motif(
                                                     self._memory, 'mini',
@@ -135,7 +139,7 @@ class Motippets(object):
                             
                 ### TEMOLO
                 elif section == 'tremoloHi':
-                    if note > self._pianosectons[1]:
+                    if note > self._pianosections[1]:
                         self.memorize(note, 4, False, 'Tremolo Hi: ')
                         
                         if self.count_notes(self._memory, False) == 4:
@@ -144,8 +148,8 @@ class Motippets(object):
                                 deltatime, 0.1, False)
                 
                 elif section == 'tremoloMid':
-                    if (note > self._pianosectons[0] and
-                        note <= self._pianosectons[1]):
+                    if (note > self._pianosections[0] and
+                        note <= self._pianosections[1]):
                         self.memorize(note, 4, False, 'Tremolo Mid: ')
                         
                         if self.count_notes(self._memory, False) == 4:
@@ -154,7 +158,7 @@ class Motippets(object):
                                 deltatime, 0.1, False)
                     
                 elif section == 'tremoloLow':
-                    if note <= self._pianosectons[0]:
+                    if note <= self._pianosections[0]:
                         self.memorize(note, 4, False, 'Tremolo Low: ')
                         
                         if self.count_notes(self._memory, False) == 4:
@@ -176,33 +180,71 @@ class Motippets(object):
                             self._motif2_counter = 1
                             
                 ### CONDITONALS
-                elif section == 'full_conditionals':
-                    self.memorize(note, 20, True, 'Conditional Memory: ')
+                elif section == 'conditionals': 
+                            
+                    if note <= self._pianosections[0]:
+                        self.memorize(note, 20, True, 'Conditional Memory: ')
                     
-                    conditional1_played = self.compare_motif(
-                                            self._memory, 'conditional 1',
-                                            Motifs().conditional_1(),
-                                            note, True)
+                        conditional2_played = self.compare_chordal_motif(
+                                            self._memory,
+                                            Motifs().conditional_2(),
+                                            note, False)
                     
-                    if conditional1_played:
-                        self.mapscheme.conditional(1)                    
-                        
+                        if conditional2_played:
+                            if self._conditional_counter == 0:
+                                self.mapscheme.conditional(2)
+                                self._memory = []
+                                self._conditional_counter += 1
 
-    def memorize(self, midinote, length, debug=False, debugname="Motippets"):
+
+                    if note > self._pianosections[1]:
+                        self.memorize(note, 20, False, 'Conditional Memory: ')
+                    
+                        result2_played = self.compare_motif(
+                                        self._memory, 'conditional result 2',
+                                        Motifs().conditional_result_2(),
+                                        note, False)
+                        
+                        if result2_played and self._resultCounter == 0: 
+                            if self._conditional_counter > 0:
+                                self.mapscheme.result(2, 'comment')
+                                self._conditionalsBuffer = []
+                                self._resultCounter += 1
+                                self._conditionalStatus = "2 on"
+                        
+                            return self._conditionalStatus
+
+                #### RESULTS
+                elif section == 'conditional_results':
+                    self.memorize(note, 101, True, 'Conditional Buffer: ', 'on')
+                    
+                   # print(len(self._conditionalsBuffer))
+                    return len(self._conditionalsBuffer)             
+                    
+    def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
 
         midinote: the incoming MIDI note message\n
         length: the size of the array to store the midinotes\n
         debug: flag to print console debug messages\n
         debugname: prefix for the debug messages
+        conditional: if a parallel buffer is filled in for the conditional functions
         """
         self._memory.append(midinote)
-        
+
         if len(self._memory) > length:
             self._memory = self._memory[-length:]
         
         if debug == True:
             print(debugname + ','.join(map(str, self._memory)))
+            if conditional == "on":
+                print(debugname + ','.join(map(str, self._conditionalsBuffer)))            
+            
+        if conditional == "on":
+            self._conditionalsBuffer.append(midinote)
+            if len(self._conditionalsBuffer) > length:
+                self._conditionalsBuffer = self._conditionalsBuffer[-length:]
+                
   
     def count_notes(self, array, debug=False):
         """See if notes are repeated in the passed array so as to be considered

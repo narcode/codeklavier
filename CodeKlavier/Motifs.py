@@ -79,4 +79,4 @@ class Motifs_Anne(object):
         return [60, 62, 66, 70, 69, 67]
 
     def conditional_result_2(self):
-        return [87, 80, 78, 68, 75, 79]
+        return [99, 92, 90, 89, 92, 94]
