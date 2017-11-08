@@ -24,7 +24,7 @@ class Motippets(object):
         self._intervalsArray = []
         self._unmapCounter1 = 0
         self._unmapCounter2 = 0
-        self._conditional_counter = 0
+        self._conditionalCounter = 0
         self._conditionalsBuffer = []
         self._resultCounter = 0
         self._conditionalStatus = ""
@@ -189,10 +189,10 @@ class Motippets(object):
                                             note, True)
                     
                         if conditional2_played:
-                            if self._conditional_counter == 0:
+                            if self._conditionalCounter == 0:
                                 self.mapscheme.conditional(2)
                                 self._memory = []
-                                self._conditional_counter += 1
+                                self._conditionalCounter += 1
 
 
                     if note > self._pianosections[1]:
@@ -204,20 +204,13 @@ class Motippets(object):
                                         note, True)
                         
                         if result2_played and self._resultCounter == 0: 
-                            if self._conditional_counter > 0:
+                            if self._conditionalCounter > 0:
                                 self.mapscheme.result(2, 'comment')
                                 self._conditionalsBuffer = []
                                 self._resultCounter += 1
                                 self._conditionalStatus = "2 on"
                         
-                            return self._conditionalStatus
-
-                #### RESULTS
-                elif section == 'conditional_results':
-                    self.memorize(note, 101, True, 'Conditional Buffer: ', 'on')
-                    
-                   # print(len(self._conditionalsBuffer))
-                    return len(self._conditionalsBuffer)             
+                            return self._conditionalStatus            
                     
     def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.

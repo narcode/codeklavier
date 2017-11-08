@@ -47,16 +47,19 @@ noteBuffer = Motippets(mapping, device_id)
 #multiprocessing vars
 notecounter = 0
 
-def parallelism(debug=True):
+def parallelism(debug=True, numberOfnotes=100):
     print('thread started')
     
     for s in range(0, 10):
-        if notecounter > 100:
+        if notecounter > numberOfnotes:
             mapping.customPass('//WOW! Anne played: ', str(notecounter)+'!!!')            
             mapping.result(2, 'code')
             break
         else:
             mapping.customPass('//notes played: ', str(notecounter))
+            conditionals._conditionalStatus = ""
+            conditionals._resultCounter = 0
+            conditionals._conditionalCounter = 0
             
         if debug:        
             print(notecounter)
@@ -83,10 +86,10 @@ try:
             ##conditionals              
             if conditionals.parse_midi(msg, 'conditionals') == "2 on":
                 notecounter = 0 # reset the counter
-                p = Thread(target=parallelism, name='conditional note counter thread')
+                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150))
                 p.start()      
         
-        time.sleep(0.01)
+        time.sleep(0.01) #check
         
 except KeyboardInterrupt:
     print('')
