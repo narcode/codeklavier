@@ -117,7 +117,6 @@ def main():
     if my_midiport >= 0:
         print("CodeKlavier is ON. Press Control-C to exit.")
         try:
-            timer = time.time()
             while True:
                 msg = codeK.get_message()
 

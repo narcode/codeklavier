@@ -9,10 +9,9 @@ class Motippets(object):
     Second prototype of the CodeKlavier
     """
 
-    def __init__(self, port, mapping, noteonid):
+    def __init__(self, mapping, noteonid):
         """The method to initialise the class and prepare the class variables.
         """
-        self.port = port
         self.mapscheme = mapping
         self.noteonid = noteonid
         self._memory = []
@@ -41,8 +40,7 @@ class Motippets(object):
             if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                 note = message[1]
                 self.mapscheme.mapping(note)
-                # @narcode: return? Or is it necessary to go through the rest
-                # of the function?
+                return
                 
             if (message[0] == self.noteonid):
                 note = message[1]

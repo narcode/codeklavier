@@ -18,7 +18,7 @@ codeK.open_port(myPort)
 device_id = codeK.get_device_id()
 print('your device id is: ', device_id, '\n')
 
-# Use your favourite mapping of the keys0
+# Use your favourite mapping of the keys
 
 mapping = Mapping_Motippets()
 
@@ -46,7 +46,7 @@ noteBuffer = Motippets(mapping, device_id)
 
 #multiprocessing vars
 notecounter = 0
- 
+
 def parallelism(debug=True):
     print('thread started')
     
@@ -93,3 +93,4 @@ except KeyboardInterrupt:
 finally:
     print("Bye-Bye :(")
     codeK.end()
+

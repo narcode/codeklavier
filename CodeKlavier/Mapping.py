@@ -370,4 +370,8 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop;');
                 self.evaluateSC('eval')
+                
+    def customPass(self, name, content):
+        self.__keyboard.type(name + " " + content)
+        self.enter();
             
