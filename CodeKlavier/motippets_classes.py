@@ -38,7 +38,7 @@ class Motippets(object):
         """
         message, deltatime = event
         self._deltatime += deltatime
-        if message[2] > 0 and message[0] != 254: #only noteOn
+        if message[2] > 0 or message[0] != 254: #only noteOn and ignore activesense
             if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                 note = message[1]
                 self.mapscheme.mapping(note)
@@ -150,12 +150,12 @@ class Motippets(object):
                 elif section == 'tremoloMid':
                     if (note > self._pianosections[0] and
                         note <= self._pianosections[1]):
-                        self.memorize(note, 4, False, 'Tremolo Mid: ')
+                        self.memorize(note, 4, True, 'Tremolo Mid: ')
                         
                         if self.count_notes(self._memory, False) == 4:
                             self.tremolo_value(
                                 [self._memory[2], self._memory[3]], 'mid',
-                                self._deltatime, 0.1, False)
+                                self._deltatime, 0.1, True)
                     
                 elif section == 'tremoloLow':
                     if note <= self._pianosections[0]:
