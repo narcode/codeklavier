@@ -37,7 +37,7 @@ class Motippets(object):
         section: the MIDI piano range (i.e. low register, mid or high)
         """
         message, deltatime = event
-        self._deltatime += deltatime
+        self._deltatime -= deltatime
         if message[0] != 254:
             if message[2] > 0 and message[0]: #only noteOn and ignore activesense
                 if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
