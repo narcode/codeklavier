@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from .Motifs import Motifs_Anne as Motifs
+from Motifs import Motifs_Anne as Motifs
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -28,6 +28,7 @@ class Motippets(object):
         self._conditionalsBuffer = []
         self._resultCounter = 0
         self._conditionalStatus = ""
+        self._deltatime = 0
 
     def parse_midi(self, event, section):
         """Parse the midi signal and process it depending on the register.
@@ -36,7 +37,8 @@ class Motippets(object):
         section: the MIDI piano range (i.e. low register, mid or high)
         """
         message, deltatime = event
-        if message[2] > 0: #only noteOn
+        self._deltatime += deltatime
+        if message[2] > 0 and message[0] != 254: #only noteOn
             if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                 note = message[1]
                 self.mapscheme.mapping(note)
@@ -143,7 +145,7 @@ class Motippets(object):
                         if self.count_notes(self._memory, False) == 4:
                             self.tremolo_value(
                                 [self._memory[2], self._memory[3]], 'hi',
-                                deltatime, 0.1, False)
+                                self._deltatime, 0.1, False)
                 
                 elif section == 'tremoloMid':
                     if (note > self._pianosections[0] and
@@ -153,7 +155,7 @@ class Motippets(object):
                         if self.count_notes(self._memory, False) == 4:
                             self.tremolo_value(
                                 [self._memory[2], self._memory[3]], 'mid',
-                                deltatime, 0.1, False)
+                                self._deltatime, 0.1, False)
                     
                 elif section == 'tremoloLow':
                     if note <= self._pianosections[0]:
@@ -162,7 +164,7 @@ class Motippets(object):
                         if self.count_notes(self._memory, False) == 4:
                             self.tremolo_value(
                                 [self._memory[2], self._memory[3]], 'low',
-                                deltatime, 0.1, False)
+                                self._deltatime, 0.1, False)
 
                 ### FULL REGISTER            
                 elif section == 'full':
