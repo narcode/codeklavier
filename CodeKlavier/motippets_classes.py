@@ -38,7 +38,7 @@ class Motippets(object):
         """
         message, deltatime = event
         self._deltatime += deltatime
-        if message[2] > 0 or message[0] != 254: #only noteOn and ignore activesense
+        if (message[2] > 0 and message[0] == self.noteonid) or message[0] != 254: #only noteOn and ignore activesense
             if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                 note = message[1]
                 self.mapscheme.mapping(note)
