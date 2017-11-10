@@ -367,7 +367,7 @@ class Motippets(object):
         TODO: describe input params
         """
         if debug:
-            print('deltatime :' + deltatime, 'tolerance :', deltatolerance)
+            print('deltatime :' + str(deltatime), 'tolerance :', str(deltatolerance))
         if deltatime < deltatolerance:
             interval = abs(notes[1] - notes[0])
             self._intervalsArray.append(interval)
