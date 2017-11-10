@@ -56,8 +56,11 @@ def parallelism(debug=True, numberOfnotes=100, result_num=1):
             mapping.customPass('//WOW! Anne played: ', str(notecounter)+'!!!')
             if result_num == 1:
                 mapping.result(1, 'code')
-            elif result_num == 2:
+                mainMem._motif2_counter = 0
+                
+            elif result_num == 2: #this is for snippet 1 - change the names accordingly
                 mapping.result(2, 'code')
+                memMid._motif1_counter = 0
             break
         else:
             mapping.customPass('//notes played: ', str(notecounter))
@@ -91,6 +94,7 @@ try:
             tremoloLow.parse_midi(msg, 'tremoloLow')
             
             ##conditionals              
+            #TODO: see if this belowe can be within ONLY 1 instance of the class:
             if conditionals1.parse_midi(msg, 'conditionals') == "2 on":
                 notecounter = 0 # reset the counter
                 p = Thread(target=parallelism, name='conditional note counter thread', args=(True, 150, 2))
