@@ -7,9 +7,9 @@ import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
-from CodeKlavier.Setup import Setup
-from CodeKlavier.Mapping import Mapping_Motippets
-from CodeKlavier.motippets_classes import Motippets
+from Setup import Setup
+from Mapping import Mapping_Motippets
+from motippets_classes import Motippets
 
 # Start the CodeKlavier
 codeK = Setup()
@@ -47,13 +47,17 @@ noteBuffer = Motippets(mapping, device_id)
 #multiprocessing vars
 notecounter = 0
 
-def parallelism(debug=True, numberOfnotes=100):
+#TODO: move this function to a better place?
+def parallelism(debug=True, numberOfnotes=100, result_num):
     print('thread started')
     
     for s in range(0, 10):
         if notecounter > numberOfnotes:
-            mapping.customPass('//WOW! Anne played: ', str(notecounter)+'!!!')            
-            mapping.result(2, 'code')
+            mapping.customPass('//WOW! Anne played: ', str(notecounter)+'!!!')
+            if result_num == 1:
+                mapping.result(1, 'code')
+            elif result_num == 2:
+                mapping.result(2, 'code')
             break
         else:
             mapping.customPass('//notes played: ', str(notecounter))
@@ -87,7 +91,11 @@ try:
             if conditionals.parse_midi(msg, 'conditionals') == "2 on":
                 notecounter = 0 # reset the counter
                 p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150))
-                p.start()      
+                p.start()
+            if conditionals.parse_midi(msg, 'conditionals') == "1 on":
+                notecounter = 0 # reset the counter
+                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150))
+                p.start()                  
         
         time.sleep(0.01) #check
         

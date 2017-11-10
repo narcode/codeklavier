@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from .Motifs import Motifs_Anne as Motifs
+from Motifs import Motifs_Anne as Motifs
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -205,10 +205,13 @@ class Motippets(object):
                         if note > self._pianosections[1]:
                             self.memorize(note, 20, False, 'Conditional Memory: ')
                         
-                            result2_played = self.compare_motif(
-                                            self._memory, 'conditional result 2',
-                                            Motifs().conditional_result_2(),
-                                            note, True)
+                            result2_played = self.compare_motif(self._memory, 'conditional result 2',
+                                                                Motifs().conditional_result_2(),
+                                                                note, True)
+                            
+                            result1_played = self.compare_motif(self._memory, 'conditional result 1',
+                                                                 Motifs().conditional_result_1(),
+                                                                 note, True)          
                             
                             if result2_played and self._resultCounter == 0: 
                                 if self._conditionalCounter > 0:
@@ -217,7 +220,17 @@ class Motippets(object):
                                     self._resultCounter += 1
                                     self._conditionalStatus = "2 on"
                             
-                                return self._conditionalStatus            
+                                return self._conditionalStatus
+                            
+                            elif result1_played and self._resultCounter == 0:
+                                if self._conditionalCounter > 0:
+                                    self.mapscheme.result(1, 'comment')
+                                    self._conditionalsBuffer = []
+                                    self._resultCounter += 1
+                                    self._conditionalStatus = "1 on"
+                                    
+                                return self._conditionalStatus
+                                    
                     
     def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.

@@ -363,6 +363,14 @@ class Mapping_Motippets:
             self.enter();
             
     def result(self, result_num, text):
+        if result_num == 1:
+            if text == 'comment':
+                self.__keyboard.type('// if true -> stop ~snippet2');
+                self.enter();            
+            elif text == 'code':
+                self.__keyboard.type('~snippet2.stop;');
+                self.evaluateSC('eval')
+        
         if result_num == 2:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet1');
@@ -370,6 +378,7 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop;');
                 self.evaluateSC('eval')
+                
                 
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
