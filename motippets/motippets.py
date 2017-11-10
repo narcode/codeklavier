@@ -90,11 +90,11 @@ try:
             ##conditionals              
             if conditionals.parse_midi(msg, 'conditionals') == "2 on":
                 notecounter = 0 # reset the counter
-                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150))
+                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150), 2)
                 p.start()
             if conditionals.parse_midi(msg, 'conditionals') == "1 on":
                 notecounter = 0 # reset the counter
-                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150))
+                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150), 1)
                 p.start()                  
         
         time.sleep(0.01) #check
