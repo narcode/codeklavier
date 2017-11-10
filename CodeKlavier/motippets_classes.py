@@ -37,8 +37,9 @@ class Motippets(object):
         section: the MIDI piano range (i.e. low register, mid or high)
         """
         message, deltatime = event
-        self._deltatime -= deltatime
+        self._deltatime += deltatime
         if message[0] != 254:
+            deltatime
             if message[2] > 0 and message[0]: #only noteOn and ignore activesense
                 if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                     note = message[1]
@@ -147,6 +148,7 @@ class Motippets(object):
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'hi',
                                     self._deltatime, 0.1, False)
+                                self._deltatime = 0
                     
                     elif section == 'tremoloMid':
                         if (note > self._pianosections[0] and
@@ -157,6 +159,7 @@ class Motippets(object):
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'mid',
                                     self._deltatime, 0.1, True)
+                                self._deltatime = 0
                         
                     elif section == 'tremoloLow':
                         if note <= self._pianosections[0]:
@@ -166,6 +169,7 @@ class Motippets(object):
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'low',
                                     self._deltatime, 0.1, False)
+                                self._deltatime = 0
     
                     ### FULL REGISTER            
                     elif section == 'full':
