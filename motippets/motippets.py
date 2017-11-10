@@ -41,8 +41,8 @@ tremoloMid = Motippets(mapping, device_id)
 tremoloLow = Motippets(mapping, device_id)
 
 #midi listening for conditionals 
-conditionals = Motippets(mapping, device_id)
-noteBuffer = Motippets(mapping, device_id)
+conditionals1 = Motippets(mapping, device_id)
+conditionals2 = Motippets(mapping, device_id)
 
 #multiprocessing vars
 notecounter = 0
@@ -61,9 +61,12 @@ def parallelism(debug=True, numberOfnotes=100, result_num=1):
             break
         else:
             mapping.customPass('//notes played: ', str(notecounter))
-            conditionals._conditionalStatus = ""
-            conditionals._resultCounter = 0
-            conditionals._conditionalCounter = 0
+            conditionals1._conditionalStatus = ""
+            conditionals1._resultCounter = 0
+            conditionals1._conditionalCounter = 0
+            conditionals2._conditionalStatus = ""
+            conditionals2._resultCounter = 0
+            conditionals2._conditionalCounter = 0            
             
         if debug:        
             print(notecounter)
@@ -88,13 +91,13 @@ try:
             tremoloLow.parse_midi(msg, 'tremoloLow')
             
             ##conditionals              
-            if conditionals.parse_midi(msg, 'conditionals') == "2 on":
+            if conditionals1.parse_midi(msg, 'conditionals') == "2 on":
                 notecounter = 0 # reset the counter
-                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150, 2))
+                p = Thread(target=parallelism, name='conditional note counter thread', args=(True, 150, 2))
                 p.start()
-            if conditionals.parse_midi(msg, 'conditionals') == "1 on":
+            if conditionals2.parse_midi(msg, 'conditionals') == "1 on":
                 notecounter = 0 # reset the counter
-                p = Thread(target=parallelism, name='conditional note counter thread', args=(False, 150, 1))
+                p = Thread(target=parallelism, name='conditional note counter thread', args=(True, 150, 1))
                 p.start()                  
         
         time.sleep(0.01) #check
