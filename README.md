@@ -20,8 +20,10 @@ CodeKlavier development started in April 2017 and currently has two prototypes: 
 This is the Python directory of CodeKlavier. This project was initially started in Node.js but has been refactored into Python 3.0.
 
 ## Equipment
-1.An acoustic-MIDI piano such as a Yamaha Disklavier, any piano fitted with a silent system or an acoustic intrument in combination with a MOOG piano bar. If an acoustic-MIDI piano is not available, any 880key MIDI keyboard will suffice providing this instrument is of suitable sensitivity for the pianist.
+1.An acoustic-MIDI piano such as a Yamaha Disklavier, any piano fitted with a silent system or an acoustic intrument in combination with a MOOG piano bar. If an acoustic-MIDI piano is not available, any 88-key MIDI keyboard will suffice providing this instrument is of suitable sensitivity for the pianist.
+
 2. MIDI interface (incase this is not present in the piano)
+
 3. Sound system 
 
 ## Libraries
