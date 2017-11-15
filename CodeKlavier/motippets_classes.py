@@ -324,8 +324,7 @@ class Motippets(object):
                         self.memorize(note, 999, 
                                      debugname="Range conditional memory")
                         
-                        played_range = self.get_range(self._memory, self._timer, debug=True)
-                        self._range = played_range
+                        self.get_range(self._memory, self._timer, debug=True)
                         
         return self._conditionalStatus 
      
@@ -576,23 +575,22 @@ class Motippets(object):
         
         TODO: show range every iteration
         
-        """
-        dif = 0
-        
-        if time == 30:
-            notes.sort()
-            lowest_note = notes[0]
-            hightest_note = notes.pop()
+        """       
+        #if time == 30:
+        notes.sort()
+        lowest_note = notes[0]
+        hightest_note = notes[0]
+        if time % 2 == 0:
+            notes.reverse()
+            hightest_note = notes[0]
             
-            dif = hightest_note - lowest_note
+            self._range = hightest_note - lowest_note
 
             if debug:
-                print('highest note: ' + str(hightest_note), 'lowest note: ' + str(lowest_note), 
-                      'difference: ' + str(dif))
-            
-            return dif
+                print('highest note: ', hightest_note, 'lowest note: ', lowest_note, 
+                      'difference: ', self._range)
         
-        return dif
-                
+        return self._range
+                        
         
                         

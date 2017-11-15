@@ -87,7 +87,7 @@ def rangeCounter(timer=30, result_num=1, debug=True, perpetual=True):
     global range_trigger
     range_trigger = 1
     conditionals2._conditionalStatus = 0 #reset trigger
-    t = 0
+    t = 1
     
     if debug:
         print('thread for range started')
@@ -99,31 +99,36 @@ def rangeCounter(timer=30, result_num=1, debug=True, perpetual=True):
             print('timer: ', t)
             print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
+        t += 1
+        
+        if t % timer == 0:
+            if debug:
+                print("Range conditional thread finished")
+                print("range was: ", conditionalsRange._range)
+            if conditionalsRange._range >= 72:   
+                if result_num == 1:
+                    mapping.result(1,'code')
+                elif result_num == 2:
+                    mapping.result(2, 'code')
+                elif result_num == 3:
+                    mapping.result(3, 'code')
+            elif conditionalsRange._range <= 12:
+                if result_num == 1:
+                    mapping.result(1,'else code')
+                elif result_num == 2:
+                    mapping.result(2, 'else code')
+                elif result_num == 3:
+                    mapping.result(3, 'else code')            
+                
+            # reset states:    
+            range_trigger = 0    
+            conditionalsRange._memory = []
+            conditionals2._conditionalCounter = 0
+            conditionals2._resultCounter = 0
+            conditionalsRange._timer = 0
+            t = 0        
         
         time.sleep(1)
-    
-    if t % timer == 0:
-        if debug:
-            print("Range conditional thread finished")
-        if conditionalsRange._range >= 72:   
-            if result_num == 1:
-                mapping.result(1,'code')
-            elif result_num == 2:
-                mapping.result(2, 'code')
-            elif result_num == 3:
-                mapping.result(3, 'code')
-        elif conditionalsRange._range <= 12:
-            if result_num == 1:
-                mapping.result(1,'else code')
-            elif result_num == 2:
-                mapping.result(2, 'else code')
-            elif result_num == 3:
-                mapping.result(3, 'else code')            
-            
-        range_trigger = 0    
-        conditionalsRange._memory = []
-        conditionals2._conditionalCounter = 0
-        conditionals2._resultCounter = 0
     
 
         
@@ -156,7 +161,7 @@ try:
             
             if conditional2_value > 0:
                 conditionalsRange._conditionalStatus = conditional2_value
-                threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(30, conditional2_value, True))
+                threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, conditional2_value, True))
                 threads[conditional2_value].start()
                 
             if range_trigger == 1:
