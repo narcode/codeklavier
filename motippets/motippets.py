@@ -115,13 +115,15 @@ def rangeCounter(timer=30, result_num=1, debug=True, perpetual=True):
             elif conditionalsRange._range <= 12:
                 if result_num == 1:
                     mapping.result(1,'else code')
+                    range_trigger = 0 # stop here for now
+                    break
                 elif result_num == 2:
                     mapping.result(2, 'else code')
                 elif result_num == 3:
                     mapping.result(3, 'else code')            
                 
             # reset states:    
-            range_trigger = 0    
+            #range_trigger = 0    
             conditionalsRange._memory = []
             conditionals2._conditionalCounter = 0
             conditionals2._resultCounter = 0
@@ -147,7 +149,7 @@ try:
             memHi.parse_midi(msg, 'hi')
             ##tremolos:
             tremoloHi.parse_midi(msg, 'tremoloHi')
-            tremoloMid.parse_midi(msg, 'tremoloMid')
+            tremoloMid.parse_midi(msg, 'tremoloNdef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Im)))}Mid')
             tremoloLow.parse_midi(msg, 'tremoloLow')
             
             ##conditionals              

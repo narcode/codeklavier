@@ -373,8 +373,8 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet2.stop;');
                 self.evaluateSC('eval')
-            elif text == 'secondary code':
-                self.__keyboard.type('less than an 8ve');
+            elif text == 'else code':
+                self.__keyboard.type('//less than an 8ve');
                 self.evaluateSC('eval')                
         
         elif result_num == 2:
@@ -384,8 +384,8 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop;');
                 self.evaluateSC('eval')
-            elif text == 'secondary code':
-                self.__keyboard.type('less than an 8ve');
+            elif text == 'else code':
+                self.__keyboard.type('//less than an 8ve');
                 self.evaluateSC('eval')                 
                 
         elif result_num == 3:
@@ -395,8 +395,8 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([1234*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
                 self.evaluateSC('eval')   
-            elif text == 'secondary code':
-                self.__keyboard.type('less than an 8ve');
+            elif text == 'else code':
+                self.__keyboard.type('//less than an 8ve');
                 self.evaluateSC('eval')                 
                 
     def customPass(self, name, content):
