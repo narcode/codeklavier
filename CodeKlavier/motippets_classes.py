@@ -179,12 +179,12 @@ class Motippets(object):
     
                     ### FULL REGISTER            
                     elif section == 'full':
-                        self.memorize(note, 20, False, 'Full-section Memory: ')
+                        self.memorize(note, 20, True, 'Full-section Memory: ')
                         
                         # check if motif_2 is played:
                         motif2_played = self.compare_chordal_motif(
                                             self._memory, Motifs().motif_2(), note,
-                                            False)
+                                            True)
                         if motif2_played:
                             if self._motif2_counter == 0:
                                 self.mapscheme.snippets(2)
