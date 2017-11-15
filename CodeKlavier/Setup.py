@@ -100,6 +100,7 @@ class Setup(object):
                     device_id = message[0]
                     if device_id:
                         return device_id
+            time.sleep(0.01)
 
     def perform_setup(self):
         self.print_welcome(20)
