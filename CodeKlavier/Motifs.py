@@ -80,3 +80,6 @@ class Motifs_Anne(object):
 
     def conditional_result_2(self):
         return [99, 92, 90, 89, 92, 94]
+    
+    def conditional_result_3(self):
+        return [21,22,23]

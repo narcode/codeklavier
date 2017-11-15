@@ -358,9 +358,12 @@ class Mapping_Motippets:
         self.evaluateSC('eval')
         
     def conditional(self, conditional_num):
-        if conditional_num == 2:
-            self.__keyboard.type('// setting up a conditional: \\n if number of notes in the 10 seconds > 100:');
+        if conditional_num == 1:
+            self.__keyboard.type('// setting up a conditional: \\n if range within blocks of 30 seconds > 72 semitones or < 12 semitones:');
             self.enter();
+        elif conditional_num == 2:
+            self.__keyboard.type('// setting up a conditional: \\n if number of notes in the 10 seconds > 100:');
+            self.enter();            
             
     def result(self, result_num, text):
         if result_num == 1:
@@ -370,15 +373,31 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet2.stop;');
                 self.evaluateSC('eval')
+            elif text == 'secondary code':
+                self.__keyboard.type('less than an 8ve');
+                self.evaluateSC('eval')                
         
-        if result_num == 2:
+        elif result_num == 2:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet1');
                 self.enter();            
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop;');
                 self.evaluateSC('eval')
+            elif text == 'secondary code':
+                self.__keyboard.type('less than an 8ve');
+                self.evaluateSC('eval')                 
                 
+        elif result_num == 3:
+            if text == 'comment':
+                self.__keyboard.type('// if true -> play gong sound!');
+                self.enter();            
+            elif text == 'code':
+                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([1234*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
+                self.evaluateSC('eval')   
+            elif text == 'secondary code':
+                self.__keyboard.type('less than an 8ve');
+                self.evaluateSC('eval')                 
                 
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)

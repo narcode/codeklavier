@@ -30,7 +30,6 @@ print("\nPress Control-C to exit.")
 mainMem = Motippets(mapping, device_id)
 
 # midi listening per register
-pianosectons = [47, 78, 108]
 memLow = Motippets(mapping, device_id)
 memMid = Motippets(mapping, device_id)
 memHi = Motippets(mapping, device_id)
@@ -41,39 +40,92 @@ tremoloMid = Motippets(mapping, device_id)
 tremoloLow = Motippets(mapping, device_id)
 
 #midi listening for conditionals 
-conditionals1 = Motippets(mapping, device_id)
+conditionals = Motippets(mapping, device_id)
 conditionals2 = Motippets(mapping, device_id)
+conditionalsRange = Motippets(mapping, device_id)
 
 #multiprocessing vars
+threads = {}
 notecounter = 0
+range_trigger = 0
+
 
 #TODO: move this function to a better place?
-def parallelism(debug=True, numberOfnotes=100, result_num=1):
-    print('thread started')
+def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
+    print('thread started for result ', result_num)
     
-    for s in range(0, 10):
+    for s in range(0, timer):
         if notecounter > numberOfnotes:
-            mapping.customPass('//WOW! Anne played: ', str(notecounter)+'!!!')
+            mapping.customPass('//WOW! I played: ', str(notecounter)+'!!!')
+            
             if result_num == 1:
-                mapping.result(1, 'code')
-                mainMem._motif2_counter = 0
+                mapping.result(result_num, 'code')
+                mainMem._motif2_counter = 0 #reset the motif counter so it can be played again...
                 
             elif result_num == 2: #this is for snippet 1 - change the names accordingly
-                mapping.result(2, 'code')
+                mapping.result(result_num, 'code')
                 memMid._motif1_counter = 0
+                
+            elif result_num == 3:
+                mapping.result(result_num, 'code')
+                               
             break
         else:
             mapping.customPass('//notes played: ', str(notecounter))
-            conditionals1._conditionalStatus = ""
-            conditionals1._resultCounter = 0
-            conditionals1._conditionalCounter = 0
-            conditionals2._conditionalStatus = ""
-            conditionals2._resultCounter = 0
-            conditionals2._conditionalCounter = 0            
+            conditionals._conditionalStatus = 0
+            conditionals._resultCounter = 0
+            conditionals._conditionalCounter = 0
             
         if debug:        
             print(notecounter)
         time.sleep(1)
+    
+def rangeCounter(timer=30, result_num=1, debug=True, perpetual=True):
+    """
+   Conditional function. Perpetual too.
+    """
+    global range_trigger
+    range_trigger = 1
+    conditionals2._conditionalStatus = 0 #reset trigger
+    t = 0
+    
+    if debug:
+        print('thread for range started')
+    print("range trig -> ", range_trigger, "result num: ", result_num)
+
+    
+    while perpetual:  
+        if debug:
+            print('timer: ', t)
+            print('Range conditional memory: ', conditionalsRange._memory)
+        conditionalsRange._timer += 1
+        
+        time.sleep(1)
+    
+    if t % timer == 0:
+        if debug:
+            print("Range conditional thread finished")
+        if conditionalsRange._range >= 72:   
+            if result_num == 1:
+                mapping.result(1,'code')
+            elif result_num == 2:
+                mapping.result(2, 'code')
+            elif result_num == 3:
+                mapping.result(3, 'code')
+        elif conditionalsRange._range <= 12:
+            if result_num == 1:
+                mapping.result(1,'else code')
+            elif result_num == 2:
+                mapping.result(2, 'else code')
+            elif result_num == 3:
+                mapping.result(3, 'else code')            
+            
+        range_trigger = 0    
+        conditionalsRange._memory = []
+        conditionals2._conditionalCounter = 0
+        conditionals2._resultCounter = 0
+    
+
         
 # Loop to program to keep listening for midi input
 try:
@@ -94,15 +146,21 @@ try:
             tremoloLow.parse_midi(msg, 'tremoloLow')
             
             ##conditionals              
-            #TODO: see if this belowe can be within ONLY 1 instance of the class:
-            if conditionals1.parse_midi(msg, 'conditionals') == "2 on":
+            conditional_value = conditionals.parse_midi(msg, 'conditional 1');
+            conditional2_value = conditionals2.parse_midi(msg, 'conditional 2');
+            
+            if conditional_value > 0:
                 notecounter = 0 # reset the counter
-                p = Thread(target=parallelism, name='conditional note counter thread', args=(True, 150, 2))
-                p.start()
-            if conditionals2.parse_midi(msg, 'conditionals') == "1 on":
-                notecounter = 0 # reset the counter
-                p = Thread(target=parallelism, name='conditional note counter thread', args=(True, 150, 1))
-                p.start()                  
+                threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 150, conditional_value, True))
+                threads[conditional_value].start()
+            
+            if conditional2_value > 0:
+                conditionalsRange._conditionalStatus = conditional2_value
+                threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(30, conditional2_value, True))
+                threads[conditional2_value].start()
+                
+            if range_trigger == 1:
+                played_range = conditionalsRange.parse_midi(msg, 'conditional_range')
         
         time.sleep(0.01) #check
         
