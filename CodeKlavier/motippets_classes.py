@@ -58,7 +58,7 @@ class Motippets(object):
                     ### LOW SECTION
                     if section == 'low':
                         if note <= self._pianosections[0]:
-                            self.memorize(note, 20, False, 'Low: ')
+                            self.memorize(note, 4, False, 'Low: ')
                                                         
                             mini_motif_1_Low_played = self.compare_motif(
                                                         self._memory, 'mini',
@@ -86,7 +86,7 @@ class Motippets(object):
                     elif section == 'mid':
                         if (note > self._pianosections[0] and
                             note <= self._pianosections[1]):
-                            self.memorize(note, 20, False, 'Mid: ')
+                            self.memorize(note, 9, False, 'Mid: ')
                             
                             # see if motif_1 is played:
                             motif1_played = self.compare_chordal_motif(
@@ -121,7 +121,7 @@ class Motippets(object):
                     ### HI SECTION
                     elif section == 'hi':
                         if note > self._pianosections[1]:
-                            self.memorize(note, 20, False, 'Hi: ')
+                            self.memorize(note, 4, False, 'Hi: ')
                             
                             mini_motif_1_Hi_played = self.compare_motif(
                                                         self._memory, 'mini',
@@ -179,7 +179,7 @@ class Motippets(object):
     
                     ### FULL REGISTER            
                     elif section == 'full':
-                        self.memorize(note, 20, True, 'Full-section Memory: ')
+                        self.memorize(note, 20, False, 'Full-section Memory: ')
                         
                         # check if motif_2 is played:
                         motif2_played = self.compare_chordal_motif(
@@ -194,7 +194,7 @@ class Motippets(object):
                     elif section == 'conditional 1': 
                                 
                         if note <= self._pianosections[0]:
-                            self.memorize(note, 20, False, 'Conditional Memory: ')
+                            self.memorize(note, 12, False, 'Conditional Memory: ')
                         
                             if self._conditionalCounter == 0:
                                 conditional2_played = self.compare_chordal_motif(

@@ -151,16 +151,16 @@ try:
             memHi.parse_midi(msg, 'hi')
             ##tremolos:
             tremoloHi.parse_midi(msg, 'tremoloHi')
-            tremoloMid.parse_midi(msg, 'tremoloNdef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Im)))}Mid')
+            tremoloMid.parse_midi(msg, 'tremoloMid')
             tremoloLow.parse_midi(msg, 'tremoloLow')
             
-            ##conditionals              
+            ##conditionals 
             conditional_value = conditionals.parse_midi(msg, 'conditional 1');
             conditional2_value = conditionals2.parse_midi(msg, 'conditional 2');
             
             if conditional_value > 0:
                 notecounter = 0 # reset the counter
-                threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 150, conditional_value, True))
+                threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
                 threads[conditional_value].start()
             
             if conditional2_value > 0:
