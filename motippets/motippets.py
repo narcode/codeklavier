@@ -140,7 +140,9 @@ try:
         msg = codeK.get_message()
 
         if msg:
-            notecounter += 1
+            message, deltatime = msg
+            if message[2] > 0 and message[0]:
+                notecounter += 1
             
             ##motifs:
             mainMem.parse_midi(msg, 'full')
