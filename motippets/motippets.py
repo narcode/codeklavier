@@ -141,7 +141,7 @@ try:
 
         if msg:
             message, deltatime = msg
-            if message[2] > 0 and message[0]:
+            if (message[2] > 0 and message[0] != 254) or (message[1] == device_id and message[0] != 254):
                 notecounter += 1
             
             ##motifs:
