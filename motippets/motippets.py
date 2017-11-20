@@ -141,36 +141,37 @@ try:
 
         if msg:
             message, deltatime = msg
-            if (message[2] > 0 and message[0] != 254) or (message[1] == device_id and message[0] != 254):
-                notecounter += 1
-            
-            ##motifs:
-            mainMem.parse_midi(msg, 'full')
-            memLow.parse_midi(msg, 'low')
-            memMid.parse_midi(msg, 'mid')
-            memHi.parse_midi(msg, 'hi')
-            ##tremolos:
-            tremoloHi.parse_midi(msg, 'tremoloHi')
-            tremoloMid.parse_midi(msg, 'tremoloMid')
-            tremoloLow.parse_midi(msg, 'tremoloLow')
-            
-            ##conditionals 
-            conditional_value = conditionals.parse_midi(msg, 'conditional 1');
-            conditional2_value = conditionals2.parse_midi(msg, 'conditional 2');
-            
-            if conditional_value > 0:
-                notecounter = 0 # reset the counter
-                threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
-                threads[conditional_value].start()
-            
-            if conditional2_value > 0:
-                conditionalsRange._conditionalStatus = conditional2_value
-                threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, conditional2_value, True))
-                threads[conditional2_value].start()
+            if message[0] != 254:
+                if message[2] > 0 and message[0] == device_id:
+                    notecounter += 1
                 
-            if range_trigger == 1:
-                played_range = conditionalsRange.parse_midi(msg, 'conditional_range')
-        
+                ##motifs:
+                mainMem.parse_midi(msg, 'full')
+                memLow.parse_midi(msg, 'low')
+                memMid.parse_midi(msg, 'mid')
+                memHi.parse_midi(msg, 'hi')
+                ##tremolos:
+                tremoloHi.parse_midi(msg, 'tremoloHi')
+                tremoloMid.parse_midi(msg, 'tremoloMid')
+                tremoloLow.parse_midi(msg, 'tremoloLow')
+                
+                ##conditionals 
+                conditional_value = conditionals.parse_midi(msg, 'conditional 1');
+                conditional2_value = conditionals2.parse_midi(msg, 'conditional 2');
+                
+                if conditional_value > 0:
+                    notecounter = 0 # reset the counter
+                    threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
+                    threads[conditional_value].start()
+                
+                if conditional2_value > 0:
+                    conditionalsRange._conditionalStatus = conditional2_value
+                    threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, conditional2_value, True))
+                    threads[conditional2_value].start()
+                    
+                if range_trigger == 1:
+                    played_range = conditionalsRange.parse_midi(msg, 'conditional_range')
+            
         time.sleep(0.01) #check
         
 except KeyboardInterrupt:
