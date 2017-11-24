@@ -56,6 +56,7 @@ def set_parametes(value):
     """
     TODO: define func
     """    
+    
     print('value parameter is ', str(value))
     
 def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
@@ -172,10 +173,11 @@ try:
                 
                 if conditional_value is int and conditional_value > 0:
                     #set the timer length:
-                    threads['timer_value'] = Thread(target=timer_value, name='set timer value', args=(conditional_params))
-                    #notecounter = 0 # reset the counter
-                    #threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
-                    #threads[conditional_value].start()
+                    #conditional_params = 0
+                    #threads['timer_value'] = Thread(target=timer_value, name='set timer value', args=(conditional_params))
+                    notecounter = 0 # reset the counter
+                    threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
+                    threads[conditional_value].start()
                 
                 if conditional_value is int and conditional2_value > 0:
                     conditionalsRange._conditionalStatus = conditional2_value
