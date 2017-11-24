@@ -179,12 +179,12 @@ class Motippets(object):
                                 self._deltatime = 0
     
                     elif section == 'params':
-                            self.memorize(note, 4, True, 'Parameters tremolo: ')
+                            self.memorize(note, 4, False, 'Parameters tremolo: ')
                             
-                            if self.count_notes(self._memory, True) == 4:
+                            if self.count_notes(self._memory, False) == 4:
                                 self._interval = self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'full',
-                                    self._deltatime, 0.1, False)
+                                    self._deltatime, 0.1, True)
                                 self._deltatime = 0
                                 
                                 return self._interval
