@@ -237,8 +237,7 @@ class Motippets(object):
                             
                                 return self._conditionalStatus
                             
-                        if (note > self._pianosections[0] and
-                            note <= self._pianosections[1]):
+                        if (note > self._pianosections[0] and note <= self._pianosections[1]):
                             
                             self.memorize(note, 20, False, 'Conditional Memory Mid: ')
                         
@@ -254,6 +253,9 @@ class Motippets(object):
                                     self._conditionalStatus = 1
                         
                                 return self._conditionalStatus                                       
+
+                        
+                        return self._conditionalStatus # is this needed witht he type check in the main loop?
 
                     ### CONDITONAL 2
                     elif section == 'conditional 2': 
@@ -302,8 +304,7 @@ class Motippets(object):
                 
                                 return self._conditionalStatus
                 
-                        if (note > self._pianosections[0] and
-                                            note <= self._pianosections[1]):
+                        if (note > self._pianosections[0] and note <= self._pianosections[1]):
                 
                             self.memorize(note, 20, False, 'Conditional Memory Mid: ')
                 
@@ -319,6 +320,8 @@ class Motippets(object):
                                     self._conditionalStatus = 1
                 
                                 return self._conditionalStatus
+                        
+                        return self._conditionalStatus
 
                     elif section == 'conditional_range': # parses only MIDI for the conditional which looks at the range being played
                         self.memorize(note, 999, 
@@ -326,7 +329,7 @@ class Motippets(object):
                         
                         self.get_range(self._memory, self._timer, debug=True)
                         
-        return self._conditionalStatus 
+        return self._conditionalStatus  # is this not returning ?
      
         
                                     

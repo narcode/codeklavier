@@ -159,12 +159,12 @@ try:
                 conditional_value = conditionals.parse_midi(msg, 'conditional 1');
                 conditional2_value = conditionals2.parse_midi(msg, 'conditional 2');
                 
-                if conditional_value > 0:
+                if conditional_value is int and conditional_value > 0:
                     notecounter = 0 # reset the counter
                     threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
                     threads[conditional_value].start()
                 
-                if conditional2_value > 0:
+                if conditional_value is int and conditional2_value > 0:
                     conditionalsRange._conditionalStatus = conditional2_value
                     threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, conditional2_value, True))
                     threads[conditional2_value].start()
