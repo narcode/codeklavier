@@ -151,7 +151,7 @@ class Motippets(object):
                         if note > self._pianosections[1]:
                             self.memorize(note, 4, False, 'Tremolo Hi: ')
                             
-                            if self.count_notes(self._memory, False) == 4:
+                            if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'hi',
                                     self._deltatime, 0.1, False)
@@ -162,7 +162,7 @@ class Motippets(object):
                             note <= self._pianosections[1]):
                             self.memorize(note, 4, False, 'Tremolo Mid: ')
                             
-                            if self.count_notes(self._memory, False) == 4:
+                            if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'mid',
                                     self._deltatime, 0.1, False)
@@ -172,7 +172,7 @@ class Motippets(object):
                         if note <= self._pianosections[0]:
                             self.memorize(note, 4, False, 'Tremolo Low: ')
                             
-                            if self.count_notes(self._memory, False) == 4:
+                            if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'low',
                                     self._deltatime, 0.1, False)
@@ -181,7 +181,7 @@ class Motippets(object):
                     elif section == 'params':
                             self.memorize(note, 4, False, 'Parameters tremolo: ')
                             
-                            if self.count_notes(self._memory, True) == 4:
+                            if self.count_notes(self._memory, True) == 4 and len(self._memory) > 3:
                                 self._interval = self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'full',
                                     self._deltatime, 0.1, True)
