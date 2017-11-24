@@ -25,6 +25,7 @@ class Motippets(object):
         self._motif1_counter = 0
         self._motif2_counter = 0
         self._intervalsArray = []
+        self._interval = 0
         self._unmapCounter1 = 0
         self._unmapCounter2 = 0
         self._unmapCounter3 = 0
@@ -176,6 +177,17 @@ class Motippets(object):
                                     [self._memory[2], self._memory[3]], 'low',
                                     self._deltatime, 0.1, False)
                                 self._deltatime = 0
+    
+                    elif section == 'params':
+                            self.memorize(note, 4, True, 'Parameters tremolo: ')
+                            
+                            if self.count_notes(self._memory, True) == 4:
+                                self._interval = self.tremolo_value(
+                                    [self._memory[2], self._memory[3]], 'full',
+                                    self._deltatime, 0.1, False)
+                                self._deltatime = 0
+                                
+                                return self._interval
     
                     ### FULL REGISTER            
                     elif section == 'full':
@@ -550,6 +562,8 @@ class Motippets(object):
                      deltatolerance, debug=False):
         """Get the interval of a given tremolo.
         
+        TODO: this should only return the interval integer and on another place define what to do with it!
+        
         TODO: describe input params
         """
         if debug:
@@ -572,6 +586,8 @@ class Motippets(object):
                         self.mapscheme.tremolo('mid', interval)
                     elif pianosection == 'low':
                         self.mapscheme.tremolo('low', interval)
+                    elif pianosection == 'full':
+                        return interval
                         
     def get_range(self, notes, time, debug=False):
         """ Get the range between the notes played in a time window

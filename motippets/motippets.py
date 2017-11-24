@@ -43,6 +43,7 @@ tremoloLow = Motippets(mapping, device_id)
 conditionals = Motippets(mapping, device_id)
 conditionals2 = Motippets(mapping, device_id)
 conditionalsRange = Motippets(mapping, device_id)
+parameters = Motippets(mapping, device_id)
 
 #multiprocessing vars
 threads = {}
@@ -50,8 +51,17 @@ notecounter = 0
 range_trigger = 0
 
 
-#TODO: move this function to a better place?
+#TODO: move this functions to a better place?
+def set_parametes(value):
+    """
+    TODO: define func
+    """    
+    print('value parameter is ', str(value))
+    
 def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
+    """
+    TODO: define func
+    """
     print('thread started for result ', result_num)
     
     for s in range(0, timer):
@@ -156,13 +166,16 @@ try:
                 tremoloLow.parse_midi(msg, 'tremoloLow')
                 
                 ##conditionals 
-                conditional_value = conditionals.parse_midi(msg, 'conditional 1');
-                conditional2_value = conditionals2.parse_midi(msg, 'conditional 2');
+                conditional_value = conditionals.parse_midi(msg, 'conditional 1')
+                conditional2_value = conditionals2.parse_midi(msg, 'conditional 2')
+                conditional_params = parameters.parse_midi(msg, 'params')
                 
                 if conditional_value is int and conditional_value > 0:
-                    notecounter = 0 # reset the counter
-                    threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
-                    threads[conditional_value].start()
+                    #set the timer length:
+                    threads['timer_value'] = Thread(target=timer_value, name='set timer value', args=(conditional_params))
+                    #notecounter = 0 # reset the counter
+                    #threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
+                    #threads[conditional_value].start()
                 
                 if conditional_value is int and conditional2_value > 0:
                     conditionalsRange._conditionalStatus = conditional2_value
