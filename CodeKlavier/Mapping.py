@@ -359,10 +359,10 @@ class Mapping_Motippets:
         
     def conditional(self, conditional_num):
         if conditional_num == 1:
-            self.__keyboard.type('// setting up a conditional: \\n if range within blocks of 30 seconds > 72 semitones or < 12 semitones:');
+            self.__keyboard.type('// setting up a conditional: range played');
             self.enter();
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up a conditional: \\n if number of notes in the 10 seconds > 100:');
+            self.__keyboard.type('// setting up a conditional: amount of notes played');
             self.enter();            
             
     def result(self, result_num, text):
