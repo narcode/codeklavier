@@ -49,21 +49,42 @@ parameters = Motippets(mapping, device_id)
 threads = {}
 notecounter = 0
 range_trigger = 0
+param_interval = 0
 
 
 #TODO: move this functions to a better place?
-def set_parametes(value):
+def set_parameters(value, conditional, debug=True):
     """
-    TODO: define func
-    """    
+    function to parse a full range tremolo. This value can be used as a param for the 
+    other functions.
     
-    print('value parameter is ', str(value))
+    value: the interval of the plated tremolo
+    """   
+    global param_interval
+    print('thread started for parameter set')
+    
+    param_interval = value
+    
+    if conditional == 'amount':
+        mapping.customPass('// more than 100 notes played in the next ', str(param_interval) + ' seconds?')
+    elif conditional == 'range':
+        mapping.customPass('// range set to: ', str(param_interval) + ' semitones...')
+    
+    if debug:
+        print('value parameter is ', str(param_interval))
+        
+    parameters._interval = 0
+    
+        
     
 def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
     """
     TODO: define func
     """
-    print('thread started for result ', result_num)
+    print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
+    
+    #reset parameter global once it has passed effectively:
+    param_interval = 0
     
     for s in range(0, timer):
         if notecounter > numberOfnotes:
@@ -82,7 +103,7 @@ def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
                                
             break
         else:
-            mapping.customPass('//notes played: ', str(notecounter))
+            mapping.customPass('notes played: ', str(notecounter))
             conditionals._conditionalStatus = 0
             conditionals._resultCounter = 0
             conditionals._conditionalCounter = 0
@@ -91,7 +112,7 @@ def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
             print(notecounter)
         time.sleep(1)
     
-def rangeCounter(timer=30, result_num=1, debug=True, perpetual=True):
+def rangeCounter(timer=30, result_num=1, piano_range=72, debug=True, perpetual=True):
     """
    Conditional function. Perpetual too.
     """
@@ -102,7 +123,7 @@ def rangeCounter(timer=30, result_num=1, debug=True, perpetual=True):
     
     if debug:
         print('thread for range started')
-    print("range trig -> ", range_trigger, "result num: ", result_num)
+    print("range trig -> ", range_trigger, "result num: ", result_num, "range set to: ", piano_range)
 
     
     while perpetual:  
@@ -116,7 +137,7 @@ def rangeCounter(timer=30, result_num=1, debug=True, perpetual=True):
             if debug:
                 print("Range conditional thread finished")
                 print("range was: ", conditionalsRange._range)
-            if conditionalsRange._range >= 72:   
+            if conditionalsRange._range >= piano_range:   
                 if result_num == 1:
                     mapping.result(1,'code')
                 elif result_num == 2:
@@ -168,25 +189,38 @@ try:
                 
                 ##conditionals 
                 conditional_value = conditionals.parse_midi(msg, 'conditional 1')
-                conditional2_value = conditionals2.parse_midi(msg, 'conditional 2')
-                conditional_params = parameters.parse_midi(msg, 'params')
+                conditional2_value = conditionals2.parse_midi(msg, 'conditional 2')                
                 
-                if conditional_value is int and conditional_value > 0:
-                    #set the timer length:
-                    #conditional_params = 0
-                    #threads['timer_value'] = Thread(target=timer_value, name='set timer value', args=(conditional_params))
-                    notecounter = 0 # reset the counter
-                    threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(10, 100, conditional_value, True))
-                    threads[conditional_value].start()
+                if isinstance(conditional_value, int) and conditional_value > 0:    
+                    conditional_params = parameters.parse_midi(msg, 'params')                    
+                   
+                    #set the parameter for the timer:
+                    # amount of notes not?
+                    if isinstance(conditional_params, int) and conditional_params > 0:
+                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'amount'))
+                        threads['set_param'].start()
+                                                
+                    if param_interval > 0:
+                        notecounter = 0 # reset the counter
+                        threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
+                        threads[conditional_value].start()
                 
-                if conditional_value is int and conditional2_value > 0:
+                if isinstance(conditional2_value, int) and conditional2_value > 0:
                     conditionalsRange._conditionalStatus = conditional2_value
-                    threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, conditional2_value, True))
-                    threads[conditional2_value].start()
+                    conditional_params = parameters.parse_midi(msg, 'params')                                        
+                    
+                    # set range parameter:
+                    if isinstance(conditional_params, int) and conditional_params > 0:
+                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
+                        threads['set_param'].start()   
+                        
+                    if param_interval > 0:
+                        threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, conditional2_value, param_interval, True))
+                        threads[conditional2_value].start()
                     
                 if range_trigger == 1:
                     played_range = conditionalsRange.parse_midi(msg, 'conditional_range')
-            
+             
         time.sleep(0.01) #check
         
 except KeyboardInterrupt:
