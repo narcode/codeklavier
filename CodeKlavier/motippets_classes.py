@@ -56,11 +56,6 @@ class Motippets(object):
                 if (message[0] == self.noteonid):
                     note = message[1]
                     
-                    # out of trouble enters for the codespace in case of getting stuck
-                    if note == 21:
-                        self.mapscheme.mapping(note)
-                        return
-                    
                     ### LOW SECTION
                     if section == 'low':
                         if note <= self._pianosections[0]:
@@ -196,6 +191,10 @@ class Motippets(object):
     
                     ### FULL REGISTER            
                     elif section == 'full':
+                        # out of trouble enters for the codespace in case of getting stuck
+                        if note == 108:
+                            self.mapscheme.mapping(note)
+                        
                         self.memorize(note, 20, False, 'Full-section Memory: ')
                         
                         # check if motif_2 is played:
