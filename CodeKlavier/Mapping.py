@@ -293,7 +293,7 @@ class Mapping_Motippets:
 
     def snippets(self, num):
         if num == 1:
-            self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=420,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ev.amp}).play(0,2);(1/ev.rit).wait;}}).play(quant:0).envir = (rit: ~tremoloL, amp: ~tremoloL);')
+            self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=420,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ev.amp}).play(0,2);(1/ev.rit).wait;}}).play(quant:0).envir = (rit: ~tremoloL, amp: 0.076);')
             self.evaluateSC('eval')
         elif num == 2:
             self.__keyboard.type('~snippet2 = Ndef(\\acc, {|note=304, amp=0.1, cut=200, bw=0.5, fx=15| BPF.ar(Resonz.ar(SinOsc.ar([note.lag(1), note.lag(2)*3/2, note*2, note.lag(1.5)*4/3]), (note*LFTri.kr(fx).range(1/2, 8))+80, bw), 600, 0.8) * amp.lag(0.5)}).play(0,2);')
