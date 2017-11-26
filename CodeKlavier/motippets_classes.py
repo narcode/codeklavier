@@ -56,6 +56,11 @@ class Motippets(object):
                 if (message[0] == self.noteonid):
                     note = message[1]
                     
+                    # out of trouble enters for the codespace in case of getting stuck
+                    if note == 21:
+                        self.mapscheme.mapping(note)
+                        return
+                    
                     ### LOW SECTION
                     if section == 'low':
                         if note <= self._pianosections[0]:

@@ -279,6 +279,8 @@ class Mapping_Motippets:
         # TODO: check with Anne
         if midinumber == 66:
             self.evaluateSC('eval')
+        elif midinumber == 21:
+            self.evaluateSC('play')
 
     def snippets(self, num):
         if num == 1:
