@@ -282,10 +282,10 @@ class Mapping_Motippets:
 
     def snippets(self, num):
         if num == 1:
-            self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=400,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ~amp1}).play(0,2);(1/ev.rit).wait;}}).play(quant:0);')
+            self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=420,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ~amp1}).play(0,2);(1/ev.rit).wait;}}).play(quant:0);')
             self.evaluateSC('eval')
         elif num == 2:
-            self.__keyboard.type('~snippet2 = Ndef(\\acc, {|note=500, amp=0.1, cut=200, bw=0.5, fx=0.1| BPF.ar(Resonz.ar(SinOsc.ar([note.lag(1), note.lag(2)*3/2, note*2, note.lag(1.5)*4/3]), (note*LFTri.kr(fx).range(1/2, 8))+80, bw), 600, 0.8) * amp.lag(0.5)}).play(0,2);')
+            self.__keyboard.type('~snippet2 = Ndef(\\acc, {|note=304, amp=0.1, cut=200, bw=0.5, fx=15| BPF.ar(Resonz.ar(SinOsc.ar([note.lag(1), note.lag(2)*3/2, note*2, note.lag(1.5)*4/3]), (note*LFTri.kr(fx).range(1/2, 8))+80, bw), 600, 0.8) * amp.lag(0.5)}).play(0,2);')
             self.evaluateSC('eval')            
     
     def miniSnippets(self, snippet_num, pianosection):
@@ -359,11 +359,14 @@ class Mapping_Motippets:
         
     def conditional(self, conditional_num):
         if conditional_num == 1:
-            self.__keyboard.type('// setting up a conditional: range played');
+            self.__keyboard.type('// setting up a conditional: amount of notes played');
             self.enter();
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up a conditional: amount of notes played');
-            self.enter();            
+            self.__keyboard.type('// setting up a conditional: range is more than...');
+            self.enter();       
+        elif conditional_num == 3:
+            self.__keyboard.type('// setting up a conditional: range is less than...');
+            self.enter();
             
     def result(self, result_num, text):
         if result_num == 1:
@@ -373,8 +376,8 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet2.stop;');
                 self.evaluateSC('eval')
-            elif text == 'else code':
-                self.__keyboard.type('//less than an 8ve');
+            elif text == 'less than':
+                self.__keyboard.type('//less than an 8ve. Nothing happens :(');
                 self.evaluateSC('eval')                
         
         elif result_num == 2:
@@ -384,8 +387,8 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop;');
                 self.evaluateSC('eval')
-            elif text == 'else code':
-                self.__keyboard.type('//less than an 8ve');
+            elif text == 'less than':
+                self.__keyboard.type('//less than an 8ve. Nothing happens :(');
                 self.evaluateSC('eval')                 
                 
         elif result_num == 3:
@@ -395,7 +398,7 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([1234*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
                 self.evaluateSC('eval')   
-            elif text == 'else code':
+            elif text == 'less than':
                 self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([334*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
                 self.evaluateSC('eval')                 
                 

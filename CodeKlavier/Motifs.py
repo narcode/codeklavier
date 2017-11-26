@@ -70,10 +70,13 @@ class Motifs_Anne(object):
         return [86, 92, 95, 98]
 
     def conditional_1(self):
-        return [45, 43, 46, 45, 43, 41, 43, 45]
+        return [36, 31, 29, 26, 28, 35, 38, 33, 24, 26, 31, 28, 33, 21, 23, 29]
 
     def conditional_2(self):
-        return [36, 31, 29, 26, 28, 35, 38, 33, 24, 26, 31, 28, 33, 21, 23, 29]
+        return [45, 43, 46, 45, 43, 41, 43, 45]
+
+    def conditional_3(self):
+        return [93, 91, 89, 91, 93, 91, 94, 93]
 
     def conditional_result_1(self):
         return [60, 62, 66, 70, 69, 67]
