@@ -100,7 +100,7 @@ class Motippets(object):
                                                     note, False)
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
-                                self._motif1_counter = 1                        
+                                self._motif1_counter = 1
                             
                             mini_motif_1_Mid_played = self.compare_motif(
                                                         self._memory, 'mini',

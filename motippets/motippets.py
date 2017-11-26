@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import time
 from threading import Thread, Event
 
@@ -201,10 +203,17 @@ try:
                 memLow.parse_midi(msg, 'low')
                 memMid.parse_midi(msg, 'mid')
                 memHi.parse_midi(msg, 'hi')
+                
+                motif1_played = memMid._motif1_counter
+                motif2_played = mainMem._motif2_counter
+                
+                print(motif1_played);
+                
                 ##tremolos:
-                tremoloHi.parse_midi(msg, 'tremoloHi')
-                tremoloMid.parse_midi(msg, 'tremoloMid')
-                tremoloLow.parse_midi(msg, 'tremoloLow')
+                if motif1_played > 0 or motif2_played > 0:
+                    tremoloHi.parse_midi(msg, 'tremoloHi')
+                    tremoloMid.parse_midi(msg, 'tremoloMid')
+                    tremoloLow.parse_midi(msg, 'tremoloLow')
                 
                 ##conditionals 
                 conditional_value = conditionals[1].parse_midi(msg, 'conditional 1')
