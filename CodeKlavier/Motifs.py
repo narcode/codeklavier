@@ -57,6 +57,9 @@ class Motifs_Anne(object):
     def mini_motif_2_low(self):
         return [26, 32, 35, 38]
 
+    def mini_motif_3_low(self):
+        return [39, 43, 46]
+    
     def mini_motif_1_mid(self):
         return [60, 64, 67]
 

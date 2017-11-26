@@ -65,23 +65,49 @@ class Motippets(object):
                                                         self._memory, 'mini',
                                                         Motifs().mini_motif_1_low(),
                                                         note, False)
+                            
                             mini_motif_2_Low_played = self.compare_motif(
                                                         self._memory, 'mini2',
                                                         Motifs().mini_motif_2_low(),
                                                         note, False)
                             
+                            mini_motif_3_Low_played = self.compare_motif(
+                                                        self._memory, 'mini3',
+                                                        Motifs().mini_motif_3_low(),
+                                                        note, False)                            
+                            
                             if (mini_motif_1_Low_played and
-                                self._unmapCounter2 == 0):
+                                self._unmapCounter2 == 0 and 
+                                self._unmapCounter3 == 0):
                                 self.mapscheme.miniSnippets(1, 'low')
                             elif (mini_motif_1_Low_played and
                                   self._unmapCounter2 > 0):
-                                self.mapscheme.miniSnippets(1, 'low with unmap')
+                                self.mapscheme.miniSnippets(1, 'low with unmap 2')
+                            elif (mini_motif_1_Low_played and
+                                  self._unmapCounter3 > 0):
+                                self.mapscheme.miniSnippets(1, 'low with unmap 3')                                
+                                
                             elif (mini_motif_2_Low_played and
-                                  self._unmapCounter1 == 0):
+                                  self._unmapCounter1 == 0 and
+                                  self._unmapCounter3 == 0):
                                 self.mapscheme.miniSnippets(2, 'low')
                             elif (mini_motif_2_Low_played and
                                   self._unmapCounter1 > 0):
-                                self.mapscheme.miniSnippets(2, 'low with unmap')
+                                self.mapscheme.miniSnippets(2, 'low with unmap 1')
+                            elif (mini_motif_2_Low_played and
+                                  self._unmapCounter3 > 0):
+                                self.mapscheme.miniSnippets(2, 'low with unmap 3')
+                                
+                            elif (mini_motif_3_Low_played and 
+                                  self._unmapCounter1 == 0 and
+                                  self._unmapCounter2 == 0):
+                                self.mapscheme.miniSnippets(1, 'low amp')
+                            elif (mini_motif_3_Low_played and 
+                                  self._unmapCounter1 > 0 ):
+                                self.mapscheme.miniSnippets(1, 'low amp with unmap 1')  
+                            elif (mini_motif_3_Low_played and 
+                                  self._unmapCounter2 > 0 ):
+                                self.mapscheme.miniSnippets(1, 'low amp with unmap 2')                                
                                 
                     ### MID SECTION
                     elif section == 'mid':
@@ -565,7 +591,7 @@ class Motippets(object):
                     self._results3 = self._results3[-len(motif):]
                     if self._results3 == motif:
                         compare = True
-                        self._unmapCounter3 += 1
+                        #self._unmapCounter3 += 1 #?
                     else:
                         compare = False
                         

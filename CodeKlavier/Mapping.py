@@ -266,10 +266,19 @@ class Mapping_Motippets:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
 
+    def goDown(self):
+        with self.__keyboard.pressed(Key.cmd):
+            self.__keyboard.press(Key.down)
+            self.__keyboard.release(Key.down)
+        time.sleep(0.2)
+        self.__keyboard.press(Key.enter)
+        self.__keyboard.release(Key.enter)        
+        
+        
     def enter(self):
         self.__keyboard.press(Key.enter)
         self.__keyboard.release(Key.enter)
-
+        
     def delete(self):
         self.__keyboard.press(Key.backspace)
         self.__keyboard.release(Key.backspace)
@@ -280,11 +289,11 @@ class Mapping_Motippets:
         if midinumber == 66:
             self.evaluateSC('eval')
         elif midinumber == 108:
-            self.evaluateSC('eval')
+            self.goDown()
 
     def snippets(self, num):
         if num == 1:
-            self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=420,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ~amp1}).play(0,2);(1/ev.rit).wait;}}).play(quant:0).envir = (rit: ~tremoloL);')
+            self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=420,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ev.amp}).play(0,2);(1/ev.rit).wait;}}).play(quant:0).envir = (rit: ~tremoloL, amp: 0.1);')
             self.evaluateSC('eval')
         elif num == 2:
             self.__keyboard.type('~snippet2 = Ndef(\\acc, {|note=304, amp=0.1, cut=200, bw=0.5, fx=15| BPF.ar(Resonz.ar(SinOsc.ar([note.lag(1), note.lag(2)*3/2, note*2, note.lag(1.5)*4/3]), (note*LFTri.kr(fx).range(1/2, 8))+80, bw), 600, 0.8) * amp.lag(0.5)}).play(0,2);')
@@ -309,15 +318,37 @@ class Mapping_Motippets:
             #unmap
             self.__keyboard.type('Ndef(\\acc).set(\\note, ~tremoloM.linlin(1, 16, 180, 800));')
             self.evaluateSC('eval')
+      
+            ## LOW SECTION
         if snippet_num == 1 and pianosection == 'low':
             self.__keyboard.type('~map_rhythm = true;')
             self.evaluateSC('eval')
-        if snippet_num == 1 and pianosection == 'low with unmap':
+        if snippet_num == 1 and pianosection == 'low amp':
+            self.__keyboard.type('~map_amplitude = true')
+        if snippet_num == 1 and pianosection == 'low with unmap 2':
             self.__keyboard.type('~map_rhythm = true;')
             self.evaluateSC('eval')
-            #unmap
+            #unmap 2:
             self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL.linlin(1, 16, 0, 1.5));')
+            self.evaluateSC('eval')
+        if snippet_num == 1 and pianosection == 'low with unmap 3':
+            self.__keyboard.type('~map_rhythm = true;')
+            self.evaluateSC('eval')
+            #unmap 3:
+            self.__keyboard.type('~map_amplitude = false;')
+            self.evaluateSC('eval')
+        if snippet_num == 1 and pianosection == 'low amp with unmap 1':
+            self.__keyboard.type('~map_amplitude = true;')
+            self.evaluateSC('eval')
+            #unmap 1:
+            self.__keyboard.type('~map_rhythm = false;')
             self.evaluateSC('eval') 
+        if snippet_num == 1 and pianosection == 'low amp with unmap 2':
+            self.__keyboard.type('~map_amplitude = true')
+            self.evaluateSC('eval')
+            #unmap 2:
+            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL.linlin(1, 16, 0, 1.5));')
+            self.evaluateSC('eval')             
             
         # for snippet 2:
         if snippet_num == 2 and pianosection == 'hi':
@@ -338,16 +369,23 @@ class Mapping_Motippets:
             #unmap
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).set(\\pitch, ~tremoloM.linlin(1, 16, 200, 3000));}')
             self.evaluateSC('eval')
+            
+            ## LOW SECTION
         if snippet_num == 2 and pianosection == 'low':
             self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
             self.evaluateSC('eval') 
-        if snippet_num == 2 and pianosection == 'low with unmap':
+        if snippet_num == 2 and pianosection == 'low with unmap 1':
             self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
             self.evaluateSC('eval')
-            #unmap
+            #unmap 1:
             self.__keyboard.type('~map_rhythm = false;')
-            self.evaluateSC('eval')            
-            
+            self.evaluateSC('eval')    
+        if snippet_num == 2 and pianosection == 'low with unmap 3':
+            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
+            self.evaluateSC('eval')
+            #unmap 3:
+            self.__keyboard.type('~map_amplitude = false;')
+            self.evaluateSC('eval') 
             
             
     def tremolo(self, pianoregister, value):

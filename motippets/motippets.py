@@ -206,9 +206,7 @@ try:
                 
                 motif1_played = memMid._motif1_counter
                 motif2_played = mainMem._motif2_counter
-                
-                print(motif1_played);
-                
+                                
                 ##tremolos:
                 if motif1_played > 0 or motif2_played > 0:
                     tremoloHi.parse_midi(msg, 'tremoloHi')
