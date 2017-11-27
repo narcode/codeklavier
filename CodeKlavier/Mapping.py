@@ -70,6 +70,8 @@ class Mapping_HelloWorld:
             self.__keyboard.type('8')
         elif midinumber == 94:
             self.__keyboard.type('9')
+        elif midinumber == 34:
+                self.__keyboard.type('m')
         elif midinumber == 104:
             self.__keyboard.type('k'),
        # special keys
@@ -272,13 +274,13 @@ class Mapping_Motippets:
             self.__keyboard.release(Key.down)
         time.sleep(0.2)
         self.__keyboard.press(Key.enter)
-        self.__keyboard.release(Key.enter)        
-        
-        
+        self.__keyboard.release(Key.enter)
+
+
     def enter(self):
         self.__keyboard.press(Key.enter)
         self.__keyboard.release(Key.enter)
-        
+
     def delete(self):
         self.__keyboard.press(Key.backspace)
         self.__keyboard.release(Key.backspace)
@@ -297,8 +299,8 @@ class Mapping_Motippets:
             self.evaluateSC('eval')
         elif num == 2:
             self.__keyboard.type('~snippet2 = Ndef(\\acc, {|note=304, amp=0.1, cut=200, bw=0.5, fx=15| BPF.ar(Resonz.ar(SinOsc.ar([note.lag(1), note.lag(2)*3/2, note*2, note.lag(1.5)*4/3]), (note*LFTri.kr(fx).range(1/2, 8))+80, bw), 600, 0.8) * amp.lag(0.5)}).play(0,2);')
-            self.evaluateSC('eval')            
-    
+            self.evaluateSC('eval')
+
     def miniSnippets(self, snippet_num, pianosection):
         if snippet_num == 1 and pianosection == 'hi':
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\fx, Ndef(\\krm3));}')
@@ -308,7 +310,7 @@ class Mapping_Motippets:
             self.evaluateSC('eval')
             #unmap other motif
             self.__keyboard.type('Ndef(\\acc).set(\\fx, ~tremoloH.linlin(1, 16, 0, 15));')
-            self.evaluateSC('eval')             
+            self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'mid':
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\pitch, Ndef(\\krm1));}')
             self.evaluateSC('eval')
@@ -318,7 +320,7 @@ class Mapping_Motippets:
             #unmap
             self.__keyboard.type('Ndef(\\acc).set(\\note, ~tremoloM.linlin(1, 16, 180, 800));')
             self.evaluateSC('eval')
-      
+
             ## LOW SECTION
         if snippet_num == 1 and pianosection == 'low':
             self.__keyboard.type('~map_rhythm = true;')
@@ -343,14 +345,14 @@ class Mapping_Motippets:
             self.evaluateSC('eval')
             #unmap 1:
             self.__keyboard.type('~map_rhythm = false;')
-            self.evaluateSC('eval') 
+            self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low amp with unmap 2':
             self.__keyboard.type('~map_amplitude = true')
             self.evaluateSC('eval')
             #unmap 2:
             self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL.linlin(1, 16, 0, 1.5));')
-            self.evaluateSC('eval')             
-            
+            self.evaluateSC('eval')
+
         # for snippet 2:
         if snippet_num == 2 and pianosection == 'hi':
             self.__keyboard.type('Ndef(\\acc).map(\\fx, Ndef(\\krm2_3));')
@@ -360,90 +362,89 @@ class Mapping_Motippets:
             self.evaluateSC('eval')
             #unmap other motif
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).set(\\fx, ~tremoloH.linlin(1, 16, 1, 88));}')
-            self.evaluateSC('eval')               
+            self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'mid':
             self.__keyboard.type('Ndef(\\acc).map(\\note, Ndef(\\krm2_1));')
             self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'mid with unmap':
             self.__keyboard.type('Ndef(\\acc).map(\\note, Ndef(\\krm2_1));')
-            self.evaluateSC('eval') 
+            self.evaluateSC('eval')
             #unmap
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).set(\\pitch, ~tremoloM.linlin(1, 16, 200, 3000));}')
             self.evaluateSC('eval')
-            
+
             ## LOW SECTION
         if snippet_num == 2 and pianosection == 'low':
             self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
-            self.evaluateSC('eval') 
+            self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'low with unmap 1':
             self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
             self.evaluateSC('eval')
             #unmap 1:
             self.__keyboard.type('~map_rhythm = false;')
-            self.evaluateSC('eval')    
+            self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'low with unmap 3':
             self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
             self.evaluateSC('eval')
             #unmap 3:
             self.__keyboard.type('~map_amplitude = false;')
-            self.evaluateSC('eval') 
-            
-            
+            self.evaluateSC('eval')
+
+
     def tremolo(self, pianoregister, value):
         if pianoregister == 'hi':
             self.__keyboard.type('~tremoloH = ' + str(value))
         elif pianoregister == 'mid':
             self.__keyboard.type('~tremoloM = ' + str(value))
         elif pianoregister == 'low':
-            self.__keyboard.type('~tremoloL = ' + str(value))               
+            self.__keyboard.type('~tremoloL = ' + str(value))
         self.evaluateSC('eval')
-        
+
     def conditional(self, conditional_num):
         if conditional_num == 1:
             self.__keyboard.type('// setting up a conditional: amount of notes played');
             self.enter();
         elif conditional_num == 2:
             self.__keyboard.type('// setting up a conditional: range is more than...');
-            self.enter();       
+            self.enter();
         elif conditional_num == 3:
             self.__keyboard.type('// setting up a conditional: range is less than...');
             self.enter();
-            
+
     def result(self, result_num, text):
         if result_num == 1:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet2');
-                self.enter();            
+                self.enter();
             elif text == 'code':
                 self.__keyboard.type('~snippet2.stop;');
                 self.evaluateSC('eval')
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(');
-                self.evaluateSC('eval')                
-        
+                self.evaluateSC('eval')
+
         elif result_num == 2:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet1');
-                self.enter();            
+                self.enter();
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop;');
                 self.evaluateSC('eval')
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(');
-                self.evaluateSC('eval')                 
-                
+                self.evaluateSC('eval')
+
         elif result_num == 3:
             if text == 'comment':
                 self.__keyboard.type('// if true -> play gong sound!');
-                self.enter();            
+                self.enter();
             elif text == 'code':
                 self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([1234*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
-                self.evaluateSC('eval')   
+                self.evaluateSC('eval')
             elif text == 'less than':
                 self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([334*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
-                self.evaluateSC('eval')                 
-                
+                self.evaluateSC('eval')
+
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
         self.enter();
-            
