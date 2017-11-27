@@ -419,7 +419,7 @@ class Mapping_Motippets:
             self.__keyboard.type('// setting up a conditional: range is less than...')
             self.enter()
 
-    def result(self, result_num, text):
+    def result(self, result_num, text, mod=0): #how to make optional params?
         if result_num == 1:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet2')
@@ -447,10 +447,10 @@ class Mapping_Motippets:
                 self.__keyboard.type('// if true -> play gong sound!')
                 self.enter()
             elif text == 'code':
-                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([1234*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play')
+                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([(1234+' + str(mod) + ' )*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play')
                 self.evaluateSC('eval')
             elif text == 'less than':
-                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([334*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
+                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([(334'+ str(mod) +')*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
                 self.evaluateSC('eval')
 
     def customPass(self, name, content):

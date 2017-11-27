@@ -163,7 +163,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     elif result_num == 2:
                         mapping.result(2, 'code')
                     elif result_num == 3:
-                        mapping.result(3, 'code')
+                        mapping.result(3, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
                 else:
                     mapping.customPass('condition not met', ':(')
                         
@@ -176,7 +176,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     elif result_num == 2:
                         mapping.result(2, 'less than')
                     elif result_num == 3:
-                        mapping.result(3, 'less than') 
+                        mapping.result(3, 'less than', piano_range) 
                 else:
                     mapping.customPass('condition not met', ':(')
                 
