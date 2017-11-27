@@ -158,25 +158,29 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                 print("range was: ", conditionalsRange._range)
             if operator == 'more than':   
                 if conditionalsRange._range >= piano_range:   
-                    if result_num == 1:
-                        mapping.result(1,'code')
-                    elif result_num == 2:
-                        mapping.result(2, 'code')
-                    elif result_num == 3:
-                        mapping.result(3, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
+                    #if result_num == 1:
+                        #mapping.result(result_num,'code')
+                    #elif result_num == 2:
+                        #mapping.result(result_num, 'code')
+                    #elif result_num == 3:
+                        mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
+                    #elif result_num == 4:
+                        #mapping.result(result_num, 'bomb')
                 else:
                     mapping.customPass('condition not met', ':(')
                         
             elif operator == 'less than': 
                 if conditionalsRange._range <= piano_range:
                     if result_num == 1:
-                        mapping.result(1,'less than')
+                        mapping.result(result_num,'less than')
                         range_trigger = 0 
-                        break # secret thread stop!
-                    elif result_num == 2:
-                        mapping.result(2, 'less than')
-                    elif result_num == 3:
-                        mapping.result(3, 'less than', piano_range) 
+                        break # secret 1 shot thread!
+                    elif result_num == 2 or result_num == 3:
+                        #mapping.result(result_num, 'less than')
+                    #elif result_num == 3:
+                        mapping.result(result_num, 'less than', piano_range) 
+                    elif result_num == 4:
+                        mapping.result(result_num, 'code')                        
                 else:
                     mapping.customPass('condition not met', ':(')
                 
