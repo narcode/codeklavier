@@ -71,39 +71,39 @@ class Mapping_HelloWorld:
         elif midinumber == 94:
             self.__keyboard.type('9')
         elif midinumber == 34:
-                self.__keyboard.type('m')
+            self.__keyboard.type('m')
         elif midinumber == 104:
-            self.__keyboard.type('k'),
+            self.__keyboard.type('k')
        # special keys
         elif midinumber == 56:
             self.__keyboard.press(Key.space)
-            self.__keyboard.release(Key.space),
+            self.__keyboard.release(Key.space)
         elif midinumber == 32:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
             self.evaluateSC(),
         elif midinumber == 50:
-            self.__keyboard.type('~'),
+            self.__keyboard.type('~')
         elif midinumber == 51:
-            self.__keyboard.type('+'),
+            self.__keyboard.type('+')
         elif midinumber == 54:
-            self.__keyboard.type('-'),
+            self.__keyboard.type('-')
         elif midinumber == 49:
-            self.__keyboard.type('='),
+            self.__keyboard.type('=')
         elif midinumber == 103:
-            self.__keyboard.type('?'),
+            self.__keyboard.type('?')
         elif midinumber == 105:
-            self.__keyboard.type('.!'),
+            self.__keyboard.type('.!')
         elif midinumber == 95:
             self.__keyboard.press(Key.backspace)
-            self.__keyboard.release(Key.backspace),
+            self.__keyboard.release(Key.backspace)
       # supercollider commands:
         elif midinumber == 33:
             self.evaluateSC(),
         elif midinumber == 22:
-            self.__keyboard.type('.tempo'),
+            self.__keyboard.type('.tempo')
         elif midinumber == 21:
-            self.__keyboard.type('.play'),
+            self.__keyboard.type('.play')
         elif midinumber == 102:
             self.__keyboard.type('TempoClock.default')
 
@@ -402,44 +402,44 @@ class Mapping_Motippets:
 
     def conditional(self, conditional_num):
         if conditional_num == 1:
-            self.__keyboard.type('// setting up a conditional: amount of notes played');
-            self.enter();
+            self.__keyboard.type('// setting up a conditional: amount of notes played')
+            self.enter()
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up a conditional: range is more than...');
-            self.enter();
+            self.__keyboard.type('// setting up a conditional: range is more than...')
+            self.enter()
         elif conditional_num == 3:
-            self.__keyboard.type('// setting up a conditional: range is less than...');
-            self.enter();
+            self.__keyboard.type('// setting up a conditional: range is less than...')
+            self.enter()
 
     def result(self, result_num, text):
         if result_num == 1:
             if text == 'comment':
-                self.__keyboard.type('// if true -> stop ~snippet2');
-                self.enter();
+                self.__keyboard.type('// if true -> stop ~snippet2')
+                self.enter()
             elif text == 'code':
-                self.__keyboard.type('~snippet2.stop;');
+                self.__keyboard.type('~snippet2.stop;')
                 self.evaluateSC('eval')
             elif text == 'less than':
-                self.__keyboard.type('//less than an 8ve. Nothing happens :(');
+                self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval')
 
         elif result_num == 2:
             if text == 'comment':
-                self.__keyboard.type('// if true -> stop ~snippet1');
-                self.enter();
+                self.__keyboard.type('// if true -> stop ~snippet1')
+                self.enter()
             elif text == 'code':
-                self.__keyboard.type('~snippet1.stop;');
+                self.__keyboard.type('~snippet1.stop;')
                 self.evaluateSC('eval')
             elif text == 'less than':
-                self.__keyboard.type('//less than an 8ve. Nothing happens :(');
+                self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval')
 
         elif result_num == 3:
             if text == 'comment':
-                self.__keyboard.type('// if true -> play gong sound!');
-                self.enter();
+                self.__keyboard.type('// if true -> play gong sound!')
+                self.enter()
             elif text == 'code':
-                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([1234*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
+                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([1234*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play')
                 self.evaluateSC('eval')
             elif text == 'less than':
                 self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([334*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
@@ -447,4 +447,4 @@ class Mapping_Motippets:
 
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
-        self.enter();
+        self.enter()
