@@ -454,8 +454,11 @@ class Mapping_Motippets:
                 self.evaluateSC('eval')
 
         elif result_num == 4:
-            if text == 'code':
-                self.__keyboard.type('GOMB!');
+            if text == 'comment':
+                self.__keyboard.type('GOMB! //is activating...');
+                self.evaluateSC('eval')
+            elif text == 'code':
+                self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
                 self.evaluateSC('eval')
                 
     def customPass(self, name, content):

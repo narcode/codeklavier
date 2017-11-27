@@ -73,6 +73,8 @@ def set_parameters(value, conditional_func, debug=False):
         mapping.customPass('// more than 100 notes played in the next ', str(value) + ' seconds?')
     elif conditional_func == 'range':
         mapping.customPass('// range set to: ', str(value) + ' semitones...')
+    elif conditional_func == 'gomb':
+        mapping.customPass('// GOMB countdown set to: ', str(value))
     
     if debug:
         print('value parameter is ', str(value))
@@ -83,7 +85,7 @@ def set_parameters(value, conditional_func, debug=False):
     range_trigger = 1
 
     
-def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
+def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
     """
     TODO: define func
     """
@@ -107,6 +109,9 @@ def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
                 
             elif result_num == 3:
                 mapping.result(result_num, 'code')
+                
+            elif result_num == 4:
+                mapping.result(result_num, 'code')                
                                
             break
         else:
@@ -139,7 +144,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
        
     if debug:
         print('thread for range started')
-    print("range trig -> ", range_trigger, "result num: ", result_num, "range set to: ", piano_range)
+        print("range trig -> ", range_trigger, "result num: ", result_num, "range set to: ", piano_range)
 
     
     while threads_are_perpetual: 
@@ -178,9 +183,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     elif result_num == 2 or result_num == 3:
                         #mapping.result(result_num, 'less than')
                     #elif result_num == 3:
-                        mapping.result(result_num, 'less than', piano_range) 
-                    elif result_num == 4:
-                        mapping.result(result_num, 'code')                        
+                        mapping.result(result_num, 'less than', piano_range)                         
                 else:
                     mapping.customPass('condition not met', ':(')
                 
@@ -195,11 +198,47 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
         
         time.sleep(1)
     
-
+def gong_bomb(countdown, debug=False):
+    """
+    function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
+    
+    countdown: the countdown time in seconds
+    """
+    #reset parameter global once it has passed effectively:
+    global param_interval, threads_are_perpetual
+    param_interval= 0
+    conditionals[1]._conditionalStatus = 0
+    conditionals[1]._resultCounter = 0
+    conditionals[1]._conditionalCounter = 0     
+    
+    if debug:
+        print('gong bomb thread started', 'countdown: ', countdown)
+    
+    for g in range(0, countdown):
+        countdown -= 1
+        print(countdown)
         
-# Loop to program to keep listening for midi input
+        if countdown == 0: #boom ASCII idea by @borrob!
+            threads_are_perpetual = False #stop all perpetual threads
+            #stop all snippets
+            mapping.result(1, 'code')
+            mapping.result(2, 'code')
+            print("")
+            print("  ____   ____   ____  __  __ _ ")
+            print(" |  _ \ / __ \ / __ \|  \/  | |")
+            print(" | |_) | |  | | |  | | \  / | |")
+            print(" |  _ <| |  | | |  | | |\/| | |")
+            print(" | |_) | |__| | |__| | |  | |_|")
+            print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯")
+            print("")
+            mapping.result(4, 'code')
+
+        time.sleep(1)
+ 
+    
+# MAIN Loop to keep listening for midi input
 try:
-    while True:
+    while threads_are_perpetual:
         msg = codeK.get_message()
 
         if msg:
@@ -255,15 +294,23 @@ try:
                     conditional_params = parameters.parse_midi(msg, 'params')                    
                    
                     #set the parameter for the timer:
-                    # amount of notes not?
                     if isinstance(conditional_params, int) and conditional_params > 0:
-                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'amount'))
-                        threads['set_param'].start()
-                                                
+                        if conditional_value != 4:                                                    
+                            threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'amount'))
+                            threads['set_param'].start()
+                        elif conditional_value == 4: #gong bomb secret code
+                            threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                            threads['set_param'].start()                        
+                                                    
                     if param_interval > 0:
-                        notecounter = 0 # reset the counter
-                        threads[conditional_value] = Thread(target=parallelism, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
-                        threads[conditional_value].start()
+                        if conditional_value != 4:
+                            notecounter = 0 # reset the counter
+                            threads[conditional_value] = Thread(target=noteCounter, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
+                            threads[conditional_value].start()
+                        elif conditional_value == 4:
+                            #start the countdown
+                            gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
+                            gomb.start()                                
                 
                 if isinstance(conditional2_value, int) and conditional2_value > 0:
                     conditionalsRange._conditionalStatus = conditional2_value
@@ -302,6 +349,5 @@ try:
 except KeyboardInterrupt:
     print('')
 finally:
-    print("Bye-Bye :(")
     codeK.end()
 

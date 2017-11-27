@@ -19,7 +19,7 @@ class Motippets(object):
         self._memory = []
         self._mainMotifs = []
         self._mainMotifs1 = []        
-        self._miniMotifs1 = []
+        self._miniMotifs = []
         self._miniMotifs2 = []
         self._miniMotifs3 = []
         self._results1 = []
@@ -241,13 +241,13 @@ class Motippets(object):
                     elif section == 'conditional 1': 
                                 
                         if note <= self._pianosections[0]:
-                            self.memorize(note, 12, True, 'Conditional Memory: ')
+                            self.memorize(note, 12, False, 'Conditional Memory: ')
                         
                             if self._conditionalCounter == 0:
                                 conditional2_played = self.compare_chordal_motif(
                                                     self._memory,
                                                     Motifs().conditional_1(),
-                                                    note, True)
+                                                    note, False)
                                 
                                 if conditional2_played:
                                     self.mapscheme.conditional(1)
@@ -257,7 +257,7 @@ class Motippets(object):
                             if self._conditionalCounter > 0:      
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                         Motifs().conditional_result_3(),
-                                                                        note, True)          
+                                                                        note, 0, True)          
                             
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs().conditional_result_4(),
@@ -269,7 +269,7 @@ class Motippets(object):
                                     self._resultCounter += 1
                                     self._conditionalStatus = 3
                                 elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'bomb')
+                                    self.mapscheme.result(4, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
                                     self._conditionalStatus = 4                                
@@ -309,9 +309,8 @@ class Motippets(object):
                                     self._conditionalStatus = 1
                         
                                 return self._conditionalStatus                                       
-
-                        
-                        return self._conditionalStatus # is this needed witht he type check in the main loop?
+       
+                        return self._conditionalStatus # is this needed with the isinstance check in the main loop?
 
                     ### CONDITONAL 2
                     elif section == 'conditional 2': 
@@ -333,26 +332,15 @@ class Motippets(object):
                             if self._conditionalCounter > 0:      
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs().conditional_result_3(),
-                                                                            note, True)
+                                                                            note, 0, True)
                 
-                                result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs().conditional_result_4(),
-                                                                            note, 1, True)
-
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
                                     self._conditionalStatus = 3
-                                elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'bomb')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 4
                 
                                 return self._conditionalStatus                                    
-
-                
                 
                         if note > self._pianosections[1]:
                             self.memorize(note, 20, False, 'Conditional Memory High: ')
@@ -427,22 +415,13 @@ class Motippets(object):
                             if self._conditionalCounter > 0:      
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs().conditional_result_3(),
-                                                                            note, False)
-                                
-                                result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs().conditional_result_4(),
-                                                                            note, 1, False)
+                                                                            note, 0, False)
                 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 3
-                                elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'bomb')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 4                                    
+                                    self._conditionalStatus = 3                                  
                 
                                 return self._conditionalStatus                            
                             
@@ -690,6 +669,8 @@ class Motippets(object):
         TODO: describe input/output params
         TODO 2: make sub arrays if function is used again...
         """
+        compare = False
+        
         if num == 0:
             if note in motif:
                 self._mainMotifs.append(note)
@@ -706,8 +687,14 @@ class Motippets(object):
                                 self._mainMotifs)
                 if sum_motif == sum_played:
                     compare = True
-                else:
-                    compare = False
+
+                if debug:
+                    print('played ->' + str(self._mainMotifs),
+                          '\nmotif ->' + str(motif),
+                          '\ncomparison: ' + str(compare),
+                          '\nsum played: ' + str(sum_played),
+                          '\nsum motif: ' + str(sum_motif))
+                    
         else:
             if note in motif:
                 self._mainMotifs1.append(note)
@@ -721,20 +708,18 @@ class Motippets(object):
                                 motif)
                 sum_played = reduce(
                                 (lambda total, sumnotes: total + sumnotes),
-                                self._mainMotifs)
+                                self._mainMotifs1)
                 if sum_motif == sum_played:
                     compare = True
-                else:
-                    compare = False            
+
+                if debug:
+                    print('played ->' + str(self._mainMotifs1),
+                          '\nmotif ->' + str(motif),
+                          '\ncomparison: ' + str(compare),
+                          '\nsum played: ' + str(sum_played),
+                          '\nsum motif: ' + str(sum_motif))
             
-            if debug:
-                print('played ->' + str(self._mainMotifs),
-                      '\nmotif ->' + str(motif),
-                      '\ncomparison: ' + str(compare),
-                      '\nsum played: ' + str(sum_played),
-                      '\nsum motif: ' + str(sum_motif))
-            
-            return compare
+        return compare
 
 
     def tremolo_value(self, notes, pianosection, deltatime,
