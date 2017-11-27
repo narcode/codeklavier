@@ -59,7 +59,7 @@ threads_are_perpetual = True
 
 
 #TODO: move this functions to a better place?
-def set_parameters(value, conditional_func, debug=True):
+def set_parameters(value, conditional_func, debug=False):
     """
     function to parse a full range tremolo. This value can be used as a param for the 
     other functions.
@@ -90,7 +90,8 @@ def parallelism(timer=10, numberOfnotes=100, result_num=1, debug=True):
     print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
     
     #reset parameter global once it has passed effectively:
-    param_interval = 0
+    global param_interval
+    param_interval= 0
     
     for s in range(0, timer):
         if notecounter > numberOfnotes:
@@ -131,9 +132,10 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
    perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
     """
     
-    global range_trigger, threads_are_perpetual
+    global range_trigger, threads_are_perpetual, param_interval
     conditionals[num]._conditionalStatus = 0 #reset trigger
     t = 1
+    param_interval = 0
        
     if debug:
         print('thread for range started')
@@ -269,7 +271,8 @@ try:
                         threads['set_param'].start()   
                         
                     if param_interval > 0:
-                        threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=('random', 'more than', 2, conditional2_value, param_interval))
+                        threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', 
+                                                             args=('random', 'more than', 2, conditional2_value, param_interval))
                         threads[conditional2_value].start()
                             
                 if isinstance(conditional3_value, int) and conditional3_value > 0:
@@ -282,7 +285,8 @@ try:
                         threads['set_param'].start()   
                         
                     if param_interval > 0:
-                        threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread', args=('random', 'less than', 3, conditional3_value, param_interval))
+                        threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread', 
+                                                             args=('random', 'less than', 3, conditional3_value, param_interval))
                         threads[conditional3_value].start()
                     
                     #range parser
