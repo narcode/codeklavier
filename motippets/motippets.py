@@ -142,10 +142,10 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
     
     while threads_are_perpetual: 
         if timer == 'random':
-            timer = random.randrange(5,45)
+            timer = random.randrange(10,45)
             
         if debug:
-            print('timer: ', t)
+            print('timer: ', t, 'loop time: ', timer)
             print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
         t += 1
