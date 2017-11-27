@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+import random
 from threading import Thread, Event
 
 import sys
@@ -265,7 +266,7 @@ try:
                         threads['set_param'].start()   
                         
                     if param_interval > 0:
-                        threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, 'more than', 2, conditional2_value, param_interval))
+                        threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread', args=(random.randrange(5,40), 'more than', 2, conditional2_value, param_interval))
                         threads[conditional2_value].start()
                             
                 if isinstance(conditional3_value, int) and conditional3_value > 0:
@@ -278,7 +279,7 @@ try:
                         threads['set_param'].start()   
                         
                     if param_interval > 0:
-                        threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread', args=(31, 'less than', 3, conditional3_value, param_interval))
+                        threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread', args=(random.randrange(5,40), 'less than', 3, conditional3_value, param_interval))
                         threads[conditional3_value].start()
                     
                     #range parser
