@@ -206,12 +206,35 @@ try:
                 
                 motif1_played = memMid._motif1_counter
                 motif2_played = mainMem._motif2_counter
+               
+                minimotif1_low_mapped = memLow._unmapCounter1
+                minimotif2_low_mapped = memLow._unmapCounter2
+                minimotif3_low_mapped = memLow._unmapCounter3
+                
+                minimotif1_mid_mapped = memMid._unmapCounter1
+                minimotif2_mid_mapped = memMid._unmapCounter2
+                
+                minimotif1_hi_mapped = memHi._unmapCounter1
+                minimotif2_hi_mapped = memHi._unmapCounter2                
                                 
                 ##tremolos:
                 if motif1_played > 0 or motif2_played > 0:
-                    tremoloHi.parse_midi(msg, 'tremoloHi')
-                    tremoloMid.parse_midi(msg, 'tremoloMid')
-                    tremoloLow.parse_midi(msg, 'tremoloLow')
+                    if minimotif1_low_mapped > 0:
+                        tremoloLow.parse_midi(msg, 'tremoloLow', 1)
+                    elif minimotif2_low_mapped > 0:
+                        tremoloLow.parse_midi(msg, 'tremoloLow', 2)
+                    elif minimotif3_low_mapped > 0:
+                        tremoloLow.parse_midi(msg, 'tremoloLow', 3)
+                    
+                    if minimotif1_mid_mapped > 0:
+                        tremoloMid.parse_midi(msg, 'tremoloMid', 1)
+                    elif minimotif2_mid_mapped > 0:
+                        tremoloMid.parse_midi(msg, 'tremoloMid', 2)  
+                    
+                    if minimotif1_hi_mapped > 0:
+                        tremoloHi.parse_midi(msg, 'tremoloHi', 1)
+                    elif minimotif2_hi_mapped > 0:
+                        tremoloHi.parse_midi(msg, 'tremoloHi', 2)                         
                 
                 ##conditionals 
                 conditional_value = conditionals[1].parse_midi(msg, 'conditional 1')

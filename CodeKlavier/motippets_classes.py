@@ -18,6 +18,7 @@ class Motippets(object):
         self._mainMotifs = []
         self._miniMotifs = []
         self._miniMotifs2 = []
+        self._miniMotifs3 = []
         self._results1 = []
         self._results2 = []
         self._results3 = []
@@ -37,11 +38,12 @@ class Motippets(object):
         self._timer = 0
         self._range = 0
 
-    def parse_midi(self, event, section):
+    def parse_midi(self, event, section, target=0):
         """Parse the midi signal and process it depending on the register.
         
         event: describes the midi event that was triggered\n
         section: the MIDI piano range (i.e. low register, mid or high)
+        target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
         self._deltatime += deltatime
@@ -180,18 +182,18 @@ class Motippets(object):
                             if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'hi',
-                                    self._deltatime, 0.1, False)
+                                    self._deltatime, 0.1, target, False)
                                 self._deltatime = 0
                     
                     elif section == 'tremoloMid':
                         if (note > self._pianosections[0] and
                             note <= self._pianosections[1]):
-                            self.memorize(note, 4, False, 'Tremolo Mid: ')
+                            self.memorize(note, 4, False, target, 'Tremolo Mid: ')
                             
                             if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'mid',
-                                    self._deltatime, 0.1, False)
+                                    self._deltatime, 0.1, target, False)
                                 self._deltatime = 0
                         
                     elif section == 'tremoloLow':
@@ -201,7 +203,7 @@ class Motippets(object):
                             if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'low',
-                                    self._deltatime, 0.1, False)
+                                    self._deltatime, 0.1, target, True)
                                 self._deltatime = 0
     
                     elif section == 'params':
@@ -505,6 +507,7 @@ class Motippets(object):
                 if self._miniMotifs == motif:
                     compare = True
                     self._unmapCounter1 += 1
+                    self._unmapCounter2 = 0
                 else:
                     compare = False
                 
@@ -526,6 +529,7 @@ class Motippets(object):
                 if self._miniMotifs2 == motif:
                     compare = True
                     self._unmapCounter2 += 1
+                    self._unmapCounter1 = 0
                 else:
                     compare = False
                     
@@ -535,6 +539,30 @@ class Motippets(object):
                           '\ncomparison: ' + str(compare))
                 
                 return compare
+            
+            elif motiftype == 'mini3':
+                if note in motif:
+                    self._miniMotifs3.append(note)
+                else:
+                    self._miniMotifs3 = []
+                    return False #@narcode: is this correct?
+                    
+                if len(self._miniMotifs3) >= len(motif):
+                    self._miniMotifs3 = self._miniMotifs3[-len(motif):]
+                    if self._miniMotifs3 == motif:
+                        compare = True
+                        self._unmapCounter3 += 1
+                        self._unmapCounter1 = 0
+                        self._unmapCounter2 = 0                        
+                    else:
+                        compare = False
+                        
+                    if debug:
+                        print('played ->' + str(self._miniMotifs3),
+                              '\nmotif 2 ->' + str(motif),
+                              '\ncomparison: ' + str(compare))
+                    
+                    return compare            
             
         elif motiftype == 'result 1':
             if note in motif:
@@ -657,7 +685,7 @@ class Motippets(object):
             return compare
 
     def tremolo_value(self, notes, pianosection, deltatime,
-                     deltatolerance, debug=False):
+                     deltatolerance, target, debug=False):
         """Get the interval of a given tremolo.
         
         TODO: this should only return the interval integer and on another place define what to do with it!
@@ -665,7 +693,7 @@ class Motippets(object):
         TODO: describe input params
         """
         if debug:
-            print('deltatime :' + str(deltatime), 'tolerance :', str(deltatolerance))
+            print('deltatime :' + str(deltatime), 'tolerance :', str(deltatolerance), 'target snippet: ', target)
         if deltatime < deltatolerance:
             interval = abs(notes[1] - notes[0])
             self._intervalsArray.append(interval)
@@ -679,11 +707,22 @@ class Motippets(object):
                     if debug:
                         print('interval ' + pianosection + ': ' + str(interval))
                     if pianosection == 'hi':
-                        self.mapscheme.tremolo('hi', interval)
+                        if target == 1:
+                            self.mapscheme.tremolo('hi_1', interval)
+                        elif target == 2:
+                            self.mapscheme.tremolo('hi_2', interval)
                     elif pianosection == 'mid':
-                        self.mapscheme.tremolo('mid', interval)
+                        if target == 1:
+                            self.mapscheme.tremolo('mid_1', interval)
+                        elif target == 2:
+                            self.mapscheme.tremolo('mid_2', interval)
                     elif pianosection == 'low':
-                        self.mapscheme.tremolo('low', interval)
+                        if target == 1:
+                            self.mapscheme.tremolo('low_1', interval)
+                        elif target == 2:
+                            self.mapscheme.tremolo('low_2', interval)
+                        elif target == 3:
+                            self.mapscheme.tremolo('low_3', interval)                        
                     elif pianosection == 'full':
                         return interval
                         
