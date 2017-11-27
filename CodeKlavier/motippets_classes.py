@@ -508,6 +508,7 @@ class Motippets(object):
                     compare = True
                     self._unmapCounter1 += 1
                     self._unmapCounter2 = 0
+                    self._unmapCounter3 = 0
                 else:
                     compare = False
                 
@@ -530,6 +531,7 @@ class Motippets(object):
                     compare = True
                     self._unmapCounter2 += 1
                     self._unmapCounter1 = 0
+                    self._unmapCounter3 = 0
                 else:
                     compare = False
                     
@@ -540,29 +542,29 @@ class Motippets(object):
                 
                 return compare
             
-            elif motiftype == 'mini3':
-                if note in motif:
-                    self._miniMotifs3.append(note)
+        elif motiftype == 'mini3':
+            if note in motif:
+                self._miniMotifs3.append(note)
+            else:
+                self._miniMotifs3 = []
+                return False #@narcode: is this correct?
+            
+            if len(self._miniMotifs3) >= len(motif):
+                self._miniMotifs3 = self._miniMotifs3[-len(motif):]
+                if self._miniMotifs3 == motif:
+                    compare = True
+                    self._unmapCounter3 += 1
+                    self._unmapCounter1 = 0
+                    self._unmapCounter2 = 0                        
                 else:
-                    self._miniMotifs3 = []
-                    return False #@narcode: is this correct?
-                    
-                if len(self._miniMotifs3) >= len(motif):
-                    self._miniMotifs3 = self._miniMotifs3[-len(motif):]
-                    if self._miniMotifs3 == motif:
-                        compare = True
-                        self._unmapCounter3 += 1
-                        self._unmapCounter1 = 0
-                        self._unmapCounter2 = 0                        
-                    else:
-                        compare = False
+                    compare = False
+                            
+                if debug:
+                    print('played ->' + str(self._miniMotifs3),
+                          '\nmotif 2 ->' + str(motif),
+                          '\ncomparison: ' + str(compare))
                         
-                    if debug:
-                        print('played ->' + str(self._miniMotifs3),
-                              '\nmotif 2 ->' + str(motif),
-                              '\ncomparison: ' + str(compare))
-                    
-                    return compare            
+                return compare            
             
         elif motiftype == 'result 1':
             if note in motif:
@@ -608,27 +610,27 @@ class Motippets(object):
                 
                 return compare   
             
-            elif motiftype == 'result 3': #TODO: optimize with a Dictionary
-                if note in motif:
-                    self._results3.append(note)
-                else:
-                    self._results3 = []
-                    return False #@narcode: is this correct?
-                    
-                if len(self._results3) >= len(motif):
-                    self._results3 = self._results3[-len(motif):]
-                    if self._results3 == motif:
-                        compare = True
+        elif motiftype == 'result 3': #TODO: optimize with a Dictionary
+            if note in motif:
+                self._results3.append(note)
+            else:
+                self._results3 = []
+                return False #@narcode: is this correct?
+            
+            if len(self._results3) >= len(motif):
+                self._results3 = self._results3[-len(motif):]
+                if self._results3 == motif:
+                    compare = True
                         #self._unmapCounter3 += 1 #?
-                    else:
-                        compare = False
+                else:
+                    compare = False
                         
-                    if debug:
-                        print('played ->' + str(self._results3),
-                              '\nmotif 2 ->' + str(motif),
-                              '\ncomparison: ' + str(compare))
+                if debug:
+                    print('played ->' + str(self._results3),
+                          '\nmotif 2 ->' + str(motif),
+                          '\ncomparison: ' + str(compare))
                     
-                    return compare            
+            return compare            
             
         else:
             if note in motif:

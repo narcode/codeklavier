@@ -216,7 +216,7 @@ try:
                 
                 minimotif1_hi_mapped = memHi._unmapCounter1
                 minimotif2_hi_mapped = memHi._unmapCounter2                
-                                
+                 
                 ##tremolos:
                 if motif1_played > 0 or motif2_played > 0:
                     if minimotif1_low_mapped > 0:

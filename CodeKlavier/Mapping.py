@@ -326,7 +326,7 @@ class Mapping_Motippets:
             self.__keyboard.type('~map_rhythm = true;')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low amp':
-            self.__keyboard.type('~map_amplitude = true')
+            self.__keyboard.type('~map_amplitude = true;')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low with unmap 2':
             self.__keyboard.type('~map_rhythm = true;')
@@ -404,7 +404,7 @@ class Mapping_Motippets:
             self.__keyboard.type('~tremoloL1 = ' + str(value))
         elif pianoregister == 'low_2':
             self.__keyboard.type('~tremoloL2 = ' + str(value))      
-        elif pianoregister == 'low_2':
+        elif pianoregister == 'low_3':
             self.__keyboard.type('~tremoloL1amp = ' + str(value))             
         self.evaluateSC('eval')
 
