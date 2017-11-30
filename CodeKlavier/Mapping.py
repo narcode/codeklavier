@@ -74,7 +74,7 @@ class Mapping_HelloWorld:
             self.__keyboard.type('m')
         elif midinumber == 99:
             self.__keyboard.type('c')
-        elif midinumber == 103:
+        elif midinumber == 104:
             self.__keyboard.type('y')
        # special keys
         elif midinumber == 56:
