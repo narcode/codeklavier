@@ -72,8 +72,10 @@ class Mapping_HelloWorld:
             self.__keyboard.type('9')
         elif midinumber == 34:
             self.__keyboard.type('m')
-        elif midinumber == 104:
-            self.__keyboard.type('k')
+        elif midinumber == 99:
+            self.__keyboard.type('c')
+        elif midinumber == 103:
+            self.__keyboard.type('y')
        # special keys
         elif midinumber == 56:
             self.__keyboard.press(Key.space)
@@ -393,19 +395,19 @@ class Mapping_Motippets:
 
     def tremolo(self, pianoregister, value):
         if pianoregister == 'hi_1':
-            self.__keyboard.type('~tremoloH1 = ' + str(value)) 
+            self.__keyboard.type('~tremoloH1 = ' + str(value))
         elif pianoregister == 'hi_2':
-            self.__keyboard.type('~tremoloH2 = ' + str(value))            
+            self.__keyboard.type('~tremoloH2 = ' + str(value))
         elif pianoregister == 'mid_1':
-            self.__keyboard.type('~tremoloM1 = ' + str(value))  
+            self.__keyboard.type('~tremoloM1 = ' + str(value))
         elif pianoregister == 'mid_2':
-            self.__keyboard.type('~tremoloM2 = ' + str(value))            
+            self.__keyboard.type('~tremoloM2 = ' + str(value))
         elif pianoregister == 'low_1':
             self.__keyboard.type('~tremoloL1 = ' + str(value))
         elif pianoregister == 'low_2':
-            self.__keyboard.type('~tremoloL2 = ' + str(value))      
+            self.__keyboard.type('~tremoloL2 = ' + str(value))
         elif pianoregister == 'low_3':
-            self.__keyboard.type('~tremoloL1amp = ' + str(value))             
+            self.__keyboard.type('~tremoloL1amp = ' + str(value))
         self.evaluateSC('eval')
 
     def conditional(self, conditional_num):
@@ -460,7 +462,7 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
                 self.evaluateSC('eval')
-                
+
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
         self.enter()
