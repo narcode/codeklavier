@@ -305,19 +305,19 @@ class Mapping_Motippets:
 
     def miniSnippets(self, snippet_num, pianosection):
         if snippet_num == 1 and pianosection == 'hi':
-            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\fx, Ndef(\\krm3));}')
+            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\fx, Ndef(\\krm3));}; ~tremoloH1')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'hi with unmap':
-            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\fx, Ndef(\\krm3));}')
+            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\fx, Ndef(\\krm3));}; ~tremoloH1')
             self.evaluateSC('eval')
             #unmap other motif
             self.__keyboard.type('Ndef(\\acc).set(\\fx, ~tremoloH2.linlin(1, 16, 0, 15));')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'mid':
-            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\pitch, Ndef(\\krm1));}')
+            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\pitch, Ndef(\\krm1));}; ~tremoloM1')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'mid with unmap':
-            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\pitch, Ndef(\\krm1));}')
+            self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\pitch, Ndef(\\krm1));}; ~tremoloM1')
             self.evaluateSC('eval')
             #unmap
             self.__keyboard.type('Ndef(\\acc).set(\\note, ~tremoloM2.linlin(1, 16, 180, 800));')
@@ -334,7 +334,7 @@ class Mapping_Motippets:
             self.__keyboard.type('~map_rhythm = true; ~tremoloL1;')
             self.evaluateSC('eval')
             #unmap 2:
-            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5).postln);')
+            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5));')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low with unmap 3':
             self.__keyboard.type('~map_rhythm = true; ~tremoloL1;')
@@ -352,24 +352,24 @@ class Mapping_Motippets:
             self.__keyboard.type('~map_amplitude = true; ~tremoloL1amp;')
             self.evaluateSC('eval')
             #unmap 2:
-            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5).postln);')
+            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5));')
             self.evaluateSC('eval')
 
         # for snippet 2:
         if snippet_num == 2 and pianosection == 'hi':
-            self.__keyboard.type('Ndef(\\acc).map(\\fx, Ndef(\\krm2_3));')
+            self.__keyboard.type('Ndef(\\acc).map(\\fx, Ndef(\\krm2_3)); ~tremoloH2')
             self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'hi with unmap':
-            self.__keyboard.type('Ndef(\\acc).map(\\fx, Ndef(\\krm2_3)');
+            self.__keyboard.type('Ndef(\\acc).map(\\fx, Ndef(\\krm2_3); ~tremoloH2');
             self.evaluateSC('eval')
             #unmap other motif
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).set(\\fx, ~tremoloH1.linlin(1, 16, 1, 88));}')
             self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'mid':
-            self.__keyboard.type('Ndef(\\acc).map(\\note, Ndef(\\krm2_1));')
+            self.__keyboard.type('Ndef(\\acc).map(\\note, Ndef(\\krm2_1)); ~tremoloM2')
             self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'mid with unmap':
-            self.__keyboard.type('Ndef(\\acc).map(\\note, Ndef(\\krm2_1));')
+            self.__keyboard.type('Ndef(\\acc).map(\\note, Ndef(\\krm2_1)); ~tremoloH2')
             self.evaluateSC('eval')
             #unmap
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).set(\\pitch, ~tremoloM1.linlin(1, 16, 200, 3000));}')
@@ -377,16 +377,16 @@ class Mapping_Motippets:
 
             ## LOW SECTION
         if snippet_num == 2 and pianosection == 'low':
-            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
+            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2)); ~tremoloL2')
             self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'low with unmap 1':
-            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
+            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2)); ~tremoloL2')
             self.evaluateSC('eval')
             #unmap 1:
             self.__keyboard.type('~map_rhythm = false;')
             self.evaluateSC('eval')
         if snippet_num == 2 and pianosection == 'low with unmap 3':
-            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2));')
+            self.__keyboard.type('Ndef(\\acc).map(\\amp, Ndef(\\krm2_2)); ~tremoloL2')
             self.evaluateSC('eval')
             #unmap 3:
             self.__keyboard.type('~map_amplitude = false;')
