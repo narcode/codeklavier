@@ -166,10 +166,18 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     if result_num == 1:
                         mapping.result(result_num,'code')
                         mainMem._motif2_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0                        
                         break; #stop thread if condition met
                     elif result_num == 2:
                         mapping.result(result_num, 'code')
                         memMid._motif1_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0                        
                         break;
                     elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
@@ -182,11 +190,19 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                 if conditionalsRange._range <= piano_range:
                     if result_num == 1:
                         mapping.result(result_num,'code')
-                        mainMem._motif2_counter = 0                        
+                        mainMem._motif2_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0                        
                         break
                     elif result_num == 2:
                         mapping.result(result_num, 'code')
                         memMid._motif1_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0                        
                         break;
                     elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range)
