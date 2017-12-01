@@ -412,13 +412,13 @@ class Mapping_Motippets:
 
     def conditional(self, conditional_num):
         if conditional_num == 1:
-            self.__keyboard.type('// setting up a conditional: amount of notes played')
+            self.__keyboard.type('// setting up a conditional: IF number of notes played is more than 100 in...')
             self.enter()
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up a conditional: range is more than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
             self.enter()
         elif conditional_num == 3:
-            self.__keyboard.type('// setting up a conditional: range is less than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
 
     def result(self, result_num, text, mod=0): #how to make optional params?
@@ -465,6 +465,14 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
                 self.evaluateSC('eval')
+                self.__keyboard.type("")
+                self.__keyboard.type("  ____   ____   ____  __  __ _ ")
+                self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
+                self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
+                self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
+                self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
+                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯")
+                self.__keyboard.type("")
 
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)

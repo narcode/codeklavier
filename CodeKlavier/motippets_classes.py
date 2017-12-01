@@ -333,14 +333,23 @@ class Motippets(object):
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs().conditional_result_3(),
                                                                             note, 0, True)
+                                
+                                result4_played = self.compare_chordal_motif(self._memory,
+                                                                            Motifs().conditional_result_4(),
+                                                                            note, 1, True)                                
                 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
                                     self._conditionalStatus = 3
-                
-                                return self._conditionalStatus                                    
+                                elif result4_played and self._resultCounter == 0:
+                                    self.mapscheme.result(4, 'comment')
+                                    self._conditionalsBuffer = []
+                                    self._resultCounter += 1
+                                    self._conditionalStatus = 4                                
+                        
+                                return self._conditionalStatus                                     
                 
                         if note > self._pianosections[1]:
                             self.memorize(note, 20, False, 'Conditional Memory High: ')
@@ -416,14 +425,23 @@ class Motippets(object):
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs().conditional_result_3(),
                                                                             note, 0, False)
+                                
+                                result4_played = self.compare_chordal_motif(self._memory,
+                                                                            Motifs().conditional_result_4(),
+                                                                            note, 1, True)                                
                 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 3                                  
-                
-                                return self._conditionalStatus                            
+                                    self._conditionalStatus = 3
+                                elif result4_played and self._resultCounter == 0:
+                                    self.mapscheme.result(4, 'comment')
+                                    self._conditionalsBuffer = []
+                                    self._resultCounter += 1
+                                    self._conditionalStatus = 4                                
+                        
+                                return self._conditionalStatus                           
                             
                         if (note > self._pianosections[0] and note <= self._pianosections[1]):
                             self.memorize(note, 20, False, 'Conditional Memory Mid: ')
