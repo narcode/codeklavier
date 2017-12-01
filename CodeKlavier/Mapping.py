@@ -459,6 +459,9 @@ class Mapping_Motippets:
             if text == 'comment':
                 self.__keyboard.type('GOMB! //is activating...');
                 self.evaluateSC('eval')
+            elif text == 'start':
+                self.__keyboard.type('// GOMB countdown started!');
+                self.evaluateSC('eval')                
             elif text == 'code':
                 self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
                 self.evaluateSC('eval')
