@@ -328,10 +328,10 @@ class Mapping_Motippets:
             self.__keyboard.type('~map_rhythm = true;')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low amp':
-            self.__keyboard.type('~map_amplitude = true;')
+            self.__keyboard.type('~map_amplitude = true; ~tremoloL1amp;')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low with unmap 2':
-            self.__keyboard.type('~map_rhythm = true;')
+            self.__keyboard.type('~map_rhythm = true; ~tremoloL1;')
             self.evaluateSC('eval')
             #unmap 2:
             self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5));')
