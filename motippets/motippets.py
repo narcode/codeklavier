@@ -152,7 +152,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
             timer = random.randrange(10,45)
             
         if debug:
-            print('timer: ', t, 'loop time: ', timer)
+            print('timer: ', timer - t, 'loop time: ', timer)
             print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
         t += 1
@@ -166,9 +166,11 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     if result_num == 1:
                         mapping.result(result_num,'code')
                         mainMem._motif2_counter = 0
+                        break; #stop thread if condition met
                     elif result_num == 2:
                         mapping.result(result_num, 'code')
-                        mainMem._motif1_counter = 0
+                        memMid._motif1_counter
+                        break;
                     elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
                     elif result_num == 4:
