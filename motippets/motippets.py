@@ -207,7 +207,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range)
                     elif result_num == 4:
-                        mapping.result(result_num, 'bomb')                       
+                        mapping.result(result_num, 'code')                       
                 else:
                     mapping.customPass('condition not met', ':(')
                 
