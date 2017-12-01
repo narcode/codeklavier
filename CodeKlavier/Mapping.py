@@ -466,13 +466,21 @@ class Mapping_Motippets:
                 self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
                 self.evaluateSC('eval')
                 self.__keyboard.type("")
+                self.enter()
                 self.__keyboard.type("  ____   ____   ____  __  __ _ ")
+                self.enter()
                 self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
+                self.enter()
                 self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
+                self.enter()
                 self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
+                self.enter()
                 self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
+                self.enter()
                 self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯")
+                self.enter()
                 self.__keyboard.type("")
+                self.enter()
 
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
