@@ -325,7 +325,7 @@ class Mapping_Motippets:
 
             ## LOW SECTION
         if snippet_num == 1 and pianosection == 'low':
-            self.__keyboard.type('~map_rhythm = true;')
+            self.__keyboard.type('~map_rhythm = true; ~tremoloL1;')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low amp':
             self.__keyboard.type('~map_amplitude = true; ~tremoloL1amp;')
@@ -334,25 +334,25 @@ class Mapping_Motippets:
             self.__keyboard.type('~map_rhythm = true; ~tremoloL1;')
             self.evaluateSC('eval')
             #unmap 2:
-            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5));')
+            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5).postln);')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low with unmap 3':
-            self.__keyboard.type('~map_rhythm = true;')
+            self.__keyboard.type('~map_rhythm = true; ~tremoloL1;')
             self.evaluateSC('eval')
             #unmap 3:
             self.__keyboard.type('~map_amplitude = false;')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low amp with unmap 1':
-            self.__keyboard.type('~map_amplitude = true;')
+            self.__keyboard.type('~map_amplitude = true; ~tremoloL1amp;')
             self.evaluateSC('eval')
             #unmap 1:
             self.__keyboard.type('~map_rhythm = false;')
             self.evaluateSC('eval')
         if snippet_num == 1 and pianosection == 'low amp with unmap 2':
-            self.__keyboard.type('~map_amplitude = true')
+            self.__keyboard.type('~map_amplitude = true; ~tremoloL1amp;')
             self.evaluateSC('eval')
             #unmap 2:
-            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5));')
+            self.__keyboard.type('Ndef(\\acc).set(\\amp, ~tremoloL2.linlin(1, 16, 0, 1.5).postln);')
             self.evaluateSC('eval')
 
         # for snippet 2:
