@@ -169,7 +169,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         break; #stop thread if condition met
                     elif result_num == 2:
                         mapping.result(result_num, 'code')
-                        memMid._motif1_counter
+                        memMid._motif1_counter = 0
                         break;
                     elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
