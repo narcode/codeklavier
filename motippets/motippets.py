@@ -111,7 +111,8 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
                 mapping.result(result_num, 'code')
                 
             elif result_num == 4:
-                mapping.result(result_num, 'code')                
+                gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
+                gomb.start()                 
                                
             break
         else:
@@ -182,7 +183,8 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
                     elif result_num == 4:
-                        mapping.result(result_num, 'bomb')
+                        gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
+                        gomb.start()                        
                 else:
                     mapping.customPass('condition not met', ':(')
                         
@@ -207,7 +209,8 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                     elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range)
                     elif result_num == 4:
-                        mapping.result(result_num, 'code')                       
+                        gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
+                        gomb.start()                       
                 else:
                     mapping.customPass('condition not met', ':(')
                 
@@ -327,14 +330,14 @@ try:
                             threads['set_param'].start()                        
                                                     
                     if param_interval > 0:
-                        if conditional_value != 4:
+                        #if conditional_value != 4:
                             notecounter = 0 # reset the counter
                             threads[conditional_value] = Thread(target=noteCounter, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
                             threads[conditional_value].start()
-                        elif conditional_value == 4:
+                        #elif conditional_value == 4:
                             #start the countdown
-                            gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
-                            gomb.start()                                
+                            #gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
+                            #gomb.start()                                
                 
                 if isinstance(conditional2_value, int) and conditional2_value > 0:
                     conditionalsRange._conditionalStatus = conditional2_value
