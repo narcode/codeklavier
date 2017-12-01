@@ -163,14 +163,16 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                 print("range was: ", conditionalsRange._range)
             if operator == 'more than':   
                 if conditionalsRange._range >= piano_range:   
-                    #if result_num == 1:
-                        #mapping.result(result_num,'code')
-                    #elif result_num == 2:
-                        #mapping.result(result_num, 'code')
-                    #elif result_num == 3:
+                    if result_num == 1:
+                        mapping.result(result_num,'code')
+                        mainMem._motif2_counter = 0
+                    elif result_num == 2:
+                        mapping.result(result_num, 'code')
+                        mainMem._motif1_counter = 0
+                    elif result_num == 3:
                         mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
-                    #elif result_num == 4:
-                        #mapping.result(result_num, 'bomb')
+                    elif result_num == 4:
+                        mapping.result(result_num, 'bomb')
                 else:
                     mapping.customPass('condition not met', ':(')
                         
