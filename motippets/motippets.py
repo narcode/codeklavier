@@ -154,7 +154,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
             timer = random.randrange(10,45)
             
         if debug:
-            print('conditional: ', num, 'timer: ', timer - t, 'loop time: ', timer)
+            print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)
             #print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
         t += 1
