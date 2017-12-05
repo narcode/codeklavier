@@ -10,7 +10,7 @@ import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
-from Setup import Setup
+from Setup import Setup, BColors
 from Mapping import Mapping_Motippets
 from motippets_classes import Motippets
 
@@ -246,7 +246,7 @@ def gong_bomb(countdown, debug=False):
     
     for g in range(0, countdown):
         countdown -= 1
-        print(countdown)
+        print(BColors.FAIL + str(countdown) + BColors.ENDC)
         
         if countdown == 0: #boom ASCII idea by @borrob!
             threads_are_perpetual = False #stop all perpetual threads
@@ -254,12 +254,12 @@ def gong_bomb(countdown, debug=False):
             mapping.result(1, 'code')
             mapping.result(2, 'code')
             print("")
-            print("  ____   ____   ____  __  __ _ ")
+            print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
             print(" |  _ \ / __ \ / __ \|  \/  | |")
             print(" | |_) | |  | | |  | | \  / | |")
             print(" |  _ <| |  | | |  | | |\/| | |")
             print(" | |_) | |__| | |__| | |  | |_|")
-            print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯")
+            print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
             print("")
             mapping.result(4, 'code')
 
