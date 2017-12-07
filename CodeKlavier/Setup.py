@@ -5,8 +5,8 @@ class BColors:
     """Class with background colors for the terminal.
     """
     HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
+    CKBLUE = '\033[94m'
+    CKGREEN = '\033[92m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'
@@ -66,6 +66,8 @@ class Setup(object):
         if self.__ports:
             #TODO: do we need to check on the existence of ports?
             self.__midiin.open_port(pnum)
+            # ignore sysex, timing but not active sense messages
+            self.__midiin.ignore_types(True, True, False)            
         else:
             raise Exception("No midi ports! Maybe open a virtual device?")
 
@@ -94,9 +96,11 @@ class Setup(object):
             msg = self.get_message()
             if msg:
                 message, deltatime = msg
-                device_id = message[0]
-                if device_id:
-                    return device_id
+                if message[0] != 254: #active sense ignore                
+                    device_id = message[0]
+                    if device_id:
+                        return device_id
+            time.sleep(0.01)
 
     def perform_setup(self):
         self.print_welcome(20)
@@ -105,7 +109,7 @@ class Setup(object):
         return myPort
 
     def end(self):
-        print("Bye bye from CodeKlavier setup :(")
+        #print("Bye bye from CodeKlavier setup :(")
         self.close_port()
         del self.__midiin
 
@@ -117,7 +121,6 @@ def main():
     if my_midiport >= 0:
         print("CodeKlavier is ON. Press Control-C to exit.")
         try:
-            timer = time.time()
             while True:
                 msg = codeK.get_message()
 

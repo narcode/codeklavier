@@ -49,7 +49,7 @@ class Motifs_Anne(object):
         return [59, 62, 66, 60, 64, 67, 62, 69, 66]
 
     def motif_2(self):
-        return [62, 70, 60, 51, 44, 63, 55, 49, 62, 66]
+        return [70, 51, 62, 60, 44, 63, 66, 62, 55, 49]
 
     def mini_motif_1_low(self):
         return [35, 38, 42]
@@ -57,6 +57,9 @@ class Motifs_Anne(object):
     def mini_motif_2_low(self):
         return [26, 32, 35, 38]
 
+    def mini_motif_3_low(self):
+        return [39, 43, 46]
+    
     def mini_motif_1_mid(self):
         return [60, 64, 67]
 
@@ -70,13 +73,22 @@ class Motifs_Anne(object):
         return [86, 92, 95, 98]
 
     def conditional_1(self):
-        return [45, 43, 46, 45, 43, 41, 43, 45]
+        return [36, 31, 29, 26, 28, 35, 38, 33, 24, 26, 31, 28, 33, 21, 23, 29]
 
     def conditional_2(self):
-        return [36, 31, 29, 26, 28, 35, 38, 33, 24, 26, 31, 28, 33, 21, 23, 29]
+        return [45, 43, 46, 45, 43, 41, 43, 45]
+
+    def conditional_3(self):
+        return [93, 91, 89, 91, 93, 91, 94, 93]
 
     def conditional_result_1(self):
         return [60, 62, 66, 70, 69, 67]
 
     def conditional_result_2(self):
-        return [87, 80, 78, 68, 75, 79]
+        return [99, 92, 90, 89, 92, 94]
+    
+    def conditional_result_3(self):
+        return [21,22,23]
+    
+    def conditional_result_4(self):
+        return [23,24,25]

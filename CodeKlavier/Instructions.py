@@ -1,6 +1,6 @@
 import time
 
-from CodeKlavier.Setup import BColors
+from .Setup import BColors
 
 class Instructions(object):
 

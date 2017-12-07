@@ -32,7 +32,6 @@ codeK.set_callback(HelloWorld(myPort, mapping, device_id))
 
 # Loop to program to keep listening for midi input
 try:
-    timer = time.time()
     while True:
         time.sleep(0.01)
 except KeyboardInterrupt:
