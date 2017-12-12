@@ -206,7 +206,7 @@ class Motippets(object):
                             if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                                 self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'low',
-                                    self._deltatime, 0.1, target, True)
+                                    self._deltatime, 0.1, target, False)
                                 self._deltatime = 0
     
                     elif section == 'params':
