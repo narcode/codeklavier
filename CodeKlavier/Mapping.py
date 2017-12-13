@@ -70,7 +70,7 @@ class Mapping_HelloWorld:
             self.__keyboard.type('8')
         elif midinumber == 94:
             self.__keyboard.type('9')
-        elif midinumber == 34:
+        elif midinumber == 46:
             self.__keyboard.type('m')
         elif midinumber == 99:
             self.__keyboard.type('c')
@@ -461,7 +461,7 @@ class Mapping_Motippets:
                 self.evaluateSC('eval')
             elif text == 'start':
                 self.__keyboard.type('// GOMB countdown started!');
-                self.evaluateSC('eval')                
+                self.evaluateSC('eval')
             elif text == 'code':
                 self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
                 self.evaluateSC('eval')
