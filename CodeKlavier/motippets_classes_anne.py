@@ -5,7 +5,7 @@ Second prototype of the CodeKlavier
 """
 import rtmidi
 from functools import reduce
-from .Motifs import Motifs_Anne
+from .Motifs import motifs_anne
 
 # class to handle the midi input
 class Motippets(object):
@@ -24,7 +24,7 @@ class Motippets(object):
         self.__intervalsArray = []
         self.__unmapCounter1 = 0
         self.__unmapCounter2 = 0
-        #TODO: make a variable self._motifs = Motifs_Anne and use it throughout
+        #TODO: make a variable self._motifs = motifs_anne and use it throughout
         # the class. This makes it easier to switch between motifs and it is
         # less error prone.
 
@@ -45,8 +45,8 @@ class Motippets(object):
 
 
 
-                        mini_motif_1_Low_played = self.compareMotif(self.__memory, 'mini', Motifs_Anne().mini_motif_1_low(), note, True)
-                        mini_motif_2_Low_played = self.compareMotif(self.__memory, 'mini2', Motifs_Anne().mini_motif_2_low(), note, True)
+                        mini_motif_1_Low_played = self.compareMotif(self.__memory, 'mini', motifs_anne.get('mini_motif_1_low'), note, True)
+                        mini_motif_2_Low_played = self.compareMotif(self.__memory, 'mini2', motifs_anne.get('mini_motif_2_low'), note, True)
 
                         if mini_motif_1_Low_played and self.__unmapCounter2 == 0:
                             self.mapscheme.miniSnippets(1, 'low')
@@ -63,13 +63,13 @@ class Motippets(object):
                         self.memorize(note, 20, False, 'Mid: ')
 
                         # see if motif_1 is played:
-                        motif1_played = self.compareChordalMotif(self.__memory, Motifs_Anne().motif_1(), note, True)
+                        motif1_played = self.compareChordalMotif(self.__memory, motifs_anne.get('motif_1'), note, True)
                         if motif1_played:
                             if self.__motif1_counter == 0:
                                 self.mapscheme.snippets(1)
                                 self.__motif1_counter = 1
-                        mini_motif_1_Mid_played = self.compareMotif(self.__memory, 'mini', Motifs_Anne().mini_motif_1_mid(), note, False)
-                        mini_motif_2_Mid_played = self.compareMotif(self.__memory, 'mini2', Motifs_Anne().mini_motif_2_mid(), note, False)
+                        mini_motif_1_Mid_played = self.compareMotif(self.__memory, 'mini', motifs_anne.get('mini_motif_1_mid'), note, False)
+                        mini_motif_2_Mid_played = self.compareMotif(self.__memory, 'mini2', motifs_anne.get('mini_motif_2_mid'), note, False)
 
                         #if self.__motif1_played: ??? make a delegate?
                         if mini_motif_1_Mid_played and self.__unmapCounter2 == 0:
@@ -86,8 +86,8 @@ class Motippets(object):
                     if note > self.__pianosectons[1]:
                         self.memorize(note, 20, True, 'Hi: ')
 
-                        mini_motif_1_Hi_played = self.compareMotif(self.__memory, 'mini', Motifs_Anne().mini_motif_1_hi(), note, True)
-                        mini_motif_2_Hi_played = self.compareMotif(self.__memory, 'mini2', Motifs_Anne().mini_motif_2_hi(), note, True)
+                        mini_motif_1_Hi_played = self.compareMotif(self.__memory, 'mini', motifs_anne.get('mini_motif_1_hi'), note, True)
+                        mini_motif_2_Hi_played = self.compareMotif(self.__memory, 'mini2', motifs_anne.get('mini_motif_2_hi'), note, True)
 
                         if mini_motif_1_Hi_played and self.__unmapCounter2 == 0:
                             self.mapscheme.miniSnippets(1, 'hi')
@@ -123,7 +123,7 @@ class Motippets(object):
                     self.memorize(note, 20, False, 'Main Memory: ')
 
                     # see if motif_2 is played:
-                    motif2_played = self.compareChordalMotif(self.__memory, Motifs_Anne().motif_2(), note, False)
+                    motif2_played = self.compareChordalMotif(self.__memory, motifs_anne.get('motif_2'), note, False)
                     if motif2_played:
                         if self.__motif2_counter == 0:
                             self.mapscheme.snippets(2)
