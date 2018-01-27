@@ -110,7 +110,7 @@ Tdef(key.asSymbol, {*/
 		/*("op ---> running").postln;*/
 
 		MIDIdef.cc(\pedalpitch, {arg ...args;
-			if (args[1] == 64) {
+			if (args[1] == 1) {
 				~pitch = args[0].linlin(0, 127, 0, 12).round(1);
 				("ostinato1 ***" + ~pitch + " semitones up").postln;
 			}
@@ -124,7 +124,7 @@ MIDIdef.cc(\pedalpitch).free;
 
 	if (~op1 == 1) {
 		MIDIdef.cc(\pedalpitchop1, {arg ...args;
-			if (args[1] == 64) {
+			if (args[1] == 1) {
 				~pitch1 = args[0].linlin(0, 127, 0, 12).round(1);
 			  ("ostinato2 ***" + ~pitch1 + " semitones up").postln;
 			}
@@ -137,7 +137,7 @@ MIDIdef.cc(\pedalpitchop1).free;
 
 	if (~op2 == 1) {
 		MIDIdef.cc(\pedalpitchop2, {arg ...args;
-			if (args[1] == 64) {
+			if (args[1] == 1) {
 				~pitch2 = args[0].linlin(0, 127, 0, 12).round(1);
 				("ostinato3 *** " + ~pitch2 + " semitones up").postln;
 			}
@@ -151,7 +151,7 @@ MIDIdef.cc(\pedalpitchop2).free;
 	if (~down == 1) {
 		("down ---> running").postln;
 		MIDIdef.cc(\pedalpitchd, {arg ...args;
-			if (args[1] == 64) {
+			if (args[1] == 1) {
 				~pitch = args[0].linlin(0, 127, 0, -7).round(1);
 				("ostinato1 ***" + ~pitch + " semitones down").postln;
 			}
@@ -166,7 +166,7 @@ MIDIdef.cc(\pedalpitchd).free;
 
 	if (~down1 == 1) {
 		MIDIdef.cc(\pedalpitchd1, {arg ...args;
-			if (args[1] == 64) {
+			if (args[1] == 1) {
 				~pitch1 = args[0].linlin(0, 127, 0, -7).round(1);
 			  ("ostinato2 ***" + ~pitch1 + " semitones down").postln;
 			}
@@ -179,7 +179,7 @@ MIDIdef.cc(\pedalpitchd1).free;
 
 	if (~down2 == 1) {
 		MIDIdef.cc(\pedalpitchd2, {arg ...args;
-			if (args[1] == 64) {
+			if (args[1] == 1) {
 				~pitch2 = args[0].linlin(0, 127, 0, -7).round(1);
 				("ostinato3 ***" + ~pitch2 + " semitones down").postln;
 			}
