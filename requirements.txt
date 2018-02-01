@@ -1,2 +1,3 @@
 pynput==1.3.6
 python-rtmidi==1.1.0
+sphinx
