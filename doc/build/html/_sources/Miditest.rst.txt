@@ -1,0 +1,4 @@
+Miditest
+========
+
+Does everything work?
