@@ -100,3 +100,6 @@ ENV/
 
 # EXTRA
 .DS_Store
+
+#Allow html buld
+!doc/build
