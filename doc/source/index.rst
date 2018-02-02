@@ -13,6 +13,7 @@ Welcome to CodeKlavier's documentation!
    Miditest
    HelloWorld
    Motippets
+   Documentation
    modules.rst
 
 
