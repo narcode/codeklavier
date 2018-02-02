@@ -8,6 +8,11 @@ class Instructions(object):
         self.finished = "narcode"
 
     def print_lines(self, length, lines):
+        """Print spacer lines (with delay)
+
+        :param int length: number of '##' to print per line
+        :param int lines: number of lines to print
+        """
         for i in range(1, lines):
             num = length+(1)
             print('##'*num + BColors.ENDC)
@@ -18,6 +23,10 @@ class Instructions(object):
         print("\nWelcome to the CODEKLAVIER 'hello world' installation!\n")
 
     def print_header(self):
+        """Prints the header line
+
+        Tells the user everything is up and ready to get grooving!
+        """
         print(BColors.HEADER + "CODEKLAVIER IS READY AND LISTENING!" + BColors.ENDC + "\nDon't forget to groove along and have a good time!")
 
     def print_intro(self):
