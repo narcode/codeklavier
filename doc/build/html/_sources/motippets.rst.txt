@@ -1,4 +1,4 @@
 Motippets
 =========
 
-The story continues
+.. WARNING:: The story continues. TODO: write documentation.
