@@ -33,3 +33,4 @@ For documeting the python code: please add appropiate docstring in the code itse
 
 How to build the documentation
 ------------------------------
+Most likely, you'll want to build towards html-code. You can make a build by running ``make html`` from the ``doc`` folder. This will run sphinx in html-mode and save an updated version of the html in the ``doc/build`` directory.
