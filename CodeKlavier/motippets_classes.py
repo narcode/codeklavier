@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from Motifs import Motifs_Anne as Motifs
+from .Motifs import motifs_anne as Motifs
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -13,6 +13,7 @@ class Motippets(object):
         """The method to initialise the class and prepare the class variables.
         
         TODO: post-ICLC experiment how to nest arrays so as to not hvae to init so many empty arrays!
+        --> Perhaps change to a dict?
         """
         self.mapscheme = mapping
         self.noteonid = noteonid
@@ -68,17 +69,17 @@ class Motippets(object):
                                                         
                             mini_motif_1_Low_played = self.compare_motif(
                                                         self._memory, 'mini',
-                                                        Motifs().mini_motif_1_low(),
+                                                        Motifs.get('mini_motif_1_low'),
                                                         note, False)
                             
                             mini_motif_2_Low_played = self.compare_motif(
                                                         self._memory, 'mini2',
-                                                        Motifs().mini_motif_2_low(),
+                                                        Motifs.get('mini_motif_2_low'),
                                                         note, False)
                             
                             mini_motif_3_Low_played = self.compare_motif(
                                                         self._memory, 'mini3',
-                                                        Motifs().mini_motif_3_low(),
+                                                        Motifs.get('mini_motif_3_low'),
                                                         note, False)                            
                             
                             if (mini_motif_1_Low_played and
@@ -122,7 +123,7 @@ class Motippets(object):
                             
                             # see if motif_1 is played:
                             motif1_played = self.compare_chordal_motif(
-                                                    self._memory, Motifs().motif_1(), 
+                                                    self._memory, Motifs.get('motif_1'), 
                                                     note, False)
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
@@ -130,11 +131,11 @@ class Motippets(object):
                             
                             mini_motif_1_Mid_played = self.compare_motif(
                                                         self._memory, 'mini',
-                                                        Motifs().mini_motif_1_mid(),
+                                                        Motifs.get('mini_motif_1_mid'),
                                                         note, False)
                             mini_motif_2_Mid_played = self.compare_motif(
                                                         self._memory, 'mini2',
-                                                        Motifs().mini_motif_2_mid(),
+                                                        Motifs.get('mini_motif_2_mid'),
                                                         note, False)
                             #if self._motif1_played: ??? make a delegate?
                             if (mini_motif_1_Mid_played and
@@ -157,11 +158,11 @@ class Motippets(object):
                             
                             mini_motif_1_Hi_played = self.compare_motif(
                                                         self._memory, 'mini',
-                                                        Motifs().mini_motif_1_hi(),
+                                                        Motifs.get('mini_motif_1_hi'),
                                                         note, False)
                             mini_motif_2_Hi_played = self.compare_motif(
                                                         self._memory, 'mini2',
-                                                        Motifs().mini_motif_2_hi(),
+                                                        Motifs.get('mini_motif_2_hi'),
                                                         note, False)
                             
                             if (mini_motif_1_Hi_played and
@@ -230,7 +231,7 @@ class Motippets(object):
                         
                         # check if motif_2 is played:
                         motif2_played = self.compare_chordal_motif(
-                                            self._memory, Motifs().motif_2(), note,
+                                            self._memory, Motifs.get('motif_2'), note,
                                             True)
                         if motif2_played:
                             if self._motif2_counter == 0:
@@ -246,7 +247,7 @@ class Motippets(object):
                             if self._conditionalCounter == 0:
                                 conditional2_played = self.compare_chordal_motif(
                                                     self._memory,
-                                                    Motifs().conditional_1(),
+                                                    Motifs.get('conditional_1'),
                                                     note, False)
                                 
                                 if conditional2_played:
@@ -256,11 +257,11 @@ class Motippets(object):
                                     
                             if self._conditionalCounter > 0:      
                                 result3_played = self.compare_chordal_motif(self._memory,
-                                                                        Motifs().conditional_result_3(),
+                                                                        Motifs.get('conditional_result_3'),
                                                                         note, 0, True)          
                             
                                 result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs().conditional_result_4(),
+                                                                            Motifs.get('conditional_result_4'),
                                                                             note, 1, True)
                             
                                 if result3_played and self._resultCounter == 0:
@@ -281,7 +282,7 @@ class Motippets(object):
                             self.memorize(note, 20, False, 'Conditional Memory High: ')
                         
                             result2_played = self.compare_motif(self._memory, 'result 2',
-                                                                Motifs().conditional_result_2(),
+                                                                Motifs.get('conditional_result_2'),
                                                                 note, False)         
                             
                             if result2_played and self._resultCounter == 0: 
@@ -298,7 +299,7 @@ class Motippets(object):
                             self.memorize(note, 20, False, 'Conditional Memory Mid: ')
                         
                             result1_played = self.compare_motif(self._memory, 'result 1',
-                                                                Motifs().conditional_result_1(),
+                                                                Motifs.get('conditional_result_1'),
                                                                 note, False)          
                         
                             if result1_played and self._resultCounter == 0:
@@ -321,7 +322,7 @@ class Motippets(object):
                             if self._conditionalCounter == 0:
                                 conditional_played = self.compare_motif(
                                     self._memory,'conditional 2',
-                                    Motifs().conditional_2(),
+                                    Motifs.get('conditional_2'),
                                     note, True)
                 
                                 if conditional_played:
@@ -331,11 +332,11 @@ class Motippets(object):
                 
                             if self._conditionalCounter > 0:      
                                 result3_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs().conditional_result_3(),
+                                                                            Motifs.get('onditional_result_3'),
                                                                             note, 0, True)
                                 
                                 result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs().conditional_result_4(),
+                                                                            Motifs.get('conditional_result_4'),
                                                                             note, 1, True)                                
                 
                                 if result3_played and self._resultCounter == 0:
@@ -355,7 +356,7 @@ class Motippets(object):
                             self.memorize(note, 20, False, 'Conditional Memory High: ')
                 
                             result2_played = self.compare_motif(self._memory, 'result 2',
-                                                                Motifs().conditional_result_2(),
+                                                                Motifs.get('conditional_result_2'),
                                                                 note, False)         
                 
                             if result2_played and self._resultCounter == 0: 
@@ -372,7 +373,7 @@ class Motippets(object):
                             self.memorize(note, 20, False, 'Conditional Memory Mid: ')
                 
                             result1_played = self.compare_motif(self._memory, 'result 1',
-                                                                Motifs().conditional_result_1(),
+                                                                Motifs.get('conditional_result_1'),
                                                                 note, False)          
                 
                             if result1_played and self._resultCounter == 0:
@@ -395,7 +396,7 @@ class Motippets(object):
                             if self._conditionalCounter == 0:
                                 conditional_played = self.compare_motif(
                                     self._memory,'conditional 3',
-                                    Motifs().conditional_3(),
+                                    Motifs.get('conditional_3'),
                                     note, True)
                 
                                 if conditional_played:
@@ -406,7 +407,7 @@ class Motippets(object):
                             if self._conditionalCounter > 0:      
                                 
                                 result2_played = self.compare_motif(self._memory, 'result 2',
-                                                                    Motifs().conditional_result_2(),
+                                                                    Motifs.get('conditional_result_2'),
                                                                     note, False)         
                             
                                 if result2_played and self._resultCounter == 0: 
@@ -423,11 +424,11 @@ class Motippets(object):
                             
                             if self._conditionalCounter > 0:      
                                 result3_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs().conditional_result_3(),
+                                                                            Motifs.get('conditional_result_3'),
                                                                             note, 0, False)
                                 
                                 result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs().conditional_result_4(),
+                                                                            Motifs.get('conditional_result_4'),
                                                                             note, 1, True)                                
                 
                                 if result3_played and self._resultCounter == 0:
@@ -447,7 +448,7 @@ class Motippets(object):
                             self.memorize(note, 20, False, 'Conditional Memory Mid: ')
                 
                             result1_played = self.compare_motif(self._memory, 'result 1',
-                                                                Motifs().conditional_result_1(),
+                                                                Motifs.get('conditional_result_1'),
                                                                 note, False)          
                 
                             if result1_played and self._resultCounter == 0:
@@ -803,6 +804,3 @@ class Motippets(object):
                       'difference: ', self._range)
         
         return self._range
-                        
-        
-                        
