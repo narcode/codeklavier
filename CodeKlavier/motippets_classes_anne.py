@@ -30,7 +30,7 @@ class Motippets(object):
 
     def parse_midi(self, event, section):
         message, deltatime = event
-        if message[2] > 0: #only noteOn
+        if len(message) >= 3 and message[2] > 0: #only noteOn
 
             if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                 note = message[1]
