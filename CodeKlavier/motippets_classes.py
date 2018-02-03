@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from Motifs import motifs_anne as Motifs
+from .Motifs import motifs_anne as Motifs
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -69,7 +69,7 @@ class Motippets(object):
                                                         
                             mini_motif_1_Low_played = self.compare_motif(
                                                         self._memory, 'mini',
-                                                        Motifs.get('mini_motif_1_low')
+                                                        Motifs.get('mini_motif_1_low'),
                                                         note, False)
                             
                             mini_motif_2_Low_played = self.compare_motif(
