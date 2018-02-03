@@ -6,6 +6,7 @@ Install with pip3
 
 1. python-rtmidi
 2. pynput
+3. sphinx
 
 Run ``pip3 install -r requirements.txt`` to install the required libraries.
 

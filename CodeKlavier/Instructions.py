@@ -3,11 +3,25 @@ import time
 from .Setup import BColors
 
 class Instructions(object):
+    """This class shows instructions on the CodeKlaver usages. Great if you want
+    to run a self-running demo.
+
+    TODO: write example
+
+    TODO: write ``main()`` method
+
+    TODO: do we need to subclass ``object``? Seems unnecessary
+    """
 
     def __init__(self):
         self.finished = "narcode"
 
     def print_lines(self, length, lines):
+        """Print spacer lines (with delay)
+
+        :param int length: number of '##' to print per line
+        :param int lines: number of lines to print
+        """
         for i in range(1, lines):
             num = length+(1)
             print('##'*num + BColors.ENDC)
@@ -18,6 +32,10 @@ class Instructions(object):
         print("\nWelcome to the CODEKLAVIER 'hello world' installation!\n")
 
     def print_header(self):
+        """Prints the header line
+
+        Tells the user everything is up and ready to get grooving!
+        """
         print(BColors.HEADER + "CODEKLAVIER IS READY AND LISTENING!" + BColors.ENDC + "\nDon't forget to groove along and have a good time!")
 
     def print_intro(self):
@@ -25,19 +43,23 @@ class Instructions(object):
         print("* To re-evaluate a command it should finish with a " + BColors.HEADER + ".stop.play" + BColors.ENDC + " .\n* You can make numbers (n) by repeating 2 different notes more than twice (a tremolo) in the lower part of the piano. \n* You can also add or subtract numbers with the + and -\nand use the keys marked with 1 2 and 3 to derive your desired values.\n* At the top of the keyboard you will find the " + BColors.HEADER + "'Enter'" + BColors.ENDC + " and " + BColors.HEADER + "'Backspace' " + BColors.ENDC + "keys.\n* Don't forget to groove along and have a good time!\n\n")
 
     def mode(self):
-            try:
-                command = input("Do you want to run the tutorial? y/n:\n")
+        """Let the user select a mode on how to run the tutorial
+
+        :returns bool: True if the tutorial ran and we don't want to run it again
+        """
+        try:
+            command = input("Do you want to run the tutorial? y/n:\n")
+            if command == "y" or command == "Y":
+                self.do_tutorial()
+                command = input("Do you want to run the tutorial again? y/n:\n")
                 if command == "y" or command == "Y":
                     self.do_tutorial()
-                    command = input("Do you want to run the tutorial again? y/n:\n")
-                    if command == "y" or command == "Y":
-                        self.do_tutorial()
-                    elif command == "n" or command == "N":
-                        return True
                 elif command == "n" or command == "N":
-                    self.do_header()
-            except ValueError:
-                    print("please type 'y' or 'n'...\n")
+                    return True
+            elif command == "n" or command == "N":
+                self.do_header()
+        except ValueError:
+                print("please type 'y' or 'n'...\n")
 
     def start_levels(self):
         self.print_lines(20,2)
