@@ -1,9 +1,21 @@
+"""Mapping.py
+
+Contains the classes ``Mapping_HelloWorld``, ``Mapping_HelloWorld_NKK`` and
+``Mapping_Motippets``. These class deal with the mapping of the (midi) keys to
+chars, strings and commands.
+"""
 import time
 from pynput.keyboard import Key, Controller
 
 class Mapping_HelloWorld:
+    """Mapping for the Hello World piece.
+    """
 
     def __init__(self):
+        """Init the class
+
+        Print that the user is using this mapping and set the controller.
+        """
         print("Using the Hello World mapping")
         self.__keyboard = Controller()
 
@@ -13,6 +25,12 @@ class Mapping_HelloWorld:
             self.__keyboard.release(Key.shift)
 
     def stopSC(self, midinumber):
+        """If ``midinumber`` is 66, then stop SuperCollider
+
+        By issueing a cmd-. command.
+
+        :parameter midinumber int: the midinumber pressed on the keyboard
+        """
         if midinumber == 66:
             self.__keyboard.press(Key.cmd)
             self.__keyboard.type('.')

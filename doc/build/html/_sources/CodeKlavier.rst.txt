@@ -11,11 +11,25 @@ CodeKlavier\.Instructions module
 
 CodeKlavier\.Mapping module
 ---------------------------
+.. We specifify the separate classes and not use automodule to include the __init__ method
 
-.. automodule:: CodeKlavier.Mapping
+.. autoclass:: CodeKlavier.Mapping.Mapping_HelloWorld
     :members:
     :undoc-members:
-    :show-inheritance:
+
+    .. automethod:: __init__
+
+.. autoclass:: CodeKlavier.Mapping.Mapping_HelloWorld_NKK
+    :members:
+    :undoc-members:
+
+    .. automethod:: __init__
+
+.. autoclass:: CodeKlavier.Mapping.Mapping_Motippets
+    :members:
+    :undoc-members:
+
+    .. automethod:: __init__
 
 CodeKlavier\.Motifs module
 --------------------------
