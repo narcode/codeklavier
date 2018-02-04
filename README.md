@@ -23,7 +23,7 @@ A performance on these prototypes was presented at SHA2017 and can be viewed her
 <div class='dream'>
 <div><strong>The mid term goal:</strong></div><div>💾📌 strategy-specific releases of mini-language approaches for live coding through the piano</div></div>
 <div class='dream'>
-<div><strong>The short term goal:</strong></div><div>📆📈 research-release-evaluation cycles of prototypes which tackle specific aspects of the system</div></div><br>
+<div><strong>The short term goal:</strong></div><div>📆📈 research-release-evaluation cycles of prototypes which tackle specific aspects of the system</div></div>
 
 
 ## Equipment
