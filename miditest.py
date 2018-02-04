@@ -11,16 +11,17 @@ midi messages being printed after running this script then you can rest assured 
 the CodeKlavier will run with your midi setup.
 """
 
-#TODO: add docstrings and comments
-
 import time
 from CodeKlavier.Setup import Setup
 
+    """This method creates an infinite loop that you can break by the standard
+    keyboard interrupt.
 
-def run(codeK):
+    :param CodeKlavier.Setup.Setup CodeK: a setup file for the CodeKlavier
+    """
+
     print("CodeKlavier is ON. Press Control-C to exit.")
     try:
-        timer = time.time()
         while True:
             msg = codeK.get_message()
 

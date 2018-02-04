@@ -1,0 +1,145 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Miditest &#8212; CodeKlavier 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="hello world" href="HelloWorld.html" />
+    <link rel="prev" title="Welcome to CodeKlavier’s documentation!" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HelloWorld.html" title="hello world"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to CodeKlavier’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to CodeKlavier’s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="HelloWorld.html"
+                        title="next chapter">hello world</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="miditest">
+<h1>Miditest<a class="headerlink" href="#miditest" title="Permalink to this headline">¶</a></h1>
+<p>This simple python progam checks if everything is installed and is working properly. Run this script first and make sure everything is working. This script is great for troubleshooting.</p>
+<div class="section" id="module-miditest">
+<span id="docstring-documentation"></span><h2>Docstring documentation<a class="headerlink" href="#module-miditest" title="Permalink to this headline">¶</a></h2>
+<p>miditest.py</p>
+<p>This file is a tester for the midisignals from your input device. It helps you
+to check if your midi input device is being registered and its messages
+received. This file is not a formal part of the CodeKlavier. However, if you can
+see the midi messages being printed after running this script then you can rest
+assured that the CodeKlavier will run with your midi setup.</p>
+<dl class="function">
+<dt id="miditest.main">
+<code class="descclassname">miditest.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#miditest.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main method that will execute the CodeKlavier setup and start
+listening for midi input.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="miditest.run">
+<code class="descclassname">miditest.</code><code class="descname">run</code><span class="sig-paren">(</span><em>codeK</em><span class="sig-paren">)</span><a class="headerlink" href="#miditest.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the CodeKlavier and keep on listening for midi input.</p>
+<p>This method creates an infinite loop that you can break by the standard
+keyboard interrupt.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>CodeK</strong> (<a class="reference internal" href="CodeKlavier.html#CodeKlavier.Setup.Setup" title="CodeKlavier.Setup.Setup"><em>CodeKlavier.Setup.Setup</em></a>) – a setup file for the CodeKlavier</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HelloWorld.html" title="hello world"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to CodeKlavier’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, CodeKlavier Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

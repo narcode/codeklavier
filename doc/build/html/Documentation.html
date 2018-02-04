@@ -1,0 +1,144 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Documentation &#8212; CodeKlavier 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CodeKlavier" href="modules.html" />
+    <link rel="prev" title="Motippets" href="Motippets.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="CodeKlavier"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Motippets.html" title="Motippets"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Motippets.html"
+                        title="previous chapter">Motippets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">CodeKlavier</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<p>Every developer likes to have documentation, but no one really likes to write it.</p>
+<div class="section" id="sphinx-and-rst">
+<h2>Sphinx and rst<a class="headerlink" href="#sphinx-and-rst" title="Permalink to this headline">¶</a></h2>
+<p>To help us with the documentation proces, CodeKlavier uses the Sphinx package that convers rst-files (that are easy to write) to html-files that are beautiful and easy to browse. On top of that: Sphinx can ‘walk’ over the python source code and generate the documentation out of the docstrings in the python code.</p>
+<p>Rst-files are plain text files with some basic formatting. You can underline words with === to indicate a header and you use ‘*’ to use <strong>boldface</strong> and so on. There is enough material on the internet to help you with the basics.</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>You can use <code class="docutils literal"><span class="pre">pip3</span></code> to install the Sphinx-package by running:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">sphinx</span>
+</pre></div>
+</div>
+<p>Use pip3 because CodeKlavier uses python <strong>3</strong> and not python 2.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you used the <code class="docutils literal"><span class="pre">requirements.txt</span></code> file to install CodeKlavier, you have already installed Sphinx.</p>
+</div>
+</div>
+<div class="section" id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">doc</span></code> folder was created to put everything that deals with documentation. From that directory we made the setup by running <code class="docutils literal"><span class="pre">sphynx-quickstart</span></code> and answering the questions that pop up. This creates the <code class="docutils literal"><span class="pre">source</span></code> and <code class="docutils literal"><span class="pre">build</span></code> directories and provides you with a <code class="docutils literal"><span class="pre">Makefile</span></code> file. Some small tweaks to the <code class="docutils literal"><span class="pre">source/conf.py</span></code> were made to finalise the installation.</p>
+<p>Sphinx can autogenerate some documentation based on the docstrings from the python code. Make sure you enable the “autodoc” module in the <code class="docutils literal"><span class="pre">conf.py</span></code> file and the you insert the correct “path”. With the command: <code class="docutils literal"><span class="pre">sphinx-apidoc</span> <span class="pre">-o</span> <span class="pre">&lt;output-path&gt;</span> <span class="pre">module-path</span></code> you can include an entire package/module in one go and it generates and <code class="docutils literal"><span class="pre">.rst</span></code> file that you can include in the <code class="docutils literal"><span class="pre">modules.rst</span></code> file.</p>
+</div>
+</div>
+<div class="section" id="how-to-write-documentation">
+<h2>How to write documentation<a class="headerlink" href="#how-to-write-documentation" title="Permalink to this headline">¶</a></h2>
+<p>Change existing rst-files, or create additional files in case you want to create a new page.</p>
+<p>For documeting the python code: please add appropiate docstring in the code itself.</p>
+</div>
+<div class="section" id="how-to-build-the-documentation">
+<h2>How to build the documentation<a class="headerlink" href="#how-to-build-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>Most likely, you’ll want to build towards html-code. You can make a build by running <code class="docutils literal"><span class="pre">make</span> <span class="pre">html</span></code> from the <code class="docutils literal"><span class="pre">doc</span></code> folder. This will run sphinx in html-mode and save an updated version of the html in the <code class="docutils literal"><span class="pre">doc/build</span></code> directory.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="CodeKlavier"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Motippets.html" title="Motippets"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, CodeKlavier Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

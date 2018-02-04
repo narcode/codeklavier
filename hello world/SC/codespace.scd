@@ -3,6 +3,7 @@
 
 
 // evaluate one from below, not both \\\
+(~path ++ "/CK_environment.scd").load;
 
 // OPTION 1: to load internal toy pinao sampler (i.e. midi loopback):
 (~path ++ "/CodeKlavier_hello_world_v_sampler.scd").load;
@@ -12,4 +13,4 @@
 (~path ++ "/CodeKlavier_hello_world_v_RTP.scd").load;
 
 
-//
+///////////// start coding ⬇ \\\\\\\\\\
