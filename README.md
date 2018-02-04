@@ -12,7 +12,7 @@ More information about the specific prototypes can be found in their respective 
 
 
 A performance on these prototypes was presented at SHA2017 and can be viewed here:<br>
-https://www.youtube.com/embed/efU7trVAPvA?start=1213. <br>
+[#sha2017 presentation](https://www.youtube.com/embed/efU7trVAPvA?start=1213). <br>
 
 <div class='dream'>
 <div><strong>The dream:</strong></div><div>🐍🎹 An intuitive programming language with the piano as interface.</div></div>
