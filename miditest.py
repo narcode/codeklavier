@@ -4,33 +4,34 @@
 
 """miditest.py
 
-This file is a tester for the midisignals from your input device. It helps you
-to check if your midi input device is being registered and its messages
-received. This file is not a formal part of the CodeKlavier. However, if you can
-see the midi messages being printed after running this script then you can rest
-assured that the CodeKlavier will run with your midi setup.
+This file is a tester for the midisignals from your input device. It quickly helps you
+check if your midi input device is being registered and it's messages received.
+This file is not a formal part of the CodeKlavier. However, if you can see the
+midi messages being printed after running this script then you can rest assured that
+the CodeKlavier will run with your midi setup.
 """
 
 import time
 from CodeKlavier.Setup import Setup
 
-def run(codeK):
-    """Run the CodeKlavier and keep on listening for midi input.
-
-    This method creates an infinite loop that you can break by the standard
+    """This method creates an infinite loop that you can break by the standard
     keyboard interrupt.
 
     :param CodeKlavier.Setup.Setup CodeK: a setup file for the CodeKlavier
     """
+
     print("CodeKlavier is ON. Press Control-C to exit.")
     try:
         while True:
             msg = codeK.get_message()
+
             if msg:
                 message, deltatime = msg
                 print('deltatime: ', deltatime, 'msg: ', message)
 
+
             time.sleep(0.01)
+
     except KeyboardInterrupt:
         print('')
     finally:
@@ -38,9 +39,9 @@ def run(codeK):
         codeK.end()
 
 def main():
-    """The main method that will execute the CodeKlavier setup and start
-    listening for midi input.
-    """
+
+    codeK = Setup()
+
     # Start the CodeKlavier
     codeK = Setup()
     myPort = codeK.perform_setup()

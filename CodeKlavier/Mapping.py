@@ -242,14 +242,7 @@ class Mapping_HelloWorld_NKK:
             self.__keyboard.type('2')
         elif midinumber == 81:
             self.__keyboard.type('3')
-#        elif midinumber == 66:
-#            self.stopSC()
 
-class Mapping_Motippets:
-
-    def __init__(self):
-        print("Using the mapping for Motippets")
-        self.__keyboard = Controller()
 
     def evaluateSC(self, what):
         if what == 'play':
