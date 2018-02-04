@@ -1,5 +1,6 @@
 # CodeKlavier
-###Live coding with the piano as interface.
+##Live coding with the piano as interface.
+
 An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie** for its developement and
 **FondsPodiumKunsten NL** for public presentations presentation
 
@@ -7,7 +8,8 @@ CodeKlavier development started in April 2017 and currently has two prototypes (
 +  *Motippets* (coding via pianistic gestures/motifs)
 + *hello world* (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
 
-A performance on these prototypes was presented at SHA2017 and can be viewed here https://www.youtube.com/embed/efU7trVAPvA?start=1213. <br>
+A performance on these prototypes was presented at SHA2017 and can be viewed here:<br>
+https://www.youtube.com/embed/efU7trVAPvA?start=1213. <br>
 More information about the specific prototypes can be found in their respective directories.
 
 <div class='dream'>
