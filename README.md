@@ -8,9 +8,11 @@ CodeKlavier development started in April 2017 and currently has two prototypes (
 +  *Motippets* (coding via pianistic gestures/motifs)
 + *hello world* (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
 
+More information about the specific prototypes can be found in their respective directories.
+
+
 A performance on these prototypes was presented at SHA2017 and can be viewed here:<br>
 https://www.youtube.com/embed/efU7trVAPvA?start=1213. <br>
-More information about the specific prototypes can be found in their respective directories.
 
 <div class='dream'>
 <div>The dream: </div><div>An intuitive programming language with the piano as interface.</div></div>
