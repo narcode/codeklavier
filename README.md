@@ -15,15 +15,15 @@ A performance on these prototypes was presented at SHA2017 and can be viewed her
 https://www.youtube.com/embed/efU7trVAPvA?start=1213. <br>
 
 <div class='dream'>
-<div>The dream: </div><div>An intuitive programming language with the piano as interface.</div></div>
+<div><strong>The dream:</strong></div><div>An intuitive programming language with the piano as interface.</div></div>
 <div class='dream'>
-<div>The starting-to-be-graspable dream:</div><div>A programming language for the piano as interface</div></div>
+<div><strong>The starting-to-be-graspable dream:</strong></div><div>A programming language for the piano as interface</div></div>
 <div class='dream'>
-<div>The long term goal:</div><div>a live coding music-domain programming language for the piano as interface</div></div>
+<div><strong>The long term goal:</strong></div><div>a live coding music-domain programming language for the piano as interface</div></div>
 <div class='dream'>
-<div>The mid term goal:</div><div>strategy-specific releases of mini-language approaches for live coding through the piano</div></div>
+<div><strong>The mid term goal:</strong></div><div>strategy-specific releases of mini-language approaches for live coding through the piano</div></div>
 <div class='dream'>
-<div>The short term goal:</div><div>research-release-evaluation cycles of prototypes which tackle specific aspects of the system</div></div>
+<div><strong>The short term goal:</strong></div><div>research-release-evaluation cycles of prototypes which tackle specific aspects of the system</div></div>
 
 ## Equipment
 1. An acoustic-MIDI piano such as a Yamaha Disklavier, any piano fitted with a silent system or an acoustic intrument in combination with a MOOG piano bar. If an acoustic-MIDI piano is not available, any 88-key MIDI keyboard will suffice providing this instrument is of suitable sensitivity for the pianist.
