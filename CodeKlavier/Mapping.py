@@ -35,7 +35,7 @@ class Mapping_HelloWorld:
 
         By issueing a cmd-. command.
 
-        :param int midinumber: the midinumber that is played
+        :param int midinumber: the midinumber pressed on the keyboard
         """
         if midinumber == 66:
             self.__keyboard.press(Key.cmd)
@@ -477,6 +477,7 @@ class Mapping_Motippets:
             self.__keyboard.type('~map_amplitude = false;')
             self.evaluateSC('eval')
 
+
     def tremolo(self, pianoregister, value):
         """Type the tremolo command + the tremolo-value
         
@@ -519,7 +520,7 @@ class Mapping_Motippets:
             self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
 
-    def result(self, result_num, text, mod=0): #how to make optional params? --> mod is already optional. Takes a default of 0 if no value is supplied.
+    def result(self, result_num, text, mod=0): #how to make optional params?
         """TOOD: document function
         
         :param int result_num: type of result?
@@ -588,12 +589,5 @@ class Mapping_Motippets:
                 self.enter()
 
     def customPass(self, name, content):
-        """Type name, content and enter
-        
-        Types 'name', [space] and content
-        
-        :param string name: first part to type
-        :param string content: second part to type
-        """
         self.__keyboard.type(name + " " + content)
         self.enter()
