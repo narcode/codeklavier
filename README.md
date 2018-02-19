@@ -2,7 +2,7 @@
 ### Live coding with the piano as interface.
 
 An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie** for its developement and
-**FondsPodiumKunsten NL** for public presentations presentation
+**FondsPodiumKunsten NL** for public presentations
 
 CodeKlavier development started in April 2017 and currently has two prototypes (newest on top):
 +  *Motippets* (coding via pianistic gestures/motifs)
@@ -12,7 +12,7 @@ More information about the specific prototypes can be found in their respective 
 
 
 A performance on these prototypes was presented at SHA2017 and can be viewed here:<br>
-https://www.youtube.com/embed/efU7trVAPvA?start=1213. <br>
+[#sha2017 presentation](https://www.youtube.com/embed/efU7trVAPvA?start=1213) <br>
 
 <div class='dream'>
 <div><strong>The dream:</strong></div><div>🐍🎹 An intuitive programming language with the piano as interface.</div></div>
@@ -24,6 +24,7 @@ https://www.youtube.com/embed/efU7trVAPvA?start=1213. <br>
 <div><strong>The mid term goal:</strong></div><div>💾📌 strategy-specific releases of mini-language approaches for live coding through the piano</div></div>
 <div class='dream'>
 <div><strong>The short term goal:</strong></div><div>📆📈 research-release-evaluation cycles of prototypes which tackle specific aspects of the system</div></div>
+
 
 ## Equipment
 1. An acoustic-MIDI piano such as a Yamaha Disklavier, any piano fitted with a silent system or an acoustic intrument in combination with a MOOG piano bar. If an acoustic-MIDI piano is not available, any 88-key MIDI keyboard will suffice providing this instrument is of suitable sensitivity for the pianist.
