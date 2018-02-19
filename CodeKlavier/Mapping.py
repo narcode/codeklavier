@@ -8,7 +8,7 @@ import time
 from pynput.keyboard import Key, Controller
 
 class Mapping_HelloWorld:
-    """Mapping for the Hello World piece.
+    """Mapping for the Hello World prototype.
     """
 
     def __init__(self):
@@ -130,7 +130,9 @@ class Mapping_HelloWorld:
 class Mapping_HelloWorld_NKK:
 
     def __init__(self):
-        # print("Using the Hello World mapping (NKK)")
+        """Mapping for the Hello World NKK (installation flavour).
+        """        
+        print("Using the Hello World mapping (NKK)")
         self.__keyboard = Controller()
 
     def evaluateSC(self, what):
@@ -243,6 +245,12 @@ class Mapping_HelloWorld_NKK:
         elif midinumber == 81:
             self.__keyboard.type('3')
 
+class Mapping_Motippets:
+    """Mapping for the Motippets prototype.
+    """    
+    def __init__(self):
+        print("Using the Motippets mapping")
+        self.__keyboard = Controller()    
 
     def evaluateSC(self, what):
         if what == 'play':
