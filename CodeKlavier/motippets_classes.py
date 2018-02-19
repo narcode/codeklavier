@@ -11,7 +11,7 @@ class Motippets(object):
 
     def __init__(self, mapping, noteonid):
         """The method to initialise the class and prepare the class variables.
-
+        
         TODO: post-ICLC experiment how to nest arrays so as to not hvae to init so many empty arrays!
         --> Perhaps change to a dict?
         """
@@ -45,9 +45,9 @@ class Motippets(object):
     def parse_midi(self, event, section, target=0):
         """Parse the midi signal and process it depending on the register.
 
-        event: describes the midi event that was triggered\n
-        section: the MIDI piano range (i.e. low register, mid or high)
-        target: target the parsing for a specific snippet. 0 is no target
+        :param event: describes the midi event that was triggered
+        :param string section: the MIDI piano range (i.e. low register, mid or high)
+        :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
         self._deltatime += deltatime
@@ -471,23 +471,20 @@ class Motippets(object):
 
         return self._conditionalStatus  # is this not returning ?
 
-
-
-
     def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
 
-        midinote: the incoming MIDI note message\n
-        length: the size of the array to store the midinotes\n
-        debug: flag to print console debug messages\n
-        debugname: prefix for the debug messages
-        conditional: if a parallel buffer is filled in for the conditional functions
+        :param midinote: the incoming MIDI note message\n
+        :param int length: the size of the array to store the midinotes\n
+        :param boolean debug: flag to print console debug messages\n
+        :param string debugname: prefix for the debug messages
+        :param string conditional: if a parallel buffer is filled in for the conditional functions
         """
         self._memory.append(midinote)
 
         if len(self._memory) > length:
             self._memory = self._memory[-length:]
-
+        
         if debug == True:
             print(debugname + ','.join(map(str, self._memory)))
             if conditional == "on":
@@ -562,45 +559,45 @@ class Motippets(object):
                     self._unmapCounter3 = 0
                 else:
                     compare = False
-
+                    
                 if debug:
                     print('played ->' + str(self._miniMotifs2),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-
+                
                 return compare
-
+            
         elif motiftype == 'mini3':
             if note in motif:
                 self._miniMotifs3.append(note)
             else:
                 self._miniMotifs3 = []
                 return False #@narcode: is this correct?
-
+            
             if len(self._miniMotifs3) >= len(motif):
                 self._miniMotifs3 = self._miniMotifs3[-len(motif):]
                 if self._miniMotifs3 == motif:
                     compare = True
                     self._unmapCounter3 += 1
                     self._unmapCounter1 = 0
-                    self._unmapCounter2 = 0
+                    self._unmapCounter2 = 0                        
                 else:
                     compare = False
-
+                            
                 if debug:
                     print('played ->' + str(self._miniMotifs3),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-
-                return compare
-
+                        
+                return compare            
+            
         elif motiftype == 'result 1':
             if note in motif:
                 self._results1.append(note)
             else:
                 self._results1 = []
                 return False #@narcode: is this correct?
-
+                
             if len(self._results1) >= len(motif):
                 self._results1 = self._results1[-len(motif):]
                 if self._results1 == motif:
@@ -608,21 +605,21 @@ class Motippets(object):
                     self._unmapCounter2 += 1
                 else:
                     compare = False
-
+                    
                 if debug:
                     print('played ->' + str(self._results1),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-
-                return compare
-
+                
+                return compare 
+            
         elif motiftype == 'result 2':
             if note in motif:
                 self._results2.append(note)
             else:
                 self._results2 = []
                 return False #@narcode: is this correct?
-
+                
             if len(self._results2) >= len(motif):
                 self._results2 = self._results2[-len(motif):]
                 if self._results2 == motif:
@@ -630,21 +627,21 @@ class Motippets(object):
                     self._unmapCounter2 += 1
                 else:
                     compare = False
-
+                    
                 if debug:
                     print('played ->' + str(self._results2),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-
-                return compare
-
+                
+                return compare   
+            
         elif motiftype == 'result 3': #TODO: optimize with a Dictionary
             if note in motif:
                 self._results3.append(note)
             else:
                 self._results3 = []
                 return False #@narcode: is this correct?
-
+            
             if len(self._results3) >= len(motif):
                 self._results3 = self._results3[-len(motif):]
                 if self._results3 == motif:
@@ -652,14 +649,14 @@ class Motippets(object):
                         #self._unmapCounter3 += 1 #?
                 else:
                     compare = False
-
+                        
                 if debug:
                     print('played ->' + str(self._results3),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-
-            return compare
-
+                    
+            return compare            
+            
         else:
             if note in motif:
                 self._mainMotifs.append(note)
@@ -744,9 +741,8 @@ class Motippets(object):
     def tremolo_value(self, notes, pianosection, deltatime,
                      deltatolerance, target, debug=False):
         """Get the interval of a given tremolo.
-
+        
         TODO: this should only return the interval integer and on another place define what to do with it!
-
         TODO: describe input params
         """
         if debug:

@@ -58,27 +58,18 @@ CodeKlavier\.hello\_classes module
 CodeKlavier\.midi\_delegate module
 ----------------------------------
 
-.. .. automodule:: CodeKlavier.midi_delegate
-..    :members:
-..    :undoc-members:
-..    :show-inheritance:
-
-CodeKlavier\.motippets\_classes module
---------------------------------------
-
-.. .. automodule:: CodeKlavier.motippets_classes
-..     :members:
-..     :undoc-members:
-..     :show-inheritance:
-
-CodeKlavier\.motippets\_classes\_anne module
---------------------------------------------
-
-.. automodule:: CodeKlavier.motippets_classes_anne
+.. automodule:: CodeKlavier.midi_delegate
     :members:
     :undoc-members:
     :show-inheritance:
 
+CodeKlavier\.motippets\_classes module
+--------------------------------------
+
+.. automodule:: CodeKlavier.motippets_classes
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------

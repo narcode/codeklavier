@@ -44,6 +44,19 @@ Run ``pip3 install -r requirements.txt`` to install the required libraries.
 
 Please install the latest release of [SuperCollider](http://supercollider.github.io)
 
+__For this developement branch add the CodeKlavier directory to your sys.path so the CK modules are recognized__
+
+in your ~/.bash_profile or equivalent add the following lines (make sure you have the correct path!):
+
+`# Modules for the CodeKlavier
+PYTHONPATH="/path/to/your/codeklavier/project/folder:$PYTHONPATH"
+export PYTHONPATH`
+
+As an example, the path to the Codeklavier in my system looks like this:
+`
+PYTHONPATH="/Users/narcodeb/Development/Repos/codeklavier-python/CodeKlavier:$PYTHONPATH"
+`
+
 ## Test run
 After installing the libraries, plug in your midi device and run the miditest by ``python3 miditest.py``. After you complete the setup and configuration, you will see the midi messages on the screen. After that: try playing a ``hello world`` piece. Move into the ``hello world`` directory and run ``python3 hello_world.py``.
 

@@ -14,12 +14,12 @@ the CodeKlavier will run with your midi setup.
 import time
 from CodeKlavier.Setup import Setup
 
+def run(codeK):
     """This method creates an infinite loop that you can break by the standard
     keyboard interrupt.
 
     :param CodeKlavier.Setup.Setup CodeK: a setup file for the CodeKlavier
     """
-
     print("CodeKlavier is ON. Press Control-C to exit.")
     try:
         while True:
