@@ -53,6 +53,7 @@ PYTHONPATH="/path/to/your/codeklavier/project/folder:$PYTHONPATH"
 export PYTHONPATH`
 
 As an example, the path to the Codeklavier in my system looks like this:
+
 `
 PYTHONPATH="/Users/narcodeb/Development/Repos/codeklavier-python/CodeKlavier:$PYTHONPATH"
 `
