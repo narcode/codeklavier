@@ -11,7 +11,7 @@ import time
 from pynput.keyboard import Key, Controller
 
 class Mapping_HelloWorld:
-    """Mapping for the Hello World piece.
+    """Mapping for the Hello World prototype.
     """
 
     def __init__(self):
@@ -143,11 +143,9 @@ class Mapping_HelloWorld_NKK:
     """
 
     def __init__(self):
-        """Init the class
-
-        Print that the user is using this mapping and set the controller.
-        """
-        # print("Using the Hello World mapping (NKK)")
+        """Mapping for the Hello World NKK (installation flavour).
+        """        
+        print("Using the Hello World mapping (NKK)")
         self.__keyboard = Controller()
 
     def evaluateSC(self, what):
@@ -279,16 +277,11 @@ class Mapping_HelloWorld_NKK:
             self.__keyboard.type('3')
 
 class Mapping_Motippets:
-    """Mapping of the Motippets piece
-    """
-
+    """Mapping for the Motippets prototype.
+    """    
     def __init__(self):
-        """Init the class
-
-        Print that the user is using this mapping and set the controller.
-        """
-        print("Using the mapping for Motippets")
-        self.__keyboard = Controller()
+        print("Using the Motippets mapping")
+        self.__keyboard = Controller()    
 
     def evaluateSC(self, what):
         """Evaluate the SuperCollider command 'what'
