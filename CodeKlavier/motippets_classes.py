@@ -471,41 +471,14 @@ class Motippets(object):
 
         return self._conditionalStatus  # is this not returning ?
 
-
-
-
     def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
 
-        :param midinote: the incoming MIDI note message
-        :param int length: the size of the array to store the midinotes
-        :param debug: flag to print console debug messages
+        :param midinote: the incoming MIDI note message\n
+        :param int length: the size of the array to store the midinotes\n
+        :param boolean debug: flag to print console debug messages\n
         :param string debugname: prefix for the debug messages
         :param string conditional: if a parallel buffer is filled in for the conditional functions
-        """
-        self._memory.append(midinote)
-
-                                return self._conditionalStatus
-
-                        return self._conditionalStatus
-
-                    ### CONDITIONAL RANGE
-                    elif section == 'conditional_range': # parses only MIDI for the conditional which looks at the range being played
-                        self.memorize(note, 999,
-                                     debugname="Range conditional memory", debug=False)
-
-                        self.get_range(self._memory, self._timer, debug=False)
-
-        return self._conditionalStatus  # is this not returning ?
-
-    def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
-        """Store the incoming midi notes by appending to the memory array.
-
-        midinote: the incoming MIDI note message\n
-        length: the size of the array to store the midinotes\n
-        debug: flag to print console debug messages\n
-        debugname: prefix for the debug messages
-        conditional: if a parallel buffer is filled in for the conditional functions
         """
         self._memory.append(midinote)
 
@@ -533,21 +506,6 @@ class Motippets(object):
             count1 = array.count(array[0])
             count2 = array.count(array[1])
 
-            if debug:
-                print('array is ' + str(array),'repeated notes1: ' + \
-                      str(count1), 'repeated notes2: ' + str(count2))
-
-            return count1 + count2
-        return 0
-
-    def compare_motif(self, array, motiftype, motif, note, debug=False):
-        """Compare the passed array to a given array
-
-        i.e. detect if a motif is played
-
-
-        TODO: describe input params
-        """
             if debug:
                 print('array is ' + str(array),'repeated notes1: ' + \
                       str(count1), 'repeated notes2: ' + str(count2))

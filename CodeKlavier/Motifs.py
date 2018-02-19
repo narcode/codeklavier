@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 """Motifs in Dictionaries.
 
 Here you can define the name of the motif and the series of midi-notes that
 make up that motif.
 Way more efficient than an unjustified class.
 """
-=======
-# Motifs in Dictionaries. Way more efficient than an unjustified class (Thanks @borrob)
->>>>>>> upstream/master
 
 motifs = {}
 
