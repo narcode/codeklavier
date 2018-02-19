@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
-
-#TODO: use CodeKlavier module
-
 """midi_delegate.py
 
 This file opens a delegate between nodejs and python's CodeKlavier.
 Used for the installation at NKK 2017
 """
 
-#TODO: add docstrings and comments
+#TODO: use CodeKlavier module
 
 import time
 from pynput.keyboard import Key, Controller
-from Setup import Setup
+from .Setup import Setup
 
 def run(codeK):
+    """Run the CodeKlavier
+
+    :param CodeKlavier.Setup.setup codeK: the setup file
+    """
     print("CodeKlavier is ON. Press Control-C to exit.")
     try:
         timer = time.time()
@@ -45,6 +46,8 @@ def run(codeK):
         codeK.end()
 
 def main():
+    """Main function as example.
+    """
 
     codeK = Setup()
 

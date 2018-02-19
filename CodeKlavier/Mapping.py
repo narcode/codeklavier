@@ -3,6 +3,9 @@
 Contains the classes ``Mapping_HelloWorld``, ``Mapping_HelloWorld_NKK`` and
 ``Mapping_Motippets``. These class deal with the mapping of the (midi) keys to
 chars, strings and commands.
+
+TODO: make a single base class and subclass the different versions from that
+class.
 """
 import time
 from pynput.keyboard import Key, Controller
@@ -20,6 +23,9 @@ class Mapping_HelloWorld:
         self.__keyboard = Controller()
 
     def evaluateSC(self):
+        """Evaluate the SuperCollider command (presses shift-enter).
+        """
+
         with self.__keyboard.pressed(Key.shift):
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.shift)
@@ -29,7 +35,7 @@ class Mapping_HelloWorld:
 
         By issueing a cmd-. command.
 
-        :parameter midinumber int: the midinumber pressed on the keyboard
+        :param int midinumber: the midinumber that is played
         """
         if midinumber == 66:
             self.__keyboard.press(Key.cmd)
@@ -37,6 +43,10 @@ class Mapping_HelloWorld:
             self.__keyboard.release(Key.cmd)
 
     def mapping(self, midinumber):
+        """Type a letter that is coupled to this midi note.
+
+        :param int midinumber: the midinumber that is played
+        """
         # chars and nums
         if midinumber == 69:
             self.__keyboard.type('h')
@@ -128,12 +138,23 @@ class Mapping_HelloWorld:
             self.__keyboard.type('TempoClock.default')
 
 class Mapping_HelloWorld_NKK:
+    """Mapping of the HelloWorld piece
+    as played on the Leiden Nacht van Kunst en Kultuur.
+    """
 
     def __init__(self):
+        """Init the class
+
+        Print that the user is using this mapping and set the controller.
+        """
         # print("Using the Hello World mapping (NKK)")
         self.__keyboard = Controller()
 
     def evaluateSC(self, what):
+        """Evaluate the SuperCollider command 'what'
+
+        :param what string: the command that should be evaluated
+        """
         if what == 'play':
             with self.__keyboard.pressed(Key.cmd):
                 self.__keyboard.press(Key.right)
@@ -171,20 +192,34 @@ class Mapping_HelloWorld_NKK:
             self.__keyboard.release(Key.enter)
 
     def stopSC(self, midinumber):
+        """If ``midinumber`` is 66, then stop SuperCollider
+
+        By issueing a cmd-. command.
+
+        :param int midinumber: the midinumber that is played
+        """
         if midinumber == 66:
             self.__keyboard.press(Key.cmd)
             self.__keyboard.type('.')
             self.__keyboard.release(Key.cmd)
 
     def enter(self):
+        """Press the enter key.
+        """
         self.__keyboard.press(Key.enter)
         self.__keyboard.release(Key.enter)
 
     def delete(self):
+        """Press the backspace key.
+        """
         self.__keyboard.press(Key.backspace)
         self.__keyboard.release(Key.backspace)
 
     def mapping(self, midinumber):
+        """Type a letter that is coupled to this midi note.
+
+        :param int midinumber: the midinumber that is played
+        """
         # chars and nums
         if midinumber == 87:
             self.__keyboard.type('h')
@@ -242,16 +277,24 @@ class Mapping_HelloWorld_NKK:
             self.__keyboard.type('2')
         elif midinumber == 81:
             self.__keyboard.type('3')
-#        elif midinumber == 66:
-#            self.stopSC()
 
 class Mapping_Motippets:
+    """Mapping of the Motippets piece
+    """
 
     def __init__(self):
+        """Init the class
+
+        Print that the user is using this mapping and set the controller.
+        """
         print("Using the mapping for Motippets")
         self.__keyboard = Controller()
 
     def evaluateSC(self, what):
+        """Evaluate the SuperCollider command 'what'
+
+        :param string what: the command that should be evaluated
+        """
         if what == 'play':
             with self.__keyboard.pressed(Key.cmd):
                 self.__keyboard.press(Key.right)
@@ -289,6 +332,8 @@ class Mapping_Motippets:
             self.__keyboard.release(Key.enter)
 
     def goDown(self):
+        """Press command-arrow down and enter.
+        """
         with self.__keyboard.pressed(Key.cmd):
             self.__keyboard.press(Key.down)
             self.__keyboard.release(Key.down)
@@ -296,16 +341,25 @@ class Mapping_Motippets:
         self.__keyboard.press(Key.enter)
         self.__keyboard.release(Key.enter)
 
-
     def enter(self):
+        """Press the enter key.
+        """
         self.__keyboard.press(Key.enter)
         self.__keyboard.release(Key.enter)
 
     def delete(self):
+        """Press the backspace key.
+        """
         self.__keyboard.press(Key.backspace)
         self.__keyboard.release(Key.backspace)
 
     def mapping(self, midinumber):
+        """Evaluate a specific command if ``midinumber`` is played
+
+        TODO: Check if we can combine this with ``evaluateSC()``
+
+        :param int midinumber: the midinumber that is played
+        """
         # out of trouble with pedal:
         # TODO: check with Anne
         if midinumber == 66:
@@ -314,6 +368,12 @@ class Mapping_Motippets:
             self.goDown()
 
     def snippets(self, num):
+        """Type code snippets
+
+        TODO: consider - should we put this in a snippet config file?
+
+        :param int num: the id of the code snippet to play
+        """
         if num == 1:
             self.__keyboard.type('~snippet1 = Tdef(\\1, {|ev| loop{ Ndef(~name.next, {|pitch=420,fx=88| SinOsc.ar(456*LFTri.kr(fx).range(100, pitch)) * EnvGen.kr(Env.perc) * ev.amp}).play(0,2);(1/ev.rit).wait;}}).play(quant:0).envir = (rit: ~tremoloL, amp: 0.036);')
             self.evaluateSC('eval')
@@ -322,6 +382,13 @@ class Mapping_Motippets:
             self.evaluateSC('eval')
 
     def miniSnippets(self, snippet_num, pianosection):
+        """Type a mini snippet for specific pianosections
+
+        TODO: consider - should we put this in a snippet config file?
+
+        :param int snippet_num: the id of the mini snippet to play
+        :param string pianosections: the pianosection that is used ('hi', 'mid', 'low')
+        """
         if snippet_num == 1 and pianosection == 'hi':
             self.__keyboard.type('[\\pulse, \\pulse2, \\pulse3, \\pulse4, \\pulse5, \\pulse6].do{|i| Ndef(i).map(\\fx, Ndef(\\krm3));}; ~tremoloH1')
             self.evaluateSC('eval')
@@ -410,8 +477,12 @@ class Mapping_Motippets:
             self.__keyboard.type('~map_amplitude = false;')
             self.evaluateSC('eval')
 
-
     def tremolo(self, pianoregister, value):
+        """Type the tremolo command + the tremolo-value
+        
+        :param string pianoregister: the pianoregister the tremolo is played in. Values are: 'hi_1', 'hi_2', 'mid_1', 'mid_2', 'low_1', 'low_2', 'low_3'.
+        :param int value: the tremolo value as distance between the notes
+        """
         if pianoregister == 'hi_1':
             self.__keyboard.type('~tremoloH1 = ' + str(value))
         elif pianoregister == 'hi_2':
@@ -429,6 +500,15 @@ class Mapping_Motippets:
         self.evaluateSC('eval')
 
     def conditional(self, conditional_num):
+        """Setup a conditional
+
+        There are three options: settimg up a conditional if number of notes
+        played is more than 100 in ... (option 1), setting up a conditional if
+        range is more than ... (option 2), and setting up a conditional if range
+        is less than ... (option 3).
+
+        :param int conditional_num: the selection for the type of conditional
+        """
         if conditional_num == 1:
             self.__keyboard.type('// setting up a conditional: IF number of notes played is more than 100 in...')
             self.enter()
@@ -439,7 +519,14 @@ class Mapping_Motippets:
             self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
 
-    def result(self, result_num, text, mod=0): #how to make optional params?
+    def result(self, result_num, text, mod=0): #how to make optional params? --> mod is already optional. Takes a default of 0 if no value is supplied.
+        """TOOD: document function
+        
+        :param int result_num: type of result?
+        :param string text: indication of the type of message
+        :param mod: some function
+        :type mod: int or None
+        """
         if result_num == 1:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet2')
@@ -501,5 +588,12 @@ class Mapping_Motippets:
                 self.enter()
 
     def customPass(self, name, content):
+        """Type name, content and enter
+        
+        Types 'name', [space] and content
+        
+        :param string name: first part to type
+        :param string content: second part to type
+        """
         self.__keyboard.type(name + " " + content)
         self.enter()

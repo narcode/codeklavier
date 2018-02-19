@@ -45,9 +45,9 @@ class Motippets(object):
     def parse_midi(self, event, section, target=0):
         """Parse the midi signal and process it depending on the register.
         
-        event: describes the midi event that was triggered\n
-        section: the MIDI piano range (i.e. low register, mid or high)
-        target: target the parsing for a specific snippet. 0 is no target
+        :param event: describes the midi event that was triggered\n
+        :param string section: the MIDI piano range (i.e. low register, mid or high)
+        :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
         self._deltatime += deltatime
@@ -470,18 +470,15 @@ class Motippets(object):
                         self.get_range(self._memory, self._timer, debug=False)
                         
         return self._conditionalStatus  # is this not returning ?
-     
-        
-                                    
-                    
+
     def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
 
-        midinote: the incoming MIDI note message\n
-        length: the size of the array to store the midinotes\n
-        debug: flag to print console debug messages\n
-        debugname: prefix for the debug messages
-        conditional: if a parallel buffer is filled in for the conditional functions
+        :param midinote: the incoming MIDI note message
+        :param int length: the size of the array to store the midinotes
+        :param debug: flag to print console debug messages
+        :param string debugname: prefix for the debug messages
+        :param string conditional: if a parallel buffer is filled in for the conditional functions
         """
         self._memory.append(midinote)
 

@@ -15,6 +15,8 @@ class BColors:
 
 
 class Setup(object):
+    """Helper class to setup the CodeKlavier with your piano.
+    """
 
     def __init__(self):
         self.__midiin = rtmidi.MidiIn()
@@ -23,6 +25,11 @@ class Setup(object):
         self.__ports_out = self.__midiout.get_ports()
 
     def print_lines(self, length, lines):
+        """Print ## lines with 0.2 sec delay
+
+        :param int length: the line length (actuel length is 1 longer)
+        :param int lines: number of lines to print (-1)
+        """
         for i in range(1, lines):
             num = length+(1)
             print('##'*num)
@@ -30,6 +37,10 @@ class Setup(object):
             time.sleep(0.2)
 
     def print_welcome(self, length):
+        """Print the welcome lines
+
+        :param int length: the line length (actuel length is 1 longer)
+        """
         for i in range(1, 5):
             num = length+(1)
             print('##'*num)
@@ -39,11 +50,17 @@ class Setup(object):
         print("\nWelcome to the Codeklavier!\n")
 
     def show_ports(self):
+        """Show the available MIDI devices.
+        """
         print("These are your detected MIDI devices:", '\n')
         for port in self.__ports:
             print(self.__ports.index(port), " -> ", port)
 
     def get_port_from_user(self):
+        """Get a MIDI device from the user.
+
+        :rtype: int
+        """
         selected_midiport = -1
         while selected_midiport < 0:
             try:
@@ -61,6 +78,11 @@ class Setup(object):
                 print("Sorry, type a valid port numer!")
 
     def open_port(self, pnum):
+        """Open the MIDI port.
+
+        :param int pnum: the port number
+        :raises Exception: when there are no midi ports
+        """
         print("You have chosen: ", self.__ports[pnum])
 
         if self.__ports:
@@ -72,25 +94,47 @@ class Setup(object):
             raise Exception("No midi ports! Maybe open a virtual device?")
 
     def open_port_out(self, num):
+        """Open the midi port as output.
+
+        :param int num: the midi portnumber to open
+        """
         print("opened midi out port")
 
         if self.__ports_out:
             self.__midiout.open_port(num)
 
     def close_port(self):
+        """Close the MIDI in port
+        """
         self.__midiin.close_port()
         #TODO: add close out port too
 
     def get_message(self):
+        """Get the MIDIin message
+
+        :rtype: string? array? dict? The midi message
+        """
         return self.__midiin.get_message()
 
     def send_message(self, message):
+        """Send a message to MIDIout
+
+        :param message: the message to send
+        """
         return self.__midiout.send_message(message)
 
     def set_callback(self,cb):
+        """Set the MIDIin callback function
+
+        :param cb: the callback
+        """
         self.__midiin.set_callback(cb)
 
     def get_device_id(self):
+        """Get the device id from the instrument.
+
+        :rtype: int the device id
+        """
         print("Hit any note to get the device_id.")
         while True:
             msg = self.get_message()
@@ -103,17 +147,25 @@ class Setup(object):
             time.sleep(0.01)
 
     def perform_setup(self):
+        """Wrapper function to make the entire setup.
+
+        :rtype: int the MIDIin port
+        """
         self.print_welcome(20)
         self.show_ports()
         myPort = self.get_port_from_user()
         return myPort
 
     def end(self):
+        """Close
+        """
         #print("Bye bye from CodeKlavier setup :(")
         self.close_port()
         del self.__midiin
 
 def main():
+    """Perform the main setup.
+    """
     codeK = Setup()
     my_midiport = codeK.perform_setup()
     codeK.open_port(my_midiport)
