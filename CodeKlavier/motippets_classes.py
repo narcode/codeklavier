@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from .Motifs import motifs_anne as Motifs
+from Motifs import motifs_anne as Motifs
 
 class Motippets(object):
     """Class to handle the midi input.

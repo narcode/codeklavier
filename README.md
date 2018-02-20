@@ -1,8 +1,7 @@
 # CodeKlavier
 ### Live coding with the piano as interface.
 
-An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie** for its developement and
-**FondsPodiumKunsten NL** for public presentations
+An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL**
 
 CodeKlavier development started in April 2017 and currently has two prototypes (newest on top):
 +  *Motippets* (coding via pianistic gestures/motifs)
@@ -40,11 +39,8 @@ Install with pip3
 
 Run ``pip3 install -r requirements.txt`` to install the required libraries.
 
-## SuperCollider
-
-Please install the latest release of [SuperCollider](http://supercollider.github.io)
-
-__For this developement branch add the CodeKlavier directory to your sys.path so the CK modules are recognized__
+## Modules
+__For this version please add the CodeKlavier directory to your sys.path so the CK modules are recognized__
 
 in your ~/.bash_profile or equivalent add the following lines (make sure you have the correct path!):
 
@@ -57,6 +53,11 @@ As an example, the path to the Codeklavier in my system looks like this:
 `
 PYTHONPATH="/Users/narcodeb/Development/Repos/codeklavier-python/CodeKlavier:$PYTHONPATH"
 `
+
+## SuperCollider
+
+Please install the latest release of [SuperCollider](http://supercollider.github.io)
+
 
 ## Test run
 After installing the libraries, plug in your midi device and run the miditest by ``python3 miditest.py``. After you complete the setup and configuration, you will see the midi messages on the screen. After that: try playing a ``hello world`` piece. Move into the ``hello world`` directory and run ``python3 hello_world.py``.

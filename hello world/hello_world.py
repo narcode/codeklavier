@@ -1,16 +1,14 @@
 import time
 import rtmidi
 
-# Use trick to import from parentdir
 import sys
 import os
 import inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-from CodeKlavier.Setup import Setup
-from CodeKlavier.Mapping import Mapping_HelloWorld
-from CodeKlavier.hello_classes import HelloWorld
+
+# CodeKlavier Modules
+from CK_Setup import Setup
+from Mapping import Mapping_HelloWorld
+from hello_classes import HelloWorld
 
 # Start the CodeKlavier
 codeK = Setup()

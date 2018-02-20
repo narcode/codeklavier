@@ -47,7 +47,7 @@ class Setup(object):
             #TODO: add codeKlavier logo
             time.sleep(0.2)
 
-        print("\nWelcome to the Codeklavier!\n")
+        print("\nWelcome to the Codeklavier v0.2!\n")
 
     def show_ports(self):
         """Show the available MIDI devices.
