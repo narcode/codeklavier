@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import configparser
 import time
 import random
 from threading import Thread, Event
@@ -17,11 +18,18 @@ from CodeKlavier.Mapping import Mapping_Motippets
 from CodeKlavier.motippets_classes import Motippets
 
 # Start the CodeKlavier
+config = configparser.ConfigParser()
+config.read('default_setup.ini')
+
+try:
+    myPort = config['midi'].getint('port')
+    device_id = config['midi'].getint('device_id')
+except KeyError:
+    print('Missing key information in the config file.')
+    exit(0)
+
 codeK = Setup()
-myPort = codeK.perform_setup()
 codeK.open_port(myPort)
-device_id = codeK.get_device_id()
-print('your device id is: ', device_id, '\n')
 
 # Use your favourite mapping of the keys
 
