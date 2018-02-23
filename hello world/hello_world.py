@@ -1,14 +1,13 @@
-import time
-import rtmidi
-
-import sys
-import os
 import inspect
+import os
+import rtmidi
+import sys
+import time
 
 # CodeKlavier Modules
 from CK_Setup import Setup
-from Mapping import Mapping_HelloWorld
 from hello_classes import HelloWorld
+from Mapping import Mapping_HelloWorld
 
 # Start the CodeKlavier
 codeK = Setup()

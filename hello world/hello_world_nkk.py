@@ -1,15 +1,13 @@
-import time
-import rtmidi
-
-# Use trick to import from parentdir
-import sys
-import os
 import inspect
+import os
+import rtmidi
+import sys
+import time
 
-
+# CodeKlavier Modules
 from CK_Setup import Setup
-from Mapping import Mapping_HelloWorld_NKK
 from Instructions import Instructions
+from Mapping import Mapping_HelloWorld_NKK
 
 # Start the CodeKlavier
 codeK = Setup()
