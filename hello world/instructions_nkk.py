@@ -1,24 +1,33 @@
-import time
-import rtmidi
-
-# Use trick to import from parentdir
-import sys
-import os
+import configparser
 import inspect
+import os
+import rtmidi
+import sys
+import time
 
-
-from CK_Setup import Setup
-from Mapping import Mapping_HelloWorld_NKK
-from Instructions import Instructions
+# CodeKlavier Modules
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
+from CodeKlavier.CK_Setup import Setup
+from CodeKlavier.Mapping import Mapping_HelloWorld_NKK
+from CodeKlavier.Instructions import Instructions
 
 # Start the CodeKlavier
+config = configparser.ConfigParser()
+config.read('default_setup.ini')
+
+try:
+    myPort = config['midi'].getint('port')
+    device_id = config['midi'].getint('device_id')
+except KeyError:
+    print('Missing key information in the config file.')
+    exit(0)
+
 codeK = Setup()
 tutorial = Instructions()
-myPort = codeK.perform_setup()
 codeK.open_port(myPort)
 codeK.open_port_out(myPort)
-device_id = codeK.get_device_id()
-print('your device id is: ', device_id, '\n')
 
 # Use your favourite mapping of the keys
 mapping = Mapping_HelloWorld_NKK()

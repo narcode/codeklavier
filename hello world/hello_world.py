@@ -1,3 +1,4 @@
+import configparser
 import inspect
 import os
 import rtmidi
@@ -5,16 +6,26 @@ import sys
 import time
 
 # CodeKlavier Modules
-from CK_Setup import Setup
-from hello_classes import HelloWorld
-from Mapping import Mapping_HelloWorld
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
+from CodeKlavier.CK_Setup import Setup
+from CodeKlavier.hello_classes import HelloWorld
+from CodeKlavier.Mapping import Mapping_HelloWorld
 
 # Start the CodeKlavier
+config = configparser.ConfigParser()
+config.read('default_setup.ini')
+
+try:
+    myPort = config['midi'].getint('port')
+    device_id = config['midi'].getint('device_id')
+except KeyError:
+    print('Missing key information in the config file.')
+    exit(0)
+
 codeK = Setup()
-myPort = codeK.perform_setup()
 codeK.open_port(myPort)
-device_id = codeK.get_device_id()
-print('your device id is: ', device_id, '\n')
 
 # Use your favourite mapping of the keys
 mapping = Mapping_HelloWorld()
