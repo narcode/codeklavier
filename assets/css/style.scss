@@ -5,7 +5,16 @@
 
 header {
 background-image: url('../images/codeklavier image.png');
-background-position: left;
+background-position: 0 -165px;
 background-repeat: no-repeat;
-background-size: contain;
+background-size: cover;
+}
+
+header h2 {
+background-color: black;
+}
+
+.btn {
+background: black;
+border: 2px solid rgb(181, 232, 83);
 }
