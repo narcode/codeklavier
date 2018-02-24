@@ -5,17 +5,9 @@ import time
 import random
 from threading import Thread, Event
 
-import sys
-import os
-import inspect
-
-# CodeKlavier modules
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-from CodeKlavier.CK_Setup import Setup, BColors
-from CodeKlavier.Mapping import Mapping_Motippets
-from CodeKlavier.motippets_classes import Motippets
+from CK_Setup import Setup, BColors
+from Mapping import Mapping_Motippets
+from motippets_classes import Motippets
 
 # Start the CodeKlavier
 config = configparser.ConfigParser()

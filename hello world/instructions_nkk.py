@@ -1,17 +1,11 @@
 import configparser
-import inspect
-import os
 import rtmidi
-import sys
 import time
 
 # CodeKlavier Modules
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
-from CodeKlavier.CK_Setup import Setup
-from CodeKlavier.Mapping import Mapping_HelloWorld_NKK
-from CodeKlavier.Instructions import Instructions
+from CK_Setup import Setup
+from Mapping import Mapping_HelloWorld_NKK
+from Instructions import Instructions
 
 # Start the CodeKlavier
 config = configparser.ConfigParser()
