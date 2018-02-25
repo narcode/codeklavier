@@ -1,3 +1,10 @@
+### v0.2.1 enhancements in development:
+* tweaks for IN-SONORA presentation in late March
+* implementation of configparser
+* commandline arguments for codeklavier startup
+* dynamic mapping
+* dual display for motippets
+
 # CodeKlavier
 ### Live coding with the piano as interface.
 
