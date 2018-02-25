@@ -5,5 +5,5 @@
 #alternatively: put it in your ~/bashrc
 #windows users: you're on your own
 
-PYTHONPATH=$(pwd)
+PYTHONPATH=$(pwd)'/CodeKlavier':$PYTHONPATH
 export PYTHONPATH
