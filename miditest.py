@@ -12,7 +12,7 @@ the CodeKlavier will run with your midi setup.
 """
 
 import time
-from CodeKlavier.Setup import Setup
+from CK_Setup import Setup
 
 def run(codeK):
     """This method creates an infinite loop that you can break by the standard
