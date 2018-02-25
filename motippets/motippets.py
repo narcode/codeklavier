@@ -7,14 +7,15 @@ import time
 import random
 from threading import Thread, Event
 
+import CK_configWriter
 from CK_Setup import Setup, BColors
 from Mapping import Mapping_Motippets
 from motippets_classes import Motippets
 
-def main(config_file='default_setup.ini'):
+def main(configfile='default_setup.ini'):
     # Start the CodeKlavier
     config = configparser.ConfigParser()
-    config.read(config_file)
+    config.read(configfile)
     
     try:
         myPort = config['midi'].getint('port')
@@ -395,14 +396,10 @@ def main(config_file='default_setup.ini'):
         codeK.end()
 
 if (__name__ == '__main__'):
-    print('running main')
-    print(sys.argv)
-    print(sys.argv[1:])
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hc:m:',['configfile=', 'makeconfig='])
+        options, args = getopt.getopt(sys.argv[1:],'hc:m:',['help', 'configfile=', 'makeconfig='])
     except getopt.GetoptError:
         print('Something went wrong with parsing the options')
-    print(options)
     for o, a in options:
         if o in ('-h', '--help'):
             print('Usage: python3 motippets.py [OPTION]')
@@ -416,4 +413,16 @@ if (__name__ == '__main__'):
             print('')
             print('  -m <<filename>> | --makeconfig <<filename>>')
             print('    Create a configfile and use it. If <<filename>> already exits, it will be over written.')
-            exit(0)
+            sys.exit(0)
+        if o in ('-c', '--configfile') and o in ('-m', 'makeconfig'):
+            sys.exit(3)
+            print('Chooce either the "configfile-option" or the option to create a configfile. Not both.')
+        if o in ('-c', '--configfile'):
+            main(configfile=a)
+        if o in ('-m', '--makeconfig'):
+            print('make a new config')
+            CK_configWriter.createConfig(configfile=a)
+            main(configfile=a)
+
+    #no options were supplied: run motippets with default settings
+    main()
