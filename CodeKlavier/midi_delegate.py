@@ -9,7 +9,7 @@ Used for the installation at NKK 2017
 
 import time
 from pynput.keyboard import Key, Controller
-from .Setup import Setup
+from CK_Setup import Setup
 
 def run(codeK):
     """Run the CodeKlavier

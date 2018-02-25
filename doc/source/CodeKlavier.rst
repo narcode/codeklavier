@@ -1,6 +1,22 @@
 CodeKlavier package
 ===================
 
+CodeKlavier\.CK_Setup module
+----------------------------
+
+.. automodule:: CodeKlavier.CK_Setup
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+CodeKlavier\.CK_configWriter module
+-----------------------------------
+
+.. automodule:: CodeKlavier.CK_configWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 CodeKlavier\.Instructions module
 --------------------------------
 
@@ -39,14 +55,6 @@ CodeKlavier\.Motifs module
     :undoc-members:
     :show-inheritance:
 
-CodeKlavier\.Setup module
--------------------------
-
-.. automodule:: CodeKlavier.Setup
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 CodeKlavier\.hello\_classes module
 ----------------------------------
 
@@ -71,10 +79,3 @@ CodeKlavier\.motippets\_classes module
     :undoc-members:
     :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: CodeKlavier
-    :members:
-    :undoc-members:
-    :show-inheritance:

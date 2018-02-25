@@ -49,7 +49,7 @@ Run ``pip3 install -r requirements.txt`` to install the required libraries.
 ## Modules
 __For this version please add the CodeKlavier directory to your sys.path so the CK modules are recognized__
 
-in your ~/.bash_profile or equivalent add the following lines (make sure you have the correct path!):
+You can run the ``setPythonPath.sh`` every time you start a new shell (type ``. setPythonPath.sh`` - not the **dot-space** before the command), or put the following lines in your ``~/.bash_profile`` or ``~/.bashrc`` or equivalent add the following lines (make sure you have the correct path!):
 
 `# Modules for the CodeKlavier
 PYTHONPATH="/path/to/your/codeklavier/project/folder:$PYTHONPATH"
