@@ -72,6 +72,253 @@
             
   <div class="section" id="codeklavier-package">
 <h1>CodeKlavier package<a class="headerlink" href="#codeklavier-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-CodeKlavier.CK_Setup">
+<span id="codeklavier-ck-setup-module"></span><h2>CodeKlavier.CK_Setup module<a class="headerlink" href="#module-CodeKlavier.CK_Setup" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="CodeKlavier.CK_Setup.BColors">
+<em class="property">class </em><code class="descclassname">CodeKlavier.CK_Setup.</code><code class="descname">BColors</code><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class with background colors for the terminal.</p>
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.BOLD">
+<code class="descname">BOLD</code><em class="property"> = '\x1b[1m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.BOLD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.CKBLUE">
+<code class="descname">CKBLUE</code><em class="property"> = '\x1b[94m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.CKBLUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.CKGREEN">
+<code class="descname">CKGREEN</code><em class="property"> = '\x1b[92m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.CKGREEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.ENDC">
+<code class="descname">ENDC</code><em class="property"> = '\x1b[0m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.ENDC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.FAIL">
+<code class="descname">FAIL</code><em class="property"> = '\x1b[91m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.FAIL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.HEADER">
+<code class="descname">HEADER</code><em class="property"> = '\x1b[95m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.HEADER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.UNDERLINE">
+<code class="descname">UNDERLINE</code><em class="property"> = '\x1b[4m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.UNDERLINE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="CodeKlavier.CK_Setup.BColors.WARNING">
+<code class="descname">WARNING</code><em class="property"> = '\x1b[93m'</em><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors.WARNING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="CodeKlavier.CK_Setup.Setup">
+<em class="property">class </em><code class="descclassname">CodeKlavier.CK_Setup.</code><code class="descname">Setup</code><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Helper class to setup the CodeKlavier with your piano.</p>
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.close_port">
+<code class="descname">close_port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.close_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the MIDI in port</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.end">
+<code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.get_device_id">
+<code class="descname">get_device_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.get_device_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the device id from the instrument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int the device id</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.get_message">
+<code class="descname">get_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.get_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the MIDIin message</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string? array? dict? The midi message</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.get_port_from_user">
+<code class="descname">get_port_from_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.get_port_from_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a MIDI device from the user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.open_port">
+<code class="descname">open_port</code><span class="sig-paren">(</span><em>pnum</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.open_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the MIDI port.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pnum</strong> (<em>int</em>) – the port number</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>Exception</strong> – when there are no midi ports</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.open_port_out">
+<code class="descname">open_port_out</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.open_port_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the midi port as output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> (<em>int</em>) – the midi portnumber to open</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.perform_setup">
+<code class="descname">perform_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.perform_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper function to make the entire setup.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int the MIDIin port</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.print_lines">
+<code class="descname">print_lines</code><span class="sig-paren">(</span><em>length</em>, <em>lines</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.print_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print ## lines with 0.2 sec delay</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>length</strong> (<em>int</em>) – the line length (actuel length is 1 longer)</li>
+<li><strong>lines</strong> (<em>int</em>) – number of lines to print (-1)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.print_welcome">
+<code class="descname">print_welcome</code><span class="sig-paren">(</span><em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.print_welcome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the welcome lines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> (<em>int</em>) – the line length (actuel length is 1 longer)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.send_message">
+<code class="descname">send_message</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.send_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a message to MIDIout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> – the message to send</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.set_callback">
+<code class="descname">set_callback</code><span class="sig-paren">(</span><em>cb</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.set_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the MIDIin callback function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cb</strong> – the callback</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.CK_Setup.Setup.show_ports">
+<code class="descname">show_ports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup.show_ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the available MIDI devices.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="CodeKlavier.CK_Setup.main">
+<code class="descclassname">CodeKlavier.CK_Setup.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_Setup.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the main setup.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-CodeKlavier.CK_configWriter">
+<span id="codeklavier-ck-configwriter-module"></span><h2>CodeKlavier.CK_configWriter module<a class="headerlink" href="#module-CodeKlavier.CK_configWriter" title="Permalink to this headline">¶</a></h2>
+<p>Write a configfile for CodeKlavier</p>
+<dl class="function">
+<dt id="CodeKlavier.CK_configWriter.createConfig">
+<code class="descclassname">CodeKlavier.CK_configWriter.</code><code class="descname">createConfig</code><span class="sig-paren">(</span><em>configfile='my_settings.ini'</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.CK_configWriter.createConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a basic configfile</p>
+<p>Note: the created configfile will overwrite the existing file
+(if present)!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>configfile</strong> (<em>string</em>) – path and name of the configfile</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 <div class="section" id="module-CodeKlavier.Instructions">
 <span id="codeklavier-instructions-module"></span><h2>CodeKlavier.Instructions module<a class="headerlink" href="#module-CodeKlavier.Instructions" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -195,7 +442,7 @@ to run a self-running demo.</p>
 <dl class="class">
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld">
 <em class="property">class </em><code class="descclassname">CodeKlavier.Mapping.</code><code class="descname">Mapping_HelloWorld</code><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mapping for the Hello World piece.</p>
+<dd><p>Mapping for the Hello World prototype.</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld.__init__" title="Permalink to this definition">¶</a></dt>
@@ -248,8 +495,7 @@ as played on the Leiden Nacht van Kunst en Kultuur.</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld_NKK.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld_NKK.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Init the class</p>
-<p>Print that the user is using this mapping and set the controller.</p>
+<dd><p>Mapping for the Hello World NKK (installation flavour).</p>
 </dd></dl>
 
 <dl class="method">
@@ -312,13 +558,11 @@ as played on the Leiden Nacht van Kunst en Kultuur.</p>
 <dl class="class">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets">
 <em class="property">class </em><code class="descclassname">CodeKlavier.Mapping.</code><code class="descname">Mapping_Motippets</code><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mapping of the Motippets piece</p>
+<dd><p>Mapping for the Motippets prototype.</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Init the class</p>
-<p>Print that the user is using this mapping and set the controller.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.conditional">
@@ -471,233 +715,6 @@ is less than … (option 3).</p>
 make up that motif.
 Way more efficient than an unjustified class.</p>
 </div>
-<div class="section" id="module-CodeKlavier.Setup">
-<span id="codeklavier-setup-module"></span><h2>CodeKlavier.Setup module<a class="headerlink" href="#module-CodeKlavier.Setup" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="CodeKlavier.Setup.BColors">
-<em class="property">class </em><code class="descclassname">CodeKlavier.Setup.</code><code class="descname">BColors</code><a class="headerlink" href="#CodeKlavier.Setup.BColors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Class with background colors for the terminal.</p>
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.BOLD">
-<code class="descname">BOLD</code><em class="property"> = '\x1b[1m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.BOLD" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.CKBLUE">
-<code class="descname">CKBLUE</code><em class="property"> = '\x1b[94m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.CKBLUE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.CKGREEN">
-<code class="descname">CKGREEN</code><em class="property"> = '\x1b[92m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.CKGREEN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.ENDC">
-<code class="descname">ENDC</code><em class="property"> = '\x1b[0m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.ENDC" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.FAIL">
-<code class="descname">FAIL</code><em class="property"> = '\x1b[91m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.FAIL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.HEADER">
-<code class="descname">HEADER</code><em class="property"> = '\x1b[95m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.HEADER" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.UNDERLINE">
-<code class="descname">UNDERLINE</code><em class="property"> = '\x1b[4m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.UNDERLINE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="CodeKlavier.Setup.BColors.WARNING">
-<code class="descname">WARNING</code><em class="property"> = '\x1b[93m'</em><a class="headerlink" href="#CodeKlavier.Setup.BColors.WARNING" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="CodeKlavier.Setup.Setup">
-<em class="property">class </em><code class="descclassname">CodeKlavier.Setup.</code><code class="descname">Setup</code><a class="headerlink" href="#CodeKlavier.Setup.Setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Helper class to setup the CodeKlavier with your piano.</p>
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.close_port">
-<code class="descname">close_port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.close_port" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close the MIDI in port</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.end">
-<code class="descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.get_device_id">
-<code class="descname">get_device_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.get_device_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the device id from the instrument.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int the device id</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.get_message">
-<code class="descname">get_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.get_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the MIDIin message</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string? array? dict? The midi message</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.get_port_from_user">
-<code class="descname">get_port_from_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.get_port_from_user" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a MIDI device from the user.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.open_port">
-<code class="descname">open_port</code><span class="sig-paren">(</span><em>pnum</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.open_port" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open the MIDI port.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pnum</strong> (<em>int</em>) – the port number</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>Exception</strong> – when there are no midi ports</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.open_port_out">
-<code class="descname">open_port_out</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.open_port_out" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open the midi port as output.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> (<em>int</em>) – the midi portnumber to open</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.perform_setup">
-<code class="descname">perform_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.perform_setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper function to make the entire setup.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int the MIDIin port</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.print_lines">
-<code class="descname">print_lines</code><span class="sig-paren">(</span><em>length</em>, <em>lines</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.print_lines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print ## lines with 0.2 sec delay</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>length</strong> (<em>int</em>) – the line length (actuel length is 1 longer)</li>
-<li><strong>lines</strong> (<em>int</em>) – number of lines to print (-1)</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.print_welcome">
-<code class="descname">print_welcome</code><span class="sig-paren">(</span><em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.print_welcome" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the welcome lines</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> (<em>int</em>) – the line length (actuel length is 1 longer)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.send_message">
-<code class="descname">send_message</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.send_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send a message to MIDIout</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> – the message to send</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.set_callback">
-<code class="descname">set_callback</code><span class="sig-paren">(</span><em>cb</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.set_callback" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the MIDIin callback function</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cb</strong> – the callback</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="CodeKlavier.Setup.Setup.show_ports">
-<code class="descname">show_ports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.Setup.show_ports" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show the available MIDI devices.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="CodeKlavier.Setup.main">
-<code class="descclassname">CodeKlavier.Setup.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Setup.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the main setup.</p>
-</dd></dl>
-
-</div>
 <div class="section" id="module-CodeKlavier.hello_classes">
 <span id="codeklavier-hello-classes-module"></span><h2>CodeKlavier.hello_classes module<a class="headerlink" href="#module-CodeKlavier.hello_classes" title="Permalink to this headline">¶</a></h2>
 <p>classes for Hello World.
@@ -827,9 +844,6 @@ TODO: describe input params</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-CodeKlavier">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-CodeKlavier" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

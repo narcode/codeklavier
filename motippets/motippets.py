@@ -197,13 +197,13 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
     """
     Calculate the played range within a time window. Perpetual flag makes it run it's loop forever, unless range_trigger is != 1
     
-    timer: time window loop
-    operator: 'more than' or 'less than'
-    num = conditional number
-    result_num: result number mapped to this conditional
-    piano_range: total range for evvaluation in semitones
-    debug: booelan flag to post debug messages
-    perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
+    :param timer: time window loop
+    :param operator: 'more than' or 'less than'
+    :param int num: conditional number
+    :param int result_num: result number mapped to this conditional
+    :param int piano_range: total range for evvaluation in semitones
+    :param bool debug: booelan flag to post debug messages
+    :param bool perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
     """
 
     global range_trigger, threads_are_perpetual, param_interval
@@ -337,7 +337,9 @@ def set_parameters(value, conditional_func, debug=False):
     function to parse a full range tremolo. This value can be used as a param for the
     other functions.
 
-    value: the interval of the plated tremolo
+    :param int value: the interval of the plated tremolo
+    :param conditional_func: todo
+    :param bool debug: run in debug mode
     """
     global param_interval, range_trigger
     print('thread started for parameter set')
@@ -360,6 +362,11 @@ def set_parameters(value, conditional_func, debug=False):
 def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
     """
     TODO: define func
+
+    :param int timer: todo
+    :param int numberOfnotes: todo
+    :param int result_num: todo
+    :param bool debug: run in debug mode
     """
     print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
 
