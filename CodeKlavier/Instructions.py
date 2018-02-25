@@ -1,6 +1,6 @@
 import time
 
-from .CK_Setup import BColors
+from CK_Setup import BColors
 
 class Instructions(object):
     """This class shows instructions on the CodeKlaver usages. Great if you want
