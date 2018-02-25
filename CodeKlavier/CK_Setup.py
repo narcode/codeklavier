@@ -1,5 +1,6 @@
 import time
 import rtmidi
+import sys
 
 class BColors:
     """Class with background colors for the terminal.
@@ -73,7 +74,7 @@ class Setup(object):
                     return selected_midiport
             except KeyboardInterrupt:
                 print('\n', "You want to quit? ¯\('…')/¯  ok, Bye bye.")
-                exit()
+                sys.exit(0)
             except ValueError:
                 print("Sorry, type a valid port numer!")
 
