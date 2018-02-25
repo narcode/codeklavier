@@ -13,7 +13,12 @@ from Mapping import Mapping_Motippets
 from motippets_classes import Motippets
 
 def main(configfile='default_setup.ini'):
-    # Start the CodeKlavier
+    """Start motippets!
+
+    :param string configfile: The configurationfile to use. Defaults to default_setup.ini
+    """
+
+    #Read config and settings
     config = configparser.ConfigParser()
     config.read(configfile)
     
@@ -21,14 +26,15 @@ def main(configfile='default_setup.ini'):
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('device_id')
     except KeyError:
-        print('Missing key information in the config file.')
-        exit(0)
+        raise LookupError('Missing key information in the config file.')
+
+    if (myPort == None or device_id == None):
+        raise LookupError('Missing key information in the config file.')
     
     codeK = Setup()
     codeK.open_port(myPort)
     
     # Use your favourite mapping of the keys
-    
     mapping = Mapping_Motippets()
     
     print("\nCodeKlavier is ready and ON.")
@@ -62,217 +68,9 @@ def main(configfile='default_setup.ini'):
     range_trigger = 0
     param_interval = 0
     threads_are_perpetual = True
-    
-    
-    #TODO: move this functions to a better place?
-    def set_parameters(value, conditional_func, debug=False):
-        """
-        function to parse a full range tremolo. This value can be used as a param for the
-        other functions.
-    
-        value: the interval of the plated tremolo
-        """
-        global param_interval, range_trigger
-        print('thread started for parameter set')
-    
-        if conditional_func == 'amount':
-            mapping.customPass('// more than 100 notes played in the next ', str(value) + ' seconds?')
-        elif conditional_func == 'range':
-            mapping.customPass('// range set to: ', str(value) + ' semitones...')
-        elif conditional_func == 'gomb':
-            mapping.customPass('// GOMB countdown set to: ', str(value))
-    
-        if debug:
-            print('value parameter is ', str(value))
-    
-        param_interval = value
-        parameters._interval = 0
-        time.sleep(1) # check if the sleep is needed...
-        range_trigger = 1
-    
-    
-    def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
-        """
-        TODO: define func
-        """
-        print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
-    
-        #reset parameter global once it has passed effectively:
-        global param_interval
-        param_interval= 0
-    
-        for s in range(0, timer):
-            if notecounter > numberOfnotes:
-                mapping.customPass('//WOW! I played: ', str(notecounter)+'!!!')
-    
-                if result_num == 1:
-                    mapping.result(result_num, 'code')
-                    mainMem._motif2_counter = 0 #reset the motif counter so it can be played again...
-    
-                elif result_num == 2: #this is for snippet 1 - change the names accordingly
-                    mapping.result(result_num, 'code')
-                    memMid._motif1_counter = 0
-    
-                elif result_num == 3:
-                    mapping.result(result_num, 'code')
-    
-                elif result_num == 4:
-                    mapping.result(4, 'start')
-                    gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
-                    gomb.start()
-    
-                break
-            else:
-                mapping.customPass('notes played: ', str(notecounter))
-                conditionals[1]._conditionalStatus = 0
-                conditionals[1]._resultCounter = 0
-                conditionals[1]._conditionalCounter = 0
-    
-            if debug:
-                print(notecounter)
-            time.sleep(1)
-    
-    def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, debug=True, perpetual=True):
-        """
-       Calculate the played range within a time window. Perpetual flag makes it run it's loop forever, unless range_trigger is != 1
-    
-       timer: time window loop
-       operator: 'more than' or 'less than'
-       num = conditional number
-       result_num: result number mapped to this conditional
-       piano_range: total range for evvaluation in semitones
-       debug: booelan flag to post debug messages
-       perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
-        """
-    
-        global range_trigger, threads_are_perpetual, param_interval
-        conditionals[num]._conditionalStatus = 0 #reset trigger
-        t = 1
-        param_interval = 0
-    
-        if debug:
-            print('thread for range started')
-            print("range trig -> ", range_trigger, "result num: ", result_num, "range set to: ", piano_range)
-    
-    
-        while threads_are_perpetual:
-            if timer == 'random':
-                timer = random.randrange(10,45)
-    
-            if debug:
-                print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)
-                #print('Range conditional memory: ', conditionalsRange._memory)
-            conditionalsRange._timer += 1
-            t += 1
-    
-            if t % timer == 0:
-                if debug:
-                    print("Range conditional thread finished")
-                    print("range was: ", conditionalsRange._range)
-                if operator == 'more than':
-                    if conditionalsRange._range >= piano_range:
-                        if result_num == 1:
-                            mapping.result(result_num,'code')
-                            mainMem._motif2_counter = 0
-                            conditionalsRange._memory = []
-                            conditionals[num]._conditionalCounter = 0
-                            conditionals[num]._resultCounter = 0
-                            conditionalsRange._timer = 0
-                            break; #stop thread if condition met
-                        elif result_num == 2:
-                            mapping.result(result_num, 'code')
-                            memMid._motif1_counter = 0
-                            conditionalsRange._memory = []
-                            conditionals[num]._conditionalCounter = 0
-                            conditionals[num]._resultCounter = 0
-                            conditionalsRange._timer = 0
-                            break;
-                        elif result_num == 3:
-                            mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
-                        elif result_num == 4:
-                            mapping.result(4, 'start')
-                            gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
-                            gomb.start()
-                    else:
-                        mapping.customPass('condition not met', ':(')
-    
-                elif operator == 'less than':
-                    if conditionalsRange._range <= piano_range:
-                        if result_num == 1:
-                            mapping.result(result_num,'code')
-                            mainMem._motif2_counter = 0
-                            conditionalsRange._memory = []
-                            conditionals[num]._conditionalCounter = 0
-                            conditionals[num]._resultCounter = 0
-                            conditionalsRange._timer = 0
-                            break
-                        elif result_num == 2:
-                            mapping.result(result_num, 'code')
-                            memMid._motif1_counter = 0
-                            conditionalsRange._memory = []
-                            conditionals[num]._conditionalCounter = 0
-                            conditionals[num]._resultCounter = 0
-                            conditionalsRange._timer = 0
-                            break;
-                        elif result_num == 3:
-                            mapping.result(result_num, 'code', piano_range)
-                        elif result_num == 4:
-                            mapping.result(4, 'start')
-                            gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
-                            gomb.start()
-                    else:
-                        mapping.customPass('condition not met', ':(')
-    
-    
-                # reset states:
-                #range_trigger = 0
-                conditionalsRange._memory = []
-                conditionals[num]._conditionalCounter = 0
-                conditionals[num]._resultCounter = 0
-                conditionalsRange._timer = 0
-                t = 0
-    
-            time.sleep(1)
-    
-    def gong_bomb(countdown, debug=False):
-        """
-        function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
-    
-        countdown: the countdown time in seconds
-        """
-        #reset parameter global once it has passed effectively:
-        global param_interval, threads_are_perpetual
-        param_interval= 0
-        conditionals[1]._conditionalStatus = 0
-        conditionals[1]._resultCounter = 0
-        conditionals[1]._conditionalCounter = 0
-    
-        if debug:
-            print('gong bomb thread started', 'countdown: ', countdown)
-    
-        for g in range(0, countdown):
-            countdown -= 1
-            print(BColors.FAIL + str(countdown) + BColors.ENDC)
-    
-            if countdown == 0: #boom ASCII idea by @borrob!
-                threads_are_perpetual = False #stop all perpetual threads
-                #stop all snippets
-                mapping.result(1, 'code')
-                mapping.result(2, 'code')
-                print("")
-                print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
-                print(" |  _ \ / __ \ / __ \|  \/  | |")
-                print(" | |_) | |  | | |  | | \  / | |")
-                print(" |  _ <| |  | | |  | | |\/| | |")
-                print(" | |_) | |__| | |__| | |  | |_|")
-                print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
-                print("")
-                mapping.result(4, 'code')
-    
-            time.sleep(1)
-    
-    
+
     # MAIN Loop to keep listening for midi input
+    #TODO: split this up in smaller functions, so it becomes easier to understand what is going on
     try:
         while threads_are_perpetual:
             msg = codeK.get_message()
@@ -395,11 +193,221 @@ def main(configfile='default_setup.ini'):
     finally:
         codeK.end()
 
+def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, debug=True, perpetual=True):
+    """
+    Calculate the played range within a time window. Perpetual flag makes it run it's loop forever, unless range_trigger is != 1
+    
+    timer: time window loop
+    operator: 'more than' or 'less than'
+    num = conditional number
+    result_num: result number mapped to this conditional
+    piano_range: total range for evvaluation in semitones
+    debug: booelan flag to post debug messages
+    perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
+    """
+
+    global range_trigger, threads_are_perpetual, param_interval
+    conditionals[num]._conditionalStatus = 0 #reset trigger
+    t = 1
+    param_interval = 0
+
+    if debug:
+        print('thread for range started')
+        print("range trig -> ", range_trigger, "result num: ", result_num, "range set to: ", piano_range)
+
+
+    while threads_are_perpetual:
+        if timer == 'random':
+            timer = random.randrange(10,45)
+
+        if debug:
+            print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)
+            #print('Range conditional memory: ', conditionalsRange._memory)
+        conditionalsRange._timer += 1
+        t += 1
+
+        if t % timer == 0:
+            if debug:
+                print("Range conditional thread finished")
+                print("range was: ", conditionalsRange._range)
+            if operator == 'more than':
+                if conditionalsRange._range >= piano_range:
+                    if result_num == 1:
+                        mapping.result(result_num,'code')
+                        mainMem._motif2_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0
+                        break; #stop thread if condition met
+                    elif result_num == 2:
+                        mapping.result(result_num, 'code')
+                        memMid._motif1_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0
+                        break;
+                    elif result_num == 3:
+                        mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
+                    elif result_num == 4:
+                        mapping.result(4, 'start')
+                        gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
+                        gomb.start()
+                else:
+                    mapping.customPass('condition not met', ':(')
+
+            elif operator == 'less than':
+                if conditionalsRange._range <= piano_range:
+                    if result_num == 1:
+                        mapping.result(result_num,'code')
+                        mainMem._motif2_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0
+                        break
+                    elif result_num == 2:
+                        mapping.result(result_num, 'code')
+                        memMid._motif1_counter = 0
+                        conditionalsRange._memory = []
+                        conditionals[num]._conditionalCounter = 0
+                        conditionals[num]._resultCounter = 0
+                        conditionalsRange._timer = 0
+                        break;
+                    elif result_num == 3:
+                        mapping.result(result_num, 'code', piano_range)
+                    elif result_num == 4:
+                        mapping.result(4, 'start')
+                        gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
+                        gomb.start()
+                else:
+                    mapping.customPass('condition not met', ':(')
+
+
+            # reset states:
+            #range_trigger = 0
+            conditionalsRange._memory = []
+            conditionals[num]._conditionalCounter = 0
+            conditionals[num]._resultCounter = 0
+            conditionalsRange._timer = 0
+            t = 0
+
+        time.sleep(1)
+    
+    def gong_bomb(countdown, debug=False):
+        """
+        function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
+    
+        countdown: the countdown time in seconds
+        """
+        #reset parameter global once it has passed effectively:
+        global param_interval, threads_are_perpetual
+        param_interval= 0
+        conditionals[1]._conditionalStatus = 0
+        conditionals[1]._resultCounter = 0
+        conditionals[1]._conditionalCounter = 0
+    
+        if debug:
+            print('gong bomb thread started', 'countdown: ', countdown)
+    
+        for g in range(0, countdown):
+            countdown -= 1
+            print(BColors.FAIL + str(countdown) + BColors.ENDC)
+    
+            if countdown == 0: #boom ASCII idea by @borrob!
+                threads_are_perpetual = False #stop all perpetual threads
+                #stop all snippets
+                mapping.result(1, 'code')
+                mapping.result(2, 'code')
+                print("")
+                print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
+                print(" |  _ \ / __ \ / __ \|  \/  | |")
+                print(" | |_) | |  | | |  | | \  / | |")
+                print(" |  _ <| |  | | |  | | |\/| | |")
+                print(" | |_) | |__| | |__| | |  | |_|")
+                print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
+                print("")
+                mapping.result(4, 'code')
+    
+            time.sleep(1)
+
+def set_parameters(value, conditional_func, debug=False):
+    """
+    function to parse a full range tremolo. This value can be used as a param for the
+    other functions.
+
+    value: the interval of the plated tremolo
+    """
+    global param_interval, range_trigger
+    print('thread started for parameter set')
+
+    if conditional_func == 'amount':
+        mapping.customPass('// more than 100 notes played in the next ', str(value) + ' seconds?')
+    elif conditional_func == 'range':
+        mapping.customPass('// range set to: ', str(value) + ' semitones...')
+    elif conditional_func == 'gomb':
+        mapping.customPass('// GOMB countdown set to: ', str(value))
+
+    if debug:
+        print('value parameter is ', str(value))
+
+    param_interval = value
+    parameters._interval = 0
+    time.sleep(1) # check if the sleep is needed...
+    range_trigger = 1
+
+def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
+    """
+    TODO: define func
+    """
+    print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
+
+    #reset parameter global once it has passed effectively:
+    global param_interval
+    param_interval= 0
+
+    for s in range(0, timer):
+        if notecounter > numberOfnotes:
+            mapping.customPass('//WOW! I played: ', str(notecounter)+'!!!')
+
+            if result_num == 1:
+                mapping.result(result_num, 'code')
+                mainMem._motif2_counter = 0 #reset the motif counter so it can be played again...
+
+            elif result_num == 2: #this is for snippet 1 - change the names accordingly
+                mapping.result(result_num, 'code')
+                memMid._motif1_counter = 0
+
+            elif result_num == 3:
+                mapping.result(result_num, 'code')
+
+            elif result_num == 4:
+                mapping.result(4, 'start')
+                gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
+                gomb.start()
+
+            break
+        else:
+            mapping.customPass('notes played: ', str(notecounter))
+            conditionals[1]._conditionalStatus = 0
+            conditionals[1]._resultCounter = 0
+            conditionals[1]._conditionalCounter = 0
+
+        if debug:
+            print(notecounter)
+        time.sleep(1)
+
 if (__name__ == '__main__'):
     try:
         options, args = getopt.getopt(sys.argv[1:],'hc:m:',['help', 'configfile=', 'makeconfig='])
+        selected_options = [x[0] for x in options]
     except getopt.GetoptError:
         print('Something went wrong with parsing the options')
+    if ('-c' in selected_options or '--configfile' in selected_options) \
+        and ('-m' in selected_options or '--makeconfig' in selected_options):
+        #cannot deal with creating a new one and using a specified config
+        raise ValueError('Chooce either the "configfile-option" or the option to create a configfile. Not both.')
     for o, a in options:
         if o in ('-h', '--help'):
             print('Usage: python3 motippets.py [OPTION]')
@@ -414,13 +422,11 @@ if (__name__ == '__main__'):
             print('  -m <<filename>> | --makeconfig <<filename>>')
             print('    Create a configfile and use it. If <<filename>> already exits, it will be over written.')
             sys.exit(0)
-        if o in ('-c', '--configfile') and o in ('-m', 'makeconfig'):
-            sys.exit(3)
-            print('Chooce either the "configfile-option" or the option to create a configfile. Not both.')
         if o in ('-c', '--configfile'):
+            #use existing configfile
             main(configfile=a)
         if o in ('-m', '--makeconfig'):
-            print('make a new config')
+            #create new configfile and use it
             CK_configWriter.createConfig(configfile=a)
             main(configfile=a)
 
