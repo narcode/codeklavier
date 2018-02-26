@@ -61,7 +61,6 @@ def miditest(configfile='default_setup.ini'):
         print("Bye-Bye :(")
         codeK.end()
 
-
 def perform(configfile='default_setup.ini', piece='hello_world'):
     """
     Do all the dificult work
@@ -71,16 +70,39 @@ def perform(configfile='default_setup.ini', piece='hello_world'):
 
     eval(piece + '.main(configfile=\'' + configfile + '\')')
 
+def perform_interactive(configfile='default_setup.ini'):
+    """
+    Run codeklavier in interactive mode.
+    """
+    while True:
+        print('Welcome to CodeKlavier.')
+        print('Type the name of the piece you want to play, \'test\' for a miditest, or \'exit\' to quit.')
+        print('')
+        print('The available pieces are:')
+        for p in PIECES:
+            print('  - ' + p)
+        print('')
+        pi = input('Your choice? ')
+        if (pi.lower() == 'exit'):
+            sys.exit(0)
+        if (pi.lower() == 'test'):
+            miditest(configfile=configfile)
+        try:
+            perform(configfile=configfile, piece=pi)
+        except ValueError:
+            print('That is not an available piece. Try again or \'exit\'')
+
 if __name__ == '__main__':
 
     showHelp = False
     test = False
+    interactive = False
     useConfig = None
     createConfig = None
     play = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:t',['help', 'configfile=', 'makeconfig=', 'play=', 'test'])
+        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:ti',['help', 'configfile=', 'makeconfig=', 'play=', 'test', 'interactive'])
         selected_options = [x[0] for x in options]
     except getopt.GetoptError:
         print('Something went wrong with parsing the options')
@@ -99,6 +121,8 @@ if __name__ == '__main__':
             play = a
         if o in ('-t', '--test'):
             test = True
+        if o in ('-i', '--interactive'):
+            interactive = True
 
     if showHelp:
         showHelp()
@@ -116,6 +140,10 @@ if __name__ == '__main__':
 
     if play:
         perform(configfile=config, piece=play)
+        sys.exit(0)
+
+    if interactive:
+        perform_interactive(configfile=config)
         sys.exit(0)
 
     sys.exit(0)
