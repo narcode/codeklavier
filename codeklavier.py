@@ -5,10 +5,13 @@ CodeKlavier Masterscript
 This script will help you run the code klavier
 """
 
+import configparser
 import getopt
 import sys
+import time
 
 import CK_configWriter
+from CK_Setup import Setup
 
 from hello_world import hello_world
 from motippets import motippets
@@ -21,25 +24,63 @@ def showHelp():
     """
     print('Hallo')
 
-def perform(config='default_setup.ini', piece='hello_world'):
+def miditest(configfile='default_setup.ini'):
+    """
+    Run a basic miditest to see if everything is working.
+    """
+    #Read config and settings
+    config = configparser.ConfigParser()
+    config.read(configfile)
+    
+    try:
+        myPort = config['midi'].getint('port')
+        device_id = config['midi'].getint('device_id')
+    except KeyError:
+        raise LookupError('Missing key information in the config file.')
+
+    if (myPort == None or device_id == None):
+        raise LookupError('Missing key information in the config file.')
+    
+    codeK = Setup()
+    codeK.open_port(myPort)
+    print('your device id is: ', device_id, '\n')
+    print("CodeKlavier is ON. Press Control-C to exit.")
+    try:
+        while True:
+            msg = codeK.get_message()
+
+            if msg:
+                message, deltatime = msg
+                print('deltatime: ', deltatime, 'msg: ', message)
+
+            time.sleep(0.01)
+
+    except KeyboardInterrupt:
+        print('')
+    finally:
+        print("Bye-Bye :(")
+        codeK.end()
+
+
+def perform(configfile='default_setup.ini', piece='hello_world'):
     """
     Do all the dificult work
     """
     if (piece not in PIECES):
         raise ValueError('This piece doesn\'t exist. Please compose it and retry.')
 
-    eval(piece + '.main(configfile=\'' + config + '\')')
-    sys.exit(0)
+    eval(piece + '.main(configfile=\'' + configfile + '\')')
 
 if __name__ == '__main__':
 
     showHelp = False
+    test = False
     useConfig = None
     createConfig = None
     play = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:',['help', 'configfile=', 'makeconfig=', 'play='])
+        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:t',['help', 'configfile=', 'makeconfig=', 'play=', 'test'])
         selected_options = [x[0] for x in options]
     except getopt.GetoptError:
         print('Something went wrong with parsing the options')
@@ -56,6 +97,8 @@ if __name__ == '__main__':
             createConfig = a
         if o in ('-p', '--play'):
             play = a
+        if o in ('-t', '--test'):
+            test = True
 
     if showHelp:
         showHelp()
@@ -65,11 +108,14 @@ if __name__ == '__main__':
         CK_configWriter=createConfig(configfile=createConfig)
 
     config = useConfig if useConfig else createConfig
-    config = condif if config else 'default_setup.ini'
+    config = config if config else 'default_setup.ini'
+
+    if test:
+        miditest(configfile=config)
+        sys.exit(0)
 
     if play:
-        print(config)
-        print(play)
-        perform(config=config, piece=play)
+        perform(configfile=config, piece=play)
+        sys.exit(0)
 
     sys.exit(0)
