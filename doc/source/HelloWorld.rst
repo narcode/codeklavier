@@ -22,3 +22,30 @@ For the *Leiden Nacht van Kunst en Cultuur* a special version is made, so the vi
 hello_world_nkk
 ---------------
 This is a special version of the CodeKlaver, made specifically for the *Leiden Nacht van Kunst en Cultuur*. It uses a seperate key-mapping that can be found in ``CodeKlavier.Mapping.Mapping_HelloWorld_NKK``.
+
+Hello World python documentation
+--------------------------------
+
+The python scripts in the hello world folder contain documentation.
+
+Hello World
+...........
+
+.. automodule:: hello_world.hello_world
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Hello World NKK
+...............
+.. automodule:: hello_world.hello_world_nkk
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Instructions
+............
+.. automodule:: hello_world.instructions_nkk
+    :members:
+    :undoc-members:
+    :show-inheritance:
