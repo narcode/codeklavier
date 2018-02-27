@@ -1,7 +1,0 @@
-hello\_world\_nkk module
-========================
-
-.. automodule:: hello_world_nkk
-    :members:
-    :undoc-members:
-    :show-inheritance:

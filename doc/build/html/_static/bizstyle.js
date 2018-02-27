@@ -36,6 +36,6 @@ $(window).resize(function(){
         $("li.nav-item-0 a").text("Top");
     }
     else {
-        $("li.nav-item-0 a").text("CodeKlavier 0.1 documentation");
+        $("li.nav-item-0 a").text("CodeKlavier 0.2.1 documentation");
     }
 });
