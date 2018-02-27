@@ -118,6 +118,9 @@ html_sidebars = {
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'CodeKlavierdoc'
 
+html_show_sourcelink = False
+html_copy_source = False
+
 
 # -- Options for LaTeX output ---------------------------------------------
 
