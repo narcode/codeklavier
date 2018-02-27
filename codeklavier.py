@@ -18,15 +18,38 @@ from motippets import motippets
 
 PIECES = ('hello_world', 'motippets')
 
-def showHelp():
+def doHelp():
     """
     Show the help for running this script.
     """
-    print('Hallo')
+    print('This script will help you to run the CodeKlavier.')
+    print('')
+    print('Usage: ./codeklaver.py [OPTION]')
+    print('')
+    print('Where [OPTION] is:')
+    print('-c | --configfile <<configfile>>')
+    print('Start CodeKlavier with the configuration in <<configfile>>. Note: -c and -m options cannot be used together.')
+    print('')
+    print('-h | --help')
+    print('Show this help text.')
+    print('')
+    print('-i | --interactive')
+    print('Start CodeKlavier in an interactive way')
+    print('')
+    print('-m | --makeconfig <<configfile>>')
+    print('Create a new configgile <<configfile>> and use it to start CodeKlavier. Note: -c and -m options cannot be used together.')
+    print('')
+    print('-p | --play <<piece>>')
+    print('Start CodeKlavier and perform piece <<piece>>')
+    print('')
+    print('Example:')
+    print('./codeklavier.py -c default_settings.ini -p hello_world')
 
 def miditest(configfile='default_setup.ini'):
     """
     Run a basic miditest to see if everything is working.
+
+    :param string configfile: Path to the configuration file (default: default_setup.ini)
     """
     #Read config and settings
     config = configparser.ConfigParser()
@@ -63,7 +86,10 @@ def miditest(configfile='default_setup.ini'):
 
 def perform(configfile='default_setup.ini', piece='hello_world'):
     """
-    Do all the dificult work
+    Perform a piece with CodeKlavier
+
+    :param string configfile: Path to the configuration file (default: default_setup.ini)
+    :param string piece: name of the piece to perform
     """
     if (piece not in PIECES):
         raise ValueError('This piece doesn\'t exist. Please compose it and retry.')
@@ -73,6 +99,8 @@ def perform(configfile='default_setup.ini', piece='hello_world'):
 def perform_interactive(configfile='default_setup.ini'):
     """
     Run codeklavier in interactive mode.
+
+    :param string configfile: Path to the configuration file (default: default_setup.ini)
     """
     while True:
         print('Welcome to CodeKlavier.')
@@ -125,7 +153,7 @@ if __name__ == '__main__':
             interactive = True
 
     if showHelp:
-        showHelp()
+        doHelp()
         sys.exit(0)
 
     if createConfig:
