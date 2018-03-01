@@ -2,7 +2,7 @@
 """
 CodeKlavier Masterscript
 
-This script will help you run the code klavier
+This script will help you run the Codeklavier
 """
 
 import configparser
@@ -86,7 +86,7 @@ def miditest(configfile='default_setup.ini'):
 
 def perform(configfile='default_setup.ini', piece='hello_world'):
     """
-    Perform a piece with CodeKlavier
+    Boot a specific prototype of the CodeKlavier
 
     :param string configfile: Path to the configuration file (default: default_setup.ini)
     :param string piece: name of the piece to perform
@@ -98,7 +98,7 @@ def perform(configfile='default_setup.ini', piece='hello_world'):
 
 def perform_interactive(configfile='default_setup.ini'):
     """
-    Run codeklavier in interactive mode.
+    Run Codeklavier in interactive mode.
 
     :param string configfile: Path to the configuration file (default: default_setup.ini)
     """
