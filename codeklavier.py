@@ -157,7 +157,8 @@ if __name__ == '__main__':
         sys.exit(0)
 
     if createConfig:
-        CK_configWriter=createConfig(configfile=createConfig)
+        CK_configWriter.createConfig(configfile=createConfig)
+        print('\nCongratultions! You have created ', createConfig, '\n')
 
     config = useConfig if useConfig else createConfig
     config = config if config else 'default_setup.ini'
