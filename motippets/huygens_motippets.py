@@ -96,7 +96,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
 
     for s in range(0, timer):
         if notecounter > numberOfnotes:
-            mapping.customPass('//WOW! I played: ', str(notecounter)+'!!!')
+            mapping.customPass('// Notes played: ', str(notecounter)+'!!!')
 
             if result_num == 1:
                 mapping.result(result_num, 'code')
@@ -187,7 +187,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                 else:
-                    mapping.customPass('condition not met', ':(')
+                    print('condition not met :(')
 
             elif operator == 'less than':
                 if conditionalsRange._range <= piano_range:
@@ -214,8 +214,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                 else:
-                    mapping.customPass('condition not met', ':(')
-
+                    print('condition not met :(')
 
             # reset states:
             #range_trigger = 0
