@@ -144,7 +144,7 @@ if __name__ == '__main__':
         if o in ('-c', '--configfile'):
             useConfig = a
         if o in ('-m', '--makeconfig'):
-            createConfig = a
+            createConfigFile = a
         if o in ('-p', '--play'):
             play = a
         if o in ('-t', '--test'):
@@ -157,7 +157,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     if createConfig:
-        CK_configWriter=createConfig(configfile=createConfig)
+        CK_configWriter=createConfig(configfile=createConfigFile)
 
     config = useConfig if useConfig else createConfig
     config = config if config else 'default_setup.ini'
