@@ -616,6 +616,7 @@ class Mapping_Motippets:
                 self.enter()
                 self.__keyboard.type("")
                 self.enter()
+            elif text == 'huygens':
                 self.__keyboard.type('~huygens.eind')
                 self.evaluateSC('eval')                 
 
