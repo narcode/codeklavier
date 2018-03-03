@@ -507,10 +507,10 @@ class Mapping_Motippets:
             self.__keyboard.type('// setting up a conditional: IF number of notes played is more than 100 in...')
             self.enter()
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
         elif conditional_num == 3:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
             self.enter()
 
     def result(self, result_num, text, mod=0): #how to make optional params?
