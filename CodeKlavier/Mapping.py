@@ -68,9 +68,9 @@ class Mapping_HelloWorld:
             self.__keyboard.type('t')
         elif midinumber == 47:
             self.__keyboard.type('s')
-        elif midinumber == 37:
+        elif midinumber == 38:
             self.__keyboard.type('a')
-        elif midinumber == 41:
+        elif midinumber == 40:
             self.__keyboard.type('n')
         elif midinumber == 42:
             self.__keyboard.type('i')
