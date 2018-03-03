@@ -109,8 +109,8 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
             elif result_num == 5:
                 mapping.result(result_num, 'code')
 
-            elif result_num == 4:
-                mapping.result(4, 'start')
+            elif result_num == 6:
+                mapping.result(6, 'start')
                 gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
                 gomb.start()
 
@@ -182,8 +182,8 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         break;
                     elif result_num == 5:
                         mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
-                    elif result_num == 4:
-                        mapping.result(4, 'start')
+                    elif result_num == 6:
+                        mapping.result(6, 'start')
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                 else:
@@ -209,8 +209,8 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         break;
                     elif result_num == 5:
                         mapping.result(result_num, 'code', piano_range)
-                    elif result_num == 4:
-                        mapping.result(4, 'start')
+                    elif result_num == 6:
+                        mapping.result(6, 'start')
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                 else:
@@ -252,6 +252,8 @@ def gong_bomb(countdown, debug=False):
             #stop all snippets
             mapping.result(1, 'code')
             mapping.result(2, 'code')
+            mapping.result(6, 'code')
+            time.sleep(1)
             print("")
             print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
             print(" |  _ \ / __ \ / __ \|  \/  | |")
@@ -260,7 +262,6 @@ def gong_bomb(countdown, debug=False):
             print(" | |_) | |__| | |__| | |  | |_|")
             print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
             print("")
-            mapping.result(4, 'code')
 
         time.sleep(1)
 

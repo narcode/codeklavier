@@ -265,15 +265,15 @@ class Motippets(object):
                                                                             note, 1, True)
 
                                 if result3_played and self._resultCounter == 0:
-                                    self.mapscheme.result(3, 'comment')
+                                    self.mapscheme.result(5, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 3
+                                    self._conditionalStatus = 5
                                 elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'comment')
+                                    self.mapscheme.result(6, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 4
+                                    self._conditionalStatus = 6
 
                                 return self._conditionalStatus
 
@@ -340,15 +340,15 @@ class Motippets(object):
                                                                             note, 1, True)
 
                                 if result3_played and self._resultCounter == 0:
-                                    self.mapscheme.result(3, 'comment')
+                                    self.mapscheme.result(5, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 3
+                                    self._conditionalStatus = 5
                                 elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'comment')
+                                    self.mapscheme.result(6, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 4
+                                    self._conditionalStatus = 6
 
                                 return self._conditionalStatus
 
@@ -425,22 +425,22 @@ class Motippets(object):
                             if self._conditionalCounter > 0:
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_3'),
-                                                                            note, 0, False)
+                                                                            note, 0, True)
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, True)
 
                                 if result3_played and self._resultCounter == 0:
-                                    self.mapscheme.result(3, 'comment')
+                                    self.mapscheme.result(5, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 3
+                                    self._conditionalStatus = 5
                                 elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'comment')
+                                    self.mapscheme.result(6, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
-                                    self._conditionalStatus = 4
+                                    self._conditionalStatus = 6
 
                                 return self._conditionalStatus
 
