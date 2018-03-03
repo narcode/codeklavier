@@ -16,6 +16,7 @@ def createConfig(configfile='my_settings.ini'):
     codeK = Setup()
     codeK.show_ports()
     myPort = codeK.get_port_from_user()
+    codeK.open_port(myPort)
     device_id = codeK.get_device_id()
 
     config = configparser.ConfigParser()
