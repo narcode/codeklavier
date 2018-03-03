@@ -581,6 +581,17 @@ class Mapping_Motippets:
                 self.__keyboard.type("")
                 self.enter()
 
+            elif result_num == 5:
+                if text == 'comment':
+                    self.__keyboard.type('// if true -> play Huygens snippet')
+                    self.enter()
+                elif text == 'code':
+                    self.__keyboard.type('Ndef(\huyg, {FreeVerb.ar(4*PlayBuf.ar(2, b, startPos: BufFrames.kr(b)*('+ str(mod) +'/90)).sum*EnvGen.kr(Env.perc), 0.5, 0.95)}).play([0,1].choose,1);')
+                    self.evaluateSC('eval')
+                elif text == 'less than':
+                    self.__keyboard.type('Ndef(\huyg, {FreeVerb.ar(4*PlayBuf.ar(2, b, startPos: BufFrames.kr(b)*('+ str(mod) +'/90)).sum*EnvGen.kr(Env.perc), 0.5, 0.95)}).play([0,1].choose,1);');
+                    self.evaluateSC('eval')
+
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
         self.enter()
