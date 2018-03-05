@@ -124,7 +124,7 @@ class Motippets(object):
                             # see if motif_1 is played:
                             motif1_played = self.compare_chordal_motif(
                                                     self._memory, Motifs.get('motif_1'),
-                                                    note, False)
+                                                    note, debug=False)
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
                                 self._motif1_counter = 1
@@ -232,7 +232,7 @@ class Motippets(object):
                         # check if motif_2 is played:
                         motif2_played = self.compare_chordal_motif(
                                             self._memory, Motifs.get('motif_2'), note,
-                                            True)
+                                            debug=True)
                         if motif2_played:
                             if self._motif2_counter == 0:
                                 self.mapscheme.snippets(2)
@@ -248,7 +248,7 @@ class Motippets(object):
                                 conditional2_played = self.compare_chordal_motif(
                                                     self._memory,
                                                     Motifs.get('conditional_1'),
-                                                    note, False)
+                                                    note, debug=False)
 
                                 if conditional2_played:
                                     self.mapscheme.conditional(1)
@@ -258,11 +258,11 @@ class Motippets(object):
                             if self._conditionalCounter > 0:
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                         Motifs.get('conditional_result_3'),
-                                                                        note, 0, True)
+                                                                        note, 0, False)
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
-                                                                            note, 1, True)
+                                                                            note, 1, False)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(5, 'comment')
@@ -323,7 +323,7 @@ class Motippets(object):
                                 conditional_played = self.compare_motif(
                                     self._memory,'conditional 2',
                                     Motifs.get('conditional_2'),
-                                    note, True)
+                                    note, False)
 
                                 if conditional_played:
                                     self.mapscheme.conditional(2)
@@ -333,11 +333,11 @@ class Motippets(object):
                             if self._conditionalCounter > 0:
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_3'),
-                                                                            note, 0, True)
+                                                                            note, 0, False)
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
-                                                                            note, 1, True)
+                                                                            note, 1, False)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(5, 'comment')
@@ -397,7 +397,7 @@ class Motippets(object):
                                 conditional_played = self.compare_motif(
                                     self._memory,'conditional 3',
                                     Motifs.get('conditional_3'),
-                                    note, True)
+                                    note, False)
 
                                 if conditional_played:
                                     self.mapscheme.conditional(3)
@@ -425,11 +425,11 @@ class Motippets(object):
                             if self._conditionalCounter > 0:
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_3'),
-                                                                            note, 0, True)
+                                                                            note, 0, False)
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
-                                                                            note, 1, True)
+                                                                            note, 1, False)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(5, 'comment')
