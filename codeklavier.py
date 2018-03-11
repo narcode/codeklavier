@@ -54,7 +54,7 @@ def miditest(configfile='default_setup.ini'):
     #Read config and settings
     config = configparser.ConfigParser()
     config.read(configfile)
-    
+
     try:
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('device_id')
@@ -63,7 +63,7 @@ def miditest(configfile='default_setup.ini'):
 
     if (myPort == None or device_id == None):
         raise LookupError('Missing key information in the config file.')
-    
+
     codeK = Setup()
     codeK.open_port(myPort)
     print('your device id is: ', device_id, '\n')
@@ -104,7 +104,7 @@ def perform_interactive(configfile='default_setup.ini'):
     """
     while True:
         print('Welcome to CodeKlavier.')
-        print('Type the name of the piece you want to play, \'test\' for a miditest, or \'exit\' to quit.')
+        print('Type the number of the prototype you want to use, \'test\' for a miditest, or \'exit\' to quit.')
         print('')
         print('The available pieces are:')
         for p in PIECES:
