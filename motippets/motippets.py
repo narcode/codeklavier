@@ -295,14 +295,14 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
         time.sleep(1)
     
-    def gong_bomb(countdown, debug=False):
+    def gong_bomb(countdown, debug=False, mapping=mapping):
         """
         function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
     
         countdown: the countdown time in seconds
         """
         #reset parameter global once it has passed effectively:
-        global param_interval, threads_are_perpetual, mapping
+        global param_interval, threads_are_perpetual
         param_interval= 0
         conditionals[1]._conditionalStatus = 0
         conditionals[1]._resultCounter = 0
