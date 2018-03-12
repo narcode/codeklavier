@@ -17,7 +17,7 @@ def main(configfile='default_setup.ini'):
 
     :param string configfile: The configurationfile to use. Defaults to default_setup.ini
     """
-    global mapping
+    global mapping, parameters, conditionalsRange, conditionals, param_interval, threads_are_perpetual
     #Read config and settings
     config = configparser.ConfigParser()
     config.read(configfile)
