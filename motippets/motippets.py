@@ -17,7 +17,7 @@ def main(configfile='default_setup.ini'):
 
     :param string configfile: The configurationfile to use. Defaults to default_setup.ini
     """
-
+    global mapping
     #Read config and settings
     config = configparser.ConfigParser()
     config.read(configfile)
@@ -295,14 +295,14 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
         time.sleep(1)
     
-    def gong_bomb(countdown, debug=False, mapping=mapping):
+    def gong_bomb(countdown, debug=False):
         """
         function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
     
         countdown: the countdown time in seconds
         """
         #reset parameter global once it has passed effectively:
-        global param_interval, threads_are_perpetual
+        global param_interval, threads_are_perpetual, mapping
         param_interval= 0
         conditionals[1]._conditionalStatus = 0
         conditionals[1]._resultCounter = 0
