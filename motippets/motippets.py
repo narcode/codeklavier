@@ -206,7 +206,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
     :param bool perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
     """
 
-    global range_trigger, threads_are_perpetual, param_interval
+    global range_trigger, threads_are_perpetual, param_interval, mapping
     conditionals[num]._conditionalStatus = 0 #reset trigger
     t = 1
     param_interval = 0
@@ -302,7 +302,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
         countdown: the countdown time in seconds
         """
         #reset parameter global once it has passed effectively:
-        global param_interval, threads_are_perpetual
+        global param_interval, threads_are_perpetual, mapping
         param_interval= 0
         conditionals[1]._conditionalStatus = 0
         conditionals[1]._resultCounter = 0
@@ -341,7 +341,7 @@ def set_parameters(value, conditional_func, debug=False):
     :param conditional_func: todo
     :param bool debug: run in debug mode
     """
-    global param_interval, range_trigger
+    global param_interval, range_trigger, mapping
     print('thread started for parameter set')
 
     if conditional_func == 'amount':
@@ -371,7 +371,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
     print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
 
     #reset parameter global once it has passed effectively:
-    global param_interval
+    global param_interval, mapping
     param_interval= 0
 
     for s in range(0, timer):
