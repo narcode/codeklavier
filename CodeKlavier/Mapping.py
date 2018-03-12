@@ -290,7 +290,7 @@ class Mapping_Motippets:
         
         #Read config and settings
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        config.read(configfile)
+        config.read('default_setup.ini')
         
         try:
             self.__snippet1 = config['snippets'].get('snippet1')
