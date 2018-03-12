@@ -130,7 +130,7 @@ def main():
             
             ck_display[str(x)] = tkinter.Text(f[str(x)], height=6, width=50)
             ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
-            ck_display[display].tag_config('var', foreground='white')
+            #ck_display[display].tag_config('var', foreground='white')
             
             if x ==1:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
