@@ -287,6 +287,43 @@ class Mapping_Motippets:
     """
     def __init__(self):
         print("Using the Motippets mapping")
+        
+        #Read config and settings
+        config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        config.read(configfile)
+        
+        try:
+            self.__snippet1 = config['snippets'].get('snippet1')
+            self.__snippet2 = config['snippets'].get('snippet2')
+           
+            self.__mini_snippet_hi_1 = config['snippets'].get('mini_snippet_hi_1')
+            self.__mini_unmap_hi_2 = config['snippets'].get('mini_unmap_hi_2')
+           
+            self.__mini_snippet_hi_2 = config['snippets'].get('mini_snippet_hi_2')
+            self.__mini_unmap_hi_1 = config['snippets'].get('mini_unmap_hi_1')           
+           
+            self.__mini_snippet_mid_1 = config['snippets'].get('mini_snippet_mid_1')
+            self.__mini_unmap_mid_2 = config['snippets'].get('mini_unmap_mid_2')
+            
+            self.__mini_snippet_mid_2 = config['snippets'].get('mini_snippet_mid_2')
+            self.__mini_snippet_mid_2b = config['snippets'].get('mini_snippet_mid_2') # check?
+            self.__mini_unmap_mid_1 = config['snippets'].get('mini_unmap_mid_1')            
+            
+            self.__mini_snippet_low_1 = config['snippets'].get('mini_snippet_low_1')
+            self.__mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')            
+            self.__mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1') 
+            self.__mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2') 
+            self.__mini_unmap_low_3 = config['snippets'].get('mini_unmap_low_3')
+            
+            self.__mini_snippet_low_2 = config['snippets'].get('mini_snippet_low_2')
+            self.__mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')            
+            self.__mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1') 
+            self.__mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2') 
+            self.__mini_unmap_low_3 = config['snippets'].get('mini_unmap_low_3')             
+            
+        except KeyError:
+            raise LookupError('Missing snippets in the config file.')
+        
         self.__keyboard = Controller()
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -392,49 +429,13 @@ class Mapping_Motippets:
         :param str configfile: the name of the config file to parse
         """
 
-        #Read config and settings
-        config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        config.read(configfile)
-        
-        try:
-            snippet1 = config['snippets'].get('snippet1')
-            snippet2 = config['snippets'].get('snippet2')
-           
-            mini_snippet_hi_1 = config['snippets'].get('mini_snippet_hi_1')
-            mini_unmap_hi_2 = config['snippets'].get('mini_unmap_hi_2')
-           
-            mini_snippet_hi_2 = config['snippets'].get('mini_snippet_hi_2')
-            mini_unmap_hi_1 = config['snippets'].get('mini_unmap_hi_1')           
-           
-            mini_snippet_mid_1 = config['snippets'].get('mini_snippet_mid_1')
-            mini_unmap_mid_2 = config['snippets'].get('mini_unmap_mid_2')
-            
-            mini_snippet_mid_2 = config['snippets'].get('mini_snippet_mid_2')
-            mini_snippet_mid_2b = config['snippets'].get('mini_snippet_mid_2') # check?
-            mini_unmap_mid_1 = config['snippets'].get('mini_unmap_mid_1')            
-            
-            mini_snippet_low_1 = config['snippets'].get('mini_snippet_low_1')
-            mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')            
-            mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1') 
-            mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2') 
-            mini_unmap_low_3 = config['snippets'].get('mini_unmap_low_3')
-            
-            mini_snippet_low_2 = config['snippets'].get('mini_snippet_low_2')
-            mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')            
-            mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1') 
-            mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2') 
-            mini_unmap_low_3 = config['snippets'].get('mini_unmap_low_3')             
-            
-        except KeyError:
-            raise LookupError('Missing snippets in the config file.')
-
         if num == 1:
-            self.__keyboard.type(snippet1)
-            self.formatAndSend(snippet1, display=1)
+            self.__keyboard.type(self.__snippet1)
+            self.formatAndSend(self.__snippet1, display=1)
             self.evaluateSC('eval')
         elif num == 2:
-            self.__keyboard.type(snippet2)
-            self.formatAndSend(snippet2, display=2)
+            self.__keyboard.type(self.__snippet2)
+            self.formatAndSend(self.__snippet2, display=2)
             self.evaluateSC('eval')
 
     def miniSnippets(self, snippet_num, pianosection):
@@ -446,118 +447,118 @@ class Mapping_Motippets:
         :param string pianosections: the pianosection that is used ('hi', 'mid', 'low')
         """
         if snippet_num == 1 and pianosection == 'hi':
-            self.__keyboard.type(mini_snippet_hi_1)
+            self.__keyboard.type(self.__mini_snippet_hi_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_hi_1, display=snippet_num)
+            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num)
         if snippet_num == 1 and pianosection == 'hi with unmap':
-            self.__keyboard.type(mini_snippet_hi_1)
+            self.__keyboard.type(self.__mini_snippet_hi_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_hi_1, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num)            
             #unmap other motif
-            self.__keyboard.type(mini_unmap_hi_2)
+            self.__keyboard.type(self.__mini_unmap_hi_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_hi_2, display=snippet_num)            
+            self.formatAndSend(self.__mini_unmap_hi_2, display=snippet_num)            
         if snippet_num == 1 and pianosection == 'mid':
-            self.__keyboard.type(mini_snippet_mid_1)
+            self.__keyboard.type(self.__mini_snippet_mid_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_mid_1, display=snippet_num)                        
+            self.formatAndSend(self.__mini_snippet_mid_1, display=snippet_num)                        
         if snippet_num == 1 and pianosection == 'mid with unmap':
-            self.__keyboard.type(mini_snippet_mid_1)
+            self.__keyboard.type(self.__mini_snippet_mid_1)
             self.evaluateSC('eval')
             #unmap
-            self.__keyboard.type(mini_unmap_mid_2)
+            self.__keyboard.type(self.__mini_unmap_mid_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_mid_2, display=snippet_num)                        
+            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num)                        
             
             ## LOW SECTION
         if snippet_num == 1 and pianosection == 'low':
-            self.__keyboard.type(mini_snippet_low_1)
+            self.__keyboard.type(self.__mini_snippet_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_1, display=snippet_num)                                    
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                    
         if snippet_num == 1 and pianosection == 'low amp':
-            self.__keyboard.type(mini_snippet_low_1_amp)
+            self.__keyboard.type(self.__mini_snippet_low_1_amp)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_1_amp, display=snippet_num)                                                
+            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num)                                                
         if snippet_num == 1 and pianosection == 'low with unmap 2':
-            self.__keyboard.type(mini_snippet_low_1)
+            self.__keyboard.type(self.__mini_snippet_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_1, display=snippet_num)                                                
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                                
             #unmap 2:
-            self.__keyboard.type(mini_unmap_low_2)
+            self.__keyboard.type(self.__mini_unmap_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_low_2, display=snippet_num)                                                
+            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num)                                                
         if snippet_num == 1 and pianosection == 'low with unmap 3':
-            self.__keyboard.type(mini_snippet_low_1)
+            self.__keyboard.type(self.__mini_snippet_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_1, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                                            
             #unmap 3:
-            self.__keyboard.type(mini_unmap_low_3)
+            self.__keyboard.type(self.__mini_unmap_low_3)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_low_3, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num)                                                            
         if snippet_num == 1 and pianosection == 'low amp with unmap 1':
-            self.__keyboard.type(mini_snippet_low_1_amp)
+            self.__keyboard.type(self.__mini_snippet_low_1_amp)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_1_amp, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num)                                                            
             #unmap 1:
-            self.__keyboard.type(mini_unmap_low_1)
+            self.__keyboard.type(self.__mini_unmap_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_low_1, display=snippet_num)                                                                        
+            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num)                                                                        
         if snippet_num == 1 and pianosection == 'low amp with unmap 2':
-            self.__keyboard.type(mini_snippet_low_1_amp)
+            self.__keyboard.type(self.__mini_snippet_low_1_amp)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_1, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                                            
             #unmap 2:
-            self.__keyboard.type(mini_unmap_low_2)
+            self.__keyboard.type(self.__mini_unmap_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_low_2, display=snippet_num)                                                                                    
+            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num)                                                                                    
 
         # for snippet 2:
         if snippet_num == 2 and pianosection == 'hi':
-            self.__keyboard.type(mini_snippet_hi_2)
+            self.__keyboard.type(self.__mini_snippet_hi_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_hi_2, display=snippet_num)                                                                        
+            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num)                                                                        
         if snippet_num == 2 and pianosection == 'hi with unmap':
-            self.__keyboard.type(mini_snippet_hi_2)
+            self.__keyboard.type(self.__mini_snippet_hi_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_hi_2, display=snippet_num)
+            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num)
             #unmap other motif
-            self.__keyboard.type(mini_unmap_hi_1)
+            self.__keyboard.type(self.__mini_unmap_hi_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_hi_1, display=snippet_num)
+            self.formatAndSend(self.__mini_unmap_hi_1, display=snippet_num)
         if snippet_num == 2 and pianosection == 'mid':
-            self.__keyboard.type(mini_snippet_mid_2)
+            self.__keyboard.type(self.__mini_snippet_mid_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_mid_2, display=snippet_num)
+            self.formatAndSend(self.__mini_snippet_mid_2, display=snippet_num)
         if snippet_num == 2 and pianosection == 'mid with unmap':
-            self.__keyboard.type(mini_snippet_mid_2b)
+            self.__keyboard.type(self.__mini_snippet_mid_2b)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_mid_2b, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_mid_2b, display=snippet_num)            
             #unmap
-            self.__keyboard.type(mini_unmap_mid_1)
+            self.__keyboard.type(self.__mini_unmap_mid_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_mid_1, display=snippet_num)            
+            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num)            
 
             ## LOW SECTION
         if snippet_num == 2 and pianosection == 'low':
-            self.__keyboard.type(mini_snippet_low_2)
+            self.__keyboard.type(self.__mini_snippet_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_2, display=snippet_num)
+            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num)
         if snippet_num == 2 and pianosection == 'low with unmap 1':
-            self.__keyboard.type(mini_snippet_low_2)
+            self.__keyboard.type(self.__mini_snippet_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_2, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num)            
             #unmap 1:
-            self.__keyboard.type(mini_unmap_low_1)
+            self.__keyboard.type(self.__mini_unmap_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_low_1, display=snippet_num)            
+            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num)            
         if snippet_num == 2 and pianosection == 'low with unmap 3':
-            self.__keyboard.type(mini_snippet_low_2)
+            self.__keyboard.type(self.__mini_snippet_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_snippet_low_2, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num)            
             #unmap 3:
-            self.__keyboard.type(mini_unmap_low_3)
+            self.__keyboard.type(self.__mini_unmap_low_3)
             self.evaluateSC('eval')
-            self.formatAndSend(mini_unmap_low_3, display=snippet_num)
+            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num)
 
 
     def tremolo(self, pianoregister, value):
