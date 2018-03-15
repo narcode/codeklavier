@@ -238,7 +238,9 @@ class Motippets(object):
                                 self.mapscheme.snippets(2)
                                 self._motif2_counter = 1
 
-                    ### CONDITIONALS
+                    ### CONDITIONALS SECTION
+
+                    #### CONDITIONAL 1
                     elif section == 'conditional 1':
 
                         if note <= self._pianosections[0]: ### low section
@@ -348,6 +350,10 @@ class Motippets(object):
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, True)
 
+                                result5_played = self.compare_motif(self._memory,
+                                                                            Motifs.get('conditional_result_5'),
+                                                                            note, True)
+
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
                                     self._conditionalsBuffer = []
@@ -358,6 +364,11 @@ class Motippets(object):
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
                                     self._conditionalStatus = 4
+                                elif result5_played and self._resultCounter == 0:
+                                    self.mapscheme.result(5, 'comment')
+                                    self._conditionalsBuffer = []
+                                    self._resultCounter += 1
+                                    self._conditionalStatus = 5
 
                                 return self._conditionalStatus
 
@@ -440,6 +451,10 @@ class Motippets(object):
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, True)
 
+                                result5_played = self.compare_motif(self._memory,
+                                                                            Motifs.get('conditional_result_5'),
+                                                                            note, True)
+
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
                                     self._conditionalsBuffer = []
@@ -450,6 +465,11 @@ class Motippets(object):
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
                                     self._conditionalStatus = 4
+                                elif result5_played and self._resultCounter == 0:
+                                    self.mapscheme.result(5, 'comment')
+                                    self._conditionalsBuffer = []
+                                    self._resultCounter += 1
+                                    self._conditionalStatus = 5
 
                                 return self._conditionalStatus
 

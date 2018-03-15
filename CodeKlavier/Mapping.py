@@ -668,34 +668,69 @@ class Mapping_Motippets:
                                    'SinOsc.ar([(334'+ str(mod) +')*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*'\
                                    'Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play', display=3)
 
+
         elif result_num == 4:
             if text == 'comment':
-                self.__keyboard.type('GOMB! //is activating...');
+                self.__keyboard.type('HUYGENS! //is activating...')
                 self.evaluateSC('eval')
-                self.formatAndSend('GOMB! //is activating...', display=3)
+                self.formatAndSend('HUYGENS', display=1)
+                self.formatAndSend('IS', display=2)
+                self.formatAndSend('ACTIVATING...', display=3)
             elif text == 'start':
-                self.__keyboard.type('// GOMB countdown started!');
+                self.__keyboard.type('// HUYGENS countdown started!')
                 self.evaluateSC('eval')
-                self.formatAndSend('GOMB! //is activating...', display=3)
+                self.formatAndSend('HUYGENS', display=1)
+                self.formatAndSend('COUNTDOWN', display=2)
+                self.formatAndSend('STARTED!', display=3)
             elif text == 'code':
-                self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
-                self.evaluateSC('eval')
                 self.__keyboard.type("")
                 self.enter()
                 self.__keyboard.type("  ____   ____   ____  __  __ _ ")
                 self.enter()
+                self.formatAndSend("  ____   ____   ____  __  __ _ ", display=1)
+                self.formatAndSend("  ____   ____   ____  __  __ _ ", display=2)
+                self.formatAndSend("  ____   ____   ____  __  __ _ ", display=3)
                 self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
                 self.enter()
+                self.formatAndSend(" |  _ \ / __ \ / __ \|  \/  | |", display=1)
+                self.formatAndSend(" |  _ \ / __ \ / __ \|  \/  | |", display=2)
+                self.formatAndSend(" |  _ \ / __ \ / __ \|  \/  | |", display=3)
                 self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
                 self.enter()
+                self.formatAndSend(" | |_) | |  | | |  | | \  / | |", display=1)
+                self.formatAndSend(" | |_) | |  | | |  | | \  / | |", display=2)
+                self.formatAndSend(" | |_) | |  | | |  | | \  / | |", display=3)
                 self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
                 self.enter()
+                self.formatAndSend(" |  _ <| |  | | |  | | |\/| | |", display=1)
+                self.formatAndSend(" |  _ <| |  | | |  | | |\/| | |", display=2)
+                self.formatAndSend(" |  _ <| |  | | |  | | |\/| | |", display=3)
                 self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
                 self.enter()
-                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯")
+                self.formatAndSend(" | |_) | |__| | |__| | |  | |_|", display=1)
+                self.formatAndSend(" | |_) | |__| | |__| | |  | |_|", display=2)
+                self.formatAndSend(" | |_) | |__| | |__| | |  | |_|", display=3)
+                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  THE END ¯\('…')/¯ ")
                 self.enter()
+                self.formatAndSend(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  THE END ¯\('…')/¯ ", display=1)
+                self.formatAndSend(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  THE END ¯\('…')/¯ ", display=2)
+                self.formatAndSend(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  THE END ¯\('…')/¯ ", display=3)
                 self.__keyboard.type("")
                 self.enter()
+            elif text == 'huygens':
+                self.__keyboard.type('~huygens.eind')
+                self.evaluateSC('eval')
+
+        elif result_num == 5:
+            if text == 'comment':
+                self.__keyboard.type('// if true -> play Huyg')
+                self.enter()
+            elif text == 'code':
+                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                self.evaluateSC('eval')
+            elif text == 'less than':
+                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                self.evaluateSC('eval')
 
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
