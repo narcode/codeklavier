@@ -266,9 +266,9 @@ class Motippets(object):
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, False)
 
-                                result5_played = self.compare_motif(self._memory,
-                                                                            Motifs.get('conditional_result_5'),
-                                                                            note, True)
+                                result5_played = self.compare_motif(self._memory, 'result 5',
+                                                                    Motifs.get('conditional_result_5'),
+                                                                    note, False)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
@@ -350,9 +350,9 @@ class Motippets(object):
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, True)
 
-                                result5_played = self.compare_motif(self._memory,
-                                                                            Motifs.get('conditional_result_5'),
-                                                                            note, True)
+                                result5_played = self.compare_motif(self._memory, 'result 5',
+                                                                    Motifs.get('conditional_result_5'),
+                                                                    note, False)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
@@ -451,9 +451,9 @@ class Motippets(object):
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, True)
 
-                                result5_played = self.compare_motif(self._memory,
-                                                                            Motifs.get('conditional_result_5'),
-                                                                            note, True)
+                                result5_played = self.compare_motif(self._memory, 'result 5',
+                                                                    Motifs.get('conditional_result_5'),
+                                                                    note, False)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
@@ -681,7 +681,29 @@ class Motippets(object):
 
                 if debug:
                     print('played ->' + str(self._results3),
-                          '\nmotif 2 ->' + str(motif),
+                          '\nmotif 3 ->' + str(motif),
+                          '\ncomparison: ' + str(compare))
+
+            return compare
+
+        elif motiftype == 'result 5': #TODO: optimize with a Dictionary
+            if note in motif:
+                self._results5.append(note)
+            else:
+                self._results5 = []
+                return False #@narcode: is this correct?
+
+            if len(self._results5) >= len(motif):
+                self._results5 = self._results5[-len(motif):]
+                if self._results5 == motif:
+                    compare = True
+                        #self._unmapCounter3 += 1 #?
+                else:
+                    compare = False
+
+                if debug:
+                    print('played ->' + str(self._results3),
+                          '\nmotif 5 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
 
             return compare
