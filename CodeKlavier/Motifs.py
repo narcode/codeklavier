@@ -7,7 +7,7 @@ Way more efficient than an unjustified class.
 
 motifs = {}
 
-# Motifs Anne
+# Motifs by Anne Veinberg
 motifs_anne = {}
 motifs_anne['motif_1'] = [59, 62, 66, 60, 64, 67, 62, 69, 66]
 motifs_anne['motif_2'] = [70, 51, 62, 60, 44, 63, 66, 62, 55, 49]
@@ -25,4 +25,4 @@ motifs_anne['conditional_result_1'] = [60, 62, 66, 70, 69, 67]
 motifs_anne['conditional_result_2'] = [99, 92, 90, 89, 92, 94]
 motifs_anne['conditional_result_3'] = [21,22,23]
 motifs_anne['conditional_result_4'] = [23,24,25]
-
+motifs_anne['conditional_result_5'] = [26,23,23]

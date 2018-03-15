@@ -11,7 +11,7 @@ class Motippets(object):
 
     def __init__(self, mapping, noteonid):
         """The method to initialise the class and prepare the class variables.
-        
+
         TODO: post-ICLC experiment how to nest arrays so as to not hvae to init so many empty arrays!
         --> Perhaps change to a dict?
         """
@@ -178,7 +178,7 @@ class Motippets(object):
                                   self._unmapCounter1 > 0):
                                 self.mapscheme.miniSnippets(2, 'hi with unmap')
 
-                    ### TEMOLO
+                    ### TREMOLO
                     elif section == 'tremoloHi':
                         if note > self._pianosections[1]:
                             self.memorize(note, 4, False, 'Tremolo Hi: ')
@@ -238,10 +238,10 @@ class Motippets(object):
                                 self.mapscheme.snippets(2)
                                 self._motif2_counter = 1
 
-                    ### CONDITONALS
+                    ### CONDITIONALS
                     elif section == 'conditional 1':
 
-                        if note <= self._pianosections[0]:
+                        if note <= self._pianosections[0]: ### low section
                             self.memorize(note, 12, False, 'Conditional Memory: ')
 
                             if self._conditionalCounter == 0:
@@ -258,11 +258,15 @@ class Motippets(object):
                             if self._conditionalCounter > 0:
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                         Motifs.get('conditional_result_3'),
-                                                                        note, 0, True)
+                                                                        note, 0, False)
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
-                                                                            note, 1, True)
+                                                                            note, 1, False)
+
+                                result5_played = self.compare_motif(self._memory,
+                                                                            Motifs.get('conditional_result_5'),
+                                                                            note, True)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
@@ -274,11 +278,16 @@ class Motippets(object):
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
                                     self._conditionalStatus = 4
+                                elif result5_played and self._resultCounter == 0:
+                                    self.mapscheme.result(5, 'comment')
+                                    self._conditionalsBuffer = []
+                                    self._resultCounter += 1
+                                    self._conditionalStatus = 5
 
                                 return self._conditionalStatus
 
 
-                        if note > self._pianosections[1]:
+                        if note > self._pianosections[1]: ### hi register
                             self.memorize(note, 20, False, 'Conditional Memory High: ')
 
                             result2_played = self.compare_motif(self._memory, 'result 2',
@@ -484,7 +493,7 @@ class Motippets(object):
 
         if len(self._memory) > length:
             self._memory = self._memory[-length:]
-        
+
         if debug == True:
             print(debugname + ','.join(map(str, self._memory)))
             if conditional == "on":
@@ -559,45 +568,45 @@ class Motippets(object):
                     self._unmapCounter3 = 0
                 else:
                     compare = False
-                    
+
                 if debug:
                     print('played ->' + str(self._miniMotifs2),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-                
+
                 return compare
-            
+
         elif motiftype == 'mini3':
             if note in motif:
                 self._miniMotifs3.append(note)
             else:
                 self._miniMotifs3 = []
                 return False #@narcode: is this correct?
-            
+
             if len(self._miniMotifs3) >= len(motif):
                 self._miniMotifs3 = self._miniMotifs3[-len(motif):]
                 if self._miniMotifs3 == motif:
                     compare = True
                     self._unmapCounter3 += 1
                     self._unmapCounter1 = 0
-                    self._unmapCounter2 = 0                        
+                    self._unmapCounter2 = 0
                 else:
                     compare = False
-                            
+
                 if debug:
                     print('played ->' + str(self._miniMotifs3),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-                        
-                return compare            
-            
+
+                return compare
+
         elif motiftype == 'result 1':
             if note in motif:
                 self._results1.append(note)
             else:
                 self._results1 = []
                 return False #@narcode: is this correct?
-                
+
             if len(self._results1) >= len(motif):
                 self._results1 = self._results1[-len(motif):]
                 if self._results1 == motif:
@@ -605,21 +614,21 @@ class Motippets(object):
                     self._unmapCounter2 += 1
                 else:
                     compare = False
-                    
+
                 if debug:
                     print('played ->' + str(self._results1),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-                
-                return compare 
-            
+
+                return compare
+
         elif motiftype == 'result 2':
             if note in motif:
                 self._results2.append(note)
             else:
                 self._results2 = []
                 return False #@narcode: is this correct?
-                
+
             if len(self._results2) >= len(motif):
                 self._results2 = self._results2[-len(motif):]
                 if self._results2 == motif:
@@ -627,21 +636,21 @@ class Motippets(object):
                     self._unmapCounter2 += 1
                 else:
                     compare = False
-                    
+
                 if debug:
                     print('played ->' + str(self._results2),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-                
-                return compare   
-            
+
+                return compare
+
         elif motiftype == 'result 3': #TODO: optimize with a Dictionary
             if note in motif:
                 self._results3.append(note)
             else:
                 self._results3 = []
                 return False #@narcode: is this correct?
-            
+
             if len(self._results3) >= len(motif):
                 self._results3 = self._results3[-len(motif):]
                 if self._results3 == motif:
@@ -649,14 +658,14 @@ class Motippets(object):
                         #self._unmapCounter3 += 1 #?
                 else:
                     compare = False
-                        
+
                 if debug:
                     print('played ->' + str(self._results3),
                           '\nmotif 2 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
-                    
-            return compare            
-            
+
+            return compare
+
         else:
             if note in motif:
                 self._mainMotifs.append(note)
@@ -741,7 +750,7 @@ class Motippets(object):
     def tremolo_value(self, notes, pianosection, deltatime,
                      deltatolerance, target, debug=False):
         """Get the interval of a given tremolo.
-        
+
         TODO: this should only return the interval integer and on another place define what to do with it!
         TODO: describe input params
         """

@@ -287,43 +287,43 @@ class Mapping_Motippets:
     """
     def __init__(self):
         print("Using the Motippets mapping")
-        
+
         #Read config and settings
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read('default_setup.ini')
-        
+
         try:
             self.__snippet1 = config['snippets'].get('snippet1')
             self.__snippet2 = config['snippets'].get('snippet2')
-           
+
             self.__mini_snippet_hi_1 = config['snippets'].get('mini_snippet_hi_1')
             self.__mini_unmap_hi_2 = config['snippets'].get('mini_unmap_hi_2')
-           
+
             self.__mini_snippet_hi_2 = config['snippets'].get('mini_snippet_hi_2')
-            self.__mini_unmap_hi_1 = config['snippets'].get('mini_unmap_hi_1')           
-           
+            self.__mini_unmap_hi_1 = config['snippets'].get('mini_unmap_hi_1')
+
             self.__mini_snippet_mid_1 = config['snippets'].get('mini_snippet_mid_1')
             self.__mini_unmap_mid_2 = config['snippets'].get('mini_unmap_mid_2')
-            
+
             self.__mini_snippet_mid_2 = config['snippets'].get('mini_snippet_mid_2')
             self.__mini_snippet_mid_2b = config['snippets'].get('mini_snippet_mid_2') # check?
-            self.__mini_unmap_mid_1 = config['snippets'].get('mini_unmap_mid_1')            
-            
+            self.__mini_unmap_mid_1 = config['snippets'].get('mini_unmap_mid_1')
+
             self.__mini_snippet_low_1 = config['snippets'].get('mini_snippet_low_1')
-            self.__mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')            
-            self.__mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1') 
-            self.__mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2') 
+            self.__mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')
+            self.__mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1')
+            self.__mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2')
             self.__mini_unmap_low_3 = config['snippets'].get('mini_unmap_low_3')
-            
+
             self.__mini_snippet_low_2 = config['snippets'].get('mini_snippet_low_2')
-            self.__mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')            
-            self.__mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1') 
-            self.__mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2') 
-            self.__mini_unmap_low_3 = config['snippets'].get('mini_unmap_low_3')             
-            
+            self.__mini_snippet_low_1_amp = config['snippets'].get('mini_snippet_low_1_amp')
+            self.__mini_unmap_low_1 = config['snippets'].get('mini_unmap_low_1')
+            self.__mini_unmap_low_2 = config['snippets'].get('mini_unmap_low_2')
+            self.__mini_unmap_low_3 = config['snippets'].get('mini_unmap_low_3')
+
         except KeyError:
             raise LookupError('Missing snippets in the config file.')
-        
+
         self.__keyboard = Controller()
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -407,19 +407,19 @@ class Mapping_Motippets:
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1):
         """format and prepare a string for sending it over UDP socket
 
-        :param str msg: the string to be sent       
+        :param str msg: the string to be sent
         :param str encoding: the character encoding
         :param str host: the UDP server hostname
         :param int display: the UDP destination port
         """
-        
+
         if display == 1:
             port = 1111
         elif display == 2:
             port = 2222
         elif display == 3:
             port = 3333
-        
+
         return self.__socket.sendto(bytes('\n'+msg, encoding), (host, port))
 
     def snippets(self, num, configfile='default_setup.ini'):
@@ -453,70 +453,70 @@ class Mapping_Motippets:
         if snippet_num == 1 and pianosection == 'hi with unmap':
             self.__keyboard.type(self.__mini_snippet_hi_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num)
             #unmap other motif
             self.__keyboard.type(self.__mini_unmap_hi_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_hi_2, display=snippet_num)            
+            self.formatAndSend(self.__mini_unmap_hi_2, display=snippet_num)
         if snippet_num == 1 and pianosection == 'mid':
             self.__keyboard.type(self.__mini_snippet_mid_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_mid_1, display=snippet_num)                        
+            self.formatAndSend(self.__mini_snippet_mid_1, display=snippet_num)
         if snippet_num == 1 and pianosection == 'mid with unmap':
             self.__keyboard.type(self.__mini_snippet_mid_1)
             self.evaluateSC('eval')
             #unmap
             self.__keyboard.type(self.__mini_unmap_mid_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num)                        
-            
+            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num)
+
             ## LOW SECTION
         if snippet_num == 1 and pianosection == 'low':
             self.__keyboard.type(self.__mini_snippet_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                    
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)
         if snippet_num == 1 and pianosection == 'low amp':
             self.__keyboard.type(self.__mini_snippet_low_1_amp)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num)                                                
+            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num)
         if snippet_num == 1 and pianosection == 'low with unmap 2':
             self.__keyboard.type(self.__mini_snippet_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                                
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)
             #unmap 2:
             self.__keyboard.type(self.__mini_unmap_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num)                                                
+            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num)
         if snippet_num == 1 and pianosection == 'low with unmap 3':
             self.__keyboard.type(self.__mini_snippet_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)
             #unmap 3:
             self.__keyboard.type(self.__mini_unmap_low_3)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num)
         if snippet_num == 1 and pianosection == 'low amp with unmap 1':
             self.__keyboard.type(self.__mini_snippet_low_1_amp)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num)
             #unmap 1:
             self.__keyboard.type(self.__mini_unmap_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num)                                                                        
+            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num)
         if snippet_num == 1 and pianosection == 'low amp with unmap 2':
             self.__keyboard.type(self.__mini_snippet_low_1_amp)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)                                                            
+            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num)
             #unmap 2:
             self.__keyboard.type(self.__mini_unmap_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num)                                                                                    
+            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num)
 
         # for snippet 2:
         if snippet_num == 2 and pianosection == 'hi':
             self.__keyboard.type(self.__mini_snippet_hi_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num)                                                                        
+            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num)
         if snippet_num == 2 and pianosection == 'hi with unmap':
             self.__keyboard.type(self.__mini_snippet_hi_2)
             self.evaluateSC('eval')
@@ -532,11 +532,11 @@ class Mapping_Motippets:
         if snippet_num == 2 and pianosection == 'mid with unmap':
             self.__keyboard.type(self.__mini_snippet_mid_2b)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_mid_2b, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_mid_2b, display=snippet_num)
             #unmap
             self.__keyboard.type(self.__mini_unmap_mid_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num)            
+            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num)
 
             ## LOW SECTION
         if snippet_num == 2 and pianosection == 'low':
@@ -546,15 +546,15 @@ class Mapping_Motippets:
         if snippet_num == 2 and pianosection == 'low with unmap 1':
             self.__keyboard.type(self.__mini_snippet_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num)
             #unmap 1:
             self.__keyboard.type(self.__mini_unmap_low_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num)            
+            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num)
         if snippet_num == 2 and pianosection == 'low with unmap 3':
             self.__keyboard.type(self.__mini_snippet_low_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num)            
+            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num)
             #unmap 3:
             self.__keyboard.type(self.__mini_unmap_low_3)
             self.evaluateSC('eval')
@@ -608,11 +608,11 @@ class Mapping_Motippets:
         elif conditional_num == 2:
             self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
             self.enter()
-            self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3)                        
+            self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3)
         elif conditional_num == 3:
             self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
-            self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3)                        
+            self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3)
 
     def result(self, result_num, text, mod=0): #how to make optional params?
         """TOOD: document function
@@ -626,21 +626,21 @@ class Mapping_Motippets:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet2')
                 self.enter()
-                self.formatAndSend('if true -> stop ~snippet2', display=3)                                        
+                self.formatAndSend('if true -> stop ~snippet2', display=3)
             elif text == 'code':
                 self.__keyboard.type('~snippet2.stop;')
                 self.evaluateSC('eval')
-                self.formatAndSend('~snippet2.stop;', display=3)                                                        
+                self.formatAndSend('~snippet2.stop;', display=3)
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval')
-                self.formatAndSend('if false -> Nothing happens BUUUUU!', display=3)                                                                        
+                self.formatAndSend('if false -> Nothing happens BUUUUU!', display=3)
 
         elif result_num == 2:
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet1')
                 self.enter()
-                self.formatAndSend('if true -> stop ~snippet1', display=3)              
+                self.formatAndSend('if true -> stop ~snippet1', display=3)
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop;')
                 self.evaluateSC('eval')
@@ -676,7 +676,7 @@ class Mapping_Motippets:
             elif text == 'start':
                 self.__keyboard.type('// GOMB countdown started!');
                 self.evaluateSC('eval')
-                self.formatAndSend('GOMB! //is activating...', display=3)                
+                self.formatAndSend('GOMB! //is activating...', display=3)
             elif text == 'code':
                 self.__keyboard.type('KAGOOOOOM!!! // sound coming soon...');
                 self.evaluateSC('eval')
@@ -701,4 +701,3 @@ class Mapping_Motippets:
         self.__keyboard.type(name + " " + content)
         self.enter()
         self.formatAndSend(name + " " + content, display=3)
-        
