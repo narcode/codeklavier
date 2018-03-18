@@ -15,8 +15,9 @@ from CK_Setup import Setup
 
 from hello_world import hello_world
 from motippets import motippets
+from hybrid import hybrid
 
-PIECES = ('hello_world', 'motippets')
+PIECES = ('hello_world', 'motippets', 'hybrid')
 
 def doHelp():
     """
@@ -94,7 +95,7 @@ def perform(configfile='default_setup.ini', piece='hello_world'):
     if (piece not in PIECES):
         raise ValueError('This piece doesn\'t exist. Please compose it and retry.')
 
-    eval(piece + '.main(configfile=\'' + configfile + '\')')
+    eval(piece + '.main()')
 
 def perform_interactive(configfile='default_setup.ini'):
     """

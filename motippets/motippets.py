@@ -17,7 +17,7 @@ def main(configfile='default_setup.ini'):
 
     :param string configfile: The configurationfile to use. Defaults to default_setup.ini
     """
-    global mapping, parameters, conditionalsRange, conditionals, param_interval, threads_are_perpetual, range_trigger
+    global mapping, parameters, conditionalsRange, conditionals, param_interval, threads_are_perpetual, range_trigger, notecounter
     #Read config and settings
     config = configparser.ConfigParser()
     config.read(configfile)
@@ -193,6 +193,44 @@ def main(configfile='default_setup.ini'):
     finally:
         codeK.end()
 
+def gong_bomb(countdown, debug=False):
+    """
+    function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
+
+    countdown: the countdown time in seconds
+    """
+    #reset parameter global once it has passed effectively:
+    global param_interval, threads_are_perpetual, mapping
+    param_interval= 0
+    conditionals[1]._conditionalStatus = 0
+    conditionals[1]._resultCounter = 0
+    conditionals[1]._conditionalCounter = 0
+
+    if debug:
+        print('gong bomb thread started', 'countdown: ', countdown)
+
+    for g in range(0, countdown):
+        countdown -= 1
+        print(BColors.FAIL + str(countdown) + BColors.ENDC)
+
+        if countdown == 0: #boom ASCII idea by @borrob!
+            threads_are_perpetual = False #stop all perpetual threads
+            #stop all snippets
+            mapping.result(1, 'code')
+            mapping.result(2, 'code')
+            print("")
+            print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
+            print(" |  _ \ / __ \ / __ \|  \/  | |")
+            print(" | |_) | |  | | |  | | \  / | |")
+            print(" |  _ <| |  | | |  | | |\/| | |")
+            print(" | |_) | |__| | |__| | |  | |_|")
+            print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
+            print("")
+            mapping.result(4, 'code')
+
+        time.sleep(1)
+
+
 def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, debug=True, perpetual=True):
     """
     Calculate the played range within a time window. Perpetual flag makes it run it's loop forever, unless range_trigger is != 1
@@ -299,42 +337,6 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
         time.sleep(1)
 
-    def gong_bomb(countdown, debug=False):
-        """
-        function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
-
-        countdown: the countdown time in seconds
-        """
-        #reset parameter global once it has passed effectively:
-        global param_interval, threads_are_perpetual, mapping
-        param_interval= 0
-        conditionals[1]._conditionalStatus = 0
-        conditionals[1]._resultCounter = 0
-        conditionals[1]._conditionalCounter = 0
-
-        if debug:
-            print('gong bomb thread started', 'countdown: ', countdown)
-
-        for g in range(0, countdown):
-            countdown -= 1
-            print(BColors.FAIL + str(countdown) + BColors.ENDC)
-
-            if countdown == 0: #boom ASCII idea by @borrob!
-                threads_are_perpetual = False #stop all perpetual threads
-                #stop all snippets
-                mapping.result(1, 'code')
-                mapping.result(2, 'code')
-                print("")
-                print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
-                print(" |  _ \ / __ \ / __ \|  \/  | |")
-                print(" | |_) | |  | | |  | | \  / | |")
-                print(" |  _ <| |  | | |  | | |\/| | |")
-                print(" | |_) | |__| | |__| | |  | |_|")
-                print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
-                print("")
-                mapping.result(4, 'code')
-
-            time.sleep(1)
 
 def set_parameters(value, conditional_func, debug=False):
     """
@@ -375,7 +377,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
     print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
 
     #reset parameter global once it has passed effectively:
-    global param_interval, mapping
+    global param_interval, mapping, notecounter
     param_interval= 0
 
     for s in range(0, timer):

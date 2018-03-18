@@ -26,6 +26,7 @@ class Motippets(object):
         self._results1 = []
         self._results2 = []
         self._results3 = []
+        self._results5 = []
         self._pianosections = [47, 78, 108]
         self._motif1_counter = 0
         self._motif2_counter = 0
@@ -268,7 +269,7 @@ class Motippets(object):
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
-                                                                    note, False)
+                                                                    note, True)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
@@ -328,7 +329,7 @@ class Motippets(object):
                     elif section == 'conditional 2':
 
                         if note <= self._pianosections[0]:
-                            self.memorize(note, 20, False, 'Conditional 2 Memory: ') ## or 999 mem length?
+                            self.memorize(note, 20, True, 'Conditional 2 Memory: ') ## or 999 mem length?
 
                             if self._conditionalCounter == 0:
                                 conditional_played = self.compare_motif(
@@ -352,7 +353,7 @@ class Motippets(object):
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
-                                                                    note, False)
+                                                                    note, True)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
@@ -453,7 +454,7 @@ class Motippets(object):
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
-                                                                    note, False)
+                                                                    note, True)
 
                                 if result3_played and self._resultCounter == 0:
                                     self.mapscheme.result(3, 'comment')
@@ -684,11 +685,12 @@ class Motippets(object):
                           '\nmotif 3 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
 
-            return compare
+                return compare
 
         elif motiftype == 'result 5': #TODO: optimize with a Dictionary
             if note in motif:
                 self._results5.append(note)
+                print('result 5', str(self._results5))
             else:
                 self._results5 = []
                 return False #@narcode: is this correct?
@@ -702,11 +704,11 @@ class Motippets(object):
                     compare = False
 
                 if debug:
-                    print('played ->' + str(self._results3),
+                    print('played ->' + str(self._results5),
                           '\nmotif 5 ->' + str(motif),
                           '\ncomparison: ' + str(compare))
 
-            return compare
+                return compare
 
         else:
             if note in motif:
