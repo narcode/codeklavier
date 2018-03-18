@@ -48,6 +48,24 @@ class Mapping_HelloWorld:
             self.__keyboard.type('.')
             self.__keyboard.release(Key.cmd)
 
+    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1):
+        """format and prepare a string for sending it over UDP socket
+
+        :param str msg: the string to be sent
+        :param str encoding: the character encoding
+        :param str host: the UDP server hostname
+        :param int display: the UDP destination port
+        """
+
+        if display == 1:
+            port = 1111
+        elif display == 2:
+            port = 2222
+        elif display == 3:
+            port = 3333
+
+        return self.__socket.sendto(bytes('\n'+msg, encoding), (host, port))
+
     def mapping(self, midinumber):
         """Type a letter that is coupled to this midi note.
 
