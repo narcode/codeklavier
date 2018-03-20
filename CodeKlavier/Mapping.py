@@ -724,17 +724,13 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> play gong sound!', display=3)
             elif text == 'code':
-                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([(1234+' + str(mod) + ' )*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), 150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play')
+                self.__keyboard.type('~gong.play(' + str(mod) + ' )')
                 self.evaluateSC('eval')
-                self.formatAndSend('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+'\
-                                   'SinOsc.ar([(1234+' + str(mod) + ' )*LFTri.kr(0.1.rrand(18)).range(0.98, 1.02), '\
-                                   '150, 299, 544*Line.kr(1, 2, 6), 1789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play', display=3)
+                self.formatAndSend('~gong.play(' + str(mod) + ' )', display=3)
             elif text == 'less than':
-                self.__keyboard.type('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+SinOsc.ar([(334'+ str(mod) +')*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play');
+                self.__keyboard.type('~gong.play(' + str(mod) + ' )');
                 self.evaluateSC('eval')
-                self.formatAndSend('Ndef(\gong, {FreeVerb.ar(Splay.ar(WhiteNoise.ar(Impulse.kr(0.2))+'\
-                                   'SinOsc.ar([(334'+ str(mod) +')*LFTri.kr(0.1.rrand(18)).range(0.98, 1.1), 150, 299, 344*'\
-                                   'Line.kr(2, 1, 3), 789]))*EnvGen.kr(Env.perc), 0.5, 0.95)}).play', display=3)
+                self.formatAndSend('~gong.play(' + str(mod) + ' )', display=3)
 
 
         elif result_num == 4:
