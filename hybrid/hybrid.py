@@ -226,7 +226,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
                 gomb.start()
 
             elif result_num == 5:
-                mapping.result(result_num, 'code', piano_range)
+                mapping.result(result_num, 'code', notecounter*random.uniform(-2, 10))
 
             break
         else:
@@ -313,7 +313,7 @@ def main():
                                                             
                                 threads_are_perpetual = False
                                 hello_world_on = True
-                                noteCounter = 0  
+                                notecounter = 0  
                                 
                                 threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
                                 threads['toggle_h'].start()
@@ -467,7 +467,7 @@ def ck_loop(prototype='hello world'):
     
                                         hello_world_on = False
                                         threads_are_perpetual = True
-                                        noteCounter = 0
+                                        notecounter = 0
                                         
                                         threads['toggle_m'] = Thread(target=ck_loop, name='ck loop thread', args=('motippets',)) 
                                         threads['toggle_m'].start()
@@ -503,7 +503,7 @@ def ck_loop(prototype='hello world'):
     
                                     threads_are_perpetual = False
                                     hello_world_on = True
-                                    noteCounter = 0
+                                    notecounter = 0
                                     
                                     threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
                                     threads['toggle_h'].start()
