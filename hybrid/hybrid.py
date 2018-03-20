@@ -284,7 +284,7 @@ def main():
     """
     global mapping, parameters, conditionalsRange, conditionals, \
            param_interval, threads_are_perpetual, range_trigger, \
-           notecounter, hello_world_on
+           notecounter, hello_world_on, noteCounter
 
     codeK = Setup()
     codeK.open_port(myPort)
