@@ -16,18 +16,23 @@ display1 = 1111
 display2 = 2222
 display3 = 3333
 
-class Mapping_HelloWorld:
+class Mapping_HelloWorld():
     """Mapping for the Hello World prototype.
+    
+    :param use_display boolean: set if code should be printed in UDP display
     """
 
-    def __init__(self):
+    def __init__(self, use_display=False):
         """Init the class
 
         Print that the user is using this mapping and set the controller.
         """
         print("Using the Hello World mapping")
-        self.__keyboard = Controller()
-        self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
+        self.use_display = use_display
+        
+        if use_display:
+            self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 
     def evaluateSC(self):
@@ -66,7 +71,10 @@ class Mapping_HelloWorld:
         elif display == 3:
             port = 3333
 
-        return self.__socket.sendto(bytes(msg, encoding), (host, port))
+        if self.use_display:
+            return self.__socket.sendto(bytes(msg, encoding), (host, port))
+        else:
+            return 
 
     def mapping(self, midinumber):
         """Type a letter that is coupled to this midi note.
