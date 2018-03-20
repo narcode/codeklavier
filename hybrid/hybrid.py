@@ -120,8 +120,8 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         gomb.start()
                     elif result_num == 5:
                         mapping.result(result_num, 'code', piano_range)
-                else:
-                    mapping.customPass('condition not met', ':(')
+                #else:
+                    #mapping.customPass('condition not met', ':(')
 
             elif operator == 'less than':
                 if conditionalsRange._range <= piano_range:
@@ -149,12 +149,11 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         gomb.start()
                     elif result_num == 5:
                         mapping.result(result_num, 'code', piano_range)
-                else:
-                    mapping.customPass('condition not met', ':(')
+                #else:
+                    #mapping.customPass('condition not met', ':(')
 
 
             # reset states:
-            #range_trigger = 0
             conditionalsRange._memory = []
             conditionals[num]._conditionalCounter = 0
             conditionals[num]._resultCounter = 0
@@ -263,6 +262,7 @@ def gong_bomb(countdown, debug=False):
         if countdown == 0: #boom ASCII idea by @borrob!
             threads_are_perpetual = False #stop all perpetual threads
             #stop all snippets
+            mapping.result(4, 'huygens')                        
             mapping.result(1, 'code')
             mapping.result(2, 'code')
             print("")
