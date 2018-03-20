@@ -438,7 +438,7 @@ def ck_loop(prototype='hello world'):
     """
     global mapping, parameters, conditionalsRange, conditionals, \
            param_interval, threads_are_perpetual, range_trigger, \
-           notecounter, hello_world_on
+           notecounter, hello_world_on, noteCounter
     
     codeK_thread = Setup()
     codeK_thread.open_port(myPort)
