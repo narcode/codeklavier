@@ -64,7 +64,7 @@ def main():
         # Gui window
         root = tkinter.Tk()
         root.title('CK PARALLEL CODING DISPLAY')
-        root.attributes('-topmost', True)
+        root.attributes('-topmost', False)
         root.geometry("1920x900")
         root.config(background='black')
         
