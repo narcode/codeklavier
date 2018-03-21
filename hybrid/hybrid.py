@@ -177,11 +177,11 @@ def set_parameters(value, conditional_func, debug=False):
     print('thread started for parameter set')
 
     if conditional_func == 'amount':
-        mapping.customPass('// more than 100 notes played in the next ', str(value) + ' seconds?')
+        mapping.customPass('more than 100 notes played in the next ', str(value) + ' seconds?')
     elif conditional_func == 'range':
-        mapping.customPass('// range set to: ', str(value) + ' semitones...')
+        mapping.customPass('range set to: ', str(value) + ' semitones...')
     elif conditional_func == 'gomb':
-        mapping.customPass('// GOMB countdown set to: ', str(value))
+        mapping.customPass('GOMB countdown set to: ', str(value))
 
     if debug:
         print('value parameter is ', str(value))
@@ -208,7 +208,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
 
     for s in range(0, timer):
         if notecounter > numberOfnotes:
-            mapping.customPass('//WOW! I played: ', str(notecounter)+'!!!')
+            mapping.customPass('Total notes played: ', str(notecounter)+'!!!')
 
             if result_num == 1:
                 mapping.result(result_num, 'code')

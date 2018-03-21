@@ -789,7 +789,7 @@ class Mapping_Motippets:
                 self.__keyboard.type("")
                 self.enter()
             elif text == 'huygens':
-                self.__keyboard.type('~huygens.eind;')
+                self.__keyboard.type('~huygens.end;')
                 self.evaluateSC('eval')
 
         elif result_num == 5:
