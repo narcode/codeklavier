@@ -72,6 +72,8 @@ class Mapping_HelloWorld():
             port = 2222
         elif display == 3:
             port = 3333
+        elif display == 4:
+            port = 4444        
 
         if self.use_display:
             return self.__socket.sendto(bytes(msg, encoding), (host, port))
