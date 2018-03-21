@@ -165,13 +165,15 @@ def main():
             
             ck_display[str(x)] = tkinter.Text(f[str(x)], height=6, width=50)
             ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            
+            # syntax colors
             ck_display[str(x)].tag_config('title', foreground='cyan')
             ck_display[str(x)].tag_config('snippets', foreground='white')
             ck_display[str(x)].tag_config('low', foreground='#b3649d')
             ck_display[str(x)].tag_config('mid', foreground='#6477b3')
             ck_display[str(x)].tag_config('hi', foreground='#67b371')
             ck_display[str(x)].tag_config('primitive', foreground='#ebb18a')
-            ck_display[str(x)].tag_config('comment', foreground='#fbf88a')
+            ck_display[str(x)].tag_config('comment', foreground='#a3a3a3')
             ck_display[str(x)].tag_config('loop', foreground='cyan')            
             
             if x ==1:
