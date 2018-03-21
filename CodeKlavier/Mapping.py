@@ -15,6 +15,7 @@ import configparser
 display1 = 1111
 display2 = 2222
 display3 = 3333
+display4 = 4444
 
 class Mapping_HelloWorld():
     """Mapping for the Hello World prototype.
@@ -783,7 +784,7 @@ class Mapping_Motippets:
                 self.__keyboard.type("")
                 self.enter()
             elif text == 'huygens':
-                self.__keyboard.type('~huygens.eind')
+                self.__keyboard.type('~huygens.eind;')
                 self.evaluateSC('eval')
 
         elif result_num == 5:
@@ -803,4 +804,4 @@ class Mapping_Motippets:
         self.formatAndSend(name + " " + content, display=3)
         
     def onlyDisplay(self, content):
-        self.formatAndSend(content, display=3)
+        self.formatAndSend(content, display=4)
