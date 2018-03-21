@@ -489,6 +489,8 @@ class Mapping_Motippets:
             port = 2222
         elif display == 3:
             port = 3333
+        elif display == 4:
+            port = 4444        
 
         return self.__socket.sendto(bytes('\n'+msg, encoding), (host, port))
 
