@@ -811,5 +811,8 @@ class Mapping_Motippets:
         self.enter()
         self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
-    def onlyDisplay(self, content):
-        self.formatAndSend(content, display=4, syntax_color='loop:')
+    def onlyDisplay(self, content, warning=False):
+        if warning:
+            self.formatAndSend(content, display=4, syntax_color='warning:')
+        else:
+            self.formatAndSend(content, display=4, syntax_color='loop:')
