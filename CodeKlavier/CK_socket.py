@@ -12,6 +12,7 @@ TODO: Classify this
 import socket
 import getopt
 import sys
+import re
 
 # Gui
 from threading import Thread
@@ -156,7 +157,7 @@ def main():
         for x in range(1, int(display)+1):
             
             s[str(x)].bind(('localhost', x*1111))
-            
+                        
             f[str(x)] = tkinter.Frame(root, height=s_height, width=s_width/4) 
             f[str(x)].pack(fill=tkinter.Y, side=tkinter.LEFT)
             f[str(x)].pack_propagate(0) 
@@ -164,20 +165,26 @@ def main():
             
             ck_display[str(x)] = tkinter.Text(f[str(x)], height=6, width=50)
             ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
-            #ck_display[display].tag_config('var', foreground='white')
+            ck_display[str(x)].tag_config('title', foreground='cyan')
+            ck_display[str(x)].tag_config('snippets', foreground='white')
+            ck_display[str(x)].tag_config('low', foreground='#b3649d')
+            ck_display[str(x)].tag_config('mid', foreground='#6477b3')
+            ck_display[str(x)].tag_config('hi', foreground='#67b371')
+            ck_display[str(x)].tag_config('primitive', foreground='#ebb18a')
+            ck_display[str(x)].tag_config('loop', foreground='#fbf88a')
             
             if x ==1:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n")
+                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
             elif x == 2:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n")
+                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
             elif x == 3:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n")
+                ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n", 'title')
             elif x == 4:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "loops \n")            
+                ck_display[str(x)].insert(tkinter.END, "loops \n", 'title')            
             
             
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))        
@@ -229,6 +236,8 @@ def displayCode(display):
     Funtion to listen for incoming UDP stream.
     Handeld by parallel thread
     
+    :param display string: the display target (1-4)
+    :param syntax_color string: the tag to use for coloring the syntax (snippet, mid, hi, low, primitive, loops)
     """
     global ck_display
     
@@ -238,36 +247,45 @@ def displayCode(display):
                 data, addr = s[display].recvfrom(1024)
                 #print(str(data, 'utf-8'))
                 dump = str(data, 'utf-8')
+                tagmatch = re.match('.*:', dump)
+                tag = tagmatch.group(0)[0:-1]
+                ckcode = re.sub(''+tag+':', '', dump)
                 try:
-                    ck_display[display].insert(tkinter.END, dump)
-                    ck_display[display].see(tkinter.END)
+                    ck_display[display].insert(tkinter.END, ckcode, tag)
+                    ck_display[display].see(tkinter.END)                       
                 except RuntimeError as err:
                     break
             elif display == '2':
                 data, addr = s[display].recvfrom(1024)
-                #print(str(data, 'utf-8'))
                 dump = str(data, 'utf-8')
+                tagmatch = re.match('.*:', dump)
+                tag = tagmatch.group(0)[0:-1]                
+                ckcode = re.sub(''+tag+':', '', dump)                
                 try:
-                    ck_display[display].insert(tkinter.END, dump)
-                    ck_display[display].see(tkinter.END)
+                    ck_display[display].insert(tkinter.END, ckcode, tag)
+                    ck_display[display].see(tkinter.END)                                            
                 except RuntimeError as err:
                     break      
             elif display == '3':
                 data, addr = s[display].recvfrom(1024)
-                #print(str(data, 'utf-8'))
                 dump = str(data, 'utf-8')
+                tagmatch = re.match('.*:', dump)
+                tag = tagmatch.group(0)[0:-1]  
+                ckcode = re.sub(''+tag+':', '', dump)                
                 try:
-                    ck_display[display].insert(tkinter.END, dump)
-                    ck_display[display].see(tkinter.END)
+                    ck_display[display].insert(tkinter.END, ckcode, tag)
+                    ck_display[display].see(tkinter.END)                                             
                 except RuntimeError as err:
                     break   
             elif display == '4':
                 data, addr = s[display].recvfrom(1024)
-                #print(str(data, 'utf-8'))
                 dump = str(data, 'utf-8')
+                tagmatch = re.match('.*:', dump)
+                tag = tagmatch.group(0)[0:-1]      
+                ckcode = re.sub(''+tag+':', '', dump)                
                 try:
-                    ck_display[display].insert(tkinter.END, dump)
-                    ck_display[display].see(tkinter.END)
+                    ck_display[display].insert(tkinter.END, ckcode, tag)
+                    ck_display[display].see(tkinter.END)                                           
                 except RuntimeError as err:
                     break             
         except OSError as err:
