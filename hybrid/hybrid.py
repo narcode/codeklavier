@@ -259,7 +259,7 @@ def gong_bomb(countdown, debug=False):
     for g in range(0, countdown):
         countdown -= 1
         print(BColors.FAIL + str(countdown) + BColors.ENDC)
-        mapping.onlyDisplay(str(countdown))
+        mapping.onlyDisplay(str(countdown), True)
 
         if countdown == 0: #boom ASCII idea by @borrob!
             threads_are_perpetual = False #stop all perpetual threads

@@ -175,6 +175,8 @@ def main():
             ck_display[str(x)].tag_config('primitive', foreground='#ebb18a')
             ck_display[str(x)].tag_config('comment', foreground='#a3a3a3')
             ck_display[str(x)].tag_config('loop', foreground='cyan')            
+            ck_display[str(x)].tag_config('warning', foreground='red')            
+            
             
             if x ==1:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
