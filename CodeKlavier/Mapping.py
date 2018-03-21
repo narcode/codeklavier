@@ -809,7 +809,7 @@ class Mapping_Motippets:
     def customPass(self, name, content):
         self.__keyboard.type(name + " " + content)
         self.enter()
-        self.formatAndSend(name + " " + content, display=3, syntax_color='loop:')
+        self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
     def onlyDisplay(self, content):
         self.formatAndSend(content, display=4, syntax_color='loop:')
