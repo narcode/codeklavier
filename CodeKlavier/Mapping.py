@@ -801,3 +801,6 @@ class Mapping_Motippets:
         self.__keyboard.type(name + " " + content)
         self.enter()
         self.formatAndSend(name + " " + content, display=3)
+        
+    def onlyDisplay(self, content):
+        self.formatAndSend(content, display=3)
