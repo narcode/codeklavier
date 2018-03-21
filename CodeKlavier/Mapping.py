@@ -29,6 +29,7 @@ class Mapping_HelloWorld():
         """
         print("Using the Hello World mapping")
         
+        self.__keyboard = Controller()
         self.use_display = use_display
         
         if use_display:
