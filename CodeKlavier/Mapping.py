@@ -725,13 +725,13 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> play gong sound!', display=3)
             elif text == 'code':
-                self.__keyboard.type('~gong.play(' + str(mod) + ' )')
+                self.__keyboard.type('~gong.play(' + str(mod) + ');')
                 self.evaluateSC('eval')
-                self.formatAndSend('~gong.play(' + str(mod) + ' )', display=3)
+                self.formatAndSend('~gong.play(' + str(mod) + ');', display=3)
             elif text == 'less than':
-                self.__keyboard.type('~gong.play(' + str(mod) + ' )');
+                self.__keyboard.type('~gong.play(' + str(mod) + ');');
                 self.evaluateSC('eval')
-                self.formatAndSend('~gong.play(' + str(mod) + ' )', display=3)
+                self.formatAndSend('~gong.play(' + str(mod) + ');', display=3)
 
 
         elif result_num == 4:

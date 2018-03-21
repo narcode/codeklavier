@@ -218,7 +218,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
                 memMid._motif1_counter = 0
 
             elif result_num == 3:
-                mapping.result(result_num, 'code')
+                mapping.result(result_num, 'code', round(notecounter*random.uniform(-2, 10)))
 
             elif result_num == 4:
                 mapping.result(4, 'start')
