@@ -19,7 +19,7 @@ display4 = 4444
 
 class Mapping_HelloWorld():
     """Mapping for the Hello World prototype.
-    
+
     :param use_display boolean: set if code should be printed in UDP display
     """
 
@@ -29,10 +29,10 @@ class Mapping_HelloWorld():
         Print that the user is using this mapping and set the controller.
         """
         print("Using the Hello World mapping")
-        
+
         self.__keyboard = Controller()
         self.use_display = use_display
-        
+
         if use_display:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -73,12 +73,12 @@ class Mapping_HelloWorld():
         elif display == 3:
             port = 3333
         elif display == 4:
-            port = 4444        
+            port = 4444
 
         if self.use_display:
             return self.__socket.sendto(bytes(msg, encoding), (host, port))
         else:
-            return 
+            return
 
     def mapping(self, midinumber):
         """Type a letter that is coupled to this midi note.
@@ -116,10 +116,10 @@ class Mapping_HelloWorld():
         elif midinumber == 47:
             self.__keyboard.type('s')
             self.formatAndSend('s', display=2)
-        elif midinumber == 37:
+        elif midinumber == 38:
             self.__keyboard.type('a')
             self.formatAndSend('a', display=2)
-        elif midinumber == 41:
+        elif midinumber == 40:
             self.__keyboard.type('n')
             self.formatAndSend('n', display=2)
         elif midinumber == 42:
@@ -492,7 +492,7 @@ class Mapping_Motippets:
         elif display == 3:
             port = 3333
         elif display == 4:
-            port = 4444        
+            port = 4444
 
         return self.__socket.sendto(bytes('\n'+msg, encoding), (host, port))
 
@@ -806,6 +806,6 @@ class Mapping_Motippets:
         self.__keyboard.type(name + " " + content)
         self.enter()
         self.formatAndSend(name + " " + content, display=3)
-        
+
     def onlyDisplay(self, content):
         self.formatAndSend(content, display=4)
