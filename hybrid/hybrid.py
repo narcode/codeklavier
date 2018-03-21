@@ -226,7 +226,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
                 gomb.start()
 
             elif result_num == 5:
-                mapping.result(result_num, 'code', notecounter*random.uniform(-2, 10))
+                mapping.result(result_num, 'code', round(notecounter*random.uniform(-2, 10)))
 
             break
         else:
