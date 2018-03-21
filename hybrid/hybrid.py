@@ -86,6 +86,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
         if debug:
             print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)
+            mapping.customPass('cond: ' + str(num) + ' res: ' + str(result_num) + ' countdown: ' + str(timer - t) + '')
             #print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
         t += 1
@@ -258,6 +259,7 @@ def gong_bomb(countdown, debug=False):
     for g in range(0, countdown):
         countdown -= 1
         print(BColors.FAIL + str(countdown) + BColors.ENDC)
+        mapping.customPass('', str(countdown))
 
         if countdown == 0: #boom ASCII idea by @borrob!
             threads_are_perpetual = False #stop all perpetual threads
