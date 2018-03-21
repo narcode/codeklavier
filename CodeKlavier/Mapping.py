@@ -116,10 +116,10 @@ class Mapping_HelloWorld():
         elif midinumber == 47:
             self.__keyboard.type('s')
             self.formatAndSend('s', display=2)
-        elif midinumber == 37:
+        elif midinumber == 38:
             self.__keyboard.type('a')
             self.formatAndSend('a', display=2)
-        elif midinumber == 41:
+        elif midinumber == 40:
             self.__keyboard.type('n')
             self.formatAndSend('n', display=2)
         elif midinumber == 42:
