@@ -260,7 +260,16 @@ def displayCode(display):
                     ck_display[display].insert(tkinter.END, dump)
                     ck_display[display].see(tkinter.END)
                 except RuntimeError as err:
-                    break                   
+                    break   
+            elif display == '4':
+                data, addr = s[display].recvfrom(1024)
+                #print(str(data, 'utf-8'))
+                dump = str(data, 'utf-8')
+                try:
+                    ck_display[display].insert(tkinter.END, dump)
+                    ck_display[display].see(tkinter.END)
+                except RuntimeError as err:
+                    break             
         except OSError as err:
             print(err)
             break
