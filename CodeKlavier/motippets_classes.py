@@ -126,6 +126,8 @@ class Motippets(object):
                             motif1_played = self.compare_chordal_motif(
                                                     self._memory, Motifs.get('motif_1'),
                                                     note, deltatime=self._deltatime, debug=False)
+                            self._deltatime = 0
+                            
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
                                 self._motif1_counter = 1
@@ -234,6 +236,8 @@ class Motippets(object):
                         motif2_played = self.compare_chordal_motif(
                                             self._memory, Motifs.get('motif_2'), note,
                                             deltatime=self._deltatime, debug=False)
+                        self._deltatime = 0
+                        
                         if motif2_played:
                             if self._motif2_counter == 0:
                                 self.mapscheme.snippets(2)
@@ -262,10 +266,12 @@ class Motippets(object):
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                         Motifs.get('conditional_result_3'),
                                                                         note, 0, self._deltatime, False)
+                                self._deltatime = 0
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, self._deltatime, False)
+                                self._deltatime = 0
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
@@ -346,10 +352,12 @@ class Motippets(object):
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_3'),
                                                                             note, 0, self._deltatime, False)
+                                self._deltatime = 0
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, self._deltatime, False)
+                                self._deltatime = 0
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
@@ -447,10 +455,12 @@ class Motippets(object):
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_3'),
                                                                             note, 0, self._deltatime, False)
+                                self._deltatime = 0
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
                                                                             note, 1, self._deltatime, False)
+                                self._deltatime = 0
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
