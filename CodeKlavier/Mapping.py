@@ -28,7 +28,7 @@ class Mapping_HelloWorld():
 
         Print that the user is using this mapping and set the controller.
         """
-        print("Using the Hello World mapping")
+        print("## Using the Hello World mapping ##")
 
         self.__keyboard = Controller()
         self.use_display = use_display
@@ -357,8 +357,9 @@ class Mapping_HelloWorld_NKK:
 class Mapping_Motippets:
     """Mapping for the Motippets prototype.
     """
-    def __init__(self):
-        print("Using the Motippets mapping")
+    def __init__(self, debug=True):
+        if debug:
+            print("## Using the Motippets mapping ##")
 
         #Read config and settings
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))

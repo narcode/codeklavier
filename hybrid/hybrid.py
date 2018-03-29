@@ -26,8 +26,12 @@ except KeyError:
 if (myPort == None or device_id == None):
     raise LookupError('Missing key information in the config file.')
 
+codeK = Setup()
+codeK.print_welcome(22)
+codeK.open_port(myPort)
+
 # default mapping
-mapping = Mapping_Motippets()
+mapping = Mapping_Motippets(False)
 
 # main memory (i.e. listen to the whole register)
 mainMem = Motippets(mapping, device_id)
@@ -289,13 +293,12 @@ def main():
     global mapping, parameters, conditionalsRange, conditionals, \
            param_interval, threads_are_perpetual, range_trigger, \
            notecounter, hello_world_on, noteCounter
-
-    codeK = Setup()
-    codeK.open_port(myPort)
     
-    print("\nCodeKlavier is ready and ON.")
-    print("You are performing: Motippets")
-    print("\nPress Control-C to exit.")
+    codeK.print_lines(20, 1)
+    print("Prototype loaded: Hybrid 0.2.2")        
+    print("CodeKlavier is ready and LISTENING.")    
+    codeK.print_lines(20, 1)    
+    print("\nPress Control-C to exit.\n")
 
     try:
         while motippets_is_listening:

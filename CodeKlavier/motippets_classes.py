@@ -134,7 +134,8 @@ class Motippets(object):
                             # see if motif_1 is played:
                             motif1_played = self.compare_chordal_motif(
                                                     self._memory, Motifs.get('motif_1'),
-                                                    note, deltatime=self._deltatime, debug=False)
+                                                    note, deltatime=self._deltatime, deltatolerance=0.2, debug=True)
+                            
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
                                 self._motif1_counter = 1
@@ -766,7 +767,8 @@ class Motippets(object):
                     (lambda total, sumnotes: total + sumnotes),
                     self._mainMotifs)
                 dif_delta = reduce(
-                                (lambda total, sumtimes: sumtimes - total), self._deltaHelper1)
+                                (lambda total, sumtimes: sumtimes - total), self._deltaHelper)
+                print('dif: ', dif_delta)
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
                     
@@ -776,7 +778,7 @@ class Motippets(object):
                               '\ncomparison: ' + str(compare),
                               '\nsum played: ' + str(sum_played),
                               '\nsum motif: ' + str(sum_motif),
-                              '\ndelta dif: ', self._deltaHelper)
+                              '\ndelta dif: ', dif_delta)
         elif num == 1:
             if note in motif:
                 self._mainMotifs1.append(note)
