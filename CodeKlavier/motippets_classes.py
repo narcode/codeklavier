@@ -739,7 +739,7 @@ class Motippets(object):
         TODO 2: make sub arrays if function is used again...
         """
         compare = False
-        
+        print('deltatime chordal func: ', deltatime)
         if deltatime < deltatolerance: 
             if num == 0:
                 if note in motif:
