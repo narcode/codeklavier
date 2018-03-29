@@ -807,12 +807,31 @@ class Mapping_Motippets:
                 self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
 
     def customPass(self, name, content):
+        """
+        post custom string message on codespace and display
+        
+        :param string name: a label to print in front of the string
+        :param string content: the message or content
+        """
         self.__keyboard.type(name + " " + content)
         self.enter()
         self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
-    def onlyDisplay(self, content, warning=False):
+    def onlyDisplay(self, content, tag=1, warning=False):
+        """
+        print a custom string on the UDP display only!
+        
+        :param string content: the message or content
+        :param int tag: the reference to a color tag
+        :param warning: wether to print the message with the warning color tag (i.e. red)
+        
+        """
         if warning:
             self.formatAndSend(content, display=4, syntax_color='warning:')
         else:
-            self.formatAndSend(content, display=4, syntax_color='loop:')
+            if tag == 2:
+                self.formatAndSend(content, display=4, syntax_color='loop2:')
+            elif tag == 3:
+                self.formatAndSend(content, display=4, syntax_color='loop3:')
+            else:
+                self.formatAndSend(content, display=4, syntax_color='loop:')

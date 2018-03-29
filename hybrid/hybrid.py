@@ -55,7 +55,8 @@ threads = {}
 notecounter = 0
 range_trigger = 0
 param_interval = 0
-threads_are_perpetual = True              
+threads_are_perpetual = True     
+motippets_is_listening = True
 
 def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, debug=True, perpetual=True):
     """
@@ -86,7 +87,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
         if debug:
             print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)
-            mapping.onlyDisplay('cond: ' + str(num) + ' res: ' + str(result_num) + ' countdown: ' + str(timer - t) + '')
+            mapping.onlyDisplay('cond: ' + str(num) + ' result: ' + str(result_num) + ' countdown: ' + str(timer - t) + '', num)
             #print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
         t += 1
@@ -259,10 +260,11 @@ def gong_bomb(countdown, debug=False):
     for g in range(0, countdown):
         countdown -= 1
         print(BColors.FAIL + str(countdown) + BColors.ENDC)
-        mapping.onlyDisplay(str(countdown), True)
+        mapping.onlyDisplay(str(countdown), warning=True)
 
         if countdown == 0: #boom ASCII idea by @borrob!
             threads_are_perpetual = False #stop all perpetual threads
+            motippets_is_listening = False #stop listening for input
             #stop all snippets
             mapping.result(4, 'huygens')                       
             mapping.result(1, 'code')
@@ -296,7 +298,7 @@ def main():
     print("\nPress Control-C to exit.")
 
     try:
-        while threads_are_perpetual:
+        while motippets_is_listening:
             msg = codeK.get_message()
 
             if msg:
@@ -313,7 +315,6 @@ def main():
                                
                                 mapping = Mapping_HelloWorld()
                                                             
-                                threads_are_perpetual = False
                                 hello_world_on = True
                                 notecounter = 0  
                                 
@@ -440,7 +441,7 @@ def ck_loop(prototype='hello world'):
     """
     global mapping, parameters, conditionalsRange, conditionals, \
            param_interval, threads_are_perpetual, range_trigger, \
-           notecounter, hello_world_on, noteCounter
+           notecounter, hello_world_on, noteCounter, motippets_is_listening
     
     codeK_thread = Setup()
     codeK_thread.open_port(myPort)
@@ -468,7 +469,7 @@ def ck_loop(prototype='hello world'):
                                         mapping = Mapping_Motippets()
     
                                         hello_world_on = False
-                                        threads_are_perpetual = True
+                                        motippets_is_listening = True
                                         notecounter = 0
                                         
                                         threads['toggle_m'] = Thread(target=ck_loop, name='ck loop thread', args=('motippets',)) 
@@ -486,7 +487,7 @@ def ck_loop(prototype='hello world'):
     
     elif prototype == 'motippets':
         try:
-            while threads_are_perpetual:
+            while motippets_is_listening:
                 msg = codeK_thread.get_message()
     
                 if msg:
@@ -503,7 +504,7 @@ def ck_loop(prototype='hello world'):
     
                                     mapping = Mapping_HelloWorld()
     
-                                    threads_are_perpetual = False
+                                    motippets_is_listening = False
                                     hello_world_on = True
                                     notecounter = 0
                                     

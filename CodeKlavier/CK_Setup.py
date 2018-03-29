@@ -40,7 +40,7 @@ class Setup(object):
     def print_welcome(self, length):
         """Print the welcome lines
 
-        :param int length: the line length (actuel length is 1 longer)
+        :param int length: the line length (actual length is 1 longer)
         """
         for i in range(1, 5):
             num = length+(1)

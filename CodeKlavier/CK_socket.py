@@ -66,7 +66,7 @@ def main():
         # Gui window
         root = tkinter.Tk()
         root.title('CK PARALLEL CODING DISPLAY')
-        root.attributes('-topmost', False)
+        root.attributes('-topmost', True)
         root.geometry("1920x900")
         root.config(background='black')
         
@@ -175,7 +175,9 @@ def main():
             ck_display[str(x)].tag_config('primitive', foreground='#ebb18a')
             ck_display[str(x)].tag_config('comment', foreground='#a3a3a3')
             ck_display[str(x)].tag_config('loop', foreground='cyan')            
-            ck_display[str(x)].tag_config('warning', foreground='red')            
+            ck_display[str(x)].tag_config('warning', foreground='red')
+            ck_display[str(x)].tag_config('loop2', foreground='#80f7a6')
+            ck_display[str(x)].tag_config('loop3', foreground='#00b3ff')            
             
             
             if x ==1:
@@ -239,7 +241,7 @@ def showUsage():
 def displayCode(display):     
     """
     Funtion to listen for incoming UDP stream.
-    Handeld by parallel thread
+    Handeld by parallel threads
     
     :param display string: the display target (1-4)
     :param syntax_color string: the tag to use for coloring the syntax (snippet, mid, hi, low, primitive, loops)
