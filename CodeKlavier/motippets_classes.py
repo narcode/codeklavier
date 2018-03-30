@@ -51,14 +51,14 @@ class Motippets(object):
     def parse_midi(self, event, section, target=0):
         """Parse the midi signal and process it depending on the register.
 
-        :param event: describes the midi event that was received
+        :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
         :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
         self._deltatime += deltatime
         if message[0] != 254: #ignore activesense
-            print('deltatime debug: ', deltatime)
+            print('deltatime wrong: ', deltatime)
             
             if (message[0] == self.noteoffid or message[2] == 0):
                 self._deltatime = 0
@@ -848,7 +848,14 @@ class Motippets(object):
     def tremolo_value(self, notes, pianosection, deltatime,
                      deltatolerance, target, debug=False):
         """Get the interval of a given tremolo.
-
+        
+        :param array notes: Array of notes to be analysed
+        :param string pianosection: the name of the piano range (i.e. low, mid, etc)
+        :param float deltatime: the time between the received midi messages
+        :param float deltatolerance: the deltatime max threshold
+        :param int target: integer that references the targeted snippet
+        :param boolean debug: wheather to show or hide debug messages 
+        
         TODO: this should only return the interval integer and on another place define what to do with it!
         TODO: describe input params
         """
