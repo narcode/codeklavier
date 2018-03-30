@@ -58,7 +58,7 @@ class Motippets(object):
         message, deltatime = event
         self._deltatime += deltatime
         if message[0] != 254:
-            #deltatime #what is this doing here?
+            deltatime
 
             if (message[0] == self.noteoffid or message[2] == 0):
                 self._deltatime = 0
