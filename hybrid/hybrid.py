@@ -309,6 +309,7 @@ def main():
                 if message[0] == device_id:
                     if message[2] > 0 and message[0] == device_id:
                         notecounter += 1
+                        print('deltatime general: ', deltatime)
                         if message[1] == 106:
                             print('toggle prototype')
 
