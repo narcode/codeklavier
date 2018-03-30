@@ -102,7 +102,7 @@ class Setup(object):
             #TODO: do we need to check on the existence of ports?
             self.__midiin.open_port(pnum)
             # ignore sysex, timing but not active sense messages
-            self.__midiin.ignore_types(True, True, False)            
+            self.__midiin.ignore_types(True, False, False)            
         else:
             raise Exception("No midi ports! Maybe open a virtual device?")
 
