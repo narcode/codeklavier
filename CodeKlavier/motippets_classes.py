@@ -456,11 +456,11 @@ class Motippets(object):
                             if self._conditionalCounter > 0:
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_3'),
-                                                                            note, 0, self._deltatime, False)
+                                                                            note, 0, self._deltatime, 0.1, False)
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
-                                                                            note, 1, self._deltatime, False)
+                                                                            note, 1, self._deltatime, 0.1, False)
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
