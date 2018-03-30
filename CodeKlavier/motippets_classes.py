@@ -51,19 +51,19 @@ class Motippets(object):
     def parse_midi(self, event, section, target=0):
         """Parse the midi signal and process it depending on the register.
 
-        :param event: describes the midi event that was triggered
+        :param event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
         :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
         self._deltatime += deltatime
-        if message[0] != 254:
-            deltatime
-
+        if message[0] != 254: #ignore activesense
+            print('deltatime debug: ', deltatime)
+            
             if (message[0] == self.noteoffid or message[2] == 0):
                 self._deltatime = 0
                 
-            if message[2] > 0 and message[0]: #only noteOn and ignore activesense
+            if message[2] > 0 and message[0]: #only noteOn
                 if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                     note = message[1]
                     self.mapscheme.mapping(note)
