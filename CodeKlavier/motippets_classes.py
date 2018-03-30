@@ -739,7 +739,7 @@ class Motippets(object):
 
                 return compare
 
-    def compare_chordal_motif(self, array, motif, note, num=0, deltatime=0, deltatolerance=0.01, debug=False):
+    def compare_chordal_motif(self, array, motif, note, num=0, deltatime=0, deltatolerance=0.1, debug=False):
         """Compare chordal motifs
 
         i.e. MIDI note order doesn't matter
