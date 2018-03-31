@@ -330,9 +330,10 @@ def main():
                             if len(ck_deltatime_mem) > 2:
                                 ck_deltatime_mem = ck_deltatime_mem[-2:]
                             
-                            ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-                            print('deltatimes after: ', ck_deltatime_mem)
-                            print('deltatime debug: ', ck_deltadif)
+                            if len(ck_deltatime_mem) == 2:
+                                ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
+                                print('deltatimes after: ', ck_deltatime_mem)
+                                print('deltatime debug: ', ck_deltadif)
                             
                             if message[1] == 106:
                                 print('toggle prototype')
