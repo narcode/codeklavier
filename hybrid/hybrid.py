@@ -298,7 +298,8 @@ def main():
     """
     global mapping, parameters, conditionalsRange, conditionals, \
            param_interval, threads_are_perpetual, range_trigger, \
-           notecounter, hello_world_on, noteCounter, ck_deltatime
+           notecounter, hello_world_on, noteCounter, ck_deltatime, \
+           ck_deltatime_mem
     
     codeK.print_lines(20, 1)
     print("Prototype loaded: Hybrid 0.2.2")        
