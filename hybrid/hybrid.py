@@ -326,7 +326,7 @@ def main():
                         if message[2] > 0 and message[0] == device_id:
                             notecounter += 1
                             
-                            if len(ck_deltatime) > 2:
+                            if len(ck_deltatime_mem) > 2:
                                 ck_deltatime_mem = ck_deltatime_mem[-2:]
                             
                             ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
