@@ -32,7 +32,8 @@ codeK.print_welcome(22)
 codeK.open_port(myPort)
 
 # activesense compensation
-ck_deltatime = []
+ck_deltatime_mem = []
+ck_deltatime = 0
 ck_deltadif = 0
 
 # default mapping
@@ -311,25 +312,24 @@ def main():
 
             if msg:
                 message, deltatime = msg
-                #ck_deltatime += deltatime
-                ck_deltatime.append(deltatime)
-                print('deltatimes before: ', ck_deltatime)
-                
+                ck_deltatime += deltatime
+                ck_deltatime_mem.append(ck_deltatime)                
                 
                 if message[0] != 254:
                     
                     #if (message[0] == noteoff_id or message[2] == 0):
                         #ck_deltatime = 0
-                        
+                    print('deltatimes before: ', ck_deltatime_mem)
+                    
                     if message[0] == device_id:
                         if message[2] > 0 and message[0] == device_id:
                             notecounter += 1
                             
                             if len(ck_deltatime) > 2:
-                                ck_deltatime = ck_deltatime[-2:]
+                                ck_deltatime_mem = ck_deltatime_mem[-2:]
                             
-                            ck_deltadif = ck_deltatime[1] - ck_deltatime[0]
-                            print('deltatimes after: ', ck_deltatime)
+                            ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
+                            print('deltatimes after: ', ck_deltatime_mem)
                             print('deltatime debug: ', ck_deltadif)
                             
                             if message[1] == 106:
