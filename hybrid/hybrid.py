@@ -334,6 +334,8 @@ def main():
                                 ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
                                 #print('deltatimes after: ', ck_deltatime_mem)
                                 #print('deltatime debug: ', ck_deltadif)
+                            else:
+                                ck_deltadif = 0
                             
                             if message[1] == 106:
                                 print('toggle prototype')

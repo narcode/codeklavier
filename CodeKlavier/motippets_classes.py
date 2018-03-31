@@ -131,7 +131,7 @@ class Motippets(object):
                             # see if motif_1 is played:
                             motif1_played = self.compare_chordal_motif(
                                                     self._memory, Motifs.get('motif_1'),
-                                                    note, deltatime=self._deltatime, deltatolerance=0.2, debug=True)
+                                                    note, deltatime=self._deltatime, deltatolerance=0.01, debug=True)
                             
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
@@ -453,11 +453,11 @@ class Motippets(object):
                             if self._conditionalCounter > 0:
                                 result3_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_3'),
-                                                                            note, 0, self._deltatime, 0.1, False)
+                                                                            note, 0, self._deltatime, 0.01, False)
 
                                 result4_played = self.compare_chordal_motif(self._memory,
                                                                             Motifs.get('conditional_result_4'),
-                                                                            note, 1, self._deltatime, 0.1, False)
+                                                                            note, 1, self._deltatime, 0.01, False)
 
                                 result5_played = self.compare_motif(self._memory, 'result 5',
                                                                     Motifs.get('conditional_result_5'),
@@ -736,7 +736,7 @@ class Motippets(object):
 
                 return compare
 
-    def compare_chordal_motif(self, array, motif, note, num=0, deltatime=0, deltatolerance=0.1, debug=False):
+    def compare_chordal_motif(self, array, motif, note, num=0, deltatime=0, deltatolerance=0.01, debug=False):
         """Compare chordal motifs
 
         i.e. MIDI note order doesn't matter
@@ -763,9 +763,10 @@ class Motippets(object):
                 sum_played = reduce(
                     (lambda total, sumnotes: total + sumnotes),
                     self._mainMotifs)
-                dif_delta = reduce(
-                                (lambda total, sumtimes: sumtimes - total), self._deltaHelper)
-                print('dif: ', dif_delta)
+                dif_delta = reduce( (lambda total, sumtimes: (total +
+                                                              sumtimes) / len( self._deltaHelper) ), self._deltaHelper)
+                print('average: ', dif_delta)
+                
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
                     
@@ -775,7 +776,7 @@ class Motippets(object):
                               '\ncomparison: ' + str(compare),
                               '\nsum played: ' + str(sum_played),
                               '\nsum motif: ' + str(sum_motif),
-                              '\ndelta dif: ', dif_delta)
+                              '\ndelta average: ', dif_delta)
         elif num == 1:
             if note in motif:
                 self._mainMotifs1.append(note)
@@ -795,7 +796,7 @@ class Motippets(object):
                     (lambda total, sumnotes: total + sumnotes),
                     self._mainMotifs1)
                 dif_delta = reduce(
-                     (lambda total, sumtimes: sumtimes - total), self._deltaHelper1)
+                     (lambda total, sumtimes: (total + sumnotes) / len(self._deltaHelper1)), self._deltaHelper1)
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
                     
@@ -805,7 +806,7 @@ class Motippets(object):
                               '\ncomparison: ' + str(compare),
                               '\nsum played: ' + str(sum_played),
                               '\nsum motif: ' + str(sum_motif),
-                              '\ndelta dif: ', dif_delta)            
+                              '\ndelta average: ', dif_delta)            
                         
         else:
             if note in motif:
@@ -825,8 +826,8 @@ class Motippets(object):
                 sum_played = reduce(
                     (lambda total, sumnotes: total + sumnotes),
                     self._mainMotifs2)
-                dif_delta = reduce(
-                                (lambda total, sumtimes: sumtimes - total), self._deltaHelper2)
+                dif_delta = reduce( (lambda total, sumtimes: (total +
+                                                              sumnotes) / len( self._deltaHelper2)), self._deltaHelper2)
                 
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
@@ -837,7 +838,7 @@ class Motippets(object):
                               '\ncomparison: ' + str(compare),
                               '\nsum played: ' + str(sum_played),
                               '\nsum motif: ' + str(sum_motif),
-                              '\ndelta dif: ', dif_delta)
+                              '\ndelta average: ', dif_delta)
                         
         return compare
 
