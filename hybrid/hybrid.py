@@ -314,7 +314,6 @@ def main():
             if msg:
                 message, deltatime = msg
                 ck_deltatime += deltatime
-                ck_deltatime_mem.append(ck_deltatime)                
                 
                 if message[0] != 254:
                     
@@ -325,6 +324,8 @@ def main():
                     if message[0] == device_id:
                         if message[2] > 0 and message[0] == device_id:
                             notecounter += 1
+                            
+                            ck_deltatime_mem.append(ck_deltatime)                                            
                             
                             if len(ck_deltatime_mem) > 2:
                                 ck_deltatime_mem = ck_deltatime_mem[-2:]
