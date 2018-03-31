@@ -56,13 +56,8 @@ class Motippets(object):
         :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
-        self._deltatime += deltatime
         if message[0] != 254: #ignore activesense
-            print('deltatime wrong: ', deltatime)
-            
-            if (message[0] == self.noteoffid or message[2] == 0):
-                self._deltatime = 0
-                
+                            
             if message[2] > 0 and message[0]: #only noteOn
                 if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
                     note = message[1]
