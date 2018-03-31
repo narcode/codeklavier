@@ -317,9 +317,9 @@ def main():
                 
                 if message[0] != 254:
                     
+                    #note offs:
                     #if (message[0] == noteoff_id or message[2] == 0):
                         #ck_deltatime = 0
-                    print('deltatimes before: ', ck_deltatime_mem)
                     
                     if message[0] == device_id:
                         if message[2] > 0 and message[0] == device_id:
@@ -332,8 +332,8 @@ def main():
                             
                             if len(ck_deltatime_mem) == 2:
                                 ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-                                print('deltatimes after: ', ck_deltatime_mem)
-                                print('deltatime debug: ', ck_deltadif)
+                                #print('deltatimes after: ', ck_deltatime_mem)
+                                #print('deltatime debug: ', ck_deltadif)
                             
                             if message[1] == 106:
                                 print('toggle prototype')
@@ -350,10 +350,10 @@ def main():
                                     threads['toggle_h'].start()
                                     
                             ##motifs:
-                            mainMem.parse_midi(msg, 'full')
-                            memLow.parse_midi(msg, 'low')
-                            memMid.parse_midi(msg, 'mid')
-                            memHi.parse_midi(msg, 'hi')
+                            mainMem.parse_midi(msg, 'full', ck_deltadif)
+                            memLow.parse_midi(msg, 'low', ck_deltadif)
+                            memMid.parse_midi(msg, 'mid', ck_deltadif)
+                            memHi.parse_midi(msg, 'hi', ck_deltadif)
 
                             motif1_played = memMid._motif1_counter
                             motif2_played = mainMem._motif2_counter
@@ -371,26 +371,26 @@ def main():
                             ##tremolos:
                             if motif1_played > 0 or motif2_played > 0:
                                 if minimotif1_low_mapped > 0:
-                                    tremoloLow.parse_midi(msg, 'tremoloLow', 1)
+                                    tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 1)
                                 elif minimotif2_low_mapped > 0:
-                                    tremoloLow.parse_midi(msg, 'tremoloLow', 2)
+                                    tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 2)
                                 elif minimotif3_low_mapped > 0:
-                                    tremoloLow.parse_midi(msg, 'tremoloLow', 3)
+                                    tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
                                     
                                 if minimotif1_mid_mapped > 0:
-                                    tremoloMid.parse_midi(msg, 'tremoloMid', 1)
+                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
                                 elif minimotif2_mid_mapped > 0:
-                                    tremoloMid.parse_midi(msg, 'tremoloMid', 2)
+                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)
                                         
                                 if minimotif1_hi_mapped > 0:
-                                    tremoloHi.parse_midi(msg, 'tremoloHi', 1)
+                                    tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, 1)
                                 elif minimotif2_hi_mapped > 0:
-                                    tremoloHi.parse_midi(msg, 'tremoloHi', 2)
+                                    tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, 2)
                                             
                             ##conditionals
-                            conditional_value = conditionals[1].parse_midi(msg, 'conditional 1')
-                            conditional2_value = conditionals[2].parse_midi(msg, 'conditional 2')
-                            conditional3_value = conditionals[3].parse_midi(msg, 'conditional 3')
+                            conditional_value = conditionals[1].parse_midi(msg, 'conditional 1', ck_deltadif)
+                            conditional2_value = conditionals[2].parse_midi(msg, 'conditional 2', ck_deltadif)
+                            conditional3_value = conditionals[3].parse_midi(msg, 'conditional 3', ck_deltadif)
                                             
                             if isinstance(conditional_value, int) and conditional_value > 0:
                                 conditional_params = parameters.parse_midi(msg, 'params')

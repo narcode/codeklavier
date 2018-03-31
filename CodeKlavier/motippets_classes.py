@@ -48,11 +48,12 @@ class Motippets(object):
         self._timer = 0
         self._range = 0
 
-    def parse_midi(self, event, section, target=0):
+    def parse_midi(self, event, section, ck_deltatime=0, target=0):
         """Parse the midi signal and process it depending on the register.
 
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
+        :param float ck_deltatime: the deltatime between icoming note-on MIDI messages
         :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
@@ -66,6 +67,7 @@ class Motippets(object):
                     
                 if (message[0] == self.noteonid):
                     note = message[1]
+                    self._deltatime = ck_deltatime
 
                     ### LOW SECTION
                     if section == 'low':
