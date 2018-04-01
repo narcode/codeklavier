@@ -827,7 +827,7 @@ class Motippets(object):
                     (lambda total, sumnotes: total + sumnotes),
                     self._mainMotifs2)
                 dif_delta = reduce( (lambda total, sumtimes: (total +
-                                                              sumnotes) / len( self._deltaHelper2)), self._deltaHelper2)
+                                                              sumtimes) / len( self._deltaHelper2)), self._deltaHelper2)
                 
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
