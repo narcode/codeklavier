@@ -131,7 +131,7 @@ class Motippets(object):
                             # see if motif_1 is played:
                             motif1_played = self.compare_chordal_motif(
                                                     self._memory, Motifs.get('motif_1'),
-                                                    note, deltatime=self._deltatime, deltatolerance=0.01, debug=True)
+                                                    note, deltatime=self._deltatime, deltatolerance=0.005, debug=True)
                             
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
@@ -736,7 +736,7 @@ class Motippets(object):
 
                 return compare
 
-    def compare_chordal_motif(self, array, motif, note, num=0, deltatime=0, deltatolerance=0.01, debug=False):
+    def compare_chordal_motif(self, array, motif, note, num=0, deltatime=0, deltatolerance=0.005, debug=False):
         """Compare chordal motifs
 
         i.e. MIDI note order doesn't matter
