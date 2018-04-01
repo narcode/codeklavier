@@ -332,8 +332,10 @@ def main():
                             
                             if len(ck_deltatime_mem) == 2:
                                 ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-                                #print('deltatimes after: ', ck_deltatime_mem)
-                                #print('deltatime debug: ', ck_deltadif)
+                                print('deltatimes comp: ', ck_deltatime_mem)
+                                print('deltatime diff: ', ck_deltadif)
+                                # reselt the ck_deltatime to avoid long number overflow. or reset it after noteoff?
+                                ck_deltatime = 0
                             else:
                                 ck_deltadif = 0
                             
