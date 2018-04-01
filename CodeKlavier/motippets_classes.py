@@ -131,7 +131,7 @@ class Motippets(object):
                             # see if motif_1 is played:
                             motif1_played = self.compare_chordal_motif(
                                                     self._memory, Motifs.get('motif_1'),
-                                                    note, deltatime=self._deltatime, deltatolerance=0.005, debug=True)
+                                                    note, deltatime=self._deltatime, deltatolerance=0.005, debug=False)
                             
                             if motif1_played and self._motif1_counter == 0:
                                 self.mapscheme.snippets(1)
@@ -765,7 +765,7 @@ class Motippets(object):
                     self._mainMotifs)
                 dif_delta = reduce( (lambda total, sumtimes: (total +
                                                               sumtimes) / len( self._deltaHelper) ), self._deltaHelper)
-                print('average: ', dif_delta)
+                #print('average: ', dif_delta)
                 
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
