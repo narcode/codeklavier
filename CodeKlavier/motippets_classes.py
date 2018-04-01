@@ -57,456 +57,452 @@ class Motippets(object):
         :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
-        if message[0] != 254: #ignore activesense
-                            
-            if message[2] > 0 and message[0]: #only noteOn
-                if (message[0] == 176): #pedal stop (TODO: handle in Mapping class!)
-                    note = message[1]
-                    self.mapscheme.mapping(note)
-                    return
+                           
+        if message[2] > 0 and message[0] == 176: #PEDAL STOP
+            note = message[1]
+            self.mapscheme.mapping(note)
+            return
                     
-                if (message[0] == self.noteonid):
-                    note = message[1]
-                    self._deltatime = ck_deltatime
+        if (message[0] == self.noteonid):
+            note = message[1]
+            self._deltatime = ck_deltatime
 
-                    ### LOW SECTION
-                    if section == 'low':
-                        if note <= self._pianosections[0]:
-                            self.memorize(note, 4, False, 'Low: ')
+            ### LOW SECTION
+            if section == 'low':
+                if note <= self._pianosections[0]:
+                    self.memorize(note, 4, False, 'Low: ')
+                    
+                    mini_motif_1_Low_played = self.compare_motif(
+                        self._memory, 'mini',
+                        Motifs.get('mini_motif_1_low'),
+                        note, False)
+                    
+                    mini_motif_2_Low_played = self.compare_motif(
+                        self._memory, 'mini2',
+                        Motifs.get('mini_motif_2_low'),
+                        note, False)
 
-                            mini_motif_1_Low_played = self.compare_motif(
-                                                        self._memory, 'mini',
-                                                        Motifs.get('mini_motif_1_low'),
-                                                        note, False)
-
-                            mini_motif_2_Low_played = self.compare_motif(
-                                                        self._memory, 'mini2',
-                                                        Motifs.get('mini_motif_2_low'),
-                                                        note, False)
-
-                            mini_motif_3_Low_played = self.compare_motif(
-                                                        self._memory, 'mini3',
-                                                        Motifs.get('mini_motif_3_low'),
-                                                        note, False)
-
-                            if (mini_motif_1_Low_played and
-                                self._unmapCounter2 == 0 and
-                                self._unmapCounter3 == 0):
-                                self.mapscheme.miniSnippets(1, 'low')
-                            elif (mini_motif_1_Low_played and
-                                  self._unmapCounter2 > 0):
-                                self.mapscheme.miniSnippets(1, 'low with unmap 2')
-                            elif (mini_motif_1_Low_played and
-                                  self._unmapCounter3 > 0):
-                                self.mapscheme.miniSnippets(1, 'low with unmap 3')
-
-                            elif (mini_motif_2_Low_played and
-                                  self._unmapCounter1 == 0 and
-                                  self._unmapCounter3 == 0):
-                                self.mapscheme.miniSnippets(2, 'low')
-                            elif (mini_motif_2_Low_played and
+                    mini_motif_3_Low_played = self.compare_motif(
+                        self._memory, 'mini3',
+                        Motifs.get('mini_motif_3_low'),
+                        note, False)
+                    
+                    if (mini_motif_1_Low_played and
+                        self._unmapCounter2 == 0 and
+                        self._unmapCounter3 == 0):
+                        self.mapscheme.miniSnippets(1, 'low')
+                    elif (mini_motif_1_Low_played and
+                          self._unmapCounter2 > 0):
+                        self.mapscheme.miniSnippets(1, 'low with unmap 2')
+                    elif (mini_motif_1_Low_played and
+                          self._unmapCounter3 > 0):
+                        self.mapscheme.miniSnippets(1, 'low with unmap 3')
+                        
+                    elif (mini_motif_2_Low_played and
+                          self._unmapCounter1 == 0 and
+                          self._unmapCounter3 == 0):
+                        self.mapscheme.miniSnippets(2, 'low')
+                    elif (mini_motif_2_Low_played and
                                   self._unmapCounter1 > 0):
-                                self.mapscheme.miniSnippets(2, 'low with unmap 1')
-                            elif (mini_motif_2_Low_played and
-                                  self._unmapCounter3 > 0):
-                                self.mapscheme.miniSnippets(2, 'low with unmap 3')
-
-                            elif (mini_motif_3_Low_played and
-                                  self._unmapCounter1 == 0 and
-                                  self._unmapCounter2 == 0):
-                                self.mapscheme.miniSnippets(1, 'low amp')
-                            elif (mini_motif_3_Low_played and
-                                  self._unmapCounter1 > 0 ):
-                                self.mapscheme.miniSnippets(1, 'low amp with unmap 1')
-                            elif (mini_motif_3_Low_played and
-                                  self._unmapCounter2 > 0 ):
-                                self.mapscheme.miniSnippets(1, 'low amp with unmap 2')
-
+                        self.mapscheme.miniSnippets(2, 'low with unmap 1')
+                    elif (mini_motif_2_Low_played and
+                          self._unmapCounter3 > 0):
+                        self.mapscheme.miniSnippets(2, 'low with unmap 3')
+                        
+                    elif (mini_motif_3_Low_played and
+                          self._unmapCounter1 == 0 and
+                          self._unmapCounter2 == 0):
+                        self.mapscheme.miniSnippets(1, 'low amp')
+                    elif (mini_motif_3_Low_played and
+                          self._unmapCounter1 > 0 ):
+                        self.mapscheme.miniSnippets(1, 'low amp with unmap 1')
+                    elif (mini_motif_3_Low_played and
+                          self._unmapCounter2 > 0 ):
+                        self.mapscheme.miniSnippets(1, 'low amp with unmap 2')
+                        
                     ### MID SECTION
-                    elif section == 'mid':
-                        if (note > self._pianosections[0] and
-                            note <= self._pianosections[1]):
-                            self.memorize(note, 9, False, 'Mid: ')
+            elif section == 'mid':
+                if (note > self._pianosections[0] and
+                    note <= self._pianosections[1]):
+                    self.memorize(note, 9, False, 'Mid: ')
 
-                            # see if motif_1 is played:
-                            motif1_played = self.compare_chordal_motif(
-                                                    self._memory, Motifs.get('motif_1'),
-                                                    note, deltatime=self._deltatime, deltatolerance=0.005, debug=False)
+                    # see if motif_1 is played:
+                    motif1_played = self.compare_chordal_motif(
+                        self._memory, Motifs.get('motif_1'),
+                        note, deltatime=self._deltatime, deltatolerance=0.005, debug=False)
+                    
+                    if motif1_played and self._motif1_counter == 0:
+                        self.mapscheme.snippets(1)
+                        self._motif1_counter = 1
+                        
+                        mini_motif_1_Mid_played = self.compare_motif(
+                            self._memory, 'mini',
+                            Motifs.get('mini_motif_1_mid'),
+                            note, False)
+                        mini_motif_2_Mid_played = self.compare_motif(
+                            self._memory, 'mini2',
+                            Motifs.get('mini_motif_2_mid'),
+                            note, False)
+                        #if self._motif1_played: ??? make a delegate?
+                        if (mini_motif_1_Mid_played and
+                            self._unmapCounter2 == 0):
+                            self.mapscheme.miniSnippets(1, 'mid')
+                        elif (mini_motif_1_Mid_played and
+                              self._unmapCounter2 > 0):
+                            self.mapscheme.miniSnippets(1, 'mid with unmap')
+                        elif (mini_motif_2_Mid_played and
+                              self._unmapCounter1 == 0):
+                            self.mapscheme.miniSnippets(2, 'mid')
+                        elif (mini_motif_2_Mid_played and
+                              self._unmapCounter1 > 0):
+                            self.mapscheme.miniSnippets(2, 'mid with unmap')
                             
-                            if motif1_played and self._motif1_counter == 0:
-                                self.mapscheme.snippets(1)
-                                self._motif1_counter = 1
+            ### HI SECTION
+            elif section == 'hi':
+                if note > self._pianosections[1]:
+                    self.memorize(note, 4, False, 'Hi: ')
+                    
+                    mini_motif_1_Hi_played = self.compare_motif(
+                        self._memory, 'mini',
+                        Motifs.get('mini_motif_1_hi'),
+                        note, False)
+                    mini_motif_2_Hi_played = self.compare_motif(
+                        self._memory, 'mini2',
+                        Motifs.get('mini_motif_2_hi'),
+                        note, False)
+                    
+                    if (mini_motif_1_Hi_played and
+                        self._unmapCounter2 == 0):
+                        self.mapscheme.miniSnippets(1, 'hi')
+                    elif (mini_motif_1_Hi_played and
+                          self._unmapCounter2 > 0):
+                        self.mapscheme.miniSnippets(1, 'hi with unmap')
+                    elif (mini_motif_2_Hi_played and
+                          self._unmapCounter1 == 0):
+                        self.mapscheme.miniSnippets(2, 'hi')
+                    elif (mini_motif_2_Hi_played and
+                          self._unmapCounter1 > 0):
+                        self.mapscheme.miniSnippets(2, 'hi with unmap')
 
-                            mini_motif_1_Mid_played = self.compare_motif(
-                                                        self._memory, 'mini',
-                                                        Motifs.get('mini_motif_1_mid'),
-                                                        note, False)
-                            mini_motif_2_Mid_played = self.compare_motif(
-                                                        self._memory, 'mini2',
-                                                        Motifs.get('mini_motif_2_mid'),
-                                                        note, False)
-                            #if self._motif1_played: ??? make a delegate?
-                            if (mini_motif_1_Mid_played and
-                                self._unmapCounter2 == 0):
-                                self.mapscheme.miniSnippets(1, 'mid')
-                            elif (mini_motif_1_Mid_played and
-                                  self._unmapCounter2 > 0):
-                                self.mapscheme.miniSnippets(1, 'mid with unmap')
-                            elif (mini_motif_2_Mid_played and
-                                  self._unmapCounter1 == 0):
-                                self.mapscheme.miniSnippets(2, 'mid')
-                            elif (mini_motif_2_Mid_played and
-                                  self._unmapCounter1 > 0):
-                                self.mapscheme.miniSnippets(2, 'mid with unmap')
+            ### TREMOLO
+            elif section == 'tremoloHi':
+                if note > self._pianosections[1]:
+                    self.memorize(note, 4, False, 'Tremolo Hi: ')
 
-                    ### HI SECTION
-                    elif section == 'hi':
-                        if note > self._pianosections[1]:
-                            self.memorize(note, 4, False, 'Hi: ')
+                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                        self.tremolo_value(
+                            [self._memory[2], self._memory[3]], 'hi',
+                            self._deltatime, 0.1, target, False)
+                        self._deltatime = 0
 
-                            mini_motif_1_Hi_played = self.compare_motif(
-                                                        self._memory, 'mini',
-                                                        Motifs.get('mini_motif_1_hi'),
-                                                        note, False)
-                            mini_motif_2_Hi_played = self.compare_motif(
-                                                        self._memory, 'mini2',
-                                                        Motifs.get('mini_motif_2_hi'),
-                                                        note, False)
+                elif section == 'tremoloMid':
+                    if (note > self._pianosections[0] and
+                        note <= self._pianosections[1]):
+                        self.memorize(note, 4, False, target, 'Tremolo Mid: ')
+                        
+                        if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                            self.tremolo_value(
+                                [self._memory[2], self._memory[3]], 'mid',
+                                self._deltatime, 0.1, target, False)
+                            self._deltatime = 0
 
-                            if (mini_motif_1_Hi_played and
-                                self._unmapCounter2 == 0):
-                                self.mapscheme.miniSnippets(1, 'hi')
-                            elif (mini_motif_1_Hi_played and
-                                  self._unmapCounter2 > 0):
-                                self.mapscheme.miniSnippets(1, 'hi with unmap')
-                            elif (mini_motif_2_Hi_played and
-                                  self._unmapCounter1 == 0):
-                                self.mapscheme.miniSnippets(2, 'hi')
-                            elif (mini_motif_2_Hi_played and
-                                  self._unmapCounter1 > 0):
-                                self.mapscheme.miniSnippets(2, 'hi with unmap')
+                elif section == 'tremoloLow':
+                    if note <= self._pianosections[0]:
+                        self.memorize(note, 4, False, 'Tremolo Low: ')
+                        
+                        if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                            self.tremolo_value(
+                                [self._memory[2], self._memory[3]], 'low',
+                                self._deltatime, 0.1, target, False)
+                            self._deltatime = 0
 
-                    ### TREMOLO
-                    elif section == 'tremoloHi':
-                        if note > self._pianosections[1]:
-                            self.memorize(note, 4, False, 'Tremolo Hi: ')
+                elif section == 'params':
+                    self.memorize(note, 4, False, 'Parameters tremolo: ')
 
-                            if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
-                                self.tremolo_value(
-                                    [self._memory[2], self._memory[3]], 'hi',
-                                    self._deltatime, 0.1, target, False)
-                                self._deltatime = 0
-
-                    elif section == 'tremoloMid':
-                        if (note > self._pianosections[0] and
-                            note <= self._pianosections[1]):
-                            self.memorize(note, 4, False, target, 'Tremolo Mid: ')
-
-                            if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
-                                self.tremolo_value(
-                                    [self._memory[2], self._memory[3]], 'mid',
-                                    self._deltatime, 0.1, target, False)
-                                self._deltatime = 0
-
-                    elif section == 'tremoloLow':
-                        if note <= self._pianosections[0]:
-                            self.memorize(note, 4, False, 'Tremolo Low: ')
-
-                            if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
-                                self.tremolo_value(
-                                    [self._memory[2], self._memory[3]], 'low',
-                                    self._deltatime, 0.1, target, False)
-                                self._deltatime = 0
-
-                    elif section == 'params':
-                            self.memorize(note, 4, False, 'Parameters tremolo: ')
-
-                            if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
-                                self._interval = self.tremolo_value(
+                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                        self._interval = self.tremolo_value(
                                     [self._memory[2], self._memory[3]], 'full',
                                     self._deltatime, 0.1, False)
-                                self._deltatime = 0
+                        self._deltatime = 0
 
-                                return self._interval
+                return self._interval
 
-                    ### FULL REGISTER
-                    elif section == 'full':
-                        # out of trouble enters for the codespace in case of getting stuck
-                        if note == 108:
-                            self.mapscheme.mapping(note)
+            ### FULL REGISTER
+            elif section == 'full':
+                # out of trouble enters for the codespace in case of getting stuck
+                if note == 108:
+                    self.mapscheme.mapping(note)
 
-                        self.memorize(note, 20, False, 'Full-section Memory: ')
+                self.memorize(note, 20, False, 'Full-section Memory: ')
 
-                        # check if motif_2 is played:
-                        motif2_played = self.compare_chordal_motif(
-                                            self._memory, Motifs.get('motif_2'), note,
-                                            deltatime=self._deltatime, debug=False)
-                        if motif2_played:
-                            if self._motif2_counter == 0:
-                                self.mapscheme.snippets(2)
-                                self._motif2_counter = 1
+                # check if motif_2 is played:
+                motif2_played = self.compare_chordal_motif(
+                    self._memory, Motifs.get('motif_2'), note,
+                    deltatime=self._deltatime, debug=False)
+                if motif2_played:
+                    if self._motif2_counter == 0:
+                        self.mapscheme.snippets(2)
+                        self._motif2_counter = 1
 
-                    ### CONDITIONALS SECTION
+            ### CONDITIONALS SECTION
 
-                    #### CONDITIONAL 1
-                    elif section == 'conditional 1':
+            #### CONDITIONAL 1
+            elif section == 'conditional 1':
 
-                        if note <= self._pianosections[0]: ### LOW SECTION
-                            self.memorize(note, 12, False, 'Conditional Memory: ')
+                if note <= self._pianosections[0]: ### LOW SECTION
+                    self.memorize(note, 12, False, 'Conditional Memory: ')
 
-                            if self._conditionalCounter == 0:
-                                conditional2_played = self.compare_chordal_motif(
-                                                    self._memory,
-                                                    Motifs.get('conditional_1'),
-                                                    note, 0, deltatime=self._deltatime, debug=False)
+                    if self._conditionalCounter == 0:
+                        conditional2_played = self.compare_chordal_motif(
+                            self._memory,
+                            Motifs.get('conditional_1'),
+                            note, 0, deltatime=self._deltatime, debug=False)
 
-                                if conditional2_played:
+                        if conditional2_played:
                                     self.mapscheme.conditional(1)
                                     self._memory = []
                                     self._conditionalCounter += 1
 
-                            if self._conditionalCounter > 0:
-                                result3_played = self.compare_chordal_motif(self._memory,
-                                                                        Motifs.get('conditional_result_3'),
-                                                                        note, 1, self._deltatime, debug=False)
+                    if self._conditionalCounter > 0:
+                        result3_played = self.compare_chordal_motif(self._memory,
+                                                                    Motifs.get('conditional_result_3'),
+                                                                    note, 1, self._deltatime, debug=False)
+                        
+                        result4_played = self.compare_chordal_motif(self._memory,
+                                                                    Motifs.get('conditional_result_4'),
+                                                                    note, 2, self._deltatime, debug=False)
+                        
+                        result5_played = self.compare_motif(self._memory, 'result 5',
+                                                            Motifs.get('conditional_result_5'),
+                                                            note, False)
 
-                                result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs.get('conditional_result_4'),
-                                                                            note, 2, self._deltatime, debug=False)
-
-                                result5_played = self.compare_motif(self._memory, 'result 5',
-                                                                    Motifs.get('conditional_result_5'),
-                                                                    note, False)
-
-                                if result3_played and self._resultCounter == 0:
-                                    self.mapscheme.result(3, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 3
-                                elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 4
-                                elif result5_played and self._resultCounter == 0:
-                                    self.mapscheme.result(5, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 5
-
-                                return self._conditionalStatus
-
-
-                        if note > self._pianosections[1]: ### hi register
-                            self.memorize(note, 20, False, 'Conditional Memory High: ')
-
-                            result2_played = self.compare_motif(self._memory, 'result 2',
-                                                                Motifs.get('conditional_result_2'),
-                                                                note, False)
-
-                            if result2_played and self._resultCounter == 0:
-                                if self._conditionalCounter > 0:
-                                    self.mapscheme.result(2, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 2
-
-                                return self._conditionalStatus
-
-                        if (note > self._pianosections[0] and note <= self._pianosections[1]):
-
-                            self.memorize(note, 20, False, 'Conditional Memory Mid: ')
-
-                            result1_played = self.compare_motif(self._memory, 'result 1',
-                                                                Motifs.get('conditional_result_1'),
-                                                                note, False)
-
-                            if result1_played and self._resultCounter == 0:
-                                if self._conditionalCounter > 0:
-                                    self.mapscheme.result(1, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 1
-
-                                return self._conditionalStatus
-
-                        return self._conditionalStatus # is this needed with the isinstance check in the main loop?
-
-                    ### CONDITONAL 2
-                    elif section == 'conditional 2':
-
-                        if note <= self._pianosections[0]:
-                            self.memorize(note, 20, False, 'Conditional 2 Memory: ') ## or 999 mem length?
-
-                            if self._conditionalCounter == 0:
-                                conditional_played = self.compare_motif(
-                                    self._memory,'conditional 2',
-                                    Motifs.get('conditional_2'),
-                                    note, False)
-
-                                if conditional_played:
-                                    self.mapscheme.conditional(2)
-                                    self._memory = []
-                                    self._conditionalCounter += 1
-
-                            if self._conditionalCounter > 0:
-                                result3_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs.get('conditional_result_3'),
-                                                                            note, 0, self._deltatime, False)
-
-                                result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs.get('conditional_result_4'),
-                                                                            note, 1, self._deltatime, False)
-
-                                result5_played = self.compare_motif(self._memory, 'result 5',
-                                                                    Motifs.get('conditional_result_5'),
-                                                                    note, False)
-
-                                if result3_played and self._resultCounter == 0:
-                                    self.mapscheme.result(3, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 3
-                                elif result4_played and self._resultCounter == 0:
-                                    self.mapscheme.result(4, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 4
-                                elif result5_played and self._resultCounter == 0:
-                                    self.mapscheme.result(5, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 5
-
-                                return self._conditionalStatus
-
-                        if note > self._pianosections[1]:
-                            self.memorize(note, 20, False, 'Conditional Memory High: ')
-
-                            result2_played = self.compare_motif(self._memory, 'result 2',
-                                                                Motifs.get('conditional_result_2'),
-                                                                note, False)
-
-                            if result2_played and self._resultCounter == 0:
-                                if self._conditionalCounter > 0:
-                                    self.mapscheme.result(2, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 2
-
-                                return self._conditionalStatus
-
-                        if (note > self._pianosections[0] and note <= self._pianosections[1]):
-
-                            self.memorize(note, 20, False, 'Conditional Memory Mid: ')
-
-                            result1_played = self.compare_motif(self._memory, 'result 1',
-                                                                Motifs.get('conditional_result_1'),
-                                                                note, False)
-
-                            if result1_played and self._resultCounter == 0:
-                                if self._conditionalCounter > 0:
-                                    self.mapscheme.result(1, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 1
-
-                                return self._conditionalStatus
+                        if result3_played and self._resultCounter == 0:
+                            self.mapscheme.result(3, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 3
+                        elif result4_played and self._resultCounter == 0:
+                            self.mapscheme.result(4, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 4
+                        elif result5_played and self._resultCounter == 0:
+                            self.mapscheme.result(5, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 5
 
                         return self._conditionalStatus
 
-                    ### CONDITONAL 3
-                    elif section == 'conditional 3':
 
-                        if note > self._pianosections[1]:
-                            self.memorize(note, 20, False, 'Conditional 3 Memory Hi: ')
+                if note > self._pianosections[1]: ### hi register
+                    self.memorize(note, 20, False, 'Conditional Memory High: ')
+                    
+                    result2_played = self.compare_motif(self._memory, 'result 2',
+                                                        Motifs.get('conditional_result_2'),
+                                                        note, False)
 
-                            if self._conditionalCounter == 0:
-                                conditional_played = self.compare_motif(
-                                    self._memory,'conditional 3',
-                                    Motifs.get('conditional_3'),
-                                    note, False)
+                    if result2_played and self._resultCounter == 0:
+                        if self._conditionalCounter > 0:
+                            self.mapscheme.result(2, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 2
 
-                                if conditional_played:
-                                    self.mapscheme.conditional(3)
-                                    self._memory = []
-                                    self._conditionalCounter += 1
+                        return self._conditionalStatus
 
+                if (note > self._pianosections[0] and note <= self._pianosections[1]):
+                    
+                    self.memorize(note, 20, False, 'Conditional Memory Mid: ')
+                    
+                    result1_played = self.compare_motif(self._memory, 'result 1',
+                                                        Motifs.get('conditional_result_1'),
+                                                        note, False)
+
+                    if result1_played and self._resultCounter == 0:
+                        if self._conditionalCounter > 0:
+                            self.mapscheme.result(1, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 1
+
+                        return self._conditionalStatus
+
+                return self._conditionalStatus # is this needed with the isinstance check in the main loop?
+
+            ### CONDITONAL 2
+            elif section == 'conditional 2':
+
+                if note <= self._pianosections[0]:
+                    self.memorize(note, 20, False, 'Conditional 2 Memory: ') ## or 999 mem length?
+
+                    if self._conditionalCounter == 0:
+                        conditional_played = self.compare_motif(
+                            self._memory,'conditional 2',
+                            Motifs.get('conditional_2'),
+                            note, False)
+
+                        if conditional_played:
+                            self.mapscheme.conditional(2)
+                            self._memory = []
+                            self._conditionalCounter += 1
+
+                    if self._conditionalCounter > 0:
+                        result3_played = self.compare_chordal_motif(self._memory,
+                                                                    Motifs.get('conditional_result_3'),
+                                                                    note, 0, self._deltatime, False)
+                    
+                        result4_played = self.compare_chordal_motif(self._memory,
+                                                                    Motifs.get('conditional_result_4'),
+                                                                    note, 1, self._deltatime, False)
+                    
+                        result5_played = self.compare_motif(self._memory, 'result 5',
+                                                            Motifs.get('conditional_result_5'),
+                                                            note, False)
+                    
+                        if result3_played and self._resultCounter == 0:
+                            self.mapscheme.result(3, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 3
+                        elif result4_played and self._resultCounter == 0:
+                            self.mapscheme.result(4, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 4
+                        elif result5_played and self._resultCounter == 0:
+                            self.mapscheme.result(5, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 5
+                            
+                    return self._conditionalStatus
+
+                if note > self._pianosections[1]:
+                    self.memorize(note, 20, False, 'Conditional Memory High: ')
+
+                    result2_played = self.compare_motif(self._memory, 'result 2',
+                                                        Motifs.get('conditional_result_2'),
+                                                        note, False)
+                    
+                    if result2_played and self._resultCounter == 0:
+                        if self._conditionalCounter > 0:
+                            self.mapscheme.result(2, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 2
+                            
+                        return self._conditionalStatus
+
+                    if (note > self._pianosections[0] and note <= self._pianosections[1]):
+                        
+                        self.memorize(note, 20, False, 'Conditional Memory Mid: ')
+                        
+                        result1_played = self.compare_motif(self._memory, 'result 1',
+                                                            Motifs.get('conditional_result_1'),
+                                                            note, False)
+                        
+                        if result1_played and self._resultCounter == 0:
                             if self._conditionalCounter > 0:
+                                self.mapscheme.result(1, 'comment')
+                                self._conditionalsBuffer = []
+                                self._resultCounter += 1
+                                self._conditionalStatus = 1
 
-                                result2_played = self.compare_motif(self._memory, 'result 2',
-                                                                    Motifs.get('conditional_result_2'),
-                                                                    note, False)
+                            return self._conditionalStatus
 
-                                if result2_played and self._resultCounter == 0:
-                                    if self._conditionalCounter > 0:
-                                        self.mapscheme.result(2, 'comment')
-                                        self._conditionalsBuffer = []
-                                        self._resultCounter += 1
-                                        self._conditionalStatus = 2
+                return self._conditionalStatus
 
-                                    return self._conditionalStatus
+            ### CONDITONAL 3
+            elif section == 'conditional 3':
 
-                        if note <= self._pianosections[0]:
-                            self.memorize(note, 20, False, 'Conditional 3 Memory: ')
+                if note > self._pianosections[1]:
+                    self.memorize(note, 20, False, 'Conditional 3 Memory Hi: ')
+                    
+                    if self._conditionalCounter == 0:
+                        conditional_played = self.compare_motif(
+                            self._memory,'conditional 3',
+                            Motifs.get('conditional_3'),
+                            note, False)
 
+                        if conditional_played:
+                            self.mapscheme.conditional(3)
+                            self._memory = []
+                            self._conditionalCounter += 1
+
+                    if self._conditionalCounter > 0:
+
+                        result2_played = self.compare_motif(self._memory, 'result 2',
+                                                            Motifs.get('conditional_result_2'),
+                                                            note, False)
+                        
+                        if result2_played and self._resultCounter == 0:
                             if self._conditionalCounter > 0:
-                                result3_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs.get('conditional_result_3'),
-                                                                            note, 0, self._deltatime, 0.01, False)
+                                self.mapscheme.result(2, 'comment')
+                                self._conditionalsBuffer = []
+                                self._resultCounter += 1
+                                self._conditionalStatus = 2
 
-                                result4_played = self.compare_chordal_motif(self._memory,
-                                                                            Motifs.get('conditional_result_4'),
-                                                                            note, 1, self._deltatime, 0.01, False)
+                            return self._conditionalStatus
 
-                                result5_played = self.compare_motif(self._memory, 'result 5',
-                                                                    Motifs.get('conditional_result_5'),
-                                                                    note, False)
+                if note <= self._pianosections[0]:
+                    self.memorize(note, 20, False, 'Conditional 3 Memory: ')
 
-                                if result3_played and self._resultCounter == 0:
-                                    self.mapscheme.result(3, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 3
-                                elif result4_played and self._resultCounter == 0:
+                    if self._conditionalCounter > 0:
+                        result3_played = self.compare_chordal_motif(self._memory,
+                                                                    Motifs.get('conditional_result_3'),
+                                                                    note, 0, self._deltatime, 0.01, False)
+                        
+                        result4_played = self.compare_chordal_motif(self._memory,
+                                                                    Motifs.get('conditional_result_4'),
+                                                                    note, 1, self._deltatime, 0.01, False)
+                        
+                        result5_played = self.compare_motif(self._memory, 'result 5',
+                                                            Motifs.get('conditional_result_5'),
+                                                            note, False)
+
+                        if result3_played and self._resultCounter == 0:
+                            self.mapscheme.result(3, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 3
+                        elif result4_played and self._resultCounter == 0:
                                     self.mapscheme.result(4, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
                                     self._conditionalStatus = 4
-                                elif result5_played and self._resultCounter == 0:
-                                    self.mapscheme.result(5, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 5
-
-                                return self._conditionalStatus
-
-                        if (note > self._pianosections[0] and note <= self._pianosections[1]):
-                            self.memorize(note, 20, False, 'Conditional Memory Mid: ')
-
-                            result1_played = self.compare_motif(self._memory, 'result 1',
-                                                                Motifs.get('conditional_result_1'),
-                                                                note, False)
-
-                            if result1_played and self._resultCounter == 0:
-                                if self._conditionalCounter > 0:
-                                    self.mapscheme.result(1, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = 1
-
-                                return self._conditionalStatus
+                        elif result5_played and self._resultCounter == 0:
+                            self.mapscheme.result(5, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 5
 
                         return self._conditionalStatus
 
-                    ### CONDITIONAL RANGE
-                    elif section == 'conditional_range': # parses only MIDI for the conditional which looks at the range being played
-                        self.memorize(note, 999,
-                                     debugname="Range conditional memory", debug=False)
+                if (note > self._pianosections[0] and note <= self._pianosections[1]):
+                    self.memorize(note, 20, False, 'Conditional Memory Mid: ')
 
-                        self.get_range(self._memory, self._timer, debug=False)
+                    result1_played = self.compare_motif(self._memory, 'result 1',
+                                                        Motifs.get('conditional_result_1'),
+                                                        note, False)
+                    
+                    if result1_played and self._resultCounter == 0:
+                        if self._conditionalCounter > 0:
+                            self.mapscheme.result(1, 'comment')
+                            self._conditionalsBuffer = []
+                            self._resultCounter += 1
+                            self._conditionalStatus = 1
+                            
+                        return self._conditionalStatus
 
-        return self._conditionalStatus  # is this not returning ?
+                return self._conditionalStatus
+
+            ### CONDITIONAL RANGE
+            elif section == 'conditional_range': # parses only MIDI for the conditional which looks at the range being played
+                self.memorize(note, 999,
+                              debugname="Range conditional memory", debug=False)
+                
+                self.get_range(self._memory, self._timer, debug=False)
 
     def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
