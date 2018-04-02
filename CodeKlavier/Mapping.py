@@ -591,7 +591,7 @@ class Mapping_Motippets:
             self.__keyboard.release(Key.backspace)
       # supercollider commands:
         elif midinumber == 33:
-            self.evaluateSC()
+            self.evaluateSC('eval')
             self.formatAndSend('\nevaluate\n', display=2)
         elif midinumber == 22:
             self.__keyboard.type('.tempo')
