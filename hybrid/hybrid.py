@@ -329,6 +329,8 @@ def main():
                             print('deltatimes before: ', ck_deltatime_mem)
                             
                             if len(ck_deltatime_mem) > 2:
+                                print('reset here!');
+                                ck_deltatime = 0                                     
                                 ck_deltatime_mem = ck_deltatime_mem[-2:]
                             
                             if len(ck_deltatime_mem) == 2:
@@ -336,9 +338,7 @@ def main():
                                 print('deltatimes after: ', ck_deltatime_mem)
                                 print('deltatime diff: ', ck_deltadif)
                                 # reset the ck_deltatime to avoid long number overflow. or reset it after noteoff?
-                            else:
-                                print('reset here!');
-                                ck_deltatime = 0                                
+                            else:                           
                                 ck_deltadif = 0
                             
                             if message[1] == 106:
