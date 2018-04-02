@@ -339,18 +339,17 @@ def main():
                                 ck_deltadif = 0
                             
                             if message[1] == 106:
-                                print('toggle prototype')
+                                print('toggle prototype -> Hello World')
 
-                                if isinstance(mapping, Mapping_Motippets):
-                                    codeK.close_port()
+                                codeK.close_port()
                                     
-                                    mapping = Mapping_HelloWorld()
-                                                            
-                                    hello_world_on = True
-                                    notecounter = 0  
+                                #mapping = Mapping_HelloWorld()
+                                    
+                                hello_world_on = True
+                                notecounter = 0  
                                 
-                                    threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
-                                    threads['toggle_h'].start()
+                                threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
+                                threads['toggle_h'].start()
                                     
                             ##motifs:
                             mainMem.parse_midi(msg, 'full', ck_deltadif)
@@ -493,19 +492,18 @@ def ck_loop(prototype='hello world'):
                             if (message[0] == device_id): 
     
                                 if message[1] == 106:
-                                    print('toggle prototype')
+                                    print('toggle prototype -> Motippets')
     
-                                    if isinstance(mapping, Mapping_HelloWorld):
-                                        codeK_thread.close_port()
+                                    codeK_thread.close_port()
     
-                                        mapping = Mapping_Motippets()
+                                    #mapping = Mapping_Motippets()
     
-                                        hello_world_on = False
-                                        motippets_is_listening = True
-                                        notecounter = 0
-                                        
-                                        threads['toggle_m'] = Thread(target=ck_loop, name='ck loop thread', args=('motippets',)) 
-                                        threads['toggle_m'].start()
+                                    hello_world_on = False
+                                    motippets_is_listening = True
+                                    notecounter = 0
+                                    
+                                    threads['toggle_m'] = Thread(target=ck_loop, name='ck loop thread', args=('motippets',)) 
+                                    threads['toggle_m'].start()
     
                                 mapping.mapping(message[1])
     
@@ -547,19 +545,18 @@ def ck_loop(prototype='hello world'):
                                 ck_deltadif = 0                            
     
                             if message[1] == 106:
-                                print('toggle prototype')
+                                print('toggle prototype -> Hello World')
     
-                                if isinstance(mapping, Mapping_Motippets):
-                                    codeK_thread.close_port()
+                                codeK_thread.close_port()
     
-                                    mapping = Mapping_HelloWorld()
+                                #mapping = Mapping_HelloWorld()
     
-                                    motippets_is_listening = False
-                                    hello_world_on = True
-                                    notecounter = 0
+                                motippets_is_listening = False
+                                hello_world_on = True
+                                notecounter = 0
                                     
-                                    threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
-                                    threads['toggle_h'].start()
+                                threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
+                                threads['toggle_h'].start()
     
                             ##motifs:
                             mainMem.parse_midi(msg, 'full', ck_deltadif)

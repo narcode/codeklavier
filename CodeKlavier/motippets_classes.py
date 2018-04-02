@@ -60,7 +60,7 @@ class Motippets(object):
                            
         if message[2] > 0 and message[0] == 176: #PEDAL STOP
             note = message[1]
-            self.mapscheme.mapping(note)
+            self.mapscheme.mapping(note, 'Motippets')
             return
                     
         if (message[0] == self.noteonid):
@@ -231,7 +231,7 @@ class Motippets(object):
             elif section == 'full':
                 # out of trouble enters for the codespace in case of getting stuck
                 if note == 108:
-                    self.mapscheme.mapping(note)
+                    self.mapscheme.mapping(note, 'Motippets')
 
                 self.memorize(note, 20, False, 'Full-section Memory: ')
 
