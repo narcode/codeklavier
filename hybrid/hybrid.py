@@ -326,17 +326,18 @@ def main():
                             notecounter += 1
                             
                             ck_deltatime_mem.append(ck_deltatime)                                            
-                            #print('deltatimes before: ', ck_deltatime_mem)
+                            print('deltatimes before: ', ck_deltatime_mem)
                             
                             if len(ck_deltatime_mem) > 2:
                                 ck_deltatime_mem = ck_deltatime_mem[-2:]
                             
                             if len(ck_deltatime_mem) == 2:
                                 ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-                                #print('deltatimes after: ', ck_deltatime_mem)
-                                #print('deltatime diff: ', ck_deltadif)
-                                # reselt the ck_deltatime to avoid long number overflow. or reset it after noteoff?
+                                print('deltatimes after: ', ck_deltatime_mem)
+                                print('deltatime diff: ', ck_deltadif)
+                                # reset the ck_deltatime to avoid long number overflow. or reset it after noteoff?
                             else:
+                                print('reset here!');
                                 ck_deltatime = 0                                
                                 ck_deltadif = 0
                             
