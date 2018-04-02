@@ -120,7 +120,7 @@ class Motippets(object):
                           self._unmapCounter2 > 0 ):
                         self.mapscheme.miniSnippets(1, 'low amp with unmap 2')
                         
-                    ### MID SECTION
+            ### MID SECTION
             elif section == 'mid':
                 if (note > self._pianosections[0] and
                     note <= self._pianosections[1]):
@@ -131,31 +131,31 @@ class Motippets(object):
                         self._memory, Motifs.get('motif_1'),
                         note, deltatime=self._deltatime, deltatolerance=0.005, debug=False)
                     
-                    if motif1_played and self._motif1_counter == 0:
-                        self.mapscheme.snippets(1)
-                        self._motif1_counter = 1
+                if motif1_played and self._motif1_counter == 0:
+                    self.mapscheme.snippets(1)
+                    self._motif1_counter = 1
                         
-                        mini_motif_1_Mid_played = self.compare_motif(
-                            self._memory, 'mini',
-                            Motifs.get('mini_motif_1_mid'),
-                            note, False)
-                        mini_motif_2_Mid_played = self.compare_motif(
-                            self._memory, 'mini2',
-                            Motifs.get('mini_motif_2_mid'),
-                            note, False)
-                        #if self._motif1_played: ??? make a delegate?
-                        if (mini_motif_1_Mid_played and
-                            self._unmapCounter2 == 0):
-                            self.mapscheme.miniSnippets(1, 'mid')
-                        elif (mini_motif_1_Mid_played and
-                              self._unmapCounter2 > 0):
-                            self.mapscheme.miniSnippets(1, 'mid with unmap')
-                        elif (mini_motif_2_Mid_played and
-                              self._unmapCounter1 == 0):
-                            self.mapscheme.miniSnippets(2, 'mid')
-                        elif (mini_motif_2_Mid_played and
-                              self._unmapCounter1 > 0):
-                            self.mapscheme.miniSnippets(2, 'mid with unmap')
+                    mini_motif_1_Mid_played = self.compare_motif(
+                        self._memory, 'mini',
+                        Motifs.get('mini_motif_1_mid'),
+                        note, False)
+                    mini_motif_2_Mid_played = self.compare_motif(
+                        self._memory, 'mini2',
+                        Motifs.get('mini_motif_2_mid'),
+                        note, False)
+                    #if self._motif1_played: ??? make a delegate?
+                    if (mini_motif_1_Mid_played and
+                        self._unmapCounter2 == 0):
+                        self.mapscheme.miniSnippets(1, 'mid')
+                    elif (mini_motif_1_Mid_played and
+                          self._unmapCounter2 > 0):
+                        self.mapscheme.miniSnippets(1, 'mid with unmap')
+                    elif (mini_motif_2_Mid_played and
+                          self._unmapCounter1 == 0):
+                        self.mapscheme.miniSnippets(2, 'mid')
+                    elif (mini_motif_2_Mid_played and
+                          self._unmapCounter1 > 0):
+                        self.mapscheme.miniSnippets(2, 'mid with unmap')
                             
             ### HI SECTION
             elif section == 'hi':
