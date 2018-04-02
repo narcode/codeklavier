@@ -57,7 +57,7 @@ class Mapping_HelloWorld():
             self.__keyboard.type('.')
             self.__keyboard.release(Key.cmd)
 
-    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1):
+    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=''):
         """format and prepare a string for sending it over UDP socket
 
         :param str msg: the string to be sent
@@ -76,7 +76,7 @@ class Mapping_HelloWorld():
             port = 4444
 
         if self.use_display:
-            return self.__socket.sendto(bytes(msg, encoding), (host, port))
+            return self.__socket.sendto(bytes(syntax_color+'\n'+msg, encoding), (host, port))
         else:
             return
 
