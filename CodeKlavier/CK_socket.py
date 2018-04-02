@@ -214,12 +214,16 @@ def main():
         
         for x in range(1, int(display)+1):
             
+            print('x is: ', x);
+            
             s[str(x)].bind(('localhost', x*1111))
                         
             f[str(x)] = tkinter.Frame(root, height=s_height, width=s_width/5) 
             f[str(x)].pack(fill=tkinter.Y, side=tkinter.LEFT)
             f[str(x)].pack_propagate(0) 
-            f[str(x)].configure(bg='black', bd=3)                          
+            f[str(x)].configure(bg='black', bd=3)  
+            
+        for x in range(1, int(display)+1):
             
             if x == 1:
                 ck_display[str(x)] = tkinter.Text(f['2'], height=6, width=50)
