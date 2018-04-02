@@ -417,45 +417,45 @@ def main():
                                     #gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
                                     #gomb.start()
                                     
-                                if isinstance(conditional2_value, int) and conditional2_value > 0:
-                                    conditionalsRange._conditionalStatus = conditional2_value
-                                    conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                            if isinstance(conditional2_value, int) and conditional2_value > 0:
+                                conditionalsRange._conditionalStatus = conditional2_value
+                                conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
                                     
-                                    # set range parameter:
-                                    if isinstance(conditional_params, int) and conditional_params > 0:
-                                        if conditional_value != 4:
-                                            threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
-                                            threads['set_param'].start()
-                                        elif conditional_value == 4: #gong bomb
-                                            threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                            threads['set_param'].start()
+                                # set range parameter:
+                                if isinstance(conditional_params, int) and conditional_params > 0:
+                                    if conditional_value != 4:
+                                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
+                                        threads['set_param'].start()
+                                    elif conditional_value == 4: #gong bomb
+                                        threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                                        threads['set_param'].start()
                                                                         
-                                    if param_interval > 0:
-                                        threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread',
+                                if param_interval > 0:
+                                    threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread',
                                                                              args=('random', 'more than', 2, conditional2_value, param_interval))
-                                        threads[conditional2_value].start()
+                                    threads[conditional2_value].start()
                                         
-                                if isinstance(conditional3_value, int) and conditional3_value > 0:
-                                    conditionalsRange._conditionalStatus = conditional3_value
-                                    conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                        if isinstance(conditional3_value, int) and conditional3_value > 0:
+                            conditionalsRange._conditionalStatus = conditional3_value
+                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
                                         
-                                    # set range parameter:
-                                    if isinstance(conditional_params, int) and conditional_params > 0:
-                                        if conditional_value != 4:
-                                            threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
-                                            threads['set_param'].start()
-                                        elif conditional_value == 4: #gong bomb
-                                            threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                            threads['set_param'].start()
+                            # set range parameter:
+                            if isinstance(conditional_params, int) and conditional_params > 0:
+                                if conditional_value != 4:
+                                    threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
+                                    threads['set_param'].start()
+                                elif conditional_value == 4: #gong bomb
+                                    threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                                    threads['set_param'].start()
                                                 
-                                    if param_interval > 0:
-                                        threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
+                            if param_interval > 0:
+                                threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
                                                                              args=('random', 'less than', 3, conditional3_value, param_interval))
-                                        threads[conditional3_value].start()
+                                threads[conditional3_value].start()
                                         
-                                #range parser
-                                if range_trigger == 1:
-                                    conditionalsRange.parse_midi(msg, 'conditional_range')
+                        #range parser
+                        if range_trigger == 1:
+                            conditionalsRange.parse_midi(msg, 'conditional_range')
                                                                                                 
             time.sleep(0.01) #check
                                                                                                 
