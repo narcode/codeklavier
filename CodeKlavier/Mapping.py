@@ -214,7 +214,7 @@ class Mapping_HelloWorld():
             self.formatAndSend('.play', display=2)
         elif midinumber == 102:
             self.__keyboard.type('TempoClock.default')
-            self.formatAndSend('TempoClock.default', display=5, 'hello:'))
+            self.formatAndSend('TempoClock.default', display=5, 'hello:')
     
       
 
