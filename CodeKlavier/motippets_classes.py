@@ -198,7 +198,7 @@ class Motippets(object):
             elif section == 'tremoloMid':
                 if (note > self._pianosections[0] and
                     note <= self._pianosections[1]):
-                    self.memorize(note, 4, True, target, 'Tremolo Mid: ')
+                    self.memorize(note, 4, False, target, 'Tremolo Mid: ')
                     
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
