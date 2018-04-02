@@ -566,7 +566,7 @@ class Mapping_Motippets:
         elif midinumber == 32:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
-            self.evaluateSC()
+            self.evaluateSC('eval')
             self.formatAndSend('\nevaluate\n', display=2)
         elif midinumber == 50:
             self.__keyboard.type('~')
