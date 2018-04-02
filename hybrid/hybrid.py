@@ -332,6 +332,7 @@ def main():
                                 print('reset here!');
                                 ck_deltatime = 0                                     
                                 ck_deltatime_mem = ck_deltatime_mem[-2:]
+                                ck_deltatime_mem[0] = 0
                             
                             if len(ck_deltatime_mem) == 2:
                                 ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
