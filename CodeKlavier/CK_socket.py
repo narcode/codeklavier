@@ -221,8 +221,21 @@ def main():
             f[str(x)].pack_propagate(0) 
             f[str(x)].configure(bg='black', bd=3)                          
             
-            ck_display[str(x)] = tkinter.Text(f[str(x)], height=6, width=50)
-            ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            if x == 1:
+                ck_display[str(x)] = tkinter.Text(f[2], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            elif x == 2:
+                ck_display[str(x)] = tkinter.Text(f[3], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)  
+            elif x == 3:
+                ck_display[str(x)] = tkinter.Text(f[4], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)  
+            elif x == 4:
+                ck_display[str(x)] = tkinter.Text(f[5], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)             
+            elif x == 5:
+                ck_display[str(x)] = tkinter.Text(f[1], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)             
             
             # syntax colors
             ck_display[str(x)].tag_config('title', foreground='cyan')
@@ -238,19 +251,19 @@ def main():
             ck_display[str(x)].tag_config('loop3', foreground='#00b3ff')            
             
             
-            if x ==2:
+            if x ==1:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
-            elif x == 3:
+            elif x == 2:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
-            elif x == 4:
+            elif x == 3:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n", 'title')
-            elif x == 5:
+            elif x == 4:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "Loops \n", 'title')  
-            elif x == 1:
+            elif x == 5:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "CodeSpace \n", 'title')            
             
