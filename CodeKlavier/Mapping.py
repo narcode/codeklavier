@@ -602,12 +602,12 @@ class Mapping_Motippets:
         elif midinumber == 102:
             self.__keyboard.type('TempoClock.default')
             self.formatAndSend('TempoClock.default', display=2)
+        elif midinumber == 108:
+            self.goDown()         
     # motippets only commands:
         elif prototype == 'Motippets':
             if midinumber == 66:
-                self.evaluateSC('eval')
-            elif midinumber == 108:
-                self.goDown()        
+                self.evaluateSC('eval')       
     
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=''):
         """format and prepare a string for sending it over UDP socket
