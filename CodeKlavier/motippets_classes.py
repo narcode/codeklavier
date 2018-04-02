@@ -225,7 +225,7 @@ class Motippets(object):
                         self._deltatime, 0.1, False)
                     self._deltatime = 0
 
-            return self._interval
+                    return self._interval
 
             ### FULL REGISTER
             elif section == 'full':
