@@ -363,8 +363,8 @@ def displayCode(display):
                 data, addr = s[display].recvfrom(1024)
                 dump = str(data, 'utf-8')
                 tagmatch = re.match('.*:', dump)
-                tag = tagmatch.group(0)[0:-1]      
-                ckcode = re.sub(''+tag+':', '', dump)                
+                tag = tagmatch.group(0)[0:-1]    
+                ckcode = re.sub(''+tag+':', '', dump)               
                 try:
                     ck_display[display].insert(tkinter.END, ckcode, tag)
                     ck_display[display].see(tkinter.END)                                           
