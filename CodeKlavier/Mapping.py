@@ -16,6 +16,7 @@ display1 = 1111
 display2 = 2222
 display3 = 3333
 display4 = 4444
+display5 = 5555
 
 class Mapping_HelloWorld():
     """Mapping for the Hello World prototype.
@@ -476,132 +477,132 @@ class Mapping_Motippets:
         # chars and nums
         if midinumber == 69:
             self.__keyboard.type('h')
-            self.formatAndSend('h', display=2)
+            self.formatAndSend('h', display=5)
         elif midinumber == 74:
             self.__keyboard.type('l')
-            self.formatAndSend('l', display=2)
+            self.formatAndSend('l', display=5)
         elif midinumber == 63:
             self.__keyboard.type('e')
-            self.formatAndSend('e', display=2)
+            self.formatAndSend('e', display=5)
         elif midinumber == 80:
             self.__keyboard.type('o')
-            self.formatAndSend('o', display=2)
+            self.formatAndSend('o', display=5)
         elif midinumber == 68:
             self.__keyboard.type('o')
-            self.formatAndSend('o', display=2)
+            self.formatAndSend('o', display=5)
         elif midinumber == 81:
             self.__keyboard.type('r')
-            self.formatAndSend('r', display=2)
+            self.formatAndSend('r', display=5)
         elif midinumber == 88:
             self.__keyboard.type('w')
-            self.formatAndSend('w', display=2)
+            self.formatAndSend('w', display=5)
         elif midinumber == 64:
             self.__keyboard.type('d')
-            self.formatAndSend('d', display=2)
+            self.formatAndSend('d', display=5)
         elif midinumber ==48:
             self.__keyboard.type('t')
-            self.formatAndSend('t', display=2)
+            self.formatAndSend('t', display=5)
         elif midinumber == 47:
             self.__keyboard.type('s')
-            self.formatAndSend('s', display=2)
+            self.formatAndSend('s', display=5)
         elif midinumber == 38:
             self.__keyboard.type('a')
-            self.formatAndSend('a', display=2)
+            self.formatAndSend('a', display=5)
         elif midinumber == 40:
             self.__keyboard.type('n')
-            self.formatAndSend('n', display=2)
+            self.formatAndSend('n', display=5)
         elif midinumber == 42:
             self.__keyboard.type('i')
-            self.formatAndSend('i', display=2)
+            self.formatAndSend('i', display=5)
         elif midinumber == 44:
             self.__keyboard.type('o')
-            self.formatAndSend('o', display=2)
+            self.formatAndSend('o', display=5)
         elif midinumber == 45:
             self.__keyboard.type('p')
-            self.formatAndSend('p', display=2)
+            self.formatAndSend('p', display=5)
         elif midinumber == 59:
             self.__keyboard.type('0')
-            self.formatAndSend('0', display=2)
+            self.formatAndSend('0', display=5)
         elif midinumber == 60:
             self.__keyboard.type('1')
-            self.formatAndSend('1', display=2)
+            self.formatAndSend('1', display=5)
         elif midinumber == 61:
             self.__keyboard.type('2')
-            self.formatAndSend('2', display=2)
+            self.formatAndSend('2', display=5)
         elif midinumber == 62:
             self.__keyboard.type('3')
-            self.formatAndSend('3', display=2)
+            self.formatAndSend('3', display=5)
         elif midinumber == 89:
             self.__keyboard.type('4')
-            self.formatAndSend('4', display=2)
+            self.formatAndSend('4', display=5)
         elif midinumber == 90:
             self.__keyboard.type('5')
-            self.formatAndSend('5', display=2)
+            self.formatAndSend('5', display=5)
         elif midinumber == 91:
             self.__keyboard.type('6')
-            self.formatAndSend('6', display=2)
+            self.formatAndSend('6', display=5)
         elif midinumber == 92:
             self.__keyboard.type('7')
-            self.formatAndSend('7', display=2)
+            self.formatAndSend('7', display=5)
         elif midinumber == 93:
             self.__keyboard.type('8')
-            self.formatAndSend('8', display=2)
+            self.formatAndSend('8', display=5)
         elif midinumber == 94:
             self.__keyboard.type('9')
-            self.formatAndSend('9', display=2)
+            self.formatAndSend('9', display=5)
         elif midinumber == 46:
             self.__keyboard.type('m')
-            self.formatAndSend('m', display=2)
+            self.formatAndSend('m', display=5)
         elif midinumber == 99:
             self.__keyboard.type('j')
-            self.formatAndSend('j', display=2)
+            self.formatAndSend('j', display=5)
         elif midinumber == 104:
             self.__keyboard.type('y')
-            self.formatAndSend('y', display=2)
+            self.formatAndSend('y', display=5)
        # special keys
         elif midinumber == 56:
             self.__keyboard.press(Key.space)
             self.__keyboard.release(Key.space)
-            self.formatAndSend('\n', display=2)
+            self.formatAndSend('\n', display=5)
         elif midinumber == 32:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
             self.evaluateSC('eval')
-            self.formatAndSend('\nevaluate\n', display=2)
+            self.formatAndSend('\nevaluate\n', display=5)
         elif midinumber == 50:
             self.__keyboard.type('~')
-            self.formatAndSend('~', display=2)
+            self.formatAndSend('~', display=5)
         elif midinumber == 51:
             self.__keyboard.type('+')
-            self.formatAndSend('+', display=2)
+            self.formatAndSend('+', display=5)
         elif midinumber == 54:
             self.__keyboard.type('-')
-            self.formatAndSend('-', display=2)
+            self.formatAndSend('-', display=5)
         elif midinumber == 49:
             self.__keyboard.type('=')
-            self.formatAndSend('=', display=2)
+            self.formatAndSend('=', display=5)
         elif midinumber == 103:
             self.__keyboard.type('?')
-            self.formatAndSend('?', display=2)
+            self.formatAndSend('?', display=5)
         elif midinumber == 105:
             self.__keyboard.type('.!')
-            self.formatAndSend('.!', display=2)
+            self.formatAndSend('.!', display=5)
         elif midinumber == 95:
             self.__keyboard.press(Key.backspace)
             self.__keyboard.release(Key.backspace)
       # supercollider commands:
         elif midinumber == 33:
             self.evaluateSC('eval')
-            self.formatAndSend('\nevaluate\n', display=2)
+            self.formatAndSend('\nevaluate\n', display=5)
         elif midinumber == 22:
             self.__keyboard.type('.tempo')
-            self.formatAndSend('.tempo', display=2)
+            self.formatAndSend('.tempo', display=5)
         elif midinumber == 21:
             self.__keyboard.type('.play')
-            self.formatAndSend('.play', display=2)
+            self.formatAndSend('.play', display=5)
         elif midinumber == 102:
             self.__keyboard.type('TempoClock.default')
-            self.formatAndSend('TempoClock.default', display=2)
+            self.formatAndSend('TempoClock.default', display=5)
         elif midinumber == 108:
             self.goDown()         
     # motippets only commands:
@@ -627,6 +628,8 @@ class Mapping_Motippets:
             port = 3333
         elif display == 4:
             port = 4444
+        elif display == 5:
+            port = 5555        
 
         return self.__socket.sendto(bytes(syntax_color+'\n'+msg, encoding), (host, port))
 
