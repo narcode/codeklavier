@@ -124,7 +124,7 @@ class Motippets(object):
             elif section == 'mid':
                 if (note > self._pianosections[0] and
                     note <= self._pianosections[1]):
-                    self.memorize(note, 9, True, 'Mid: ')
+                    self.memorize(note, 9, False, 'Mid: ')
 
                     # see if motif_1 is played:
                     motif1_played = self.compare_chordal_motif(
@@ -195,37 +195,37 @@ class Motippets(object):
                             self._deltatime, 0.1, target, False)
                         self._deltatime = 0
 
-                elif section == 'tremoloMid':
-                    if (note > self._pianosections[0] and
-                        note <= self._pianosections[1]):
-                        self.memorize(note, 4, False, target, 'Tremolo Mid: ')
-                        
-                        if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
-                            self.tremolo_value(
-                                [self._memory[2], self._memory[3]], 'mid',
-                                self._deltatime, 0.1, target, False)
-                            self._deltatime = 0
-
-                elif section == 'tremoloLow':
-                    if note <= self._pianosections[0]:
-                        self.memorize(note, 4, False, 'Tremolo Low: ')
-                        
-                        if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
-                            self.tremolo_value(
-                                [self._memory[2], self._memory[3]], 'low',
-                                self._deltatime, 0.1, target, False)
-                            self._deltatime = 0
-
-                elif section == 'params':
-                    self.memorize(note, 4, False, 'Parameters tremolo: ')
-
+            elif section == 'tremoloMid':
+                if (note > self._pianosections[0] and
+                    note <= self._pianosections[1]):
+                    self.memorize(note, 4, True, target, 'Tremolo Mid: ')
+                    
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
-                        self._interval = self.tremolo_value(
-                                    [self._memory[2], self._memory[3]], 'full',
-                                    self._deltatime, 0.1, False)
+                        self.tremolo_value(
+                            [self._memory[2], self._memory[3]], 'mid',
+                            self._deltatime, 0.1, target, False)
                         self._deltatime = 0
 
-                return self._interval
+            elif section == 'tremoloLow':
+                if note <= self._pianosections[0]:
+                    self.memorize(note, 4, False, 'Tremolo Low: ')
+                    
+                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                        self.tremolo_value(
+                            [self._memory[2], self._memory[3]], 'low',
+                            self._deltatime, 0.1, target, False)
+                        self._deltatime = 0
+
+            elif section == 'params':
+                self.memorize(note, 4, False, 'Parameters tremolo: ')
+
+                if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                    self._interval = self.tremolo_value(
+                        [self._memory[2], self._memory[3]], 'full',
+                        self._deltatime, 0.1, False)
+                    self._deltatime = 0
+
+            return self._interval
 
             ### FULL REGISTER
             elif section == 'full':
