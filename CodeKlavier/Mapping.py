@@ -214,6 +214,25 @@ class Mapping_HelloWorld():
         elif midinumber == 102:
             self.__keyboard.type('TempoClock.default')
             self.formatAndSend('TempoClock.default', display=2)
+    
+    def onlyDisplay(self, content, tag=1, warning=False):
+        """
+        print a custom string on the UDP display only!
+        
+        :param string content: the message or content
+        :param int tag: the reference to a color tag
+        :param warning: wether to print the message with the warning color tag (i.e. red)
+        
+        """
+        if warning:
+            self.formatAndSend(content, display=4, syntax_color='warning:')
+        else:
+            if tag == 2:
+                self.formatAndSend(content, display=4, syntax_color='loop2:')
+            elif tag == 3:
+                self.formatAndSend(content, display=4, syntax_color='loop3:')
+            else:
+                self.formatAndSend(content, display=4, syntax_color='loop:')    
 
 class Mapping_HelloWorld_NKK:
     """Mapping of the HelloWorld piece
