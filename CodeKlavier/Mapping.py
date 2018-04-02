@@ -593,7 +593,7 @@ class Mapping_Motippets:
       # supercollider commands:
         elif midinumber == 33:
             self.evaluateSC('eval')
-            self.formatAndSend('\nevaluate\n', display=5, syntax_color='hello:', spacing=False)
+            self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 22:
             self.__keyboard.type('.tempo')
             self.formatAndSend('.tempo', display=5, syntax_color='hello:', spacing=False)
