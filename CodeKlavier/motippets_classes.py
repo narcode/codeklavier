@@ -519,7 +519,7 @@ class Motippets(object):
             self._memory = self._memory[-length:]
 
         if debug == True:
-            print(debugname + ','.join(map(str, self._memory)))
+            print(debugname, ','.join(map(str, self._memory)))
             if conditional == "on":
                 print(debugname + ','.join(map(str, self._conditionalsBuffer)))
 
