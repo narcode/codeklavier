@@ -14,6 +14,7 @@ Contents
    RunCodeKlavier
    HelloWorld
    Motippets
+   Hybrid
    Documentation
    modules.rst
 

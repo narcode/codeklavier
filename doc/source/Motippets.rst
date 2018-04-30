@@ -1,7 +1,7 @@
 Motippets
 =========
 
-.. WARNING:: The story continues. TODO: write documentation.
+TODO: write documentation.
 
 Motippets python documentation
 ------------------------------

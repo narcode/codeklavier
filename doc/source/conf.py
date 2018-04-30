@@ -171,6 +171,3 @@ texinfo_documents = [
      author, 'CodeKlavier', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
