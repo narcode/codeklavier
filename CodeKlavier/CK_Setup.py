@@ -31,7 +31,7 @@ class Setup(object):
         :param int length: the line length (actuel length is 1 longer)
         :param int lines: number of lines to print (-1)
         """
-        for i in range(1, lines):
+        for i in range(0, lines):
             num = length+(1)
             print('##'*num)
             #TODO: add codeKlavier logo
@@ -40,12 +40,24 @@ class Setup(object):
     def print_welcome(self, length):
         """Print the welcome lines
 
-        :param int length: the line length (actuel length is 1 longer)
+        :param int length: the line length (actual length is 1 longer)
         """
-        for i in range(1, 5):
+        for i in range(0, 7):
             num = length+(1)
-            print('##'*num)
-            #TODO: add codeKlavier logo
+            if i == 0:
+                print('##'*num)
+            elif i == 1:
+                print('##  ## ##  ##   # # # #### ## # #   #   #  ###')
+            elif i == 2:  
+                print('# ### # # # # ### # # ### # # # ## ## ### # ##')
+            elif i == 3:
+                print('# ### # # # #  ##  ## ###   # # ## ##  ##  ###')
+            elif i == 4:
+                print('# ### # # # # ### # # ### # # # ## ## ### # ##')
+            elif i == 5:
+                print('##  ## ##  ##   # # #   # # ## ##   #   # # ##')
+            elif i == 6:
+                print('##'*num)            
             time.sleep(0.2)
 
         print("\nWelcome to the Codeklavier v0.2!\n")
@@ -84,7 +96,7 @@ class Setup(object):
         :param int pnum: the port number
         :raises Exception: when there are no midi ports
         """
-        print("You have chosen: ", self.__ports[pnum])
+        print("Using Midi device: ", self.__ports[pnum])
 
         if self.__ports:
             #TODO: do we need to check on the existence of ports?

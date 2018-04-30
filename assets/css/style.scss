@@ -1,0 +1,24 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+header {
+background-image: url('../images/codeklavier image.png');
+background-position: 0;
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+header h2 {
+background-color: black;
+border-radius: 10%;
+padding: 10px;
+width: 50%;
+border: 2px solid #b5e853;
+}
+
+.btn {
+background: black;
+border: 2px solid rgb(181, 232, 83);
+}

@@ -16,8 +16,9 @@ from CK_Setup import Setup
 
 from hello_world import hello_world
 from motippets import motippets
+from hybrid import hybrid
 
-PIECES = ('hello_world', 'motippets')
+PROTOTYPES = ('hello_world', 'motippets', 'hybrid')
 
 def doHelp():
     """
@@ -35,27 +36,27 @@ def doHelp():
     print('Show this help text.')
     print('')
     print('-i | --interactive')
-    print('Start CodeKlavier in an interactive way')
+    print('Start CodeKlavier in interactive mode')
     print('')
     print('-m | --makeconfig <<configfile>>')
-    print('Create a new configgile <<configfile>> and use it to start CodeKlavier. Note: -c and -m options cannot be used together.')
+    print('Create a new configfile <<configfile>> and use it to start CodeKlavier. Note: -c and -m options cannot be used together.')
     print('')
-    print('-p | --play <<piece>>')
-    print('Start CodeKlavier and perform piece <<piece>>')
+    print('-p | --prototype <<name>>')
+    print('Boot CodeKlavier with prototype <<name>>')
     print('')
     print('Example:')
-    print('./codeklavier.py -c default_settings.ini -p hello_world')
+    print('./codeklavier.py -c custom_settings.ini -p hello_world')
 
 def miditest(configfile='default_setup.ini'):
     """
-    Run a basic miditest to see if everything is working.
+    Run a basic miditest to see how the CodeKlavier is receiving your midi.
 
     :param string configfile: Path to the configuration file (default: default_setup.ini)
     """
     #Read config and settings
     config = configparser.ConfigParser()
     config.read(configfile)
-    
+
     try:
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('device_id')
@@ -64,7 +65,7 @@ def miditest(configfile='default_setup.ini'):
 
     if (myPort == None or device_id == None):
         raise LookupError('Missing key information in the config file.')
-    
+
     codeK = Setup()
     codeK.open_port(myPort)
     print('your device id is: ', device_id, '\n')
@@ -85,17 +86,17 @@ def miditest(configfile='default_setup.ini'):
         print("Bye-Bye :(")
         codeK.end()
 
-def perform(configfile='default_setup.ini', piece='hello_world'):
+def perform(configfile='default_setup.ini', prototype='hello_world'):
     """
-    Boot a specific prototype of the CodeKlavier
+    Boot a specific prototype from the CodeKlavier
 
     :param string configfile: Path to the configuration file (default: default_setup.ini)
-    :param string piece: name of the piece to perform
+    :param string prototype: name of the prototype to boot
     """
-    if (piece not in PIECES):
-        raise ValueError('This piece doesn\'t exist. Please compose it and retry.')
+    if (prototype not in PROTOTYPES):
+        raise ValueError('This prototype doesn\'t exist. Please retry.')
 
-    eval(piece + '.main(configfile=\'' + configfile + '\')')
+    eval(prototype + '.main()')
 
 def perform_interactive(configfile='default_setup.ini'):
     """
@@ -103,23 +104,27 @@ def perform_interactive(configfile='default_setup.ini'):
 
     :param string configfile: Path to the configuration file (default: default_setup.ini)
     """
+    codeK = Setup()
+    count = 1
     while True:
-        print('Welcome to CodeKlavier.')
-        print('Type the name of the piece you want to play, \'test\' for a miditest, or \'exit\' to quit.')
+        codeK.print_welcome(20)
+        print('Type the number of the prototype you want to use,\n \'test\' for a miditest,\n or \'exit\' to quit.')
         print('')
-        print('The available pieces are:')
-        for p in PIECES:
-            print('  - ' + p)
+        print('The available prototypes are:')
+
+        for p in PROTOTYPES:
+            count = count + 1
+            print(' ', count, '.' + p)
         print('')
-        pi = input('Your choice? ')
+        pi = input('Type your choice? ')
         if (pi.lower() == 'exit'):
             sys.exit(0)
         if (pi.lower() == 'test'):
             miditest(configfile=configfile)
         try:
-            perform(configfile=configfile, piece=pi)
+            perform(configfile=configfile, prototype=pi)
         except ValueError:
-            print('That is not an available piece. Try again or \'exit\'')
+            print('That is not an available prototype. Try again or \'exit\'')
 
 if __name__ == '__main__':
     """
@@ -186,7 +191,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     if play:
-        perform(configfile=config, piece=play)
+        perform(configfile=config, prototype=play)
         sys.exit(0)
 
     if interactive:
