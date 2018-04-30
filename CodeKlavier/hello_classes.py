@@ -31,5 +31,6 @@ class HelloWorld(object):
             if message[2] > 0: #only noteOn
                 if (message[0] == self.noteonid):
                     self.mapscheme.mapping(message[1])
+                    
                 if (message[0] == 176): #hardcoded pedal id (not pretty) TODO: make it dynamic
                     self.mapscheme.stopSC(message[1])

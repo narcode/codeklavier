@@ -5,16 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Motippets &#8212; CodeKlavier 0.1 documentation</title>
+    <title>Motippets &#8212; CodeKlavier 0.2.1 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
+        HAS_SOURCE:  false,
         SOURCELINK_SUFFIX: '.txt'
       };
     </script>
@@ -47,7 +47,7 @@
         <li class="right" >
           <a href="HelloWorld.html" title="hello world"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -82,6 +82,86 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">The story continues. TODO: write documentation.</p>
 </div>
+<div class="section" id="module-motippets.motippets">
+<span id="motippets-python-documentation"></span><h2>Motippets python documentation<a class="headerlink" href="#module-motippets.motippets" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="motippets.motippets.main">
+<code class="descclassname">motippets.motippets.</code><code class="descname">main</code><span class="sig-paren">(</span><em>configfile='default_setup.ini'</em><span class="sig-paren">)</span><a class="headerlink" href="#motippets.motippets.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start motippets!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>configfile</strong> (<em>string</em>) – The configurationfile to use. Defaults to default_setup.ini</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="motippets.motippets.noteCounter">
+<code class="descclassname">motippets.motippets.</code><code class="descname">noteCounter</code><span class="sig-paren">(</span><em>timer=10</em>, <em>numberOfnotes=100</em>, <em>result_num=1</em>, <em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#motippets.motippets.noteCounter" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: define func</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>timer</strong> (<em>int</em>) – todo</li>
+<li><strong>numberOfnotes</strong> (<em>int</em>) – todo</li>
+<li><strong>result_num</strong> (<em>int</em>) – todo</li>
+<li><strong>debug</strong> (<em>bool</em>) – run in debug mode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="motippets.motippets.rangeCounter">
+<code class="descclassname">motippets.motippets.</code><code class="descname">rangeCounter</code><span class="sig-paren">(</span><em>timer=''</em>, <em>operator=''</em>, <em>num=1</em>, <em>result_num=1</em>, <em>piano_range=72</em>, <em>debug=True</em>, <em>perpetual=True</em><span class="sig-paren">)</span><a class="headerlink" href="#motippets.motippets.rangeCounter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the played range within a time window. Perpetual flag makes it run it’s loop forever, unless range_trigger is != 1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>timer</strong> – time window loop</li>
+<li><strong>operator</strong> – ‘more than’ or ‘less than’</li>
+<li><strong>num</strong> (<em>int</em>) – conditional number</li>
+<li><strong>result_num</strong> (<em>int</em>) – result number mapped to this conditional</li>
+<li><strong>piano_range</strong> (<em>int</em>) – total range for evvaluation in semitones</li>
+<li><strong>debug</strong> (<em>bool</em>) – booelan flag to post debug messages</li>
+<li><strong>perpetual</strong> (<em>bool</em>) – boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="motippets.motippets.set_parameters">
+<code class="descclassname">motippets.motippets.</code><code class="descname">set_parameters</code><span class="sig-paren">(</span><em>value</em>, <em>conditional_func</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#motippets.motippets.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to parse a full range tremolo. This value can be used as a param for the
+other functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> (<em>int</em>) – the interval of the plated tremolo</li>
+<li><strong>conditional_func</strong> – todo</li>
+<li><strong>debug</strong> (<em>bool</em>) – run in debug mode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -105,7 +185,7 @@
         <li class="right" >
           <a href="HelloWorld.html" title="hello world"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CodeKlavier 0.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
