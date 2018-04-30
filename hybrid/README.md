@@ -1,4 +1,4 @@
-# Motippets
+# Hybrid Prototype
 
 TODO
 
