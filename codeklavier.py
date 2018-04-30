@@ -2,11 +2,12 @@
 """
 CodeKlavier Masterscript
 
-This script will help you run the code klavier
+This script will help you run the Codeklavier
 """
 
 import configparser
 import getopt
+import os.path
 import sys
 import time
 
@@ -99,7 +100,7 @@ def perform(configfile='default_setup.ini', prototype='hello_world'):
 
 def perform_interactive(configfile='default_setup.ini'):
     """
-    Run codeklavier in interactive mode.
+    Run Codeklavier in interactive mode.
 
     :param string configfile: Path to the configuration file (default: default_setup.ini)
     """
@@ -126,6 +127,17 @@ def perform_interactive(configfile='default_setup.ini'):
             print('That is not an available prototype. Try again or \'exit\'')
 
 if __name__ == '__main__':
+    """
+    Catch the arguments that were used to start this function.
+
+    Options are h, c, p, t, i
+
+    There is no default.ini 'by default'. So if it is the first run and
+    default.ini is not yet there then the scripts prompts the user for the
+    interactive createConfig and saves it as default. I also noticed that just
+    running codeklavier.py without arguments simply exits. It should better
+    print the usage options or showhelp() before exiting.
+    """
 
     showHelp = False
     test = False
@@ -162,7 +174,14 @@ if __name__ == '__main__':
         sys.exit(0)
 
     if createConfig:
-        CK_configWriter=createConfig(configfile=createConfig)
+        CK_configWriter.createConfig(configfile=createConfig)
+        print('\nCongratultions! You have created ', createConfig, '\n')
+
+    if (not(createConfig or useConfig or os.path.isfile('default_setup.ini'))):
+        #User didn't specify a configfile -> create default
+        print('No  setup file specified. Let\'s create the default!')
+        CK_configWriter.createConfig(configfile='default_setup.ini')
+        createConfig = 'default_setup.ini'
 
     config = useConfig if useConfig else createConfig
     config = config if config else 'default_setup.ini'
@@ -179,4 +198,12 @@ if __name__ == '__main__':
         perform_interactive(configfile=config)
         sys.exit(0)
 
+    #no arguments -> print help
+    print('What do you want CodeKlavier to do? Give me something!')
+    print('These prototypes are available:')
+    for p in PIECES:
+        print(' - ', p)
+    print('')
+    print('Here is how CodeKlavier works:')
+    doHelp()
     sys.exit(0)
