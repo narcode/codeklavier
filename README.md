@@ -1,16 +1,10 @@
-### v0.2.1 enhancements in development:
-* tweaks for IN-SONORA presentation in late March
-* implementation of configparser
-* commandline arguments for codeklavier startup
-* dynamic mapping
-* dual display for motippets
-
 # CodeKlavier
 ### Live coding with the piano as interface.
 
 An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL**
 
 CodeKlavier development started in April 2017 and currently has two prototypes (newest on top):
++  *Hybrid* (coding via pianistic gestures/motifs and added a custom code display via udp sockets)
 +  *Motippets* (coding via pianistic gestures/motifs)
 + *hello world* (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
 
