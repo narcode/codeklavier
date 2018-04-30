@@ -116,15 +116,10 @@ class Mapping_HelloWorld():
             self.formatAndSend('t', display=2)
         elif midinumber == 47:
             self.__keyboard.type('s')
-<<<<<<< HEAD
             self.formatAndSend('s', display=2)
         elif midinumber == 38:
             self.__keyboard.type('a')
             self.formatAndSend('a', display=2)
-=======
-        elif midinumber == 38:
-            self.__keyboard.type('a')
->>>>>>> master
         elif midinumber == 40:
             self.__keyboard.type('n')
             self.formatAndSend('n', display=2)
@@ -662,8 +657,6 @@ class Mapping_Motippets:
 
     def miniSnippets(self, snippet_num, pianosection):
         """Type a mini snippet for specific pianosections'utf-8'
-
-        TODO: consider - should we put this in a snippet config file?
 
         :param int snippet_num: the id of the mini snippet to play
         :param string pianosections: the pianosection that is used ('hi', 'mid', 'low')

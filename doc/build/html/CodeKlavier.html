@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>CodeKlavier package &#8212; CodeKlavier 0.2.1 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.2.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -29,8 +21,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -54,12 +45,14 @@
                         title="previous chapter">CodeKlavier</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -77,7 +70,7 @@
 <dl class="class">
 <dt id="CodeKlavier.CK_Setup.BColors">
 <em class="property">class </em><code class="descclassname">CodeKlavier.CK_Setup.</code><code class="descname">BColors</code><a class="headerlink" href="#CodeKlavier.CK_Setup.BColors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class with background colors for the terminal.</p>
 <dl class="attribute">
 <dt id="CodeKlavier.CK_Setup.BColors.BOLD">
@@ -124,7 +117,7 @@
 <dl class="class">
 <dt id="CodeKlavier.CK_Setup.Setup">
 <em class="property">class </em><code class="descclassname">CodeKlavier.CK_Setup.</code><code class="descname">Setup</code><a class="headerlink" href="#CodeKlavier.CK_Setup.Setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Helper class to setup the CodeKlavier with your piano.</p>
 <dl class="method">
 <dt id="CodeKlavier.CK_Setup.Setup.close_port">
@@ -250,7 +243,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> (<em>int</em>) – the line length (actuel length is 1 longer)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> (<em>int</em>) – the line length (actual length is 1 longer)</td>
 </tr>
 </tbody>
 </table>
@@ -324,12 +317,12 @@
 <dl class="class">
 <dt id="CodeKlavier.Instructions.Instructions">
 <em class="property">class </em><code class="descclassname">CodeKlavier.Instructions.</code><code class="descname">Instructions</code><a class="headerlink" href="#CodeKlavier.Instructions.Instructions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class shows instructions on the CodeKlaver usages. Great if you want
 to run a self-running demo.</p>
 <p>TODO: write example</p>
-<p>TODO: write <code class="docutils literal"><span class="pre">main()</span></code> method</p>
-<p>TODO: do we need to subclass <code class="docutils literal"><span class="pre">object</span></code>? Seems unnecessary</p>
+<p>TODO: write <code class="docutils literal notranslate"><span class="pre">main()</span></code> method</p>
+<p>TODO: do we need to subclass <code class="docutils literal notranslate"><span class="pre">object</span></code>? Seems unnecessary</p>
 <dl class="method">
 <dt id="CodeKlavier.Instructions.Instructions.do_header">
 <code class="descname">do_header</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Instructions.Instructions.do_header" title="Permalink to this definition">¶</a></dt>
@@ -441,11 +434,19 @@ to run a self-running demo.</p>
 <h2>CodeKlavier.Mapping module<a class="headerlink" href="#codeklavier-mapping-module" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld">
-<em class="property">class </em><code class="descclassname">CodeKlavier.Mapping.</code><code class="descname">Mapping_HelloWorld</code><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">CodeKlavier.Mapping.</code><code class="descname">Mapping_HelloWorld</code><span class="sig-paren">(</span><em>use_display=False</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mapping for the Hello World prototype.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boolean</strong> (<em>use_display</em>) – set if code should be printed in UDP display</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>use_display=False</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Init the class</p>
 <p>Print that the user is using this mapping and set the controller.</p>
 </dd></dl>
@@ -454,6 +455,26 @@ to run a self-running demo.</p>
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld.evaluateSC">
 <code class="descname">evaluateSC</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld.evaluateSC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the SuperCollider command (presses shift-enter).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.Mapping.Mapping_HelloWorld.formatAndSend">
+<code class="descname">formatAndSend</code><span class="sig-paren">(</span><em>msg=''</em>, <em>encoding='utf-8'</em>, <em>host='localhost'</em>, <em>display=1</em>, <em>syntax_color=''</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld.formatAndSend" title="Permalink to this definition">¶</a></dt>
+<dd><p>format and prepare a string for sending it over UDP socket</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>msg</strong> (<em>str</em>) – the string to be sent</li>
+<li><strong>encoding</strong> (<em>str</em>) – the character encoding</li>
+<li><strong>host</strong> (<em>str</em>) – the UDP server hostname</li>
+<li><strong>display</strong> (<em>int</em>) – the UDP destination port</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -473,7 +494,7 @@ to run a self-running demo.</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld.stopSC">
 <code class="descname">stopSC</code><span class="sig-paren">(</span><em>midinumber</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld.stopSC" title="Permalink to this definition">¶</a></dt>
-<dd><p>If <code class="docutils literal"><span class="pre">midinumber</span></code> is 66, then stop SuperCollider</p>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">midinumber</span></code> is 66, then stop SuperCollider</p>
 <p>By issueing a cmd-. command.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -541,7 +562,7 @@ as played on the Leiden Nacht van Kunst en Kultuur.</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_HelloWorld_NKK.stopSC">
 <code class="descname">stopSC</code><span class="sig-paren">(</span><em>midinumber</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_HelloWorld_NKK.stopSC" title="Permalink to this definition">¶</a></dt>
-<dd><p>If <code class="docutils literal"><span class="pre">midinumber</span></code> is 66, then stop SuperCollider</p>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">midinumber</span></code> is 66, then stop SuperCollider</p>
 <p>By issueing a cmd-. command.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -557,12 +578,14 @@ as played on the Leiden Nacht van Kunst en Kultuur.</p>
 
 <dl class="class">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets">
-<em class="property">class </em><code class="descclassname">CodeKlavier.Mapping.</code><code class="descname">Mapping_Motippets</code><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">CodeKlavier.Mapping.</code><code class="descname">Mapping_Motippets</code><span class="sig-paren">(</span><em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mapping for the Motippets prototype.</p>
+<p>Includes HelloWorld mappings for the Hybrid prototype</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.conditional">
@@ -585,7 +608,20 @@ is less than … (option 3).</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.customPass">
 <code class="descname">customPass</code><span class="sig-paren">(</span><em>name</em>, <em>content</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.customPass" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>post custom string message on codespace and display</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>string</em>) – a label to print in front of the string</li>
+<li><strong>content</strong> (<em>string</em>) – the message or content</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.delete">
@@ -614,6 +650,37 @@ is less than … (option 3).</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="CodeKlavier.Mapping.Mapping_Motippets.formatAndSend">
+<code class="descname">formatAndSend</code><span class="sig-paren">(</span><em>msg=''</em>, <em>encoding='utf-8'</em>, <em>host='localhost'</em>, <em>display=1</em>, <em>syntax_color=''</em>, <em>spacing=True</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.formatAndSend" title="Permalink to this definition">¶</a></dt>
+<dd><p>format and prepare a string for sending it over UDP socket</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param str msg:</th><td class="field-body">the string to be sent</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param str encoding:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">the character encoding</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param str host:</th><td class="field-body">the UDP server hostname</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param int display:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">the UDP destination port</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param str syntax_color:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">the tag to use for syntax coloring (loop, primitive, mid, low, hi, snippet)</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param boolean spacing:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">wheather to put a</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>(new line) before the msg</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.goDown">
 <code class="descname">goDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.goDown" title="Permalink to this definition">¶</a></dt>
 <dd><p>Press command-arrow down and enter.</p>
@@ -621,9 +688,8 @@ is less than … (option 3).</p>
 
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.mapping">
-<code class="descname">mapping</code><span class="sig-paren">(</span><em>midinumber</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.mapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate a specific command if <code class="docutils literal"><span class="pre">midinumber</span></code> is played</p>
-<p>TODO: Check if we can combine this with <code class="docutils literal"><span class="pre">evaluateSC()</span></code></p>
+<code class="descname">mapping</code><span class="sig-paren">(</span><em>midinumber</em>, <em>prototype='Hello World'</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type a letter that is coupled to this midi note.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -637,8 +703,7 @@ is less than … (option 3).</p>
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.miniSnippets">
 <code class="descname">miniSnippets</code><span class="sig-paren">(</span><em>snippet_num</em>, <em>pianosection</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.miniSnippets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Type a mini snippet for specific pianosections</p>
-<p>TODO: consider - should we put this in a snippet config file?</p>
+<dd><p>Type a mini snippet for specific pianosections’utf-8’</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -646,6 +711,25 @@ is less than … (option 3).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>snippet_num</strong> (<em>int</em>) – the id of the mini snippet to play</li>
 <li><strong>pianosections</strong> (<em>string</em>) – the pianosection that is used (‘hi’, ‘mid’, ‘low’)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CodeKlavier.Mapping.Mapping_Motippets.onlyDisplay">
+<code class="descname">onlyDisplay</code><span class="sig-paren">(</span><em>content</em>, <em>tag=1</em>, <em>warning=False</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.onlyDisplay" title="Permalink to this definition">¶</a></dt>
+<dd><p>print a custom string on the UDP display only!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>content</strong> (<em>string</em>) – the message or content</li>
+<li><strong>tag</strong> (<em>int</em>) – the reference to a color tag</li>
+<li><strong>warning</strong> – wether to print the message with the warning color tag (i.e. red)</li>
 </ul>
 </td>
 </tr>
@@ -674,14 +758,17 @@ is less than … (option 3).</p>
 
 <dl class="method">
 <dt id="CodeKlavier.Mapping.Mapping_Motippets.snippets">
-<code class="descname">snippets</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.snippets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">snippets</code><span class="sig-paren">(</span><em>num</em>, <em>configfile='default_setup.ini'</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.Mapping.Mapping_Motippets.snippets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type code snippets</p>
-<p>TODO: consider - should we put this in a snippet config file?</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> (<em>int</em>) – the id of the code snippet to play</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>num</strong> (<em>int</em>) – the id of the code snippet to play</li>
+<li><strong>configfile</strong> (<em>str</em>) – the name of the config file to parse</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -722,7 +809,7 @@ First prototype of the CodeKlavier</p>
 <dl class="class">
 <dt id="CodeKlavier.hello_classes.HelloWorld">
 <em class="property">class </em><code class="descclassname">CodeKlavier.hello_classes.</code><code class="descname">HelloWorld</code><span class="sig-paren">(</span><em>port</em>, <em>mapping</em>, <em>noteonid</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.hello_classes.HelloWorld" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>class to handle the midi input and map it to characters</p>
 </dd></dl>
 
@@ -758,13 +845,13 @@ Used for the installation at NKK 2017</p>
 <dl class="class">
 <dt id="CodeKlavier.motippets_classes.Motippets">
 <em class="property">class </em><code class="descclassname">CodeKlavier.motippets_classes.</code><code class="descname">Motippets</code><span class="sig-paren">(</span><em>mapping</em>, <em>noteonid</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.motippets_classes.Motippets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class to handle the midi input.</p>
 <p>classes for Motippets.
 Second prototype of the CodeKlavier</p>
 <dl class="method">
 <dt id="CodeKlavier.motippets_classes.Motippets.compare_chordal_motif">
-<code class="descname">compare_chordal_motif</code><span class="sig-paren">(</span><em>array</em>, <em>motif</em>, <em>note</em>, <em>num=0</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.motippets_classes.Motippets.compare_chordal_motif" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compare_chordal_motif</code><span class="sig-paren">(</span><em>array</em>, <em>motif</em>, <em>note</em>, <em>num=0</em>, <em>deltatime=0</em>, <em>deltatolerance=0.005</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.motippets_classes.Motippets.compare_chordal_motif" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare chordal motifs</p>
 <p>i.e. MIDI note order doesn’t matter</p>
 <p>TODO: describe input/output params
@@ -817,15 +904,16 @@ a tremolo. Can detect tremolos and also triple tremolos, or unisons.</p>
 
 <dl class="method">
 <dt id="CodeKlavier.motippets_classes.Motippets.parse_midi">
-<code class="descname">parse_midi</code><span class="sig-paren">(</span><em>event</em>, <em>section</em>, <em>target=0</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.motippets_classes.Motippets.parse_midi" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse_midi</code><span class="sig-paren">(</span><em>event</em>, <em>section</em>, <em>ck_deltatime=0</em>, <em>target=0</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.motippets_classes.Motippets.parse_midi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the midi signal and process it depending on the register.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>event</strong> – describes the midi event that was triggered</li>
+<li><strong>event</strong> (<em>tuple</em>) – describes the midi event that was received</li>
 <li><strong>section</strong> (<em>string</em>) – the MIDI piano range (i.e. low register, mid or high)</li>
+<li><strong>ck_deltatime</strong> (<em>float</em>) – the deltatime between icoming note-on MIDI messages</li>
 <li><strong>target</strong> (<em>int</em>) – target the parsing for a specific snippet. 0 is no target</li>
 </ul>
 </td>
@@ -838,6 +926,22 @@ a tremolo. Can detect tremolos and also triple tremolos, or unisons.</p>
 <dt id="CodeKlavier.motippets_classes.Motippets.tremolo_value">
 <code class="descname">tremolo_value</code><span class="sig-paren">(</span><em>notes</em>, <em>pianosection</em>, <em>deltatime</em>, <em>deltatolerance</em>, <em>target</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#CodeKlavier.motippets_classes.Motippets.tremolo_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the interval of a given tremolo.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>notes</strong> (<em>array</em>) – Array of notes to be analysed</li>
+<li><strong>pianosection</strong> (<em>string</em>) – the name of the piano range (i.e. low, mid, etc)</li>
+<li><strong>deltatime</strong> (<em>float</em>) – the time between the received midi messages</li>
+<li><strong>deltatolerance</strong> (<em>float</em>) – the deltatime max threshold</li>
+<li><strong>target</strong> (<em>int</em>) – integer that references the targeted snippet</li>
+<li><strong>debug</strong> (<em>boolean</em>) – wheather to show or hide debug messages</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <p>TODO: this should only return the interval integer and on another place define what to do with it!
 TODO: describe input params</p>
 </dd></dl>
@@ -871,7 +975,7 @@ TODO: describe input params</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, CodeKlavier Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

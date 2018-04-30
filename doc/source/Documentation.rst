@@ -4,7 +4,7 @@ Every developer likes to have documentation, but no one really likes to write it
 
 Sphinx and rst
 --------------
-To help us with the documentation proces, CodeKlavier uses the Sphinx package that convers rst-files (that are easy to write) to html-files that are beautiful and easy to browse. On top of that: Sphinx can 'walk' over the python source code and generate the documentation out of the docstrings in the python code.
+To help us with the documentation proces, CodeKlavier uses the Sphinx package that converts rst-files (that are easy to write) to html-files that are beautiful and easy to browse. On top of that: Sphinx can 'walk' over the python source code and generate the documentation out of the docstrings in the python code.
 
 Rst-files are plain text files with some basic formatting. You can underline words with === to indicate a header and you use '*' to use **boldface** and so on. There is enough material on the internet to help you with the basics.
 

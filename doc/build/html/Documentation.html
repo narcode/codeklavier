@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Documentation &#8212; CodeKlavier 0.2.1 documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.2.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -30,8 +22,7 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -60,12 +51,14 @@
                         title="next chapter">CodeKlavier</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -85,20 +78,20 @@
 <p>Rst-files are plain text files with some basic formatting. You can underline words with === to indicate a header and you use ‘*’ to use <strong>boldface</strong> and so on. There is enough material on the internet to help you with the basics.</p>
 <div class="section" id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
-<p>You can use <code class="docutils literal"><span class="pre">pip3</span></code> to install the Sphinx-package by running:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">sphinx</span>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">pip3</span></code> to install the Sphinx-package by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">sphinx</span>
 </pre></div>
 </div>
 <p>Use pip3 because CodeKlavier uses python <strong>3</strong> and not python 2.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you used the <code class="docutils literal"><span class="pre">requirements.txt</span></code> file to install CodeKlavier, you have already installed Sphinx.</p>
+<p class="last">If you used the <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file to install CodeKlavier, you have already installed Sphinx.</p>
 </div>
 </div>
 <div class="section" id="setup">
 <h3>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">doc</span></code> folder was created to put everything that deals with documentation. From that directory we made the setup by running <code class="docutils literal"><span class="pre">sphynx-quickstart</span></code> and answering the questions that pop up. This creates the <code class="docutils literal"><span class="pre">source</span></code> and <code class="docutils literal"><span class="pre">build</span></code> directories and provides you with a <code class="docutils literal"><span class="pre">Makefile</span></code> file. Some small tweaks to the <code class="docutils literal"><span class="pre">source/conf.py</span></code> were made to finalise the installation.</p>
-<p>Sphinx can autogenerate some documentation based on the docstrings from the python code. Make sure you enable the “autodoc” module in the <code class="docutils literal"><span class="pre">conf.py</span></code> file and the you insert the correct “path”. With the command: <code class="docutils literal"><span class="pre">sphinx-apidoc</span> <span class="pre">-o</span> <span class="pre">&lt;output-path&gt;</span> <span class="pre">module-path</span></code> you can include an entire package/module in one go and it generates and <code class="docutils literal"><span class="pre">.rst</span></code> file that you can include in the <code class="docutils literal"><span class="pre">modules.rst</span></code> file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">doc</span></code> folder was created to put everything that deals with documentation. From that directory we made the setup by running <code class="docutils literal notranslate"><span class="pre">sphynx-quickstart</span></code> and answering the questions that pop up. This creates the <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">build</span></code> directories and provides you with a <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> file. Some small tweaks to the <code class="docutils literal notranslate"><span class="pre">source/conf.py</span></code> were made to finalise the installation.</p>
+<p>Sphinx can autogenerate some documentation based on the docstrings from the python code. Make sure you enable the “autodoc” module in the <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> file and the you insert the correct “path”. With the command: <code class="docutils literal notranslate"><span class="pre">sphinx-apidoc</span> <span class="pre">-o</span> <span class="pre">&lt;output-path&gt;</span> <span class="pre">module-path</span></code> you can include an entire package/module in one go and it generates and <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file that you can include in the <code class="docutils literal notranslate"><span class="pre">modules.rst</span></code> file.</p>
 </div>
 </div>
 <div class="section" id="how-to-write-documentation">
@@ -108,7 +101,7 @@
 </div>
 <div class="section" id="how-to-build-the-documentation">
 <h2>How to build the documentation<a class="headerlink" href="#how-to-build-the-documentation" title="Permalink to this headline">¶</a></h2>
-<p>Most likely, you’ll want to build towards html-code. You can make a build by running <code class="docutils literal"><span class="pre">make</span> <span class="pre">html</span></code> from the <code class="docutils literal"><span class="pre">doc</span></code> folder. This will run sphinx in html-mode and save an updated version of the html in the <code class="docutils literal"><span class="pre">doc/build</span></code> directory.</p>
+<p>Most likely, you’ll want to build towards html-code. You can make a build by running <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code> from the <code class="docutils literal notranslate"><span class="pre">doc</span></code> folder. This will run sphinx in html-mode and save an updated version of the html in the <code class="docutils literal notranslate"><span class="pre">doc/build</span></code> directory.</p>
 </div>
 </div>
 
@@ -138,7 +131,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, CodeKlavier Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>
