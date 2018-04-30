@@ -618,6 +618,7 @@ class Mapping_Motippets:
         :param str host: the UDP server hostname
         :param int display: the UDP destination port
         :param str syntax_color: the tag to use for syntax coloring (loop, primitive, mid, low, hi, snippet)
+        :param boolean spacing: wheather to put a \n (new line) before the msg
         """
 
         if display == 1:
