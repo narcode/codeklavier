@@ -20,14 +20,14 @@ class Motippets(object):
         self.noteoffid = 153
         self._memory = []
         self._mainMotifs = []
-        self._mainMotifs2 = []        
+        self._mainMotifs2 = []
         self._mainMotifs1 = []
         self._miniMotifs = []
         self._miniMotifs2 = []
         self._miniMotifs3 = []
         self._deltaHelper = []
         self._deltaHelper1 = []
-        self._deltaHelper2 = []        
+        self._deltaHelper2 = []
         self._results1 = []
         self._results2 = []
         self._results3 = []
@@ -57,12 +57,12 @@ class Motippets(object):
         :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
-                           
+
         if message[2] > 0 and message[0] == 176: #PEDAL STOP
             note = message[1]
             self.mapscheme.mapping(note, 'Motippets')
             return
-                    
+
         if (message[0] == self.noteonid):
             note = message[1]
             self._deltatime = ck_deltatime
@@ -71,12 +71,12 @@ class Motippets(object):
             if section == 'low':
                 if note <= self._pianosections[0]:
                     self.memorize(note, 4, False, 'Low: ')
-                    
+
                     mini_motif_1_Low_played = self.compare_motif(
                         self._memory, 'mini',
                         Motifs.get('mini_motif_1_low'),
                         note, False)
-                    
+
                     mini_motif_2_Low_played = self.compare_motif(
                         self._memory, 'mini2',
                         Motifs.get('mini_motif_2_low'),
@@ -86,7 +86,7 @@ class Motippets(object):
                         self._memory, 'mini3',
                         Motifs.get('mini_motif_3_low'),
                         note, False)
-                    
+
                     if (mini_motif_1_Low_played and
                         self._unmapCounter2 == 0 and
                         self._unmapCounter3 == 0):
@@ -97,7 +97,7 @@ class Motippets(object):
                     elif (mini_motif_1_Low_played and
                           self._unmapCounter3 > 0):
                         self.mapscheme.miniSnippets(1, 'low with unmap 3')
-                        
+
                     elif (mini_motif_2_Low_played and
                           self._unmapCounter1 == 0 and
                           self._unmapCounter3 == 0):
@@ -108,7 +108,7 @@ class Motippets(object):
                     elif (mini_motif_2_Low_played and
                           self._unmapCounter3 > 0):
                         self.mapscheme.miniSnippets(2, 'low with unmap 3')
-                        
+
                     elif (mini_motif_3_Low_played and
                           self._unmapCounter1 == 0 and
                           self._unmapCounter2 == 0):
@@ -119,7 +119,7 @@ class Motippets(object):
                     elif (mini_motif_3_Low_played and
                           self._unmapCounter2 > 0 ):
                         self.mapscheme.miniSnippets(1, 'low amp with unmap 2')
-                        
+
             ### MID SECTION
             elif section == 'mid':
                 if (note > self._pianosections[0] and
@@ -130,11 +130,11 @@ class Motippets(object):
                     motif1_played = self.compare_chordal_motif(
                         self._memory, Motifs.get('motif_1'),
                         note, deltatime=self._deltatime, deltatolerance=0.005, debug=False)
-                    
+
                     if motif1_played and self._motif1_counter == 0:
                         self.mapscheme.snippets(1)
                         self._motif1_counter = 1
-                        
+
                     mini_motif_1_Mid_played = self.compare_motif(
                         self._memory, 'mini',
                         Motifs.get('mini_motif_1_mid'),
@@ -156,12 +156,12 @@ class Motippets(object):
                     elif (mini_motif_2_Mid_played and
                           self._unmapCounter1 > 0):
                         self.mapscheme.miniSnippets(2, 'mid with unmap')
-                            
+
             ### HI SECTION
             elif section == 'hi':
                 if note > self._pianosections[1]:
                     self.memorize(note, 4, False, 'Hi: ')
-                    
+
                     mini_motif_1_Hi_played = self.compare_motif(
                         self._memory, 'mini',
                         Motifs.get('mini_motif_1_hi'),
@@ -170,7 +170,7 @@ class Motippets(object):
                         self._memory, 'mini2',
                         Motifs.get('mini_motif_2_hi'),
                         note, False)
-                    
+
                     if (mini_motif_1_Hi_played and
                         self._unmapCounter2 == 0):
                         self.mapscheme.miniSnippets(1, 'hi')
@@ -199,7 +199,7 @@ class Motippets(object):
                 if (note > self._pianosections[0] and
                     note <= self._pianosections[1]):
                     self.memorize(note, 4, False, target, 'Tremolo Mid: ')
-                    
+
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'mid',
@@ -209,7 +209,7 @@ class Motippets(object):
             elif section == 'tremoloLow':
                 if note <= self._pianosections[0]:
                     self.memorize(note, 4, False, 'Tremolo Low: ')
-                    
+
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'low',
@@ -267,11 +267,11 @@ class Motippets(object):
                         result3_played = self.compare_chordal_motif(self._memory,
                                                                     Motifs.get('conditional_result_3'),
                                                                     note, 1, self._deltatime, debug=False)
-                        
+
                         result4_played = self.compare_chordal_motif(self._memory,
                                                                     Motifs.get('conditional_result_4'),
                                                                     note, 2, self._deltatime, debug=False)
-                        
+
                         result5_played = self.compare_motif(self._memory, 'result 5',
                                                             Motifs.get('conditional_result_5'),
                                                             note, False)
@@ -297,7 +297,7 @@ class Motippets(object):
 
                 if note > self._pianosections[1]: ### hi register
                     self.memorize(note, 20, False, 'Conditional Memory High: ')
-                    
+
                     result2_played = self.compare_motif(self._memory, 'result 2',
                                                         Motifs.get('conditional_result_2'),
                                                         note, False)
@@ -312,9 +312,9 @@ class Motippets(object):
                         return self._conditionalStatus
 
                 if (note > self._pianosections[0] and note <= self._pianosections[1]):
-                    
+
                     self.memorize(note, 20, False, 'Conditional Memory Mid: ')
-                    
+
                     result1_played = self.compare_motif(self._memory, 'result 1',
                                                         Motifs.get('conditional_result_1'),
                                                         note, False)
@@ -351,15 +351,15 @@ class Motippets(object):
                         result3_played = self.compare_chordal_motif(self._memory,
                                                                     Motifs.get('conditional_result_3'),
                                                                     note, 1, self._deltatime, debug=False)
-                    
+
                         result4_played = self.compare_chordal_motif(self._memory,
                                                                     Motifs.get('conditional_result_4'),
                                                                     note, 2, self._deltatime, debug=False)
-                    
+
                         result5_played = self.compare_motif(self._memory, 'result 5',
                                                             Motifs.get('conditional_result_5'),
                                                             note, False)
-                    
+
                         if result3_played and self._resultCounter == 0:
                             self.mapscheme.result(3, 'comment')
                             self._conditionalsBuffer = []
@@ -375,7 +375,7 @@ class Motippets(object):
                             self._conditionalsBuffer = []
                             self._resultCounter += 1
                             self._conditionalStatus = 5
-                            
+
                     return self._conditionalStatus
 
                 if note > self._pianosections[1]:
@@ -384,24 +384,24 @@ class Motippets(object):
                     result2_played = self.compare_motif(self._memory, 'result 2',
                                                         Motifs.get('conditional_result_2'),
                                                         note, False)
-                    
+
                     if result2_played and self._resultCounter == 0:
                         if self._conditionalCounter > 0:
                             self.mapscheme.result(2, 'comment')
                             self._conditionalsBuffer = []
                             self._resultCounter += 1
                             self._conditionalStatus = 2
-                            
+
                         return self._conditionalStatus
 
                     if (note > self._pianosections[0] and note <= self._pianosections[1]):
-                        
+
                         self.memorize(note, 20, False, 'Conditional Memory Mid: ')
-                        
+
                         result1_played = self.compare_motif(self._memory, 'result 1',
                                                             Motifs.get('conditional_result_1'),
                                                             note, False)
-                        
+
                         if result1_played and self._resultCounter == 0:
                             if self._conditionalCounter > 0:
                                 self.mapscheme.result(1, 'comment')
@@ -418,7 +418,7 @@ class Motippets(object):
 
                 if note > self._pianosections[1]:
                     self.memorize(note, 20, False, 'Conditional 3 Memory Hi: ')
-                    
+
                     if self._conditionalCounter == 0:
                         conditional_played = self.compare_motif(
                             self._memory,'conditional 3',
@@ -435,7 +435,7 @@ class Motippets(object):
                         result2_played = self.compare_motif(self._memory, 'result 2',
                                                             Motifs.get('conditional_result_2'),
                                                             note, False)
-                        
+
                         if result2_played and self._resultCounter == 0:
                             if self._conditionalCounter > 0:
                                 self.mapscheme.result(2, 'comment')
@@ -452,11 +452,11 @@ class Motippets(object):
                         result3_played = self.compare_chordal_motif(self._memory,
                                                                     Motifs.get('conditional_result_3'),
                                                                     note, 0, self._deltatime, 0.01, False)
-                        
+
                         result4_played = self.compare_chordal_motif(self._memory,
                                                                     Motifs.get('conditional_result_4'),
                                                                     note, 1, self._deltatime, 0.01, False)
-                        
+
                         result5_played = self.compare_motif(self._memory, 'result 5',
                                                             Motifs.get('conditional_result_5'),
                                                             note, False)
@@ -485,14 +485,14 @@ class Motippets(object):
                     result1_played = self.compare_motif(self._memory, 'result 1',
                                                         Motifs.get('conditional_result_1'),
                                                         note, False)
-                    
+
                     if result1_played and self._resultCounter == 0:
                         if self._conditionalCounter > 0:
                             self.mapscheme.result(1, 'comment')
                             self._conditionalsBuffer = []
                             self._resultCounter += 1
                             self._conditionalStatus = 1
-                            
+
                         return self._conditionalStatus
 
                 return self._conditionalStatus
@@ -501,7 +501,7 @@ class Motippets(object):
             elif section == 'conditional_range': # parses only MIDI for the conditional which looks at the range being played
                 self.memorize(note, 999,
                               debugname="Range conditional memory", debug=False)
-                
+
                 self.get_range(self._memory, self._timer, debug=False)
 
     def memorize(self, midinote, length, debug=False, debugname="Motippets", conditional="off"):
@@ -558,7 +558,7 @@ class Motippets(object):
                 self._miniMotifs.append(note)
             else:
                 self._miniMotifs = []
-                return False 
+                return False
 
             if len(self._miniMotifs) >= len(motif):
                 self._miniMotifs = self._miniMotifs[-len(motif):]
@@ -581,7 +581,7 @@ class Motippets(object):
                 self._miniMotifs2.append(note)
             else:
                 self._miniMotifs2 = []
-                return False 
+                return False
 
             if len(self._miniMotifs2) >= len(motif):
                 self._miniMotifs2 = self._miniMotifs2[-len(motif):]
@@ -605,7 +605,7 @@ class Motippets(object):
                 self._miniMotifs3.append(note)
             else:
                 self._miniMotifs3 = []
-                return False 
+                return False
 
             if len(self._miniMotifs3) >= len(motif):
                 self._miniMotifs3 = self._miniMotifs3[-len(motif):]
@@ -629,7 +629,7 @@ class Motippets(object):
                 self._results1.append(note)
             else:
                 self._results1 = []
-                return False 
+                return False
 
             if len(self._results1) >= len(motif):
                 self._results1 = self._results1[-len(motif):]
@@ -651,7 +651,7 @@ class Motippets(object):
                 self._results2.append(note)
             else:
                 self._results2 = []
-                return False 
+                return False
 
             if len(self._results2) >= len(motif):
                 self._results2 = self._results2[-len(motif):]
@@ -673,7 +673,7 @@ class Motippets(object):
                 self._results3.append(note)
             else:
                 self._results3 = []
-                return False 
+                return False
 
             if len(self._results3) >= len(motif):
                 self._results3 = self._results3[-len(motif):]
@@ -695,7 +695,7 @@ class Motippets(object):
                 self._results5.append(note)
             else:
                 self._results5 = []
-                return False 
+                return False
 
             if len(self._results5) >= len(motif):
                 self._results5 = self._results5[-len(motif):]
@@ -744,15 +744,15 @@ class Motippets(object):
         if num == 0:
             if note in motif:
                 self._mainMotifs.append(note)
-                self._deltaHelper.append(deltatime)                
+                self._deltaHelper.append(deltatime)
             else:
                 self._mainMotifs = []
                 self._deltaHelper = []
-                
+
             if len(self._mainMotifs) >= len(motif):
                 self._mainMotifs = self._mainMotifs[-len(motif):]
                 self._deltaHelper = self._deltaHelper[-(len(motif)-1):]
-                
+
                 sum_motif = reduce(
                     (lambda total, sumnotes: total + sumnotes),
                     motif)
@@ -762,10 +762,10 @@ class Motippets(object):
                 dif_delta = reduce( (lambda total, sumtimes: (total +
                                                               sumtimes) / len( self._deltaHelper) ), self._deltaHelper)
                 #print('average: ', dif_delta)
-                
+
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
-                    
+
                     if debug:
                         print('played ->' + str(self._mainMotifs),
                               '\nmotif ->' + str(motif),
@@ -780,11 +780,11 @@ class Motippets(object):
             else:
                 self._mainMotifs1 = []
                 self._deltaHelper1 = []
-                
+
             if len(self._mainMotifs1) >= len(motif):
                 self._mainMotifs1 = self._mainMotifs1[-len(motif):]
                 self._deltaHelper1 = self._deltaHelper1[-(len(motif)-1):]
-                                
+
                 sum_motif = reduce(
                     (lambda total, sumnotes: total + sumnotes),
                     motif)
@@ -795,27 +795,27 @@ class Motippets(object):
                      (lambda total, sumtimes: (total + sumtimes) / len(self._deltaHelper1)), self._deltaHelper1)
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
-                    
+
                     if debug:
                         print('played ->' + str(self._mainMotifs1),
                               '\nmotif ->' + str(motif),
                               '\ncomparison: ' + str(compare),
                               '\nsum played: ' + str(sum_played),
                               '\nsum motif: ' + str(sum_motif),
-                              '\ndelta average: ', dif_delta)            
-                        
+                              '\ndelta average: ', dif_delta)
+
         else:
             if note in motif:
                 self._mainMotifs2.append(note)
                 self._deltaHelper2.append(deltatime)
             else:
                 self._mainMotifs2 = []
-                self._deltaHelper2 = []                
-                
+                self._deltaHelper2 = []
+
             if len(self._mainMotifs2) >= len(motif):
                 self._mainMotifs2 = self._mainMotifs2[-len(motif):]
                 self._deltaHelper2 = self._deltaHelper2[-(len(motif)-1):]
-                
+
                 sum_motif = reduce(
                     (lambda total, sumnotes: total + sumnotes),
                     motif)
@@ -824,10 +824,10 @@ class Motippets(object):
                     self._mainMotifs2)
                 dif_delta = reduce( (lambda total, sumtimes: (total +
                                                               sumtimes) / len( self._deltaHelper2)), self._deltaHelper2)
-                
+
                 if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                     compare = True
-                    
+
                     if debug:
                         print('played_1 ->' + str(self._mainMotifs2),
                               '\nmotif ->' + str(motif),
@@ -835,21 +835,21 @@ class Motippets(object):
                               '\nsum played: ' + str(sum_played),
                               '\nsum motif: ' + str(sum_motif),
                               '\ndelta average: ', dif_delta)
-                        
+
         return compare
 
 
     def tremolo_value(self, notes, pianosection, deltatime,
                      deltatolerance, target, debug=False):
         """Get the interval of a given tremolo.
-        
+
         :param array notes: Array of notes to be analysed
         :param string pianosection: the name of the piano range (i.e. low, mid, etc)
         :param float deltatime: the time between the received midi messages
         :param float deltatolerance: the deltatime max threshold
         :param int target: integer that references the targeted snippet
-        :param boolean debug: wheather to show or hide debug messages 
-        
+        :param boolean debug: wheather to show or hide debug messages
+
         TODO: this should only return the interval integer and on another place define what to do with it!
         TODO: describe input params
         """

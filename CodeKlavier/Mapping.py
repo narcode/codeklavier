@@ -116,10 +116,15 @@ class Mapping_HelloWorld():
             self.formatAndSend('t', display=2)
         elif midinumber == 47:
             self.__keyboard.type('s')
+<<<<<<< HEAD
             self.formatAndSend('s', display=2)
         elif midinumber == 38:
             self.__keyboard.type('a')
             self.formatAndSend('a', display=2)
+=======
+        elif midinumber == 38:
+            self.__keyboard.type('a')
+>>>>>>> master
         elif midinumber == 40:
             self.__keyboard.type('n')
             self.formatAndSend('n', display=2)
@@ -823,11 +828,11 @@ class Mapping_Motippets:
             self.enter()
             self.formatAndSend('setting up a conditional: \nIF number of notes played is more than 100 in...', display=3, syntax_color='primitive:')
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
             self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3, syntax_color='primitive:')
         elif conditional_num == 3:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
             self.enter()
             self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3, syntax_color='primitive:')
 
@@ -947,6 +952,45 @@ class Mapping_Motippets:
                 self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 self.evaluateSC('eval')
                 self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
+
+        elif result_num == 5:
+            if text == 'comment':
+                self.__keyboard.type('// if true -> play Huyg')
+                self.enter()
+            elif text == 'code':
+                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                self.evaluateSC('eval')
+            elif text == 'less than':
+                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                self.evaluateSC('eval')
+
+        elif result_num == 6:
+            if text == 'comment':
+                self.__keyboard.type('HUYGENS! //is activating...')
+                self.evaluateSC('eval')
+            elif text == 'start':
+                self.__keyboard.type('// HUYGENS countdown started!')
+                self.evaluateSC('eval')
+            elif text == 'code':               
+                self.__keyboard.type("")
+                self.enter()
+                self.__keyboard.type("  ____   ____   ____  __  __ _ ")
+                self.enter()
+                self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
+                self.enter()
+                self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
+                self.enter()
+                self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
+                self.enter()
+                self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
+                self.enter()
+                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  ¯\\(^0^) ")
+                self.enter()
+                self.__keyboard.type("")
+                self.enter()
+            elif text == 'huygens':
+                self.__keyboard.type('~huygens.eind')
+                self.evaluateSC('eval')                 
 
     def customPass(self, name, content):
         """
