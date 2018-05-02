@@ -479,6 +479,9 @@ def ck_loop(prototype='hello world'):
     codeK_thread.open_port(myPort)
 
     print('port', myPort)
+    
+    #go to the end of the codespace screen
+    mapping.goDown()
 
     if prototype == 'hello world':
         try:

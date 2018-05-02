@@ -360,7 +360,7 @@ class Mapping_HelloWorld_NKK:
 class Mapping_Motippets:
     """Mapping for the Motippets prototype.
     
-       Includes HelloWorld mappings for the Hybrid prototype  
+       Includes Hello World mappings for the Hybrid prototype  
     """
     def __init__(self, debug=True):
         if debug:
@@ -567,7 +567,6 @@ class Mapping_Motippets:
         elif midinumber == 32:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
-            self.evaluateSC('eval')
             self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 50:
             self.__keyboard.type('~')
