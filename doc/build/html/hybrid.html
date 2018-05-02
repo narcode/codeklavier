@@ -72,8 +72,106 @@
   <div class="section" id="hybrid">
 <h1>Hybrid<a class="headerlink" href="#hybrid" title="Permalink to this headline">¶</a></h1>
 <p>TODO: write documentation.</p>
-<div class="section" id="hybrid-python-documentation">
-<h2>Hybrid python documentation<a class="headerlink" href="#hybrid-python-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-hybrid.hybrid">
+<span id="hybrid-python-documentation"></span><h2>Hybrid python documentation<a class="headerlink" href="#module-hybrid.hybrid" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="hybrid.hybrid.ck_loop">
+<code class="descclassname">hybrid.hybrid.</code><code class="descname">ck_loop</code><span class="sig-paren">(</span><em>prototype='hello world'</em><span class="sig-paren">)</span><a class="headerlink" href="#hybrid.hybrid.ck_loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>the main loop thread for the Codeklavier to listen to incoming midi messages</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prototype</strong> (<em>string</em>) – The name of the prototype to process</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hybrid.hybrid.gong_bomb">
+<code class="descclassname">hybrid.hybrid.</code><code class="descname">gong_bomb</code><span class="sig-paren">(</span><em>countdown</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hybrid.hybrid.gong_bomb" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!</p>
+<p>countdown: the countdown time in seconds</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hybrid.hybrid.main">
+<code class="descclassname">hybrid.hybrid.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hybrid.hybrid.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the Hybrid prototype</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>configfile</strong> (<em>string</em>) – The configurationfile to use. Defaults to default_setup.ini</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hybrid.hybrid.noteCounter">
+<code class="descclassname">hybrid.hybrid.</code><code class="descname">noteCounter</code><span class="sig-paren">(</span><em>timer=10</em>, <em>numberOfnotes=100</em>, <em>result_num=1</em>, <em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hybrid.hybrid.noteCounter" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: define func</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>timer</strong> (<em>int</em>) – todo</li>
+<li><strong>numberOfnotes</strong> (<em>int</em>) – todo</li>
+<li><strong>result_num</strong> (<em>int</em>) – todo</li>
+<li><strong>debug</strong> (<em>bool</em>) – run in debug mode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hybrid.hybrid.rangeCounter">
+<code class="descclassname">hybrid.hybrid.</code><code class="descname">rangeCounter</code><span class="sig-paren">(</span><em>timer=''</em>, <em>operator=''</em>, <em>num=1</em>, <em>result_num=1</em>, <em>piano_range=72</em>, <em>debug=True</em>, <em>perpetual=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hybrid.hybrid.rangeCounter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the played range within a time window. Perpetual flag makes it run it’s loop forever, unless range_trigger is != 1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>timer</strong> – time window loop</li>
+<li><strong>operator</strong> – ‘more than’ or ‘less than’</li>
+<li><strong>num</strong> (<em>int</em>) – conditional number</li>
+<li><strong>result_num</strong> (<em>int</em>) – result number mapped to this conditional</li>
+<li><strong>piano_range</strong> (<em>int</em>) – total range for evvaluation in semitones</li>
+<li><strong>debug</strong> (<em>bool</em>) – booelan flag to post debug messages</li>
+<li><strong>perpetual</strong> (<em>bool</em>) – boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hybrid.hybrid.set_parameters">
+<code class="descclassname">hybrid.hybrid.</code><code class="descname">set_parameters</code><span class="sig-paren">(</span><em>value</em>, <em>conditional_func</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hybrid.hybrid.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to parse a full range tremolo. This value can be used as a param for the
+other functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> (<em>int</em>) – the interval of the plated tremolo</li>
+<li><strong>conditional_func</strong> – todo</li>
+<li><strong>debug</strong> (<em>bool</em>) – run in debug mode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 

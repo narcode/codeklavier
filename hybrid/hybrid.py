@@ -466,7 +466,7 @@ def main():
 
 def ck_loop(prototype='hello world'):
     """
-    the main loop tread for the Codeklavier to listen to incoming midi messages
+    the main loop thread for the Codeklavier to listen to incoming midi messages
 
     :param string prototype: The name of the prototype to process
     """
