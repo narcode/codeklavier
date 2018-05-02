@@ -17,7 +17,7 @@ class Motippets(object):
         """
         self.mapscheme = mapping
         self.noteonid = noteonid
-        self.noteoffid = 153
+        self.noteoffid = 153 #TODO: pass is in init...
         self._memory = []
         self._mainMotifs = []
         self._mainMotifs2 = []

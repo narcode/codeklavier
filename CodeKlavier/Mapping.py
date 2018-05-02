@@ -1014,3 +1014,32 @@ class Mapping_Motippets:
                 self.formatAndSend(content, display=4, syntax_color='loop3:')
             else:
                 self.formatAndSend(content, display=4, syntax_color='loop:')
+
+class Mapping_Ckalculator:
+    """Mapping for the Ckalculator prototype.
+    """
+    def __init__(self, use_display=False, debug=True):
+        if debug:
+            print("## Using the Ckalculator mapping ##")
+
+        #Read config and settings
+        config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        config.read('default_setup.ini')
+
+        #load the mapping
+        try:
+            self._zero = config['lambda'].get('identity')
+            self._true = config['lambda'].get('select_first')
+            self._true = config['lambda'].get('select_second')
+            self._true = config['lambda'].get('successor')
+            
+            
+        except KeyError:
+            raise LookupError('Missing [lambda] section in the config file.')
+
+        self.__keyboard = Controller()
+        
+        if use_display:
+            self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
+        
