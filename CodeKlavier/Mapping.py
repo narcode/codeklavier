@@ -10,6 +10,7 @@ class.
 import time
 from pynput.keyboard import Key, Controller
 import socket
+from pythonosc import udp_client
 import configparser
 
 display1 = 1111
@@ -404,6 +405,7 @@ class Mapping_Motippets:
 
         self.__keyboard = Controller()
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
 
     def evaluateSC(self, what):
         """Evaluate the SuperCollider command 'what'
@@ -870,12 +872,14 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> play gong sound!', display=3, syntax_color='primitive:')
             elif text == 'code':
-                self.__keyboard.type('~gong.play(' + str(mod) + ');')
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~gong.play(' + str(mod) + ');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/gong", str(mod))
                 self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
             elif text == 'less than':
-                self.__keyboard.type('~gong.play(' + str(mod) + ');');
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~gong.play(' + str(mod) + ');');
+                #self.evaluateSC('eval')
+                self._osc.send_message("/gong", str(mod))                
                 self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
 
 

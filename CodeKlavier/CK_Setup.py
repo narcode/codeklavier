@@ -47,15 +47,15 @@ class Setup(object):
             if i == 0:
                 print('##'*num)
             elif i == 1:
-                print('##  ## ##  ##   # # # #### ## # #   #   #  ###')
+                print('##  ### ###  ###   ## # ## ##### ### # ##   ##   ##  ###')
             elif i == 2:  
-                print('# ### # # # # ### # # ### # # # ## ## ### # ##')
+                print('# #### # ## # ## #### # ## #### # ## # ### ### #### # ##')
             elif i == 3:
-                print('# ### # # # #  ##  ## ###   # # ## ##  ##  ###')
+                print('# #### # ## # ##  ###  ### ####   ## # ### ###  ###  ###')
             elif i == 4:
-                print('# ### # # # # ### # # ### # # # ## ## ### # ##')
+                print('# #### # ## # ## #### # ## #### # ## # ### ### #### # ##')
             elif i == 5:
-                print('##  ## ##  ##   # # #   # # ## ##   #   # # ##')
+                print('##  ### ###  ###   ## # ##   ## # ### ###   ##   ## # ##')
             elif i == 6:
                 print('##'*num)            
             time.sleep(0.2)
@@ -164,7 +164,7 @@ class Setup(object):
 
         :rtype: int the MIDIin port
         """
-        self.print_welcome(20)
+        self.print_welcome(27)
         self.show_ports()
         myPort = self.get_port_from_user()
         return myPort
