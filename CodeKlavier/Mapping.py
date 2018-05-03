@@ -941,24 +941,15 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> play Huyg', display=3, syntax_color='primitive:')
             elif text == 'code':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/huygens", str(mod))
                 self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
             elif text == 'less than':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
-                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
-
-        elif result_num == 5:
-            if text == 'comment':
-                self.__keyboard.type('// if true -> play Huyg')
-                self.enter()
-            elif text == 'code':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
-            elif text == 'less than':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/huygens", str(mod))                
+                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')                
 
         elif result_num == 6:
             if text == 'comment':
