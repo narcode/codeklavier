@@ -12,7 +12,7 @@ from CK_Setup import Setup
 from hello_classes import HelloWorld
 from Mapping import Mapping_HelloWorld
 
-def main(configfile='default_setup.ini'):
+def main(configfile='../default_setup.ini'):
     """
     Start hello world!
 

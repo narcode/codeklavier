@@ -13,7 +13,7 @@ from hello_classes import HelloWorld
 from Instructions import Instructions
 from Mapping import Mapping_HelloWorld_NKK
 
-def main(configfile='default_setup.ini'):
+def main(configfile='../default_setup.ini'):
     """
     Start hello world!
 

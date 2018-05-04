@@ -13,7 +13,7 @@ from CK_Setup import Setup
 from Mapping import Mapping_HelloWorld_NKK
 from Instructions import Instructions
 
-def main (configfile='default_setup.ini'):
+def main (configfile='../default_setup.ini'):
     # Start the CodeKlavier
     #Read config and settings
     config = configparser.ConfigParser()
