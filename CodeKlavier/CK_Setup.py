@@ -60,7 +60,7 @@ class Setup(object):
                 print('##'*num)            
             time.sleep(0.2)
 
-        print("\nWelcome to the Codeklavier v0.2!\n")
+        print("\nWelcome to the Codeklavier v0.3!\n")
 
     def show_ports(self):
         """Show the available MIDI devices.
