@@ -107,7 +107,7 @@ def perform_interactive(configfile='default_setup.ini'):
     codeK = Setup()
     count = 1
     while True:
-        codeK.print_welcome(20)
+        codeK.print_welcome(28)
         print('Type the number of the prototype you want to use,\n \'test\' for a miditest,\n or \'exit\' to quit.')
         print('')
         print('The available prototypes are:')

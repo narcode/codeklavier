@@ -10,6 +10,7 @@ class.
 import time
 from pynput.keyboard import Key, Controller
 import socket
+from pythonosc import udp_client
 import configparser
 
 display1 = 1111
@@ -360,7 +361,7 @@ class Mapping_HelloWorld_NKK:
 class Mapping_Motippets:
     """Mapping for the Motippets prototype.
     
-       Includes HelloWorld mappings for the Hybrid prototype  
+       Includes Hello World mappings for the Hybrid prototype  
     """
     def __init__(self, debug=True):
         if debug:
@@ -404,6 +405,7 @@ class Mapping_Motippets:
 
         self.__keyboard = Controller()
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
 
     def evaluateSC(self, what):
         """Evaluate the SuperCollider command 'what'
@@ -567,7 +569,6 @@ class Mapping_Motippets:
         elif midinumber == 32:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
-            self.evaluateSC('eval')
             self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 50:
             self.__keyboard.type('~')
@@ -871,12 +872,14 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> play gong sound!', display=3, syntax_color='primitive:')
             elif text == 'code':
-                self.__keyboard.type('~gong.play(' + str(mod) + ');')
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~gong.play(' + str(mod) + ');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/gong", str(mod))
                 self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
             elif text == 'less than':
-                self.__keyboard.type('~gong.play(' + str(mod) + ');');
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~gong.play(' + str(mod) + ');');
+                #self.evaluateSC('eval')
+                self._osc.send_message("/gong", str(mod))                
                 self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
 
 
@@ -938,24 +941,15 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> play Huyg', display=3, syntax_color='primitive:')
             elif text == 'code':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/huygens", str(mod))
                 self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
             elif text == 'less than':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
-                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
-
-        elif result_num == 5:
-            if text == 'comment':
-                self.__keyboard.type('// if true -> play Huyg')
-                self.enter()
-            elif text == 'code':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
-            elif text == 'less than':
-                self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                self.evaluateSC('eval')
+                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/huygens", str(mod))                
+                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')                
 
         elif result_num == 6:
             if text == 'comment':

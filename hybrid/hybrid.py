@@ -28,7 +28,7 @@ if (myPort == None or device_id == None):
     raise LookupError('Missing key information in the config file.')
 
 codeK = Setup()
-codeK.print_welcome(22)
+codeK.print_welcome(27)
 codeK.open_port(myPort)
 
 # activesense compensation
@@ -479,6 +479,9 @@ def ck_loop(prototype='hello world'):
     codeK_thread.open_port(myPort)
 
     print('port', myPort)
+    
+    #go to the end of the codespace screen
+    mapping.goDown()
 
     if prototype == 'hello world':
         try:
