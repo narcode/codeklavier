@@ -112,7 +112,7 @@ class CK_lambda(object):
         return select_second
     
     
-    def simpleApply(self, function1, *functions):
+    def simpleApply(self, *functions):
         """
         lambda application of functions. 
         
@@ -132,21 +132,76 @@ class CK_lambda(object):
                 
         print(functions_array)
 
-        if callable(function1):
+        if len(functions_array) > 1:
             # TODO: think if a loop is doable...
-            if len(functions_array) == 1:
-                return function1(functions_array[0])()
-            elif len(functions_array) == 2:
-                return function1(functions_array[0])(functions_array[1])()
+            if len(functions_array) == 2:
+                return functions_array[0](functions_array[1])()
             elif len(functions_array) == 3:
-                return function1(functions_array[0])(functions_array[1])\
-                    (functions_array[2])
+                return functions_array[0](functions_array[1])(functions_array[2])()
             elif len(functions_array) == 4:
-                return function1(functions_array[0])(functions_array[1])\
-                    (functions_array[2])(functions_array[3])
+                return functions_array[0](functions_array[1])(functions_array[2])\
+                    (functions_array[3])()
+            elif len(functions_array) == 5:
+                return functions_array[0](functions_array[1])(functions_array[2])\
+                    (functions_array[3])(functions_array[4])()
+            
+    
+    def successor(self, number):
+        """
+        lambda successor function. Returns a pair function with FALSE as first
+        argument and the original number (function expression) as second argument.\n
+        [in lambda notation: ƛn.ƛs.((s false) n) ]\n
         
+        :param function number: zero or successors of zero as integer representations  
+        """
         
-    def test_func(arg=''):
+        def reduce1(succesor):
+            """
+            :param function succesor: a bound variable to be replaced by the argument after final application (i.e. select_first)
+                    
+            """
+            return succesor(self.false)(number)
+        
+        return reduce1
+    
+    
+    def countSuccesorsUntilZero(self, succesor_expression):
+        """
+        function to count how many times succesor functions are nested until the zero is reached. Returns the count as int.
+        
+        :param function succesor_expression: the nested succesor funtions to be reduced until zero
+        """
+        
+        counter = 0
+        reduced = succesor_expression(self.false)
+        
+        def countreduce1(function):
+            """
+            applies the succesor function to select_second recursively\n
+            \n
+            :param function function: the function to reduce
+            """
+            nonlocal reduced
+            reduced = reduced(self.false)
+            return reduced
+        
+        if succesor_expression.__name__ is 'reduce1':
+            while reduced.__name__ is 'reduce1':
+                counter += 1
+                countreduce1(reduced)
+                
+            if reduced.__name__ is 'zero': 
+                counter += 1
+                return counter
+                
+        else:
+            if succesor_expression.__name__ is 'successor':
+                print('missing a zero to close the successor chain!')
+            else:
+                print('this function can only process successor functions as argument!')
+                
+        
+    def test_func(*args):
         return "narcode"
         
         
