@@ -72,32 +72,81 @@ class CK_lambda(object):
     def __init__(self):
         self._type = 'function'
     
-    def zero(body):
+    def zero(self, body=''):
         """
-        lambda identity function. Also represent 0 (zero)\n
-        returns the function/argument it was applied to        
-        
-        :param any body: body variable to replace with the application argument
+        lambda identity function. Also represents 0 (zero)\n
+        returns the function/argument it was applied to\n
+        (in lambda notation: ƛx.x)\n
+        \n
+        :param function body: body variable to replace with the application argument\n
         """
-        
         return body
     
+    def true(self, function1):
+        """
+        lambda select first function. Also represents TRUE\n
+        returns the first variable (function1)\n 
+        (in lambda notation: ƛx.ƛy.x)\n
+        \n
+        :param function function1: expression that will be returned\n
+        :param function function2: expression that will be discarded/destroyed\n
+        """
+        def select_first(function2):
+            return function1
+        
+        return select_first
+           
     
-    def apply(function1, function2):
+    def false(self, function1):
         """
-        lambda application of 2 functions. 
+        lambda select second function. Also represents FALSE\n
+        returns the second variable (function2)\n 
+        (in lambda notation: ƛx.ƛy.y)\n
+        \n
+        :param function function1: expression that will be discarded/destroyed\n
+        :param function function2: expression that will be returned\n
+        """ 
+        def select_second(function2):
+            return function2
         
-        :param function function1: the function to apply 
-        :param function function2: the function to treat as argument for the application 
+        return select_second
+    
+    
+    def simpleApply(self, function1, *functions):
+        """
+        lambda application of functions. 
+        
+        :param function function1: the function to apply to the next functions in *functions
+        :param function *functions: the function(s) to treat as argument(s) for the application 
         """
         
-        if callable(function1) and callable(function2):
-            return function1(function2)()
-        else: 
-            print('arguments need to be function expressions!')
-            
+        functions_array = []
+                
+        for f in functions:
+            if callable(f):
+                functions_array.append(f)
+                
+        if len(functions_array) < len(functions):
+            print('not all arguments are functions!')
+            return
+                
+        print(functions_array)
+
+        if callable(function1):
+            # TODO: think if a loop is doable...
+            if len(functions_array) == 1:
+                return function1(functions_array[0])()
+            elif len(functions_array) == 2:
+                return function1(functions_array[0])(functions_array[1])()
+            elif len(functions_array) == 3:
+                return function1(functions_array[0])(functions_array[1])\
+                    (functions_array[2])
+            elif len(functions_array) == 4:
+                return function1(functions_array[0])(functions_array[1])\
+                    (functions_array[2])(functions_array[3])
         
-    def test_func():
+        
+    def test_func(arg=''):
         return "narcode"
         
         
