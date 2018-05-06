@@ -1,6 +1,6 @@
 import rtmidi
 from functools import reduce
-from Motifs import motifs_anne as Motifs
+from Motifs import motifs as Motifs
 
 class Motippets(object):
     """Class to handle the midi input.
@@ -53,7 +53,7 @@ class Motippets(object):
 
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
-        :param float ck_deltatime: the deltatime between icoming note-on MIDI messages
+        :param float ck_deltatime: the deltatime between incoming note-on MIDI messages
         :param int target: target the parsing for a specific snippet. 0 is no target
         """
         message, deltatime = event
