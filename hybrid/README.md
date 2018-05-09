@@ -23,4 +23,4 @@ Be sure to evaluate the SuperCollider files that correspond with your desired co
 
 ## Videos
 
-The hybrid is artisticly currently still under development but to get a taste of the visual display, you can watch a video from our concert at [In-Sonora Festival in Madrid in March 2018.] (https://youtu.be/F5O_WUdtOqY?t=1h31m1s)
+The hybrid is artisticly currently still under development but to get a taste of the visual display, you can watch a video from our concert at [In-Sonora Festival in Madrid in March 2018.](https://youtu.be/F5O_WUdtOqY?t=1h31m1s)
