@@ -20,3 +20,7 @@ To run display: Make sure you are in the Codeklavier folder of the codeklavier d
 Switching between the two prototypes is done by pressing the top Bb on the piano. All sound processes and the ongoing conditionals will continue running so the change will only impact the input mode for the piano. 
 
 Be sure to evaluate the SuperCollider files that correspond with your desired code output extension
+
+## Videos
+
+The hybrid is artisticly currently still under development but to get a taste of the visual display, you can watch a video from our concert at [In-Sonora Festival in Madrid in March 2018.] (https://youtu.be/F5O_WUdtOqY?t=1h31m1s)
