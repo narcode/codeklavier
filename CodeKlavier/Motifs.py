@@ -25,7 +25,6 @@ try:
     select_second = config['lambda'].getint('select_second_midi')
     successor = config['lambda'].get('successor_midi').split(',')
     
-    print(successor)
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 

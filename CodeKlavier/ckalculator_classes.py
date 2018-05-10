@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import rtmidi
-import time
 from inspect import signature
 from Motifs import motifs as LambdaMapping
 
