@@ -18,7 +18,7 @@ from hello_world import hello_world
 from motippets import motippets
 from hybrid import hybrid
 
-PROTOTYPES = ('hello_world', 'motippets', 'hybrid')
+PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator')
 
 def doHelp():
     """

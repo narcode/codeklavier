@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import rtmidi
+import time
 from inspect import signature
 from Motifs import motifs as LambdaMapping
 
@@ -10,15 +11,17 @@ class Ckalculator(object):
     The main class behind the Ckalculator prototype. Lambda calculus with the piano (simple arithmetic operations)
     """
     
-    def __init__(self, mapping, noteonid, noteoffid):
+    def __init__(self, noteonid, noteoffid):
         """The method to initialise the class and prepare the class variables.
         """
-        self.mapscheme = mapping
+        #self.mapscheme = mapping
         self.note_on = noteonid
         self.note_off = noteoffid
         self._memory = []
+        self._functionStack = []
         self._conditionalsBuffer = []
         self._pianosections = []
+        self._lambda = CK_lambda(True)
         
     def parse_midi(self, event, section, ck_deltatime=0, target=0):
         """Parse the midi signal and process it depending on the register.
@@ -37,7 +40,26 @@ class Ckalculator(object):
             self._deltatime = ck_deltatime 
             
             ### lambda calculus ###
-            
+            if (note in LambdaMapping.get('succesor')):
+                
+                self.build_succesor(self._lambda.successor)
+                
+    def build_succesor(self, function):
+        """
+        builds a successor functions chain.\n
+        \n
+        :param function function: the function to apply the successor function to
+        """
+        self.functionToStack(function)
+        return self._lambda.successor(function)
+    
+    def functionToStack(self, function):    
+        """
+        store functions in an array.\n
+        \n
+        :param function function: the function to store in the List
+        """
+        self.functionStack.append(function)
     
     def memorize(self, midinote, length, debug=False, debugname="Ckalculator", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
@@ -237,7 +259,7 @@ class CK_lambda(object):
             if succesor_expression.__name__ is 'successor':
                 print('missing a zero to close the successor chain!')
             else:
-                print('this function can only process successor functions as argument!')
+                print('this function can only process number expression functions as argument!')
                 
     
     def add(self, x, y):
