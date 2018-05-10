@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import rtmidi
+from inspect import signature
 from Motifs import motifs as LambdaMapping
 
 class Ckalculator(object):
@@ -69,8 +70,8 @@ class CK_lambda(object):
     The main class containing basic Lambda calculus expressions
     """    
     
-    def __init__(self):
-        self._type = 'function'
+    def __init__(self, debug=False):
+        self._debug = debug
     
     def zero(self, body=''):
         """
@@ -111,13 +112,26 @@ class CK_lambda(object):
         
         return select_second
     
-    
-    def simpleApply(self, *functions):
+    def iszero(self, number_expression):
         """
-        lambda application of functions. 
+        lambda function to return true (select_first) if the number expression is zero (i.e. identity func)\n
+        otherwise returns false (selet_second)\n
+        [in lambda notation: ƛn.(n true) ]\n
+        \n
+        :param function number_expression: a funtional representation of an integer (with succesor function)
+        """
         
-        :param function function1: the function to apply to the next functions in *functions
-        :param function *functions: the function(s) to treat as argument(s) for the application 
+        return number_expression(self.true)
+    
+    
+    def simpleReduce(self, *functions):
+        """
+        lambda function to apply selector functions.\n
+        \n
+        :param function function1: the function to apply to the next functions in *functions\n
+        :param function *functions: the function(s) to treat as argument(s) for the application\n 
+        \n\n
+        TODO: Make a simpleApply function 
         """
         
         functions_array = []
@@ -129,21 +143,22 @@ class CK_lambda(object):
         if len(functions_array) < len(functions):
             print('not all arguments are functions!')
             return
-                
-        print(functions_array)
+        
+        if self._debug:        
+            print('array of functions length: ', len(functions_array))
 
         if len(functions_array) > 1:
-            # TODO: think if a loop is doable...
+            # TODO: think if this can be done recursively
             if len(functions_array) == 2:
-                return functions_array[0](functions_array[1])()
+                return functions_array[0](functions_array[1])
             elif len(functions_array) == 3:
-                return functions_array[0](functions_array[1])(functions_array[2])()
+                return functions_array[0](functions_array[1])(functions_array[2])
             elif len(functions_array) == 4:
                 return functions_array[0](functions_array[1])(functions_array[2])\
-                    (functions_array[3])()
+                    (functions_array[3])
             elif len(functions_array) == 5:
                 return functions_array[0](functions_array[1])(functions_array[2])\
-                    (functions_array[3])(functions_array[4])()
+                    (functions_array[3])(functions_array[4])
             
     
     def successor(self, number):
@@ -155,57 +170,107 @@ class CK_lambda(object):
         :param function number: zero or successors of zero as integer representations  
         """
         
-        def reduce1(succesor):
+        def succ1(succesor):
             """
             :param function succesor: a bound variable to be replaced by the argument after final application (i.e. select_first)
                     
             """
             return succesor(self.false)(number)
         
-        return reduce1
+        return succ1
     
-    
-    def countSuccesorsUntilZero(self, succesor_expression):
+    def predecessor(self, number):
+        """
+        lambda predecessor function. Returns a function which returns zero if number argument is zero otherwise\n 
+        reduces the number expression argument by one level\n
+        [in lambda notation: ƛn.(((iszero n) zero)(n false)) ]\n
+        
+        :param function number: zero or successors of zero as integer representations
+        \n
+        \nNOTE: The function stops at zero. It doesn't return -1 when applied to zero!
+        """
+        
+        if self.iszero(number).__name__ is 'true':
+            return self.zero
+        else:
+            return number(self.false)
+                
+    def recursiveCounter(self, succesor_expression, counter=0):
         """
         function to count how many times succesor functions are nested until the zero is reached. Returns the count as int.
         
-        :param function succesor_expression: the nested succesor funtions to be reduced until zero
+        :param function succesor_expression: the nested succesor functions to be reduced until zero\n
+        :param int counter: the integer to increment on each recursion\n
+        :param boolean debug: wheather to print debg messages or not
         """
+           
+        #print(succesor_expression, 'counter: ', counter)           
+        def sum_one(num):
+            """
+            add 1 to the counter.\n
+            \n
+            :param integer counter: the number to add 1 to
+            """
+            if type(num) is int:
+                return num + 1
         
-        counter = 0
-        reduced = succesor_expression(self.false)
-        
-        def countreduce1(function):
+        def countreduce(reducedfunc):
             """
             applies the succesor function to select_second recursively\n
             \n
-            :param function function: the function to reduce
+            :param function reducedfunc: the function to reduce
             """
-            nonlocal reduced
-            reduced = reduced(self.false)
-            return reduced
+            #nonlocal reduced # this is really functional now            
+            return reducedfunc(self.false)              
         
-        if succesor_expression.__name__ is 'reduce1':
-            while reduced.__name__ is 'reduce1':
-                counter += 1
-                countreduce1(reduced)
-                
-            if reduced.__name__ is 'zero': 
-                counter += 1
-                return counter
-                
+        if succesor_expression.__name__ is 'succ1':
+            #recursion point 1
+            return self.recursiveCounter(countreduce(succesor_expression),
+                                         sum_one(counter))
+        
+        elif succesor_expression.__name__ is 'zero':
+            if self._debug:
+                print(counter)
+            return counter
+                       
         else:
             if succesor_expression.__name__ is 'successor':
                 print('missing a zero to close the successor chain!')
             else:
                 print('this function can only process successor functions as argument!')
                 
+    
+    def add(self, x, y):
+        """
+        function to get the result of the addition of two number expressions.\n
+        Returns the resulting representation of an integer\n
+        \n
+        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function y: functional representation of an integer
+        """
         
+        if self.iszero(y).__name__ is 'true':
+            pass
+        else:
+            return self.add(self.successor(x), self.predecessor(y))
+        
+        return x
+    
+    def mult(self, x, y):
+        """
+        function to get the result of the multiplication of two number expressions.\n
+        Returns the resulting representation of an integer\n
+        \n
+        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function y: functional representation of an integer
+        """
+        
+        if self.iszero(y).__name__ is 'true':
+            return self.zero
+        else:
+            return self.add(x, self.mult(x, self.predecessor(y)))
+                       
     def test_func(*args):
         return "narcode"
-        
-        
-        
-    
 
     
