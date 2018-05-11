@@ -58,7 +58,7 @@ class Setup(object):
                 print('##  ### ###  ###   ## # ##   ## # ### ###   ##   ## # ##')
             elif i == 6:
                 print('##'*num)            
-            time.sleep(0.2)
+            time.sleep(0.1)
 
         print("\nWelcome to the Codeklavier v0.4!\n")
 

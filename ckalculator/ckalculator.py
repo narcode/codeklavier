@@ -9,31 +9,15 @@ import CK_configWriter
 from CK_Setup import Setup, BColors
 from ckalculator_classes import *
 
-#ck = CK_lambda(True)
-
-#ck.recursiveCounter(ck.successor(ck.successor(ck.successor(ck.zero))), 0)
-
-#ck.recursiveCounter(ck.successor(ck.successor(ck.successor(ck.zero))), 0) + 3
-
-#ck.recursiveCounter(ck.successor(ck.successor(ck.successor(ck.zero))),0) + ck.recursiveCounter(ck.successor(ck.zero),0)
-
-##test predecessor:
-
-#ck.recursiveCounter(ck.predecessor(ck.successor(ck.successor(ck.zero))), 0)
-
-
-#ck.recursiveCounter(ck.add(ck.successor(ck.zero), ck.successor(ck.successor(ck.zero))),0)
-
-#ck.add(ck.successor(ck.zero), ck.successor(ck.successor(ck.zero)))
-
 ckalculator_listens = True
 
-def main(configfile='../default_setup.ini'):
+
+def main(configfile='default_setup.ini'):
     """
     start the CKalculator
     """
     global ckalculator_listens
-    
+       
     # activesense compensation
     ck_deltatime_mem = []
     ck_deltatime = 0
@@ -53,8 +37,12 @@ def main(configfile='../default_setup.ini'):
         raise LookupError('Missing key information in the config file.')
     
     codeK = Setup()
-    codeK.print_welcome(27)
-    codeK.open_port(myPort)
+    
+    codeK.print_lines(20, 1)
+    print("Prototype loaded: Ckalculator 0.1")
+    print("CodeKlavier is ready and LISTENING.")
+    codeK.print_lines(20, 1)
+    print("\nPress Control-C to exit.\n")       
     
     cKalc = Ckalculator(device_id, noteoff_id)
     
@@ -89,6 +77,8 @@ def main(configfile='../default_setup.ini'):
                                 ck_deltadif = 0    
                             
                             cKalc.parse_midi(msg, 'full', ck_deltatime=ck_deltadif)
+                            
+            time.sleep(0.01)
                             
     except KeyboardInterrupt:
         print('')

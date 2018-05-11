@@ -17,6 +17,7 @@ class Ckalculator(object):
         self.note_off = noteoffid
         self._memory = []
         self._functionStack = []
+        self._numberStack = []
         self._successorHead = []
         self._conditionalsBuffer = []
         self._pianosections = []
@@ -42,18 +43,27 @@ class Ckalculator(object):
             if note in LambdaMapping.get('successor'):
                 self.build_succesor(self._lambda.successor)
 
-            elif note is LambdaMapping.get('eval'):
+            elif note is LambdaMapping.get('zero'):
                 if len(self._successorHead) > 0:
-                    self._functionStack = []
+                    self._numberStack = []
                     self._lambda.recursiveCounter(self._successorHead[0])
-                    self._functionStack.append(self._successorHead[0])
+                    self._numberStack.append(self._successorHead[0])
                     self._successorHead = []
+            
+            elif note is LambdaMapping.get('eval'):
+                if len(self._functionStack) > 0:
+                    self.evaluateFunctionStack(self._functionStack)
+                    self._lambda.recursiveCounter(self._numberStack[0])
+                    self._functionStack = []
                 
             elif note in LambdaMapping.get('predecessor'):
-                if len(self._functionStack) == 0:
+                if len(self._numberStack) == 0:
                     self.build_predecessor(self._lambda.zero)
                 else:
                     self.build_predecessor(self._lambda.predecessor)
+                    
+            elif note in LambdaMapping.get('addition'):
+                self.add()
                 
     def build_succesor(self, function):
         """
@@ -85,22 +95,60 @@ class Ckalculator(object):
         print(function.__name__)       
                 
         def nestFunc(function1):
-            if len(self._functionStack) == 0:
+            if len(self._numberStack) == 0:
                 return function(self._lambda.zero)
             else:
-                return function(self._functionStack[0])
+                return function(self._numberStack[0])
 
-        self._functionStack.append(nestFunc(function))
+        self._numberStack.append(nestFunc(function))
                                     
-        if len(self._functionStack) > 1:
-            if self._functionStack[0].__name__ is 'zero':
-                self._functionStack = []
+        if len(self._numberStack) > 1:
+            if self._numberStack[0].__name__ is 'zero':
+                self._numberStack = []
                 return 0
             else:
-                self._functionStack = self._functionStack[-1:]
-                self._lambda.recursiveCounter(self._functionStack[0])
+                self._numberStack = self._numberStack[-1:]
+                self._lambda.recursiveCounter(self._numberStack[0])
                                             
-    
+    def add(self):
+        """
+        Append an addition function to the functions stack and any existing number expression\n
+        \n
+        """
+        #append the first number
+        print('addition')
+        if len(self._numberStack) == 0:
+            self._functionStack.append(self._lambda.zero)
+        else:
+            self._functionStack.append(self._numberStack[0])
+            #append the operator        
+        self._functionStack.append(self._lambda.add)
+        
+    def evaluateFunctionStack(self, stack):
+
+        def evaluate2args(function, *args):
+            """Evaluate a function with 2 arguments.\n
+            \n
+            :param function function: the function to evaluate with the given args
+            :param function args: the function arguments to pass
+            """
+            return function(args[0], args[1])
+        
+        if type(stack) is not list:
+            print('This function expects a List/Stack')
+        else:
+            # append the 2nd number
+            if len(stack) == 0:
+                print('not enough elements in stack to apply the function')
+            elif len(stack) == 2:
+                self._functionStack.append(self._numberStack[0])             
+            
+            if len(stack) == 3:
+                self._numberStack = []
+                self._numberStack.append(evaluate2args(self._functionStack[1], \
+                                                       self._functionStack[0], \
+                                                       self._functionStack[2]))             
+                     
     def memorize(self, midinote, length, debug=False, debugname="Ckalculator", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
 

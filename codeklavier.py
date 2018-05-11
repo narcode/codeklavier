@@ -17,6 +17,7 @@ from CK_Setup import Setup
 from hello_world import hello_world
 from motippets import motippets
 from hybrid import hybrid
+from ckalculator import ckalculator
 
 PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator')
 

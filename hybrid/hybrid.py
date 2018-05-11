@@ -303,7 +303,7 @@ def main():
            ck_deltatime_mem
 
     codeK.print_lines(20, 1)
-    print("Prototype loaded: Hybrid 0.2.2")
+    print("Prototype loaded: Hybrid 0.3")
     print("CodeKlavier is ready and LISTENING.")
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")
