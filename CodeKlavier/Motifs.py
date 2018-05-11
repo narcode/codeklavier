@@ -21,9 +21,11 @@ try:
     motif_2 = config['snippets midi mapping'].get('motif_2').split(',')
     
     identity_midi = config['lambda'].getint('identity_midi')
+    evaluate_function = config['lambda'].getint('evaluate_function')    
     select_first = config['lambda'].getint('select_first_midi')
     select_second = config['lambda'].getint('select_second_midi')
     successor = config['lambda'].get('successor_midi').split(',')
+    predecessor = config['lambda'].get('predecessor_midi').split(',')    
     
 except KeyError:
     raise LookupError('Missing key information in the config file.')
@@ -50,7 +52,10 @@ motifs['conditional_result_4'] = [23,24,25]
 motifs['conditional_result_5'] = [26,23,23]
 
 # lambda calculus
-motifs['identity'] = identity_midi
-motifs['select_first'] = select_first
-motifs['select_second'] = select_second
+motifs['eval'] = evaluate_function
+motifs['zero'] = identity_midi
+motifs['true'] = select_first
+motifs['false'] = select_second
 motifs['successor'] = list(map(int, successor))
+motifs['predecessor'] = list(map(int, predecessor))
+

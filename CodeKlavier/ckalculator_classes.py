@@ -17,6 +17,7 @@ class Ckalculator(object):
         self.note_off = noteoffid
         self._memory = []
         self._functionStack = []
+        self._successorHead = []
         self._conditionalsBuffer = []
         self._pianosections = []
         self._lambda = CK_lambda(True)
@@ -38,9 +39,21 @@ class Ckalculator(object):
             self._deltatime = ck_deltatime 
             
             ### lambda calculus ###
-            if (note in LambdaMapping.get('succesor')):
-                
+            if note in LambdaMapping.get('successor'):
                 self.build_succesor(self._lambda.successor)
+
+            elif note is LambdaMapping.get('eval'):
+                if len(self._successorHead) > 0:
+                    self._functionStack = []
+                    self._lambda.recursiveCounter(self._successorHead[0])
+                    self._functionStack.append(self._successorHead[0])
+                    self._successorHead = []
+                
+            elif note in LambdaMapping.get('predecessor'):
+                if len(self._functionStack) == 0:
+                    self.build_predecessor(self._lambda.zero)
+                else:
+                    self.build_predecessor(self._lambda.predecessor)
                 
     def build_succesor(self, function):
         """
@@ -48,16 +61,45 @@ class Ckalculator(object):
         \n
         :param function function: the function to apply the successor function to
         """
-        self.functionToStack(function)
-        return self._lambda.successor(function)
-    
-    def functionToStack(self, function):    
+        
+        print(function.__name__)       
+                
+        def nestFunc(function1):
+            if len(self._successorHead) == 0:
+                return function(self._lambda.zero)
+            else:
+                return function(self._successorHead[0])
+
+        self._successorHead.append(nestFunc(function))
+                                    
+        if len(self._successorHead) > 1:
+            self._successorHead = self._successorHead[-1:]
+            
+    def build_predecessor(self, function):
         """
-        store functions in an array.\n
+        builds a predecessor functions chain.\n
         \n
-        :param function function: the function to store in the List
+        :param function function: the function to apply the predecessor function to
         """
-        self.functionStack.append(function)
+        
+        print(function.__name__)       
+                
+        def nestFunc(function1):
+            if len(self._functionStack) == 0:
+                return function(self._lambda.zero)
+            else:
+                return function(self._functionStack[0])
+
+        self._functionStack.append(nestFunc(function))
+                                    
+        if len(self._functionStack) > 1:
+            if self._functionStack[0].__name__ is 'zero':
+                self._functionStack = []
+                return 0
+            else:
+                self._functionStack = self._functionStack[-1:]
+                self._lambda.recursiveCounter(self._functionStack[0])
+                                            
     
     def memorize(self, midinote, length, debug=False, debugname="Ckalculator", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
@@ -190,14 +232,15 @@ class CK_lambda(object):
         :param function number: zero or successors of zero as integer representations  
         """
         
-        def succ1(succesor):
+        def succ1(successor):
             """
             :param function succesor: a bound variable to be replaced by the argument after final application (i.e. select_first)
                     
             """
-            return succesor(self.false)(number)
+            return successor(self.false)(number)
         
         return succ1
+    
     
     def predecessor(self, number):
         """
