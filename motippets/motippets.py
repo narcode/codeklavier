@@ -12,7 +12,7 @@ from CK_Setup import Setup, BColors
 from Mapping import Mapping_Motippets
 from motippets_classes import Motippets
 
-def main(configfile='../default_setup.ini'):
+def main(configfile='default_setup.ini'):
     """Start motippets!
 
     :param string configfile: The configurationfile to use. Defaults to default_setup.ini
