@@ -29,7 +29,8 @@ try:
     #lists
     successor = config['lambda'].get('successor_midi').split(',')
     predecessor = config['lambda'].get('predecessor_midi').split(',')  
-    add_midi = config['lambda'].get('add_midi').split(',')    
+    add_midi = config['lambda'].get('add_midi').split(',')   
+    mult_midi = config['lambda'].get('mult_midi').split(',')    
     
     
 except KeyError:
@@ -64,4 +65,5 @@ motifs['false'] = select_second
 motifs['successor'] = list(map(int, successor))
 motifs['predecessor'] = list(map(int, predecessor))
 motifs['addition'] = list(map(int, add_midi))
+motifs['multiplication'] = list(map(int, mult_midi))
 

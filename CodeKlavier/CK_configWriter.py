@@ -8,7 +8,7 @@ from CK_Setup import Setup
 def createConfig(configfile='my_settings.ini'):
     """Create a basic configfile
 
-    Note: the created configfile will overwrite the existing file
+    TODO!!: avoid that the created configfile overwrites the existing file
     (if present)!
 
     :param string configfile: path and name of the configfile

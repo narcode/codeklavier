@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from fn import recur
+import functools
 from inspect import signature
 from Motifs import motifs as LambdaMapping
 
@@ -22,6 +24,9 @@ class Ckalculator(object):
         self._conditionalsBuffer = []
         self._pianosections = []
         self._lambda = CK_lambda(True)
+        self._getResult = self._lambda.with_trampoline(self._lambda.trampolineRecursiveCounter)
+        self._getAdd = self._lambda.with_trampoline(self._lambda.add_trampoline)
+        self._getMult = self._lambda.with_trampoline(self._lambda.mult_trampoline)
         
     def parse_midi(self, event, section, ck_deltatime=0, target=0):
         """Parse the midi signal and process it depending on the register.
@@ -46,14 +51,14 @@ class Ckalculator(object):
             elif note is LambdaMapping.get('zero'):
                 if len(self._successorHead) > 0:
                     self._numberStack = []
-                    self._lambda.recursiveCounter(self._successorHead[0])
+                    self._getResult(self._successorHead[0])
                     self._numberStack.append(self._successorHead[0])
                     self._successorHead = []
             
             elif note is LambdaMapping.get('eval'):
                 if len(self._functionStack) > 0:
                     self.evaluateFunctionStack(self._functionStack)
-                    self._lambda.recursiveCounter(self._numberStack[0])
+                    self._getResult(self._numberStack[0])
                     self._functionStack = []
                 
             elif note in LambdaMapping.get('predecessor'):
@@ -64,6 +69,9 @@ class Ckalculator(object):
                     
             elif note in LambdaMapping.get('addition'):
                 self.add()
+                
+            elif note in LambdaMapping.get('multiplication'):
+                self.multiply()                
                 
     def build_succesor(self, function):
         """
@@ -122,7 +130,8 @@ class Ckalculator(object):
         else:
             self._functionStack.append(self._numberStack[0])
             #append the operator        
-        self._functionStack.append(self._lambda.add)
+        #self._functionStack.append(self._lambda.add)
+        self._functionStack.append(self._getAdd)
         
     def evaluateFunctionStack(self, stack):
 
@@ -148,6 +157,22 @@ class Ckalculator(object):
                 self._numberStack.append(evaluate2args(self._functionStack[1], \
                                                        self._functionStack[0], \
                                                        self._functionStack[2]))             
+                     
+    
+    def multiply(self):
+        """
+        Append an addition function to the functions stack and any existing number expression\n
+        \n
+        """
+        #append the first number
+        print('multiplication')
+        if len(self._numberStack) == 0:
+            self._functionStack.append(self._lambda.zero)
+        else:
+            self._functionStack.append(self._numberStack[0])
+            #append the operator        
+        self._functionStack.append(self._getMult)
+        
                      
     def memorize(self, midinote, length, debug=False, debugname="Ckalculator", conditional="off"):
         """Store the incoming midi notes by appending to the memory array.
@@ -301,10 +326,14 @@ class CK_lambda(object):
         \nNOTE: The function stops at zero. It doesn't return -1 when applied to zero!
         """
         
-        if self.iszero(number).__name__ is 'true':
-            return self.zero
+        if type(number) is not tuple:
+            if self.iszero(number).__name__ is 'true':
+                return self.zero
+            else:
+                return number(self.false)
         else:
-            return number(self.false)
+            if number[0].__name__ is 'mult_trampoline':
+                return number[1][1](self.false)
                 
     def recursiveCounter(self, succesor_expression, counter=0):
         """
@@ -314,8 +343,7 @@ class CK_lambda(object):
         :param int counter: the integer to increment on each recursion\n
         :param boolean debug: wheather to print debg messages or not
         """
-           
-        #print(succesor_expression, 'counter: ', counter)           
+                   
         def sum_one(num):
             """
             add 1 to the counter.\n
@@ -350,7 +378,36 @@ class CK_lambda(object):
             else:
                 print('this function can only process number expression functions as argument!')
                 
-    
+    def trampolineRecursiveCounter(self, succesor_expression, counter=0):
+        """
+        function to count how many times succesor functions are nested until the zero is reached. Returns the count as int.
+        
+        :param function succesor_expression: the nested succesor functions to be reduced until zero\n
+        :param int counter: the integer to increment on each recursion\n
+        :param boolean debug: wheather to print debg messages or not
+        """         
+        
+        if type(succesor_expression) is tuple:
+            expression = succesor_expression[1]            
+        else:
+            expression = succesor_expression
+        
+        if expression.__name__ is 'succ1' or expression.__name__ is 'mult_add':
+            #recursion point 1
+            return self.callTrampoline(self.trampolineRecursiveCounter)(expression(self.false),
+                                         counter + 1)
+        
+        elif expression.__name__ is 'zero':
+            if self._debug:
+                print(counter)
+            return self.stopTrampoline(counter)
+                       
+        else:
+            if expression.__name__ is 'successor':
+                print('missing a zero to close the successor chain!')
+            else:
+                print('this function can only process number expression functions as argument!', expression)    
+                
     def add(self, x, y):
         """
         function to get the result of the addition of two number expressions.\n
@@ -361,12 +418,26 @@ class CK_lambda(object):
         """
         
         if self.iszero(y).__name__ is 'true':
-            pass
+            return x
         else:
             return self.add(self.successor(x), self.predecessor(y))
-        
-        return x
     
+    
+    def add_trampoline(self, x, y):
+        """
+        function to get the result of the addition of two number expressions.\n
+        Returns the resulting representation of an integer\n
+        \n
+        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function y: functional representation of an integer
+        """   
+        
+        if type(y) is not tuple and y.__name__ is 'succ1' and self.iszero(y).__name__ is 'true':
+            return self.stopTrampoline(x)
+        else:
+            return self.callTrampoline(self.add_trampoline)(self.successor(
+                x), self.predecessor(y))
+            
     def mult(self, x, y):
         """
         function to get the result of the multiplication of two number expressions.\n
@@ -380,8 +451,59 @@ class CK_lambda(object):
             return self.zero
         else:
             return self.add(x, self.mult(x, self.predecessor(y)))
+    
+    def mult_trampoline(self, x, y):
+        """
+        function to get the result of the multiplication of two number expressions.\n
+        Returns the resulting representation of an integer\n
+        \n
+        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function y: functional representation of an integer
+        """
+                   
+        if type(y) is not tuple and self.iszero(y).__name__ is 'true':
+            return self.stopTrampoline(self.zero)
+        else:
+            #return self.add(x, self.mult(x, self.predecessor(y)))
+            def mult_add(y):
+                return self.callTrampoline(self.mult_trampoline)(x,
+                                                                 self.predecessor(y))
+        
+            return self.callTrampoline(self.add_trampoline)(x, mult_add)
                        
     def test_func(*args):
         return "narcode"
 
+    # solutions for stack overflow due to recursive limit
+    def callTrampoline(self, f):
+        """
+        encode instructions for trampoline function 
+        """
+        def g(*args, **kwds):
+            return f, args, kwds
+        
+        return g
+    
+    def stopTrampoline(self, value):
+        """return a triple to stop the trampoline iteration
+        """
+        return None, value, None
+    
+    def with_trampoline(self, f):
+        """
+        wrap a trampoline around a recursive function
+        """
+        
+        @functools.wraps(f)
+        def g(*args, **kwds):
+            h = f
+            # the trampoline
+            while h is not None:
+                h, args, kwds = h(*args, **kwds)
+
+            return args
+
+        return g
+        
+        
     

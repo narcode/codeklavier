@@ -9,6 +9,10 @@ import CK_configWriter
 from CK_Setup import Setup, BColors
 from ckalculator_classes import *
 
+
+# increase recursion limit:
+sys.setrecursionlimit(3000)
+
 ckalculator_listens = True
 
 
@@ -37,6 +41,7 @@ def main(configfile='default_setup.ini'):
         raise LookupError('Missing key information in the config file.')
     
     codeK = Setup()
+    codeK.open_port(myPort)
     
     codeK.print_lines(20, 1)
     print("Prototype loaded: Ckalculator 0.1")
