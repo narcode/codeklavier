@@ -85,11 +85,11 @@ def main(configfile='default_setup.ini'):
                 ck_deltatime += deltatime
 
                 if message[0] != 254:
-                
+
                     if message[0] == device_id:
                         if message[2] > 0 and message[0] == device_id:
                             notecounter += 1
-                            
+
                             ck_deltatime_mem.append(ck_deltatime)
                             #print('deltatimes before: ', ck_deltatime_mem)
 
@@ -101,27 +101,27 @@ def main(configfile='default_setup.ini'):
                             if len(ck_deltatime_mem) == 2:
                                 ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
                             else:
-                                ck_deltadif = 0                            
+                                ck_deltadif = 0
 
                             ##motifs:
                             mainMem.parse_midi(msg, 'full',ck_deltadif)
                             memLow.parse_midi(msg, 'low',ck_deltadif)
                             memMid.parse_midi(msg, 'mid',ck_deltadif)
-                            memHi.parse_midi(msg, 'hi',ck_deltadif) 
-        
+                            memHi.parse_midi(msg, 'hi',ck_deltadif)
+
                             motif1_played = memMid._motif1_counter
                             motif2_played = mainMem._motif2_counter
-        
+
                             minimotif1_low_mapped = memLow._unmapCounter1
                             minimotif2_low_mapped = memLow._unmapCounter2
                             minimotif3_low_mapped = memLow._unmapCounter3
-        
+
                             minimotif1_mid_mapped = memMid._unmapCounter1
                             minimotif2_mid_mapped = memMid._unmapCounter2
-        
+
                             minimotif1_hi_mapped = memHi._unmapCounter1
                             minimotif2_hi_mapped = memHi._unmapCounter2
-            
+
                             ##tremolos:
                             if motif1_played > 0 or motif2_played > 0:
                                 if minimotif1_low_mapped > 0:
@@ -130,25 +130,25 @@ def main(configfile='default_setup.ini'):
                                     tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 2)
                                 elif minimotif3_low_mapped > 0:
                                     tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
-        
+
                                 if minimotif1_mid_mapped > 0:
                                     tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
                                 elif minimotif2_mid_mapped > 0:
                                     tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)
-        
+
                                 if minimotif1_hi_mapped > 0:
                                     tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, 1)
                                 elif minimotif2_hi_mapped > 0:
                                     tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, 2)
-        
+
                             ##conditionals
                             conditional_value = conditionals[1].parse_midi(msg, 'conditional 1', ck_deltadif)
                             conditional2_value = conditionals[2].parse_midi(msg, 'conditional 2', ck_deltadif)
                             conditional3_value = conditionals[3].parse_midi(msg, 'conditional 3', ck_deltadif)
-            
+
                             if isinstance(conditional_value, int) and conditional_value > 0:
                                 conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
-        
+
                                 #set the parameter for the timer:
                                 if isinstance(conditional_params, int) and conditional_params > 0:
                                     if conditional_value != 4:
@@ -157,7 +157,7 @@ def main(configfile='default_setup.ini'):
                                     elif conditional_value == 4: #gong bomb
                                         threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
                                         threads['set_param'].start()
-        
+
                                 if param_interval > 0:
                                     #if conditional_value != 4:
                                         notecounter = 0 # reset the counter
@@ -167,11 +167,11 @@ def main(configfile='default_setup.ini'):
                                         #start the countdown
                                         #gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
                                         #gomb.start()
-        
+
                             if isinstance(conditional2_value, int) and conditional2_value > 0:
                                 conditionalsRange._conditionalStatus = conditional2_value
                                 conditional_params = parameters.parse_midi(msg, 'params',ck_deltadif)
-        
+
                                 # set range parameter:
                                 if isinstance(conditional_params, int) and conditional_params > 0:
                                     if conditional_value != 4:
@@ -180,16 +180,16 @@ def main(configfile='default_setup.ini'):
                                     elif conditional_value == 4: #gong bomb
                                         threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
                                         threads['set_param'].start()
-        
+
                                 if param_interval > 0:
                                     threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread',
                                                                          args=('random', 'more than', 2, conditional2_value, param_interval))
                                     threads[conditional2_value].start()
-        
+
                             if isinstance(conditional3_value, int) and conditional3_value > 0:
                                 conditionalsRange._conditionalStatus = conditional3_value
                                 conditional_params = parameters.parse_midi(msg, 'params',ck_deltadif)
-        
+
                                 # set range parameter:
                                 if isinstance(conditional_params, int) and conditional_params > 0:
                                     if conditional_value != 4:
@@ -198,16 +198,16 @@ def main(configfile='default_setup.ini'):
                                     elif conditional_value == 4: #gong bomb
                                         threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
                                         threads['set_param'].start()
-        
+
                                 if param_interval > 0:
                                     threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
                                                                          args=('random', 'less than', 3, conditional3_value, param_interval))
                                     threads[conditional3_value].start()
-        
+
                                 #range parser
                             if range_trigger == 1:
                                 conditionalsRange.parse_midi(msg, 'conditional_range')
-            
+
             time.sleep(0.01) #check
 
     except KeyboardInterrupt:
