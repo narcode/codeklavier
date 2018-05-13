@@ -107,7 +107,7 @@ def main(configfile='default_setup.ini'):
                             mainMem.parse_midi(msg, 'full',ck_deltadif)
                             memLow.parse_midi(msg, 'low',ck_deltadif)
                             memMid.parse_midi(msg, 'mid',ck_deltadif)
-                            memHi.parse_midi(msg, 'hi',ck_deltadif)
+                            memHi.parse_midi(msg, 'hi',ck_deltadif) 
         
                             motif1_played = memMid._motif1_counter
                             motif2_played = mainMem._motif2_counter
