@@ -63,4 +63,6 @@ Please install the latest release of [SuperCollider](http://supercollider.github
 ## Test run
 After installing the libraries, plug in your midi device and run the miditest by ``python3 miditest.py``. After you complete the setup and configuration, you will see the midi messages on the screen. After that: try playing a ``hello world`` piece. Move into the ``hello world`` directory and run ``python3 hello_world.py``.
 
+Be sure to setup the correct port and device ID via ``default_setup.ini``
+
 # This project is possible thanks to the Stimuleringsfonds Creatieve Industrie
