@@ -9,7 +9,8 @@ The performer is relatively free to play anything on the piano but must ensure t
 
 ## Run
 Make sure you have installed supercollider and the required libraries before you
-start motipets. Then run: ``python3 motippets.py``.
+start motippets. Then run: ``python3 codeklavier.py -p hybrid`` <--- be sure to avoid the top Bb! You can also run ``python3 codeklavier.py -p motippets`` but this version may not stay as upto date as the hybrid.
+
 
 ## Customise
 This prototype is musically customisable by adjusting the motifs used to trigger the snippets in the motifs class and/or adjusting the printed snippets in the default.ini
