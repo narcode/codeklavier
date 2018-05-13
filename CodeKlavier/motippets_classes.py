@@ -124,12 +124,12 @@ class Motippets(object):
             elif section == 'mid':
                 if (note > self._pianosections[0] and
                     note <= self._pianosections[1]):
-                    self.memorize(note, 9, False, 'Mid: ')
+                    self.memorize(note, 9, True, 'Mid: ')
 
                     # see if motif_1 is played:
                     motif1_played = self.compare_chordal_motif(
                         self._memory, Motifs.get('motif_1'),
-                        note, deltatime=self._deltatime, deltatolerance=0.005, debug=False)
+                        note, deltatime=self._deltatime, deltatolerance=0.005, debug=True)
 
                     if motif1_played and self._motif1_counter == 0:
                         self.mapscheme.snippets(1)
@@ -238,7 +238,7 @@ class Motippets(object):
                 # check if motif_2 is played:
                 motif2_played = self.compare_chordal_motif(
                     self._memory, Motifs.get('motif_2'), note,
-                    deltatime=self._deltatime, debug=False)
+                    deltatime=self._deltatime, debug=True)
                 if motif2_played:
                     if self._motif2_counter == 0:
                         self.mapscheme.snippets(2)

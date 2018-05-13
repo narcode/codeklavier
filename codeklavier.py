@@ -18,7 +18,7 @@ from hello_world import hello_world
 from motippets import motippets
 from hybrid import hybrid
 
-PROTOTYPES = ('hello_world', 'motippets', 'hybrid')
+PROTOTYPES = ('hybrid')
 
 def doHelp():
     """
@@ -45,7 +45,7 @@ def doHelp():
     print('Boot CodeKlavier with prototype <<name>>')
     print('')
     print('Example:')
-    print('./codeklavier.py -c custom_settings.ini -p hello_world')
+    print('./codeklavier.py -c custom_settings.ini -p hybrid')
 
 def miditest(configfile='default_setup.ini'):
     """
