@@ -3,7 +3,7 @@
 import functools
 from inspect import signature
 from Motifs import motifs as LambdaMapping
-from ck_lambda import *
+from CK_lambda import *
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -112,7 +112,7 @@ class Ckalculator(object):
                 return 0
             else:
                 self._numberStack = self._numberStack[-1:]
-                trampolineRecursiveCounter(self._numberStack[0])
+                print(trampolineRecursiveCounter(self._numberStack[0]))
                                             
     def add(self):
         """

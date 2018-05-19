@@ -230,7 +230,7 @@ def add_trampoline(x, y):
     :param function y: functional representation of an integer
     """   
     
-    if y.__name__ is 'succ1' and iszero(y).__name__ is 'true':
+    if iszero(y).__name__ is 'true':
         return False, x
     else:
         return True, (successor(x), predecessor(y))
@@ -250,7 +250,7 @@ def mult(x, y):
         return add(x, mult(x, predecessor(y)))
 
 @recur.tco
-def mult_trampoline(f, x, y):
+def mult_trampoline(x, y, acc=zero):
     """
     function to get the result of the multiplication of two number expressions.\n
     Returns the resulting representation of an integer\n
@@ -258,16 +258,13 @@ def mult_trampoline(f, x, y):
     :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
     :param function y: functional representation of an integer
     """
-               
-    if type(y) is not tuple and iszero(y).__name__ is 'true':
-        return False, zero
-    else:
-        #return add(x, mult(x, predecessor(y)))
-        def mult_add(f):
-            return add_trampoline(x, f)
-            
     
-        return True, (mult_trampoline, x, predecessor(y))
+    if type(y) is not tuple and iszero(y).__name__ is 'true':
+        return False, acc
+    else:
+        #return add(x, mult(x, predecessor(y)))            
+        acc = add_trampoline(x, acc)
+        return True, (x, predecessor(y), acc)
                    
 def test_func(*args):
     return "narcode"
