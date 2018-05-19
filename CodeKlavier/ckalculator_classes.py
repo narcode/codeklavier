@@ -4,6 +4,7 @@ from fn import recur
 import functools
 from inspect import signature
 from Motifs import motifs as LambdaMapping
+from ck_lambda import *
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -23,10 +24,6 @@ class Ckalculator(object):
         self._successorHead = []
         self._conditionalsBuffer = []
         self._pianosections = []
-        self._lambda = CK_lambda(True)
-        self._getResult = self._lambda.with_trampoline(self._lambda.trampolineRecursiveCounter)
-        self._getAdd = self._lambda.with_trampoline(self._lambda.add_trampoline)
-        self._getMult = self._lambda.with_trampoline(self._lambda.mult_trampoline)
         
     def parse_midi(self, event, section, ck_deltatime=0, target=0):
         """Parse the midi signal and process it depending on the register.
@@ -46,26 +43,26 @@ class Ckalculator(object):
             
             ### lambda calculus ###
             if note in LambdaMapping.get('successor'):
-                self.build_succesor(self._lambda.successor)
+                self.build_succesor(successor)
 
             elif note is LambdaMapping.get('zero'):
                 if len(self._successorHead) > 0:
                     self._numberStack = []
-                    self._getResult(self._successorHead[0])
+                    print(trampolineRecursiveCounter(self._successorHead[0]))
                     self._numberStack.append(self._successorHead[0])
                     self._successorHead = []
             
             elif note is LambdaMapping.get('eval'):
                 if len(self._functionStack) > 0:
                     self.evaluateFunctionStack(self._functionStack)
-                    self._getResult(self._numberStack[0])
+                    print(trampolineRecursiveCounter(self._numberStack[0]))
                     self._functionStack = []
                 
             elif note in LambdaMapping.get('predecessor'):
                 if len(self._numberStack) == 0:
-                    self.build_predecessor(self._lambda.zero)
+                    self.build_predecessor(zero)
                 else:
-                    self.build_predecessor(self._lambda.predecessor)
+                    self.build_predecessor(predecessor)
                     
             elif note in LambdaMapping.get('addition'):
                 self.add()
@@ -84,7 +81,7 @@ class Ckalculator(object):
                 
         def nestFunc(function1):
             if len(self._successorHead) == 0:
-                return function(self._lambda.zero)
+                return function(zero)
             else:
                 return function(self._successorHead[0])
 
@@ -104,7 +101,7 @@ class Ckalculator(object):
                 
         def nestFunc(function1):
             if len(self._numberStack) == 0:
-                return function(self._lambda.zero)
+                return function(zero)
             else:
                 return function(self._numberStack[0])
 
@@ -116,7 +113,7 @@ class Ckalculator(object):
                 return 0
             else:
                 self._numberStack = self._numberStack[-1:]
-                self._lambda.recursiveCounter(self._numberStack[0])
+                trampolineRecursiveCounter(self._numberStack[0])
                                             
     def add(self):
         """
@@ -126,12 +123,12 @@ class Ckalculator(object):
         #append the first number
         print('addition')
         if len(self._numberStack) == 0:
-            self._functionStack.append(self._lambda.zero)
+            self._functionStack.append(zero)
         else:
             self._functionStack.append(self._numberStack[0])
             #append the operator        
         #self._functionStack.append(self._lambda.add)
-        self._functionStack.append(self._getAdd)
+        self._functionStack.append(add_trampoline)
         
     def evaluateFunctionStack(self, stack):
 
@@ -167,11 +164,11 @@ class Ckalculator(object):
         #append the first number
         print('multiplication')
         if len(self._numberStack) == 0:
-            self._functionStack.append(self._lambda.zero)
+            self._functionStack.append(zero)
         else:
             self._functionStack.append(self._numberStack[0])
             #append the operator        
-        self._functionStack.append(self._getMult)
+        self._functionStack.append(mult_trampoline)
         
                      
     def memorize(self, midinote, length, debug=False, debugname="Ckalculator", conditional="off"):
