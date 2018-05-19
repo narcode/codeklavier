@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from fn import recur
 import functools
 from inspect import signature
 from Motifs import motifs as LambdaMapping
@@ -432,7 +431,7 @@ class CK_lambda(object):
         :param function y: functional representation of an integer
         """   
         
-        if type(y) is not tuple and y.__name__ is 'succ1' and self.iszero(y).__name__ is 'true':
+        if self.iszero(y).__name__ is 'true':
             return self.stopTrampoline(x)
         else:
             return self.callTrampoline(self.add_trampoline)(self.successor(
