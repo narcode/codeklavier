@@ -23,6 +23,7 @@ class Ckalculator(object):
         self._successorHead = []
         self._conditionalsBuffer = []
         self._pianosections = []
+        self._fullStack = []
         
     def parse_midi(self, event, section, ck_deltatime=0, target=0):
         """Parse the midi signal and process it depending on the register.
@@ -49,12 +50,16 @@ class Ckalculator(object):
                     self._numberStack = []
                     print(trampolineRecursiveCounter(self._successorHead[0]))
                     self._numberStack.append(self._successorHead[0])
+                    self._fullStack.append(self._successorHead[0])
                     self._successorHead = []
             
             elif note is LambdaMapping.get('eval'):
                 if len(self._functionStack) > 0:
                     self.evaluateFunctionStack(self._functionStack)
-                    print(trampolineRecursiveCounter(self._numberStack[0]))
+                    if (self._numberStack[0].__name__ is 'succ1'):
+                        print(trampolineRecursiveCounter(self._numberStack[0]))
+                    else:
+                        print(self._numberStack[0].__name__)
                     self._functionStack = []
                 
             elif note in LambdaMapping.get('predecessor'):
@@ -66,8 +71,25 @@ class Ckalculator(object):
             elif note in LambdaMapping.get('addition'):
                 self.add()
                 
+            elif note in LambdaMapping.get('substraction'):
+                self.substract()                
+                
             elif note in LambdaMapping.get('multiplication'):
-                self.multiply()                
+                self.multiply() 
+                
+            elif note in LambdaMapping.get('division'):
+                self.divide() 
+                
+            # number comparisons    
+            elif note in LambdaMapping.get('equal'):
+                self.equal() 
+                
+            elif note in LambdaMapping.get('greater'):
+                self.greater_than() 
+                
+            elif note in LambdaMapping.get('less'):
+                self.less_than()                 
+                
                 
     def build_succesor(self, function):
         """
@@ -105,6 +127,7 @@ class Ckalculator(object):
                 return function(self._numberStack[0])
 
         self._numberStack.append(nestFunc(function))
+        self._fullStack.append(nestFunc(function))        
                                     
         if len(self._numberStack) > 1:
             if self._numberStack[0].__name__ is 'zero':
@@ -128,9 +151,79 @@ class Ckalculator(object):
             #append the operator        
         #self._functionStack.append(self._lambda.add)
         self._functionStack.append(add_trampoline)
+        self._fullStack.append(add_trampoline)
         
-    def evaluateFunctionStack(self, stack):
+    def substract(self):
+        """
+        Append a substraction function to the functions stack and any existing number expression\n
+        \n
+        """
+        #append the first number
+        print('substraction')
+        if len(self._numberStack) == 0:
+            self._functionStack.append(zero)
+        else:
+            self._functionStack.append(self._numberStack[0])
+            #append the operator        
+        #self._functionStack.append(self._lambda.add)
+        self._functionStack.append(substract) 
+        self._fullStack.append(substract)
 
+
+    def equal(self):
+        """
+        Compare two number expressions for equality\n
+        \n
+        """
+        #append the first number
+        print('equal to')
+        if len(self._numberStack) == 0:
+            self._functionStack.append(zero)
+        else:
+            self._functionStack.append(self._numberStack[0])
+            #append the operator        
+        #self._functionStack.append(self._lambda.add)
+        self._functionStack.append(equal)
+        
+    def greater_than(self):
+        """
+        Compare two number expressions for equality\n
+        \n
+        """
+        #append the first number
+        print('greater than')
+        if len(self._numberStack) == 0:
+            self._functionStack.append(zero)
+        else:
+            self._functionStack.append(self._numberStack[0])
+            #append the operator        
+        #self._functionStack.append(self._lambda.add)
+        self._functionStack.append(greater)     
+        
+    def less_than(self):
+        """
+        Compare two number expressions for equality\n
+        \n
+        """
+        #append the first number
+        print('less than')
+        if len(self._numberStack) == 0:
+            self._functionStack.append(zero)
+        else:
+            self._functionStack.append(self._numberStack[0])
+            #append the operator        
+        #self._functionStack.append(self._lambda.add)
+        self._functionStack.append(less)          
+        
+
+    ##stack and evaluation
+    def evaluateFunctionStack(self, stack):
+        """Evaluate a function with 2 arguments.\n
+        \n
+        :param function function: the function to evaluate with the given args
+        :param function args: the function arguments to pass
+        """
+        
         def evaluate2args(function, *args):
             """Evaluate a function with 2 arguments.\n
             \n
@@ -155,6 +248,12 @@ class Ckalculator(object):
                                                        self._functionStack[2]))             
                      
     
+    def evalPostfix(self, stack):
+        """
+        evaluate the stack postfix style
+        """
+        
+    
     def multiply(self):
         """
         Append an addition function to the functions stack and any existing number expression\n
@@ -168,6 +267,22 @@ class Ckalculator(object):
             self._functionStack.append(self._numberStack[0])
             #append the operator        
         self._functionStack.append(mult_trampoline)
+        self._fullStack.append(mult_trampoline)
+        
+    def divide(self):
+        """
+        Append an addition function to the functions stack and any existing number expression\n
+        \n
+        """
+        #append the first number
+        print('division')
+        if len(self._numberStack) == 0:
+            self._functionStack.append(zero)
+        else:
+            self._functionStack.append(self._numberStack[0])
+            #append the operator        
+        self._functionStack.append(divide)
+        self._fullStack.append(divide)        
         
                      
     def memorize(self, midinote, length, debug=False, debugname="Ckalculator", conditional="off"):

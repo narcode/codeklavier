@@ -56,6 +56,15 @@ def iszero(number_expression):
     
     return number_expression(true)
 
+def negation(boolean_expression):
+    """
+    returns the negation of the expression.\n
+    The expression is a boolean functions, either true or false.\n
+    \n
+    [in lambda notation: ƛx.((x, false), true) ]
+    """
+    
+    return boolean_expression(false)(true)
 
 def simpleReduce(*functions, debug=False):
     """
@@ -265,7 +274,86 @@ def mult_trampoline(x, y, acc=zero):
         #return add(x, mult(x, predecessor(y)))            
         acc = add_trampoline(x, acc)
         return True, (x, predecessor(y), acc)
-                   
+
+@recur.tco
+def divide(x, y, acc=zero):
+    """
+    function to get the result of the division between two number expressions.\n
+    Returns the resulting representation of an integer\n
+    DOESN'T HANDLE FLOATS AND DIVIDING BY ZERO RETURNS ZERO\n
+    \n
+    :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+    :param function y: functional representation of an integer
+    """    
+    
+    if less(x, y).__name__ is 'true':
+        return False, acc
+    else:
+        acc = successor(acc)        
+        return True, (substract(x, y), y, acc)
+
+
+@recur.tco
+def substract(x, y):
+    """
+    function to get the result of the substraction of two number expressions.\n
+    IT DOES NOT HANDLE NEGATIVE NUMBERS, SO NEGATIVE NUMBERS RETURN ZERO
+    Returns the resulting representation of an integer\n
+    \n
+    :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+    :param function y: functional representation of an integer
+    """    
+    
+    if iszero(y).__name__ is 'true':
+        return False, x
+    else:
+        return True, (predecessor(x), predecessor(y))
+    
+@recur.tco
+def equal(x, y):
+    """
+    function to get the boolean result of the comparison between two number expressions.\n
+    Comparison is EQUAL THAN\n
+    Returns true or false function definitions\n
+    \n
+    :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+    :param function y: functional representation of an integer
+    """    
+    
+    if iszero(x).__name__ is 'true' and iszero(y).__name__ is 'true':
+        return False, true
+    
+    elif iszero(x).__name__ is 'true' or iszero(y).__name__ is 'true':
+        return False, false
+
+    else:
+        return True, (predecessor(x), predecessor(y))
+            
+
+def greater(x, y):
+    """
+    function to get the boolean result of the comparison between two number expressions.\n
+    Comparison is GREATER THAN\n
+    Returns true or false function definitions\n
+    \n
+    :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+    :param function y: functional representation of an integer
+    """    
+    
+    return negation(iszero(substract(x, y)))
+
+def less(x, y):
+    """
+    function to get the boolean result of the comparison between two number expressions.\n
+    Comparison is GREATER THAN\n
+    Returns true or false function definitions\n
+    \n
+    :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+    :param function y: functional representation of an integer
+    """    
+    
+    return negation(iszero(substract(y, x)))
+    
 def test_func(*args):
     return "narcode"
 

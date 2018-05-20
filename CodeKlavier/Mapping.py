@@ -1022,10 +1022,10 @@ class Mapping_Ckalculator:
 
         #load the mapping
         try:
-            self._zero = config['lambda'].get('identity')
-            self._true = config['lambda'].get('select_first')
-            self._true = config['lambda'].get('select_second')
-            self._true = config['lambda'].get('successor')
+            self._zero = config['lambda'].get('identity_midi')
+            self._true = config['lambda'].get('select_first_midi')
+            self._true = config['lambda'].get('select_second_midi')
+            self._true = config['lambda'].get('successor_midi')
             
             
         except KeyError:

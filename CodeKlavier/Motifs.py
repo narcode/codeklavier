@@ -29,9 +29,13 @@ try:
     #lists
     successor = config['lambda'].get('successor_midi').split(',')
     predecessor = config['lambda'].get('predecessor_midi').split(',')  
-    add_midi = config['lambda'].get('add_midi').split(',')   
+    add_midi = config['lambda'].get('add_midi').split(',')  
+    substract_midi = config['lambda'].get('substract_midi').split(',')
     mult_midi = config['lambda'].get('mult_midi').split(',')    
-    
+    division_midi = config['lambda'].get('division_midi').split(',')
+    equal_than_midi = config['lambda'].get('equality_midi').split(',')
+    greater_than_midi = config['lambda'].get('greater_than_midi').split(',')
+    less_than_midi = config['lambda'].get('less_than_midi').split(',')
     
 except KeyError:
     raise LookupError('Missing key information in the config file.')
@@ -65,5 +69,11 @@ motifs['false'] = select_second
 motifs['successor'] = list(map(int, successor))
 motifs['predecessor'] = list(map(int, predecessor))
 motifs['addition'] = list(map(int, add_midi))
+motifs['substraction'] = list(map(int, substract_midi))
 motifs['multiplication'] = list(map(int, mult_midi))
+motifs['division'] = list(map(int, division_midi))
+motifs['equal'] = list(map(int, equal_than_midi))
+motifs['greater'] = list(map(int, greater_than_midi))
+motifs['less'] = list(map(int, less_than_midi))
+
 
