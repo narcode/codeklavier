@@ -444,9 +444,9 @@ class Mapping_Motippets:
             with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
-            time.sleep(0.2)
-            self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.enter)
+            #time.sleep(0.2)
+            #self.__keyboard.press(Key.enter)
+            #self.__keyboard.release(Key.enter)
 
     def goDown(self):
         """Press command-arrow down and enter.
