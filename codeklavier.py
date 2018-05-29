@@ -28,7 +28,7 @@ def doHelp():
     print('This script will help you to run the CodeKlavier.')
     print('')
     print('Usage: ./codeklaver.py [OPTION]')
-    print('')
+    print('') 
     print('Where [OPTION] is:')
     print('-c | --configfile <<configfile>>')
     print('Start CodeKlavier with the configuration in <<configfile>>. Note: -c and -m options cannot be used together.')
@@ -98,7 +98,7 @@ def perform(configfile='default_setup.ini', prototype='hello_world'):
         raise ValueError('This prototype doesn\'t exist. Please retry.')
 
     eval(prototype + '.main()')
-
+    
 def perform_interactive(configfile='default_setup.ini'):
     """
     Run Codeklavier in interactive mode.

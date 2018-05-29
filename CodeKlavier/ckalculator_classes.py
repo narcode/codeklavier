@@ -2,8 +2,28 @@
 
 import functools
 from inspect import signature
+from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
+    ZeroOrMore,Forward,nums,alphas
+import math
+import operator
 from Motifs import motifs as LambdaMapping
+from Mapping import Mapping_Ckalculator
 from CK_lambda import *
+
+exprStack = []
+
+opn = { "+" : operator.add,
+        "-" : operator.sub,
+        "*" : operator.mul,
+        "/" : operator.truediv,
+        "^" : operator.pow }
+fn  = { "sin" : math.sin,
+        "cos" : math.cos,
+        "tan" : math.tan,
+        "abs" : abs,
+        "trunc" : lambda a: int(a),
+        "round" : round,
+        "sgn" : lambda a: abs(a)>epsilon and cmp(a,0) or 0}
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -11,19 +31,27 @@ class Ckalculator(object):
     The main class behind the Ckalculator prototype. Lambda calculus with the piano (simple arithmetic operations)
     """
     
-    def __init__(self, noteonid, noteoffid):
+    def __init__(self, noteonid, noteoffid, pedal_id):
         """The method to initialise the class and prepare the class variables.
         """
-        #self.mapscheme = mapping
+        
+        self.mapscheme = Mapping_Ckalculator(True, False)
         self.note_on = noteonid
         self.note_off = noteoffid
+        self.pedal = pedal_id
         self._memory = []
         self._functionStack = []
         self._numberStack = []
+        self._tempNumberStack = []
         self._successorHead = []
         self._conditionalsBuffer = []
         self._pianosections = []
         self._fullStack = []
+        self._evalStack = []
+        self._tempStack = []
+        self._temp = False
+        self._tempFunctionStack = []
+        self.oscName = "ck"
         
     def parse_midi(self, event, section, ck_deltatime=0, target=0):
         """Parse the midi signal and process it depending on the register.
@@ -36,6 +64,26 @@ class Ckalculator(object):
         
         message, deltatime = event
 
+        if (message[0] == self.pedal):
+            if message[2] > 0:
+                print('(')
+                self.mapscheme.formatAndSend('(', display=2, syntax_color='int:')
+                self._fullStack.append('(')
+                self._tempStack = []
+                self._temp = True
+            else:
+                print(')')
+                self.mapscheme.formatAndSend(')', display=2, syntax_color='int:')                
+                self._fullStack.append(')')
+                # to main stack
+                if len(self._tempNumberStack) > 0:
+                    self._numberStack.append(self._tempNumberStack.pop())
+                #self.evaluateTempStack(self._tempStack)
+                self._tempFunctionStack = []
+                self._tempNumberStack = []
+                self._temp = False
+                
+            
 
         if (message[0] == self.note_on):
             note = message[1]
@@ -48,18 +96,58 @@ class Ckalculator(object):
             elif note is LambdaMapping.get('zero'):
                 if len(self._successorHead) > 0:
                     self._numberStack = []
-                    print(trampolineRecursiveCounter(self._successorHead[0]))
-                    self._numberStack.append(self._successorHead[0])
-                    self._fullStack.append(self._successorHead[0])
+                    self._tempNumberStack = []
+                    
+                    if self._temp is False:
+                        #print result:
+                        self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                        self.mapscheme.newLine(display=1)
+                        self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
+                                                     display=2, syntax_color='int:')
+                        print(trampolineRecursiveCounter(self._successorHead[0]))
+                        
+                        self._numberStack.append(self._successorHead[0])
+                        self._fullStack.append(self._successorHead[0])
+                        
+                        if len(self._tempStack) > 0:
+                            if self._tempStack[0] == '(':
+                                self._tempStack.append(self.succesorHead[0])
+                    
+                    else: 
+                        self._tempNumberStack.append(self._successorHead[0])
+                        
+                        self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
+                                                     display=2, syntax_color='int:')
+                        
+                        if len(self._tempFunctionStack) > 0:
+                            self.evaluateFunctionStack(self._tempFunctionStack, True)                        
+                            if (self._tempNumberStack[0].__name__ is 'succ1'):
+                                self._evalStack = []
+                                self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
+                                self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                             syntax_color='result:')                                
+                                print(self._evalStack[0])                        
+                                self._tempFunctionStack = []
+                                
+                    
                     self._successorHead = []
             
             elif note is LambdaMapping.get('eval'):
-                if len(self._functionStack) > 0:
+                if len(self._functionStack) > 0 and len(self._numberStack) > 0:
                     self.evaluateFunctionStack(self._functionStack)
                     if (self._numberStack[0].__name__ is 'succ1'):
-                        print(trampolineRecursiveCounter(self._numberStack[0]))
+                        self._evalStack = []
+                        self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
+                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                     syntax_color='result:')
+                        print(self._evalStack[0])
+                        self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                     else:
-                        print(self._numberStack[0].__name__)
+                        print(self.oscName)
+                        self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
+                                                     syntax_color='result:')
+                        self.mapscheme._osc.send_message("/"+self.oscName, self._numberStack[0].__name__)
+                        
                     self._functionStack = []
                 
             elif note in LambdaMapping.get('predecessor'):
@@ -69,16 +157,28 @@ class Ckalculator(object):
                     self.build_predecessor(predecessor)
                     
             elif note in LambdaMapping.get('addition'):
-                self.add()
+                if not self._temp:
+                    self.add()
+                else:
+                    self.add(temp=True)
                 
             elif note in LambdaMapping.get('substraction'):
-                self.substract()                
+                if not self._temp:
+                    self.substract()  
+                else:
+                    self.substract(True)
                 
             elif note in LambdaMapping.get('multiplication'):
-                self.multiply() 
+                if not self._temp:
+                    self.multiply() 
+                else:
+                    self.multiply(True)
                 
             elif note in LambdaMapping.get('division'):
-                self.divide() 
+                if not self._temp:
+                    self.divide() 
+                else:
+                    self.divide(True)
                 
             # number comparisons    
             elif note in LambdaMapping.get('equal'):
@@ -88,8 +188,8 @@ class Ckalculator(object):
                 self.greater_than() 
                 
             elif note in LambdaMapping.get('less'):
-                self.less_than()                 
-                
+                self.less_than()  
+                                
                 
     def build_succesor(self, function):
         """
@@ -98,6 +198,7 @@ class Ckalculator(object):
         :param function function: the function to apply the successor function to
         """
         
+        self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
         print(function.__name__)       
                 
         def nestFunc(function1):
@@ -117,7 +218,8 @@ class Ckalculator(object):
         \n
         :param function function: the function to apply the predecessor function to
         """
-        
+
+        self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
         print(function.__name__)       
                 
         def nestFunc(function1):
@@ -127,7 +229,10 @@ class Ckalculator(object):
                 return function(self._numberStack[0])
 
         self._numberStack.append(nestFunc(function))
-        self._fullStack.append(nestFunc(function))        
+        self._fullStack.append(nestFunc(function))
+        if len(self._tempStack) > 0:
+            if self._tempStack[0] == '(':
+                self._tempStack.append(nestFunc(function))        
                                     
         if len(self._numberStack) > 1:
             if self._numberStack[0].__name__ is 'zero':
@@ -135,39 +240,72 @@ class Ckalculator(object):
                 return 0
             else:
                 self._numberStack = self._numberStack[-1:]
+                self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=3, syntax_color='zero:')                
                 print(trampolineRecursiveCounter(self._numberStack[0]))
                                             
-    def add(self):
+    def add(self, temp=False):
         """
         Append an addition function to the functions stack and any existing number expression\n
         \n
         """
-        #append the first number
+        self.mapscheme.formatAndSend('+', display=2, syntax_color='add:')                       
+        self.mapscheme.formatAndSend('add', display=1, syntax_color='add:')               
         print('addition')
-        if len(self._numberStack) == 0:
-            self._functionStack.append(zero)
-        else:
-            self._functionStack.append(self._numberStack[0])
+        
+        if not temp:
+            if len(self._numberStack) == 0:
+                self._functionStack.append(zero)
+            else:
+                self._functionStack.append(self._numberStack[0])
             #append the operator        
         #self._functionStack.append(self._lambda.add)
-        self._functionStack.append(add_trampoline)
+            self._functionStack.append(add_trampoline)
+        else:
+            if len(self._tempNumberStack) == 0:
+                self._tempFunctionStack.append(zero)
+            else:
+                self._tempFunctionStack.append(self._tempNumberStack[0])
+            #append the operator        
+        #self._functionStack.append(self._lambda.add)
+            self._tempFunctionStack.append(add_trampoline)
+            
         self._fullStack.append(add_trampoline)
         
-    def substract(self):
+        if len(self._tempStack) > 0:
+            if self._tempStack[0] == '(':
+                self._tempStack.append(add_trampoline)        
+        
+    def substract(self, temp=False):
         """
         Append a substraction function to the functions stack and any existing number expression\n
         \n
         """
-        #append the first number
+        self.mapscheme.formatAndSend('-', display=2, syntax_color='min:')               
+        self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
         print('substraction')
-        if len(self._numberStack) == 0:
-            self._functionStack.append(zero)
-        else:
-            self._functionStack.append(self._numberStack[0])
+        
+        if not temp:
+            if len(self._numberStack) == 0:
+                self._functionStack.append(zero)
+            else:
+                self._functionStack.append(self._numberStack[0])
             #append the operator        
-        #self._functionStack.append(self._lambda.add)
-        self._functionStack.append(substract) 
+            #self._functionStack.append(self._lambda.add)
+            self._functionStack.append(substract) 
+        else:
+            if len(self._tempNumberStack) == 0:
+                self._tempFunctionStack.append(zero)
+            else:
+                self._tempFunctionStack.append(self._tempNumberStack[0])
+            #append the operator        
+            #self._functionStack.append(self._lambda.add)
+            self._tempFunctionStack.append(substract)           
+            
+        
         self._fullStack.append(substract)
+        if len(self._tempStack) > 0:
+            if self._tempStack[0] == '(':
+                self._tempStack.append(substract)         
 
 
     def equal(self):
@@ -175,8 +313,9 @@ class Ckalculator(object):
         Compare two number expressions for equality\n
         \n
         """
-        #append the first number
+        self.mapscheme.formatAndSend('equal to', display=1, syntax_color='equal:')       
         print('equal to')
+        
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
         else:
@@ -184,13 +323,17 @@ class Ckalculator(object):
             #append the operator        
         #self._functionStack.append(self._lambda.add)
         self._functionStack.append(equal)
+        self._fullStack.append(equal)
+        self.oscName = "ck_equal"
+        
+        
         
     def greater_than(self):
         """
         Compare two number expressions for equality\n
         \n
         """
-        #append the first number
+        self.mapscheme.formatAndSend('greater than', display=1, syntax_color='gt:')       
         print('greater than')
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
@@ -198,14 +341,17 @@ class Ckalculator(object):
             self._functionStack.append(self._numberStack[0])
             #append the operator        
         #self._functionStack.append(self._lambda.add)
-        self._functionStack.append(greater)     
+        self._functionStack.append(greater) 
+        self._fullStack.append(greater)
+        self.oscName = "ck_gt"
+        
         
     def less_than(self):
         """
         Compare two number expressions for equality\n
         \n
         """
-        #append the first number
+        self.mapscheme.formatAndSend('less than', display=1, syntax_color='lt:')               
         print('less than')
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
@@ -213,16 +359,22 @@ class Ckalculator(object):
             self._functionStack.append(self._numberStack[0])
             #append the operator        
         #self._functionStack.append(self._lambda.add)
-        self._functionStack.append(less)          
+        self._functionStack.append(less)  
+        self._fullStack.append(less)
+        self.oscName = "ck_lt"
+        
         
 
     ##stack and evaluation
-    def evaluateFunctionStack(self, stack):
+    def evaluateFunctionStack(self, stack, temp=False):
         """Evaluate a function with 2 arguments.\n
         \n
         :param function function: the function to evaluate with the given args
         :param function args: the function arguments to pass
         """
+        
+        self.mapscheme.formatAndSend('apply functions', display=1, syntax_color='eval:')       
+        self.mapscheme.newLine(display=1)
         
         def evaluate2args(function, *args):
             """Evaluate a function with 2 arguments.\n
@@ -239,14 +391,38 @@ class Ckalculator(object):
             if len(stack) == 0:
                 print('not enough elements in stack to apply the function')
             elif len(stack) == 2:
-                self._functionStack.append(self._numberStack[0])             
+                if not temp:
+                    if len(self._numberStack) > 0:
+                        self._functionStack.append(self._numberStack[0])             
+                else:
+                    self._tempFunctionStack.append(self._tempNumberStack[0])
             
             if len(stack) == 3:
-                self._numberStack = []
-                self._numberStack.append(evaluate2args(self._functionStack[1], \
-                                                       self._functionStack[0], \
-                                                       self._functionStack[2]))             
+                self._numberStack = [] 
+                self._tempNumberStack = []
+                if not temp:
+                    self._numberStack.append(evaluate2args(self._functionStack[1], \
+                                                           self._functionStack[0], \
+                                                           self._functionStack[2]))             
+                else:
+                    #self._numberStack.append(evaluate2args(self._tempFunctionStack[1], \
+                                                           #self._tempFunctionStack[0], \
+                                                           #self._tempFunctionStack[2])) 
+                    self._tempNumberStack.append(evaluate2args(self._tempFunctionStack[1], \
+                                                           self._tempFunctionStack[0], \
+                                                           self._tempFunctionStack[2])) 
+                    
+                    #print('TEMP NUM STACK: ', self._tempNumberStack)
+                    #print('NORM STACK: ', self._numberStack)
                      
+    
+    def evaluateTempStack(self, stack):
+        """Evaluate the functions within parenthesis.
+        \n
+        :param list stack: a list containing the functions to be evaluated
+        """        
+        if stack[0] == '(':
+            return False
     
     def evalPostfix(self, stack):
         """
@@ -254,35 +430,66 @@ class Ckalculator(object):
         """
         
     
-    def multiply(self):
-        """
-        Append an addition function to the functions stack and any existing number expression\n
+    def multiply(self, temp=False):
+        """Append an addition function to the functions stack and any existing number expression\n
         \n
         """
-        #append the first number
+        self.mapscheme.formatAndSend('*', display=2, syntax_color='mul:', spacing=False)                        
+        self.mapscheme.formatAndSend('multiply', display=1, syntax_color='mul:')       
         print('multiplication')
-        if len(self._numberStack) == 0:
-            self._functionStack.append(zero)
+        
+        if not temp:
+            if len(self._numberStack) == 0:
+                self._functionStack.append(zero)
+            else:
+                self._functionStack.append(self._numberStack[0])
+                #append the operator        
+                self._functionStack.append(mult_trampoline)
+                        
         else:
-            self._functionStack.append(self._numberStack[0])
-            #append the operator        
-        self._functionStack.append(mult_trampoline)
+            if len(self._tempNumberStack) == 0:
+                self._tempFunctionStack.append(zero)
+            else:
+                self._tempFunctionStack.append(self._tempNumberStack[0])
+                #append the operator        
+                self._tempFunctionStack.append(mult_trampoline)            
+            
         self._fullStack.append(mult_trampoline)
         
-    def divide(self):
+        if len(self._tempStack) > 0:        
+            if self._tempStack[0] == '(':
+                self._tempStack.append(mult_trampoline)         
+            
+        
+    def divide(self, temp=False):
         """
         Append an addition function to the functions stack and any existing number expression\n
         \n
         """
-        #append the first number
+        self.mapscheme.formatAndSend('/', display=2, syntax_color='div:', spacing=False)                
+        self.mapscheme.formatAndSend('divide', display=1, syntax_color='div:')        
         print('division')
-        if len(self._numberStack) == 0:
-            self._functionStack.append(zero)
-        else:
-            self._functionStack.append(self._numberStack[0])
+        
+        if not temp:
+            if len(self._numberStack) == 0:
+                self._functionStack.append(zero)
+            else:
+                self._functionStack.append(self._numberStack[0])
             #append the operator        
-        self._functionStack.append(divide)
-        self._fullStack.append(divide)        
+            self._functionStack.append(divide)
+
+        else:
+            if len(self._tempNumberStack) == 0:
+                self._tempFunctionStack.append(zero)
+            else:
+                self._tempFunctionStack.append(self._tempNumberStack[0])
+            #append the operator        
+            self._tempFunctionStack.append(divide)            
+
+        self._fullStack.append(divide)
+        if len(self._tempStack) > 0:        
+            if self._tempStack[0] == '(':
+                self._tempStack.append(divide)         
         
                      
     def memorize(self, midinote, length, debug=False, debugname="Ckalculator", conditional="off"):
@@ -307,8 +514,14 @@ class Ckalculator(object):
         if conditional == "on":
             self._conditionalsBuffer.append(midinote)
             if len(self._conditionalsBuffer) > length:
-                self._conditionalsBuffer = self._conditionalsBuffer[-length:]
+                self._conditionalsBuffer = self._conditionalsBuffer[-length:]   
                 
+    def CK_stackEval(self, s):
+        global exprStack
+        exprStack = []
+        results = BNF().parseString(s)
+        val = evaluateStack(exprStack[:])
+        print(val, results)
     
 class CK_lambda(object):
     """CK_lambda Class
@@ -616,5 +829,74 @@ class CK_lambda(object):
 
         return g
         
+### parsing STACK:
+    
+def pushFirst( strg, loc, toks ):
+    exprStack.append( toks[0] )
+def pushUMinus( strg, loc, toks ):
+    if toks and toks[0]=='-': 
+        exprStack.append( 'unary -' )
+        #~ exprStack.append( '-1' )
+        #~ exprStack.append( '*' )
+                    
+bnf = None
+def BNF():
+    """
+    multop  :: '*' | '/'
+    addop   :: '+' | '-'
+    integer :: '0'..'9'+
+    expr    :: term [ addop term ]*
+    """
+    global bnf
+    if not bnf:
+        point = Literal( "." )
+        e     = CaselessLiteral( "E" )
+        fnumber = Combine( Word( "+-"+nums, nums ) + 
+                           Optional( point + Optional( Word( nums ) ) ) +
+                           Optional( e + Word( "+-"+nums, nums ) ) )
+        ident = Word(alphas, alphas+nums+"_$")
+        
+        plus  = Literal( "+" )
+        minus = Literal( "-" )
+        mult  = Literal( "*" )
+        div   = Literal( "/" )
+        lpar  = Literal( "(" ).suppress()
+        rpar  = Literal( ")" ).suppress()
+        addop  = plus | minus
+        multop = mult | div
+        expop = Literal( "^" )
+        pi    = CaselessLiteral( "PI" )
+        
+        expr = Forward()
+        atom = (Optional("-") + ( pi | e | fnumber | ident + lpar + expr + rpar ).setParseAction( pushFirst ) | ( lpar + expr.suppress() + rpar )).setParseAction(pushUMinus) 
+        
+        # by defining exponentiation as "atom [ ^ factor ]..." instead of "atom [ ^ atom ]...", we get right-to-left exponents, instead of left-to-righ
+        # that is, 2^3^2 = 2^(3^2), not (2^3)^2.
+        factor = Forward()
+        factor << atom + ZeroOrMore( ( expop + factor ).setParseAction( pushFirst ) )
+        
+        term = factor + ZeroOrMore( ( multop + factor ).setParseAction( pushFirst ) )
+        expr << term + ZeroOrMore( ( addop + term ).setParseAction( pushFirst ) )
+        bnf = expr
+    return bnf  
         
     
+def evaluateStack( s ):
+    op = s.pop()
+    if op == 'unary -':
+        return -evaluateStack( s )
+    if op in "+-*/^":
+        op2 = evaluateStack( s )
+        op1 = evaluateStack( s )
+        return opn[op]( op1, op2 )
+    elif op == "PI":
+        return math.pi # 3.1415926535
+    elif op == "E":
+        return math.e  # 2.718281828
+    elif op in fn:
+        return fn[op]( evaluateStack( s ) )
+    elif op[0].isalpha():
+        return 0
+    else:
+        return float( op )    
+

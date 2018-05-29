@@ -7,8 +7,7 @@ import rtmidi
 import configparser
 import CK_configWriter
 from CK_Setup import Setup, BColors
-from ckalculator_classes import *
-
+from ckalculator_classes import Ckalculator
 
 # increase recursion limit:
 sys.setrecursionlimit(3000)
@@ -21,7 +20,7 @@ def main(configfile='default_setup.ini'):
     start the CKalculator
     """
     global ckalculator_listens
-       
+    
     # activesense compensation
     ck_deltatime_mem = []
     ck_deltatime = 0
@@ -34,6 +33,7 @@ def main(configfile='default_setup.ini'):
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('device_id')
         noteoff_id = config['midi'].getint('noteoff_id')
+        pedal_id = config['midi'].getint('pedal_id')        
     except KeyError:
         raise LookupError('Missing key information in the config file.')
     
@@ -49,21 +49,25 @@ def main(configfile='default_setup.ini'):
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(device_id, noteoff_id)
+    cKalc = Ckalculator(device_id, noteoff_id, pedal_id)
     
     try:
         while ckalculator_listens:
             msg = codeK.get_message()
-
+            
             if msg:
                 message, deltatime = msg
                 ck_deltatime += deltatime
+                #print(message)
 
                 if message[0] != 254:
 
                     #note offs:
                     #if (message[0] == noteoff_id or message[2] == 0):
                         #ck_deltatime = 0
+                    
+                    if message[0] == pedal_id:
+                        cKalc.parse_midi(msg, 'full', ck_deltatime=ck_deltadif)
 
                     if message[0] == device_id:
                         if message[2] > 0 and message[0] == device_id:

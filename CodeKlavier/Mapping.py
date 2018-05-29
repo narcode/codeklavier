@@ -1035,5 +1035,44 @@ class Mapping_Ckalculator:
         
         if use_display:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120)
+
         
+    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color='', spacing=True):
+        """format and prepare a string for sending it over UDP socket
+
+        :param str msg: the string to be sent
+        :param str encoding: the character encoding
+        :param str host: the UDP server hostname
+        :param int display: the UDP destination port
+        :param str syntax_color: the tag to use for syntax coloring (loop, primitive, mid, low, hi, snippet)
+        :param boolean spacing: wheather to put a \n (new line) before the msg
+        """
+
+        if display == 1:
+            port = 1111
+        elif display == 2:
+            port = 2222
+        elif display == 3:
+            port = 3333     
         
+        if spacing:
+            newline = '\n'
+        else:
+            newline = ' -> '
+
+        return self.__socket.sendto(bytes(syntax_color+msg+newline, encoding), (host, port))  
+    
+    def newLine(self, display=1):
+        """
+        send a new line to the code display
+        """
+        if display == 1:
+            port = 1111
+        elif display == 2:
+            port = 2222
+        elif display == 3:
+            port = 3333         
+            
+        return self.__socket.sendto(bytes('line:\n', 'utf-8'), ('localhost', port))

@@ -39,9 +39,10 @@ def main():
     global root, display
     
     display = 0
+    top = False
     
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hd:',['help', 'display='])
+        options, args = getopt.getopt(sys.argv[1:],'hd:t',['help', 'display='])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -50,7 +51,9 @@ def main():
         if o in ('-h', '--help'):
             showUsage()
             sys.exit(2)
-        if o in ('-d', '--display'):
+        elif o == '-t':
+            top = True
+        elif o in ('-d', '--display'):
                 try:
                     if int(a) < 6 and int(a) > 0:                    
                         display = a
@@ -67,7 +70,7 @@ def main():
         # Gui window
         root = tkinter.Tk()
         root.title('CK PARALLEL CODING DISPLAY')
-        root.attributes('-topmost', True)
+        root.attributes('-topmost', top)
         root.geometry("1920x900")
         root.config(background='black')
         
@@ -76,13 +79,13 @@ def main():
                      
     if int(display) == 1:  
         f[display] = tkinter.Frame(root, height=900, width=1920/3) 
-        f[display].pack(fill=tkinter.Y, side=tkinter.LEFT)
+        f[display].pack(fill=tkinter.BOTH, side=tkinter.LEFT)
         f[display].pack_propagate(0)        
         ck_display[display] = tkinter.Text(f[display], height=6, width=50)
         ck_display[display].pack(fill=tkinter.Y, side=tkinter.LEFT)
         ck_display[display].configure(bg='black',fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 25')
         
-        ck_display[display].insert(tkinter.END, "Snippet 1\n")        
+        ck_display[display].insert(tkinter.END, "Code Space\n")        
         s[display].bind(('localhost', 1111))
         print('CK display 1 listening on port 1111')
 
@@ -91,7 +94,6 @@ def main():
         codedump[display].start() 
 
         tkinter.mainloop()
-        
         closeDisplay(display)
                 
     elif int(display) == 2:       
@@ -101,7 +103,7 @@ def main():
             
             s[str(x)].bind(('localhost', x*1111))
             
-            f[str(x)] = tkinter.Frame(root, height=900, width=1920/3) 
+            f[str(x)] = tkinter.Frame(root, height=900, width=1920/2) 
             f[str(x)].pack(fill=tkinter.Y, side=tkinter.LEFT)
             f[str(x)].pack_propagate(0)              
             ck_display[str(x)] = tkinter.Text(f[str(x)], height=6, width=50)
@@ -112,12 +114,11 @@ def main():
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))        
             codedump[str(x)].start()         
 
-        tkinter.mainloop()
-        
+        tkinter.mainloop()        
         closeDisplay(display)        
         
     elif int(display) == 3:
-        print('CK displays 1-3 listening on ports 1111, 2222 & 3333')
+        print('CK displays 1-3 used for CKalculator', 'Listening on ports 1111, 2222 & 3333')
 
         s_width = root.winfo_screenwidth()
         s_height = root.winfo_screenheight()
@@ -135,22 +136,38 @@ def main():
             ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             #ck_display[display].tag_config('var', foreground='white')
             
-            if x ==1:
+            # syntax colors
+            ck_display[str(x)].tag_config('add', foreground='cyan')
+            ck_display[str(x)].tag_config('min', foreground='white')
+            ck_display[str(x)].tag_config('div', foreground='#b3649d')
+            ck_display[str(x)].tag_config('mul', foreground='#6477b3')
+            ck_display[str(x)].tag_config('eval', foreground='#67b371')
+            ck_display[str(x)].tag_config('pred', foreground='#ebb18a')
+            ck_display[str(x)].tag_config('succ', foreground='#a3a3a3')
+            ck_display[str(x)].tag_config('zero', foreground='#eb218a')
+            ck_display[str(x)].tag_config('result', foreground='green')            
+            ck_display[str(x)].tag_config('equal', foreground='green')
+            ck_display[str(x)].tag_config('gt', foreground='green')
+            ck_display[str(x)].tag_config('lt', foreground='green')
+            ck_display[str(x)].tag_config('int', foreground='white')
+            
+            
+            if x == 1:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n")
+                ck_display[str(x)].insert(tkinter.END, "Functions \n")
             elif x == 2:
-                ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n")
+                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].insert(tkinter.END, "Stack \n")
             elif x == 3:
-                ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n")                
+                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].insert(tkinter.END, "Result \n")
             
             
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))        
             codedump[str(x)].start() 
 
-            tkinter.mainloop()
-            closeDisplay(display)             
+        tkinter.mainloop()
+        closeDisplay(display)             
             
     elif int(display) == 4:
         print('CK displays 1-4 listening on ports 1111, 2222, 3333, 4444')
@@ -317,7 +334,7 @@ def closeDisplay(display):
     
 def showUsage():
     print('\nusage example:', 
-                      'python3 CK_socket -d 3\n')    
+                      'python3 CK_socket -td 3\n', 't, --top: puts the window ALWAYS on top of others')    
     
 def displayCode(display):     
     """
@@ -333,7 +350,7 @@ def displayCode(display):
         try:
             if display == '1':
                 data, addr = s[display].recvfrom(1024)
-                #print(str(data, 'utf-8'))
+                print(str(data, 'utf-8'))
                 dump = str(data, 'utf-8')
                 tagmatch = re.match('.*:', dump)
                 tag = tagmatch.group(0)[0:-1]
@@ -361,8 +378,12 @@ def displayCode(display):
                 tag = tagmatch.group(0)[0:-1]  
                 ckcode = re.sub(''+tag+':', '', dump)                
                 try:
-                    ck_display[display].insert(tkinter.END, ckcode, tag)
-                    ck_display[display].see(tkinter.END)                                             
+                    if tag == 'result':
+                        ck_display[display].delete(1.0, tkinter.END)
+                        ck_display[display].insert(tkinter.END, ckcode, tag)
+                    else:   
+                        ck_display[display].insert(tkinter.END, ckcode, tag)
+                        ck_display[display].see(tkinter.END)                                             
                 except RuntimeError as err:
                     break   
             elif display == '4':

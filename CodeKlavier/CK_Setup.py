@@ -124,8 +124,6 @@ class Setup(object):
 
     def get_message(self):
         """Get the MIDIin message
-
-        :rtype: string? array? dict? The midi message
         """
         return self.__midiin.get_message()
 
