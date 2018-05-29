@@ -534,24 +534,18 @@ class Mapping_Motippets:
         elif midinumber == 62:
             self.__keyboard.type('3')
             self.formatAndSend('3', display=5, syntax_color='hello:', spacing=False)
-        elif midinumber == 89:
-            self.__keyboard.type('4')
-            self.formatAndSend('4', display=5, syntax_color='hello:', spacing=False)
-        elif midinumber == 90:
-            self.__keyboard.type('5')
-            self.formatAndSend('5', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 91:
-            self.__keyboard.type('6')
-            self.formatAndSend('6', display=5, syntax_color='hello:', spacing=False)
-        elif midinumber == 92:
-            self.__keyboard.type('7')
-            self.formatAndSend('7', display=5, syntax_color='hello:', spacing=False)
+            self.__keyboard.type('k')
+            self.formatAndSend('k', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 93:
-            self.__keyboard.type('8')
-            self.formatAndSend('8', display=5, syntax_color='hello:', spacing=False)
-        elif midinumber == 94:
-            self.__keyboard.type('9')
-            self.formatAndSend('9', display=5, syntax_color='hello:', spacing=False)
+            self.__keyboard.type('l')
+            self.formatAndSend('l', display=5, syntax_color='hello:', spacing=False)
+        elif midinumber == 96:
+            self.__keyboard.type('o')
+            self.formatAndSend('o', display=5, syntax_color='hello:', spacing=False)
+        elif midinumber == 97:
+            self.__keyboard.type('c')
+            self.formatAndSend('c', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 46:
             self.__keyboard.type('m')
             self.formatAndSend('m', display=5, syntax_color='hello:', spacing=False)
@@ -822,11 +816,11 @@ class Mapping_Motippets:
             self.enter()
             self.formatAndSend('setting up a conditional: \nIF number of notes played is more than 100 in...', display=3, syntax_color='primitive:')
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
             self.enter()
             self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3, syntax_color='primitive:')
         elif conditional_num == 3:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
             self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3, syntax_color='primitive:')
 
