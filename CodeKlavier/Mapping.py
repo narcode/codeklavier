@@ -444,9 +444,13 @@ class Mapping_Motippets:
             with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
-            #time.sleep(0.2)
-            #self.__keyboard.press(Key.enter)
-            #self.__keyboard.release(Key.enter)
+            time.sleep(0.2)
+            self.__keyboard.press(Key.enter)
+            self.__keyboard.release(Key.enter)
+        elif what == 'noEnter_eval':
+            with self.__keyboard.pressed(Key.shift):
+                self.__keyboard.press(Key.enter)
+                self.__keyboard.release(Key.enter)       
 
     def goDown(self):
         """Press command-arrow down and enter.
@@ -587,7 +591,7 @@ class Mapping_Motippets:
             self.__keyboard.release(Key.backspace)
       # supercollider commands:
         elif midinumber == 33:
-            self.evaluateSC('eval')
+            self.evaluateSC('noEnter_eval')
             self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 22:
             self.__keyboard.type('.tempo')
