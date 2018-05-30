@@ -569,7 +569,7 @@ class Mapping_Motippets:
         elif midinumber == 56:
             self.__keyboard.press(Key.space)
             self.__keyboard.release(Key.space)
-            self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
+            self.formatAndSend(' ', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 32:
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
@@ -936,6 +936,7 @@ class Mapping_Motippets:
                 self.__keyboard.type("")
                 self.enter()
             elif text == 'huygens':
+                self.__keyboard.type('~stop.now;')                
                 self.__keyboard.type('~huygens.end;')
                 self.evaluateSC('eval')
 
