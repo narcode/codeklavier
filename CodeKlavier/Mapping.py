@@ -109,6 +109,9 @@ class Mapping_HelloWorld():
         elif midinumber == 88:
             self.__keyboard.type('w')
             self.formatAndSend('w', display=2)
+        elif midinumber == 89:
+            self.__keyboard.type('v')
+            self.formatAndSend('v', display=2)
         elif midinumber == 64:
             self.__keyboard.type('d')
             self.formatAndSend('d', display=2)
@@ -198,8 +201,8 @@ class Mapping_HelloWorld():
             self.__keyboard.type('?')
             self.formatAndSend('?', display=2)
         elif midinumber == 105:
-            self.__keyboard.type('.!')
-            self.formatAndSend('.!', display=2)
+            self.__keyboard.type('!.')
+            self.formatAndSend('!.', display=2)
         elif midinumber == 95:
             self.__keyboard.press(Key.backspace)
             self.__keyboard.release(Key.backspace)
@@ -216,8 +219,8 @@ class Mapping_HelloWorld():
         elif midinumber == 102:
             self.__keyboard.type('TempoClock.default')
             self.formatAndSend('TempoClock.default', display=5)
-    
-      
+
+
 
 class Mapping_HelloWorld_NKK:
     """Mapping of the HelloWorld piece
@@ -360,8 +363,8 @@ class Mapping_HelloWorld_NKK:
 
 class Mapping_Motippets:
     """Mapping for the Motippets prototype.
-    
-       Includes Hello World mappings for the Hybrid prototype  
+
+       Includes Hello World mappings for the Hybrid prototype
     """
     def __init__(self, debug=True):
         if debug:
@@ -450,7 +453,7 @@ class Mapping_Motippets:
         elif what == 'noEnter_eval':
             with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
-                self.__keyboard.release(Key.enter)       
+                self.__keyboard.release(Key.enter)
 
     def goDown(self):
         """Press command-arrow down and enter.
@@ -502,6 +505,9 @@ class Mapping_Motippets:
         elif midinumber == 88:
             self.__keyboard.type('w')
             self.formatAndSend('w', display=5, syntax_color='hello:', spacing=False)
+        elif midinumber == 89:
+            self.__keyboard.type('v')
+            self.formatAndSend('v', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 64:
             self.__keyboard.type('d')
             self.formatAndSend('d', display=5, syntax_color='hello:', spacing=False)
@@ -584,8 +590,8 @@ class Mapping_Motippets:
             self.__keyboard.type('?')
             self.formatAndSend('?', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 105:
-            self.__keyboard.type('.!')
-            self.formatAndSend('.!', display=5, syntax_color='hello:', spacing=False)
+            self.__keyboard.type('!.')
+            self.formatAndSend('!.', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 95:
             self.__keyboard.press(Key.backspace)
             self.__keyboard.release(Key.backspace)
@@ -603,12 +609,12 @@ class Mapping_Motippets:
             self.__keyboard.type('TempoClock.default')
             self.formatAndSend('TempoClock.default', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 108:
-            self.goDown()         
+            self.goDown()
     # motippets only commands:
         elif prototype == 'Motippets':
             if midinumber == 66:
-                self.evaluateSC('eval')       
-    
+                self.evaluateSC('eval')
+
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color='', spacing=True):
         """format and prepare a string for sending it over UDP socket
 
@@ -629,8 +635,8 @@ class Mapping_Motippets:
         elif display == 4:
             port = 4444
         elif display == 5:
-            port = 5555       
-        
+            port = 5555
+
         if spacing:
             newline = '\n'
         else:
@@ -877,7 +883,7 @@ class Mapping_Motippets:
             elif text == 'less than':
                 #self.__keyboard.type('~gong.play(' + str(mod) + ');');
                 #self.evaluateSC('eval')
-                self._osc.send_message("/gong", str(mod))                
+                self._osc.send_message("/gong", str(mod))
                 self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
 
 
@@ -946,8 +952,8 @@ class Mapping_Motippets:
             elif text == 'less than':
                 #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 #self.evaluateSC('eval')
-                self._osc.send_message("/huygens", str(mod))                
-                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')                
+                self._osc.send_message("/huygens", str(mod))
+                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
 
         elif result_num == 6:
             if text == 'comment':
@@ -956,7 +962,7 @@ class Mapping_Motippets:
             elif text == 'start':
                 self.__keyboard.type('// HUYGENS countdown started!')
                 self.evaluateSC('eval')
-            elif text == 'code':               
+            elif text == 'code':
                 self.__keyboard.type("")
                 self.enter()
                 self.__keyboard.type("  ____   ____   ____  __  __ _ ")
@@ -975,12 +981,12 @@ class Mapping_Motippets:
                 self.enter()
             elif text == 'huygens':
                 self.__keyboard.type('~huygens.eind')
-                self.evaluateSC('eval')                 
+                self.evaluateSC('eval')
 
     def customPass(self, name, content):
         """
         post custom string message on codespace and display
-        
+
         :param string name: a label to print in front of the string
         :param string content: the message or content
         """
@@ -991,11 +997,11 @@ class Mapping_Motippets:
     def onlyDisplay(self, content, tag=1, warning=False):
         """
         print a custom string on the UDP display only!
-        
+
         :param string content: the message or content
         :param int tag: the reference to a color tag
         :param warning: wether to print the message with the warning color tag (i.e. red)
-        
+
         """
         if warning:
             self.formatAndSend(content, display=4, syntax_color='warning:')
