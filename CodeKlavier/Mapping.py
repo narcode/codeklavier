@@ -590,15 +590,16 @@ class Mapping_Motippets:
             self.__keyboard.type('?')
             self.formatAndSend('?', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 105:
-            self.__keyboard.type('!.')
-            self.formatAndSend('!.', display=5, syntax_color='hello:', spacing=False)
+            self.__keyboard.type('.!')
+            self.formatAndSend('.!', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 95:
             self.__keyboard.press(Key.backspace)
             self.__keyboard.release(Key.backspace)
+            self.formatAndSend('', display=5, syntax_color='delete:', spacing=False)            
       # supercollider commands:
         elif midinumber == 33:
             self.evaluateSC('noEnter_eval')
-            self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
+            self.formatAndSend('', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 22:
             self.__keyboard.type('.tempo')
             self.formatAndSend('.tempo', display=5, syntax_color='hello:', spacing=False)
@@ -610,6 +611,7 @@ class Mapping_Motippets:
             self.formatAndSend('TempoClock.default', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 108:
             self.goDown()
+            self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)            
     # motippets only commands:
         elif prototype == 'Motippets':
             if midinumber == 66:
@@ -681,7 +683,7 @@ class Mapping_Motippets:
         if snippet_num == 1 and pianosection == 'mid':
             self.__keyboard.type(self.__mini_snippet_mid_1)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_mid_1, display=snippet_num, syntax_color='snippet:')
+            self.formatAndSend(self.__mini_snippet_mid_1, display=5, syntax_color='mid:')
         if snippet_num == 1 and pianosection == 'mid with unmap':
             self.__keyboard.type(self.__mini_snippet_mid_1)
             self.evaluateSC('eval')
@@ -795,7 +797,7 @@ class Mapping_Motippets:
             self.formatAndSend('~tremoloH2 = ' + str(value), display=2, syntax_color='hi:')
         elif pianoregister == 'mid_1':
             self.__keyboard.type('~tremoloM1 = ' + str(value))
-            self.formatAndSend('~tremoloM1 = ' + str(value), display=1, syntax_color='mid:')
+            self.formatAndSend('~tremoloM1 = ' + str(value), display=5, syntax_color='mid:')
         elif pianoregister == 'mid_2':
             self.__keyboard.type('~tremoloM2 = ' + str(value))
             self.formatAndSend('~tremoloM2 = ' + str(value), display=2, syntax_color='mid:')

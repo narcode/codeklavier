@@ -260,19 +260,19 @@ def main():
 
             if x ==1:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
             elif x == 2:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
             elif x == 3:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n\n", 'title')
             elif x == 4:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Loops \n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "Loops \n\n", 'title')
             elif x == 5:
                 ck_display[str(x)].configure(bg='black', bd=5, fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "CodeSpace \n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "Free Code \n\n", 'title')
 
 
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))
@@ -341,7 +341,7 @@ def displayCode(display):
                 tagmatch = re.match('.*:', dump)
                 tag = tagmatch.group(0)[0:-1]
                 ckcode = re.sub(''+tag+':', '', dump)
-                try:
+                try: 
                     ck_display[display].insert(tkinter.END, ckcode, tag)
                     ck_display[display].see(tkinter.END)
                 except RuntimeError as err:
@@ -379,15 +379,18 @@ def displayCode(display):
                     ck_display[display].see(tkinter.END)
                 except RuntimeError as err:
                     break
-            elif display == '5':
+            elif display == '5': #this is the codespace
                 data, addr = s[display].recvfrom(1024)
                 dump = str(data, 'utf-8')
                 tagmatch = re.match('.*:', dump)
                 tag = tagmatch.group(0)[0:-1]
                 ckcode = re.sub(''+tag+':', '', dump)
                 try:
-                    ck_display[display].insert(tkinter.END, ckcode, tag)
-                    ck_display[display].see(tkinter.END)
+                    if tag == 'delete':
+                        ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
+                    else:                      
+                        ck_display[display].insert(tkinter.END, ckcode, tag)
+                        ck_display[display].see(tkinter.END)
                 except RuntimeError as err:
                     break
         except OSError as err:
