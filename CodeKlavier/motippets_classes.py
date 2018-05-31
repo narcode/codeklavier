@@ -32,7 +32,7 @@ class Motippets(object):
         self._results2 = []
         self._results3 = []
         self._results5 = []
-        self._pianosections = [47, 78, 108]
+        self._pianosections = [49, 78, 108]
         self._motif1_counter = 0
         self._motif2_counter = 0
         self._intervalsArray = []
