@@ -844,7 +844,7 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> stop ~snippet2', display=3, syntax_color='snippet:')
             elif text == 'code':
-                self.__keyboard.type('~snippet2.stop;')
+                self.__keyboard.type('~snippet2.stop(10);')
                 self.evaluateSC('eval')
                 self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
             elif text == 'less than':
@@ -858,7 +858,7 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> stop ~snippet1', display=3, syntax_color='primitive:')
             elif text == 'code':
-                self.__keyboard.type('~snippet1.stop;')
+                self.__keyboard.type('~snippet1.stop(10);')
                 self.evaluateSC('eval')
                 self.formatAndSend('~snippet1.stop;', display=3)
             elif text == 'less than':
