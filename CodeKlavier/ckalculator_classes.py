@@ -138,10 +138,18 @@ class Ckalculator(object):
                     if (self._numberStack[0].__name__ is 'succ1'):
                         self._evalStack = []
                         self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
-                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                     syntax_color='result:')
-                        print(self._evalStack[0])
-                        self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
+                        if (type(self._evalStack[0]) == int):
+                            self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                         syntax_color='result:')
+                            print(self._evalStack[0])
+                            self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
+                        else: 
+                            self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
+                            self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
+                            self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
+                            
+                            
+                    
                     else:
                         print(self.oscName)
                         self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
@@ -237,11 +245,13 @@ class Ckalculator(object):
         if len(self._numberStack) > 1:
             if self._numberStack[0].__name__ is 'zero':
                 self._numberStack = []
-                return 0
+                return zero
             else:
                 self._numberStack = self._numberStack[-1:]
-                self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=3, syntax_color='zero:')                
-                print(trampolineRecursiveCounter(self._numberStack[0]))
+                if self._numberStack[0].__name__ is 'succ1':
+                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=3, syntax_color='zero:')                
+                    print(trampolineRecursiveCounter(self._numberStack[0]))
+                
                                             
     def add(self, temp=False):
         """

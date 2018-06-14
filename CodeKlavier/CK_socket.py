@@ -150,6 +150,8 @@ def main():
             ck_display[str(x)].tag_config('gt', foreground='green')
             ck_display[str(x)].tag_config('lt', foreground='green')
             ck_display[str(x)].tag_config('int', foreground='white')
+            ck_display[str(x)].tag_config('error', foreground='red')
+            ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
             
             
             if x == 1:
@@ -378,7 +380,7 @@ def displayCode(display):
                 tag = tagmatch.group(0)[0:-1]  
                 ckcode = re.sub(''+tag+':', '', dump)                
                 try:
-                    if tag == 'result':
+                    if tag == 'result' or tag == 'error':
                         ck_display[display].delete(1.0, tkinter.END)
                         ck_display[display].insert(tkinter.END, ckcode, tag)
                     else:   

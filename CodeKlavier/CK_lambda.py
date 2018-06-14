@@ -212,8 +212,10 @@ def trampolineRecursiveCounter(succesor_expression, counter=0, debug=False):
     else:
         if expression.__name__ is 'successor':
             print('missing a zero to close the successor chain!')
+            return False, expression.__name__
         else:
-            print('this function can only process number expression functions as argument!', expression)    
+            print('this function can only process number expression functions as argument!', expression)
+            return False, expression.__name__
             
 def add(x, y):
     """
