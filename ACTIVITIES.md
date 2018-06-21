@@ -1,5 +1,5 @@
 # CodeKlavier Activities
-###This page gives a run down of public CodeKlavier presentations and milestones to date (newest on top):
+### This page gives a run down of public CodeKlavier presentations and milestones to date (newest on top):
 
 September 2017: "hello world" is performed at Gaudeamus Muziek week. 
 
