@@ -13,19 +13,14 @@ from ckalculator_classes import Ckalculator
 sys.setrecursionlimit(3000)
 
 ckalculator_listens = True
-
+ck_deltatime_mem = []
 
 def main(configfile='default_setup.ini'):
     """
     start the CKalculator
     """
     global ckalculator_listens
-    
-    # activesense compensation
-    ck_deltatime_mem = []
-    ck_deltatime = 0
-    ck_deltadif = 0
-    
+       
     config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
     config.read(configfile)
     
@@ -50,6 +45,8 @@ def main(configfile='default_setup.ini'):
     print("\nPress Control-C to exit.\n")       
     
     cKalc = Ckalculator(device_id, noteoff_id, pedal_id)
+    per_note = 0
+    ck_deltatime = 0
     
     try:
         while ckalculator_listens:
@@ -57,35 +54,24 @@ def main(configfile='default_setup.ini'):
             
             if msg:
                 message, deltatime = msg
+                per_note += deltatime
                 ck_deltatime += deltatime
                 #print(message)
 
                 if message[0] != 254:
 
                     #note offs:
-                    #if (message[0] == noteoff_id or message[2] == 0):
-                        #ck_deltatime = 0
+                    if (message[0] == noteoff_id or message[2] == 0):                
+                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note, ck_deltatime=ck_deltatime)
                     
                     if message[0] == pedal_id:
-                        cKalc.parse_midi(msg, 'full', ck_deltatime=ck_deltadif)
+                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0)
 
                     if message[0] == device_id:
-                        if message[2] > 0 and message[0] == device_id:
-                            
-                            ck_deltatime_mem.append(ck_deltatime)
-                            #print('deltatimes before: ', ck_deltatime_mem)
-
-                            if len(ck_deltatime_mem) > 2:
-                                ck_deltatime = 0
-                                ck_deltatime_mem = ck_deltatime_mem[-2:]
-                                ck_deltatime_mem[0] = 0
-
-                            if len(ck_deltatime_mem) == 2:
-                                ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-                            else:
-                                ck_deltadif = 0    
-                            
-                            cKalc.parse_midi(msg, 'full', ck_deltatime=ck_deltadif)
+                        per_note = 0
+                        if message[2] > 0: 
+                            dif = delta_difference(ck_deltatime)
+                            cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,ck_deltatime=dif)
                             
             time.sleep(0.01)
                             
@@ -93,6 +79,21 @@ def main(configfile='default_setup.ini'):
         print('')
     finally:
         codeK.end()
+
+def delta_difference(deltatime):   
+    # activesense compensation
+    global ck_deltatime_mem
+    
+    ck_deltatime_mem.append(deltatime)
+    print('deltatimes stack: ', ck_deltatime_mem)
+    
+    if len(ck_deltatime_mem) > 2:
+        ck_deltatime_mem = ck_deltatime_mem[-2:]
+        
+    if len(ck_deltatime_mem) == 2:
+        return ck_deltatime_mem[1] - ck_deltatime_mem[0]
+    else:
+        return 0     
         
 if (__name__ == '__main__'):
     try:

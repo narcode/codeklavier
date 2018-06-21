@@ -10,14 +10,10 @@ import getopt
 import os.path
 import sys
 import time
+import importlib
 
 import CK_configWriter
 from CK_Setup import Setup
-
-from hello_world import hello_world
-from motippets import motippets
-from hybrid import hybrid
-from ckalculator import ckalculator
 
 PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator')
 
@@ -96,8 +92,16 @@ def perform(configfile='default_setup.ini', prototype='hello_world'):
     """
     if (prototype not in PROTOTYPES):
         raise ValueError('This prototype doesn\'t exist. Please retry.')
+    
+    module = importlib.import_module(prototype)
+    prototype = getattr(module, prototype)
+    
+    #from hello_world import hello_world
+    #from motippets import motippets
+    #from hybrid import hybrid
+    #from ckalculator import ckalculator    
 
-    eval(prototype + '.main()')
+    eval(prototype.main())
     
 def perform_interactive(configfile='default_setup.ini'):
     """

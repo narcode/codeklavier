@@ -10,20 +10,6 @@ from Motifs import motifs as LambdaMapping
 from Mapping import Mapping_Ckalculator
 from CK_lambda import *
 
-exprStack = []
-
-opn = { "+" : operator.add,
-        "-" : operator.sub,
-        "*" : operator.mul,
-        "/" : operator.truediv,
-        "^" : operator.pow }
-fn  = { "sin" : math.sin,
-        "cos" : math.cos,
-        "tan" : math.tan,
-        "abs" : abs,
-        "trunc" : lambda a: int(a),
-        "round" : round,
-        "sgn" : lambda a: abs(a)>epsilon and cmp(a,0) or 0}
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -53,25 +39,25 @@ class Ckalculator(object):
         self._tempFunctionStack = []
         self.oscName = "ck"
         
-    def parse_midi(self, event, section, ck_deltatime=0, target=0):
+    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0):
         """Parse the midi signal and process it depending on the register.
 
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
-        :param float ck_deltatime: the deltatime between incoming note-on MIDI messages
+        :param float ck_deltatime_per_note: the deltatime between incoming note-on MIDI messages
         :param int target: target the parsing for a specific snippet. 0 is no target
         """   
         
         message, deltatime = event
 
         if (message[0] == self.pedal):
-            if message[2] > 0:
+            if message[2] == 127:
                 print('(')
                 self.mapscheme.formatAndSend('(', display=2, syntax_color='int:')
                 self._fullStack.append('(')
                 self._tempStack = []
                 self._temp = True
-            else:
+            elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
                 self.mapscheme.formatAndSend(')', display=2, syntax_color='int:')                
                 self._fullStack.append(')')
@@ -82,18 +68,21 @@ class Ckalculator(object):
                 self._tempFunctionStack = []
                 self._tempNumberStack = []
                 self._temp = False
-                
+                self._fullStack = []
             
+        if message[0] == self.note_on:
+            print('ON delta:', ck_deltatime)
 
-        if (message[0] == self.note_on):
+        if message[0] == self.note_off:
             note = message[1]
-            self._deltatime = ck_deltatime 
+            self._deltatime = ck_deltatime_per_note 
+            print('Articulation delta: ', ck_deltatime_per_note)
             
             ### lambda calculus ###
             if note in LambdaMapping.get('successor'):
                 self.build_succesor(successor)
 
-            elif note is LambdaMapping.get('zero'):
+            elif note is LambdaMapping.get('zero'): #TODO: becomes sostenuto in succesor notes...
                 if len(self._successorHead) > 0:
                     self._numberStack = []
                     self._tempNumberStack = []
@@ -132,7 +121,7 @@ class Ckalculator(object):
                     
                     self._successorHead = []
             
-            elif note is LambdaMapping.get('eval'):
+            elif note is LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                 if len(self._functionStack) > 0 and len(self._numberStack) > 0:
                     self.evaluateFunctionStack(self._functionStack)
                     if (self._numberStack[0].__name__ is 'succ1'):
@@ -197,7 +186,7 @@ class Ckalculator(object):
                 
             elif note in LambdaMapping.get('less'):
                 self.less_than()  
-                                
+                                                
                 
     def build_succesor(self, function):
         """
@@ -526,13 +515,7 @@ class Ckalculator(object):
             if len(self._conditionalsBuffer) > length:
                 self._conditionalsBuffer = self._conditionalsBuffer[-length:]   
                 
-    def CK_stackEval(self, s):
-        global exprStack
-        exprStack = []
-        results = BNF().parseString(s)
-        val = evaluateStack(exprStack[:])
-        print(val, results)
-    
+                  
 class CK_lambda(object):
     """CK_lambda Class
     
@@ -837,76 +820,5 @@ class CK_lambda(object):
 
             return args
 
-        return g
-        
-### parsing STACK:
-    
-def pushFirst( strg, loc, toks ):
-    exprStack.append( toks[0] )
-def pushUMinus( strg, loc, toks ):
-    if toks and toks[0]=='-': 
-        exprStack.append( 'unary -' )
-        #~ exprStack.append( '-1' )
-        #~ exprStack.append( '*' )
-                    
-bnf = None
-def BNF():
-    """
-    multop  :: '*' | '/'
-    addop   :: '+' | '-'
-    integer :: '0'..'9'+
-    expr    :: term [ addop term ]*
-    """
-    global bnf
-    if not bnf:
-        point = Literal( "." )
-        e     = CaselessLiteral( "E" )
-        fnumber = Combine( Word( "+-"+nums, nums ) + 
-                           Optional( point + Optional( Word( nums ) ) ) +
-                           Optional( e + Word( "+-"+nums, nums ) ) )
-        ident = Word(alphas, alphas+nums+"_$")
-        
-        plus  = Literal( "+" )
-        minus = Literal( "-" )
-        mult  = Literal( "*" )
-        div   = Literal( "/" )
-        lpar  = Literal( "(" ).suppress()
-        rpar  = Literal( ")" ).suppress()
-        addop  = plus | minus
-        multop = mult | div
-        expop = Literal( "^" )
-        pi    = CaselessLiteral( "PI" )
-        
-        expr = Forward()
-        atom = (Optional("-") + ( pi | e | fnumber | ident + lpar + expr + rpar ).setParseAction( pushFirst ) | ( lpar + expr.suppress() + rpar )).setParseAction(pushUMinus) 
-        
-        # by defining exponentiation as "atom [ ^ factor ]..." instead of "atom [ ^ atom ]...", we get right-to-left exponents, instead of left-to-righ
-        # that is, 2^3^2 = 2^(3^2), not (2^3)^2.
-        factor = Forward()
-        factor << atom + ZeroOrMore( ( expop + factor ).setParseAction( pushFirst ) )
-        
-        term = factor + ZeroOrMore( ( multop + factor ).setParseAction( pushFirst ) )
-        expr << term + ZeroOrMore( ( addop + term ).setParseAction( pushFirst ) )
-        bnf = expr
-    return bnf  
-        
-    
-def evaluateStack( s ):
-    op = s.pop()
-    if op == 'unary -':
-        return -evaluateStack( s )
-    if op in "+-*/^":
-        op2 = evaluateStack( s )
-        op1 = evaluateStack( s )
-        return opn[op]( op1, op2 )
-    elif op == "PI":
-        return math.pi # 3.1415926535
-    elif op == "E":
-        return math.e  # 2.718281828
-    elif op in fn:
-        return fn[op]( evaluateStack( s ) )
-    elif op[0].isalpha():
-        return 0
-    else:
-        return float( op )    
+        return g 
 
