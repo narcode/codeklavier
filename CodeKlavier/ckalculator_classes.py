@@ -2,10 +2,10 @@
 
 import functools
 from inspect import signature
-from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
-    ZeroOrMore,Forward,nums,alphas
-import math
-import operator
+#from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
+    #ZeroOrMore,Forward,nums,alphas
+#import math
+#import operator
 from Motifs import motifs as LambdaMapping
 from Mapping import Mapping_Ckalculator
 from CK_lambda import *
@@ -39,13 +39,14 @@ class Ckalculator(object):
         self._tempFunctionStack = []
         self.oscName = "ck"
         
-    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0):
+    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0, articulaton={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}):
         """Parse the midi signal and process it depending on the register.
 
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
         :param float ck_deltatime_per_note: the deltatime between incoming note-on MIDI messages
         :param int target: target the parsing for a specific snippet. 0 is no target
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
         """   
         
         message, deltatime = event
@@ -70,58 +71,68 @@ class Ckalculator(object):
                 self._temp = False
                 self._fullStack = []
             
-        if message[0] == self.note_on:
-            print('ON delta:', ck_deltatime)
+        #if message[0] == self.note_on:
+            #print('ON delta:', ck_deltatime)
 
-        if message[0] == self.note_off:
+        if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
             self._deltatime = ck_deltatime_per_note 
-            print('Articulation delta: ', ck_deltatime_per_note)
+            #print('Articulation delta: ', ck_deltatime_per_note)
             
             ### lambda calculus ###
             if note in LambdaMapping.get('successor'):
-                self.build_succesor(successor)
-
-            elif note is LambdaMapping.get('zero'): #TODO: becomes sostenuto in succesor notes...
-                if len(self._successorHead) > 0:
-                    self._numberStack = []
-                    self._tempNumberStack = []
+                
+                if self._deltatime <= articulaton['staccato']:
+                    self.build_succesor(successor)
+                
+                elif self._deltatime > articulaton['staccato']: #this is func 'zero'
                     
-                    if self._temp is False:
-                        #print result:
-                        self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
-                        self.mapscheme.newLine(display=1)
-                        self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
-                                                     display=2, syntax_color='int:')
-                        print(trampolineRecursiveCounter(self._successorHead[0]))
+                    if note in [LambdaMapping.get('successor')[0]]:
+                        if len(self._numberStack) == 0:
+                            self.build_predecessor(zero)
+                        else:
+                            self.build_predecessor(predecessor)
+                    else:
+                        if len(self._successorHead) > 0:
+                            self._numberStack = []
+                            self._tempNumberStack = []
                         
-                        self._numberStack.append(self._successorHead[0])
-                        self._fullStack.append(self._successorHead[0])
-                        
-                        if len(self._tempStack) > 0:
-                            if self._tempStack[0] == '(':
-                                self._tempStack.append(self.succesorHead[0])
-                    
-                    else: 
-                        self._tempNumberStack.append(self._successorHead[0])
-                        
-                        self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
-                                                     display=2, syntax_color='int:')
-                        
-                        if len(self._tempFunctionStack) > 0:
-                            self.evaluateFunctionStack(self._tempFunctionStack, True)                        
-                            if (self._tempNumberStack[0].__name__ is 'succ1'):
-                                self._evalStack = []
-                                self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
-                                self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                             syntax_color='result:')                                
-                                print(self._evalStack[0])                        
-                                self._tempFunctionStack = []
+                            if self._temp is False:
+                                #print result:
+                                self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                                self.mapscheme.newLine(display=1)
+                                self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
+                                                             display=2, syntax_color='int:')
+                                print(trampolineRecursiveCounter(self._successorHead[0]))
                                 
-                    
-                    self._successorHead = []
+                                self._numberStack.append(self._successorHead[0])
+                                self._fullStack.append(self._successorHead[0])
+                            
+                                if len(self._tempStack) > 0:
+                                    if self._tempStack[0] == '(':
+                                        self._tempStack.append(self.succesorHead[0])
+                        
+                                else: 
+                                    self._tempNumberStack.append(self._successorHead[0])
+                            
+                                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
+                                                                 display=2, syntax_color='int:')
+                            
+                                if len(self._tempFunctionStack) > 0:
+                                    self.evaluateFunctionStack(self._tempFunctionStack, True)                        
+                                    if (self._tempNumberStack[0].__name__ is 'succ1'):
+                                        self._evalStack = []
+                                        self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
+                                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                     syntax_color='result:')                                
+                                        print(self._evalStack[0])                        
+                                        self._tempFunctionStack = []
+                                    
+                        
+                            self._successorHead = []
             
-            elif note is LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
+            elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
+                print('evaluate!')
                 if len(self._functionStack) > 0 and len(self._numberStack) > 0:
                     self.evaluateFunctionStack(self._functionStack)
                     if (self._numberStack[0].__name__ is 'succ1'):
@@ -148,45 +159,51 @@ class Ckalculator(object):
                     self._functionStack = []
                 
             elif note in LambdaMapping.get('predecessor'):
-                if len(self._numberStack) == 0:
-                    self.build_predecessor(zero)
-                else:
-                    self.build_predecessor(predecessor)
+                print('used via articulation under 1 succesor')
                     
             elif note in LambdaMapping.get('addition'):
-                if not self._temp:
-                    self.add()
-                else:
-                    self.add(temp=True)
+                if self._deltatime <= articulaton['staccato']:
+                    if not self._temp:
+                        self.add()
+                    else:
+                        self.add(temp=True)
+                elif self._deltatime > articulaton['staccato']:
+                    if not self._temp:
+                        self.multiply() 
+                    else:
+                        self.multiply(True)                    
                 
             elif note in LambdaMapping.get('substraction'):
-                if not self._temp:
-                    self.substract()  
-                else:
-                    self.substract(True)
+                if self._deltatime <= articulaton['staccato']:                
+                    if not self._temp:
+                        self.substract()  
+                    else:
+                        self.substract(True)
+                elif self._deltatime > articulaton['staccato']:
+                    if not self._temp:
+                        self.divide() 
+                    else:
+                        self.divide(True)                    
                 
             elif note in LambdaMapping.get('multiplication'):
-                if not self._temp:
-                    self.multiply() 
-                else:
-                    self.multiply(True)
+                print('used via articulation under addition')
                 
             elif note in LambdaMapping.get('division'):
-                if not self._temp:
-                    self.divide() 
-                else:
-                    self.divide(True)
-                
+                print('used via articulation under substraction')
+                                
             # number comparisons    
             elif note in LambdaMapping.get('equal'):
                 self.equal() 
                 
             elif note in LambdaMapping.get('greater'):
-                self.greater_than() 
-                
+                if self._deltatime <= articulaton['staccato']:                                
+                    self.greater_than() 
+                elif self._deltatime > articulaton['staccato']:
+                    self.less_than()  
+                    
             elif note in LambdaMapping.get('less'):
-                self.less_than()  
-                                                
+                print('used via articulation under greater than')                                              
+
                 
     def build_succesor(self, function):
         """

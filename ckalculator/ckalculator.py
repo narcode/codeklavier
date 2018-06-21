@@ -28,7 +28,10 @@ def main(configfile='default_setup.ini'):
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('device_id')
         noteoff_id = config['midi'].getint('noteoff_id')
-        pedal_id = config['midi'].getint('pedal_id')        
+        pedal_id = config['midi'].getint('pedal_id')
+        staccato = config['articulation'].getfloat('staccato')
+        sostenuto = config['articulation'].getfloat('sostenuto')
+        chord = config['articulation'].getfloat('chord')
     except KeyError:
         raise LookupError('Missing key information in the config file.')
     
@@ -48,6 +51,7 @@ def main(configfile='default_setup.ini'):
     cKalc = Ckalculator(device_id, noteoff_id, pedal_id)
     per_note = 0
     ck_deltatime = 0
+    articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
     
     try:
         while ckalculator_listens:
@@ -63,16 +67,16 @@ def main(configfile='default_setup.ini'):
 
                     #note offs:
                     if (message[0] == noteoff_id or message[2] == 0):                
-                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note, ck_deltatime=ck_deltatime)
+                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note, ck_deltatime=ck_deltatime, articulaton=articulation)
                     
                     if message[0] == pedal_id:
-                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0)
+                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulaton=articulation)
 
                     if message[0] == device_id:
                         per_note = 0
                         if message[2] > 0: 
                             dif = delta_difference(ck_deltatime)
-                            cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,ck_deltatime=dif)
+                            cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,ck_deltatime=dif, articulaton=articulation)
                             
             time.sleep(0.01)
                             
@@ -86,7 +90,7 @@ def delta_difference(deltatime):
     global ck_deltatime_mem
     
     ck_deltatime_mem.append(deltatime)
-    print('deltatimes stack: ', ck_deltatime_mem)
+    #print('deltatimes stack: ', ck_deltatime_mem)
     
     if len(ck_deltatime_mem) > 2:
         ck_deltatime_mem = ck_deltatime_mem[-2:]

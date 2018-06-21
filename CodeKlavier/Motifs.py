@@ -20,13 +20,11 @@ try:
     motif_1 = config['snippets midi mapping'].get('motif_1').split(',')
     motif_2 = config['snippets midi mapping'].get('motif_2').split(',')
     
-    #single elements
-    identity_midi = config['lambda'].getint('identity_midi')
-    evaluate_function = config['lambda'].getint('evaluate_function')    
-    select_first = config['lambda'].getint('select_first_midi')
-    select_second = config['lambda'].getint('select_second_midi')
-    
-    #lists
+    #all are lists
+    identity_midi = config['lambda'].get('identity_midi').split(',')
+    evaluate_function = config['lambda'].get('evaluate_function').split(',')    
+    select_first = config['lambda'].get('select_first_midi').split(',')
+    select_second = config['lambda'].get('select_second_midi').split(',')    
     successor = config['lambda'].get('successor_midi').split(',')
     predecessor = config['lambda'].get('predecessor_midi').split(',')  
     add_midi = config['lambda'].get('add_midi').split(',')  
@@ -62,10 +60,10 @@ motifs['conditional_result_4'] = [23,24,25]
 motifs['conditional_result_5'] = [26,23,23]
 
 # lambda calculus
-motifs['eval'] = evaluate_function
-motifs['zero'] = identity_midi
-motifs['true'] = select_first
-motifs['false'] = select_second
+motifs['eval'] = list(map(int, evaluate_function))
+motifs['zero'] = list(map(int, identity_midi))
+motifs['true'] = list(map(int, select_first))
+motifs['false'] = list(map(int, select_second))
 motifs['successor'] = list(map(int, successor))
 motifs['predecessor'] = list(map(int, predecessor))
 motifs['addition'] = list(map(int, add_midi))
