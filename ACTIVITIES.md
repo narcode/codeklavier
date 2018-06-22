@@ -6,7 +6,7 @@ September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl
 
 August 2018: CodeKlavier paper and performance will be presented at the [International Computer Music Conference](https://icmc2018.org/) in Daegu, Korea! In the proceedings you can find our first CodeKlavier published paper.
 
-June 2018: Performance and lecture-demonstration at MuSA 2018 at IMWI, Karlsruhe. Our presentation includes a special CodeKlavier "presentation mode" where we use various CodeKlavier piano techniques to live code the presentation. This event will also feature a performance of Huygbrid and a more developed version of the CKalculator.
+June 2018: Performance and lecture-demonstration at MuSA 2018 at IMWI Karlsruhe, Germany. Our presentation includes a special CodeKlavier "presentation mode" where we use various CodeKlavier piano techniques to live code the presentation. This event will also feature a performance of Huygbrid and a more developed version of the CKalculator.
 There was also a performance of Huygbrid (previously Hybrid) and CKalculator at Ephemere in Studio Loos, Netherlands.
 
 May 2018: Performance of two new prototypes, Hybrid and CKalculator at WORM in Rotterdam as part of the Algo~rhythms series. 
