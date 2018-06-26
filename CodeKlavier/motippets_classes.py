@@ -317,7 +317,7 @@ class Motippets(object):
 
                     result1_played = self.compare_motif(self._memory, 'result 1',
                                                         Motifs.get('conditional_result_1'),
-                                                        note, False)
+                                                        note, True)
 
                     if result1_played and self._resultCounter == 0:
                         if self._conditionalCounter > 0:

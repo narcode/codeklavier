@@ -298,13 +298,12 @@ class Mapping_Motippets:
             self.__keyboard.press(Key.backspace)
             self.__keyboard.release(Key.backspace)
       # supercollider commands:
-        elif midinumber == 33:
+        elif midinumber == 21:
             self.evaluateSC('eval')
             self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 22:
-            self.__keyboard.type('.tempo')
-            self.formatAndSend('.tempo', display=5, syntax_color='hello:', spacing=False)
-        elif midinumber == 21:
+            self.__keyboard.press(Key.backspace)
+        elif midinumber == 33:
             self.__keyboard.type('.play')
             self.formatAndSend('.play', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 102:
@@ -528,11 +527,11 @@ class Mapping_Motippets:
             self.enter()
             self.formatAndSend('setting up a conditional: \nIF number of notes played is more than 100 in...', display=3, syntax_color='primitive:')
         elif conditional_num == 2:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
             self.enter()
             self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3, syntax_color='primitive:')
         elif conditional_num == 3:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
+            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
             self.enter()
             self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3, syntax_color='primitive:')
 
@@ -546,13 +545,12 @@ class Mapping_Motippets:
         """
         if result_num == 1:
             if text == 'comment':
-                self.__keyboard.type('// if true -> stop ~snippet2')
-                self.enter()
-                self.formatAndSend('if true -> stop ~snippet2', display=3, syntax_color='snippet:')
+                self.__keyboard.type('// if true -> print encouragement')
+                self.enter()                
+                self.formatAndSend('if true -> print encouragement', display=3, syntax_color='snippet:')
             elif text == 'code':
-                self.__keyboard.type('~snippet2.stop(10);')
-                self.evaluateSC('eval')
-                self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
+                self._osc.send_message("/ck_pp", "text1")
+                self.formatAndSend('if true -> print encouragement;', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval')
@@ -574,13 +572,14 @@ class Mapping_Motippets:
 
         elif result_num == 3:
             if text == 'comment':
-                self.__keyboard.type('// if true -> play gong sound!')
+                self.__keyboard.type('// if true -> print quote')
                 self.enter()
-                self.formatAndSend('if true -> play gong sound!', display=3, syntax_color='primitive:')
+                self.formatAndSend('if true -> print quote', display=3, syntax_color='primitive:')
             elif text == 'code':
                 #self.__keyboard.type('~gong.play(' + str(mod) + ');')
                 #self.evaluateSC('eval')
                 self._osc.send_message("/gong", str(mod))
+                self._osc.send_message("/ck_pp", "quote")
                 self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 #self.__keyboard.type('~gong.play(' + str(mod) + ');');
