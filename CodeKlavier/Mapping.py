@@ -140,8 +140,8 @@ class Mapping_Motippets:
         """
         # chars and nums
         if midinumber == 58:
-            self.__keyboard.type('“The CodeKlavier: Appropriating the piano as an instrument for live coding”', '“The CodeKlavier: Appropriating the piano as an instrument for live coding”')
-            self.formatAndSend('“The CodeKlavier: Appropriating the piano as an instrument for live coding”', '“The CodeKlavier: Appropriating the piano as an instrument for live coding”', display=5, syntax_color='hello:', spacing=False)
+            self.__keyboard.type('“The CodeKlavier: Appropriating the piano as an instrument for live coding”')
+            self.formatAndSend('“The CodeKlavier: Appropriating the piano as an instrument for live coding”', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 59:
             self.__keyboard.type('sentences ')
             self.formatAndSend('sentences ', display=5, syntax_color='hello:', spacing=False)
@@ -285,9 +285,6 @@ class Mapping_Motippets:
         elif midinumber == 105:
             self.__keyboard.type('y')
             self.formatAndSend('y', display=5, syntax_color='hello:', spacing=False)
-        elif midinumber == 106:
-            self.__keyboard.type('4')
-            self.formatAndSend('4', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 107:
             self.__keyboard.type('!')
             self.formatAndSend('!', display=5, syntax_color='hello:', spacing=False)
