@@ -128,7 +128,8 @@ class Ckalculator(object):
                                         print(self._evalStack[0])                        
                                         self._tempFunctionStack = []
                                     
-                        
+                            #else: #problem with zero
+                                
                             self._successorHead = []
             
             elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
