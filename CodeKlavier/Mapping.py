@@ -595,7 +595,7 @@ class Mapping_Motippets:
         elif midinumber == 95:
             self.__keyboard.press(Key.backspace)
             self.__keyboard.release(Key.backspace)
-            self.formatAndSend('', display=5, syntax_color='delete:', spacing=False)            
+            self.formatAndSend('', display=5, syntax_color='delete:', spacing=False)
       # supercollider commands:
         elif midinumber == 33:
             self.evaluateSC('noEnter_eval')
@@ -606,12 +606,12 @@ class Mapping_Motippets:
         elif midinumber == 21:
             self.__keyboard.type('.play')
             self.formatAndSend('.play', display=5, syntax_color='hello:', spacing=False)
-        elif midinumber == 102:
-            self.__keyboard.type('TempoClock.default')
-            self.formatAndSend('TempoClock.default', display=5, syntax_color='hello:', spacing=False)
+        elif midinumber == 101:
+            self.__keyboard.type('u')
+            self.formatAndSend('u', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 108:
             self.goDown()
-            self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)            
+            self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
     # motippets only commands:
         elif prototype == 'Motippets':
             if midinumber == 66:
@@ -850,7 +850,7 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> stop ~snippet2', display=3, syntax_color='snippet:')
             elif text == 'code':
-                self.__keyboard.type('~snippet2.stop(3);')
+                self.__keyboard.type('~snippet2.stop(0.5);')
                 self.evaluateSC('eval')
                 self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
             elif text == 'less than':
@@ -938,7 +938,7 @@ class Mapping_Motippets:
                 self.__keyboard.type("")
                 self.enter()
             elif text == 'huygens':
-                self.__keyboard.type('~stop.now;')                
+                self.__keyboard.type('~stop.now;')
                 self.__keyboard.type('~huygens.end;')
                 self.evaluateSC('eval')
 
