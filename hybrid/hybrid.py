@@ -67,7 +67,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
     while threads_are_perpetual:
         if timer == 'random':
-            timer = random.randrange(10,45)
+            timer = 60
 
         if debug:
             print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)

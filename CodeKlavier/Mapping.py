@@ -303,9 +303,9 @@ class Mapping_Motippets:
             self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 22:
             self.__keyboard.press(Key.backspace)
-        elif midinumber == 33:
-            self.__keyboard.type('.play')
-            self.formatAndSend('.play', display=5, syntax_color='hello:', spacing=False)
+        elif midinumber == 23:
+            self.__keyboard.type('.load')
+            self.formatAndSend('.load', display=5, syntax_color='hello:', spacing=False)
         elif midinumber == 102:
             self.__keyboard.type('TempoClock.default')
             self.formatAndSend('TempoClock.default', display=5, syntax_color='hello:', spacing=False)
