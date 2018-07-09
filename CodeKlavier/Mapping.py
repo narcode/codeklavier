@@ -1016,21 +1016,6 @@ class Mapping_Ckalculator:
         if debug:
             print("## Using the Ckalculator mapping ##")
 
-        #Read config and settings
-        config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        config.read('default_setup.ini')
-
-        #load the mapping
-        try:
-            self._zero = config['lambda'].get('identity_midi')
-            self._true = config['lambda'].get('select_first_midi')
-            self._true = config['lambda'].get('select_second_midi')
-            self._true = config['lambda'].get('successor_midi')
-            
-            
-        except KeyError:
-            raise LookupError('Missing [lambda] section in the config file.')
-
         self.__keyboard = Controller()
         
         if use_display:
