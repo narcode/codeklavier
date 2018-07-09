@@ -1045,7 +1045,7 @@ class Mapping_Ckalculator:
         if spacing:
             newline = '\n'
         else:
-            newline = ' -> '
+            newline = ' '
 
         return self.__socket.sendto(bytes(syntax_color+msg+newline, encoding), (host, port))  
     

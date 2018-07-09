@@ -15,6 +15,7 @@ class Ckalculator(object):
     """Ckalculator Class
     
     The main class behind the Ckalculator prototype. Lambda calculus with the piano (simple arithmetic operations)
+    TODO: _fullStack is not used yet but added for the future. Evaluate the decision and either implement or deprecate
     """
     
     def __init__(self, noteonid, noteoffid, pedal_id):
@@ -54,15 +55,17 @@ class Ckalculator(object):
         if (message[0] == self.pedal):
             if message[2] == 127:
                 print('(')
-                self.mapscheme.formatAndSend('(', display=2, syntax_color='int:')
+                self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
                 self._fullStack.append('(')
                 self._tempStack = []
+                self._tempStack.append('(')                
                 self._temp = True
             elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
-                self.mapscheme.formatAndSend(')', display=2, syntax_color='int:')                
+                self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
                 self._fullStack.append(')')
                 # to main stack
+                print('temp num stack:', self._tempNumberStack);
                 if len(self._tempNumberStack) > 0:
                     self._numberStack.append(self._tempNumberStack.pop())
                 #self.evaluateTempStack(self._tempStack)
@@ -89,51 +92,52 @@ class Ckalculator(object):
                     
                     if note in [LambdaMapping.get('successor')[0]]:
                         if len(self._numberStack) == 0:
-                            self.build_predecessor(zero)
+                            self.build_predecessor(zero) # what kind of result is better?
                         else:
                             self.build_predecessor(predecessor)
                     else:
                         if len(self._successorHead) > 0:
-                            self._numberStack = []
-                            self._tempNumberStack = []
-                        
+                            print('succ head: ', trampolineRecursiveCounter(self._successorHead[0]))
+                            
                             if self._temp is False:
+                                self._numberStack = []                                
                                 #print result:
                                 self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
-                                self.mapscheme.newLine(display=1)
+                                #self.mapscheme.newLine(display=1)
                                 self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
-                                                             display=2, syntax_color='int:')
+                                                             display=2, syntax_color='int:', spacing=False)
                                 print(trampolineRecursiveCounter(self._successorHead[0]))
                                 
                                 self._numberStack.append(self._successorHead[0])
                                 self._fullStack.append(self._successorHead[0])
+                                                                
                             
-                                if len(self._tempStack) > 0:
-                                    if self._tempStack[0] == '(':
-                                        self._tempStack.append(self.succesorHead[0])
-                        
-                                else: 
-                                    self._tempNumberStack.append(self._successorHead[0])
-                            
-                                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
-                                                                 display=2, syntax_color='int:')
-                            
-                                if len(self._tempFunctionStack) > 0:
-                                    self.evaluateFunctionStack(self._tempFunctionStack, True)                        
-                                    if (self._tempNumberStack[0].__name__ is 'succ1'):
-                                        self._evalStack = []
-                                        self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
-                                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                                     syntax_color='result:')                                
-                                        print(self._evalStack[0])                        
-                                        self._tempFunctionStack = []
-                                    
-                            #else: #problem with zero
+                            else:
+                                self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                                #self.mapscheme.newLine(display=1)
                                 
-                            self._successorHead = []
-            
+                                if len(self._tempStack) > 0:
+                                    self._tempNumberStack = []                                                                            
+                                    if self._tempStack[0] == '(':
+                                        self._tempNumberStack.append(self._successorHead[0])
+                                        self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
+                                                                     display=2, syntax_color='int:', spacing=False)                                        
+                                        
+                                        if len(self._tempFunctionStack) > 0:
+                                            self.evaluateFunctionStack(self._tempFunctionStack, True)                        
+                                            if (self._tempNumberStack[0].__name__ is 'succ1'):
+                                                self._evalStack = []
+                                                self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
+                                                self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                             syntax_color='result:')                                
+                                                print(self._evalStack[0])                        
+                                                self._tempFunctionStack = []                                    
+                            
+                    self._successorHead = []
+                                                                        
             elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                 print('evaluate!')
+                self.mapscheme.newLine(display=1)
                 if len(self._functionStack) > 0 and len(self._numberStack) > 0:
                     self.evaluateFunctionStack(self._functionStack)
                     if (self._numberStack[0].__name__ is 'succ1'):
@@ -265,7 +269,7 @@ class Ckalculator(object):
         Append an addition function to the functions stack and any existing number expression\n
         \n
         """
-        self.mapscheme.formatAndSend('+', display=2, syntax_color='add:')                       
+        self.mapscheme.formatAndSend('+', display=2, syntax_color='add:', spacing=False)                       
         self.mapscheme.formatAndSend('add', display=1, syntax_color='add:')               
         print('addition')
         
@@ -297,7 +301,7 @@ class Ckalculator(object):
         Append a substraction function to the functions stack and any existing number expression\n
         \n
         """
-        self.mapscheme.formatAndSend('-', display=2, syntax_color='min:')               
+        self.mapscheme.formatAndSend('-', display=2, syntax_color='min:',spacing=False)               
         self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
         print('substraction')
         
@@ -392,6 +396,7 @@ class Ckalculator(object):
         
         self.mapscheme.formatAndSend('apply functions', display=1, syntax_color='eval:')       
         self.mapscheme.newLine(display=1)
+        self.mapscheme.newLine(display=2)
         
         def evaluate2args(function, *args):
             """Evaluate a function with 2 arguments.\n

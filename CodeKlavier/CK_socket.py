@@ -309,6 +309,7 @@ def stopThreads():
 def closeDisplay(display):  
     """
     close the GUI window
+    TODO: optimize...
     """   
     if display == '1':
         s[display].sendto(bytes("Bye Bye CK", "utf-8"), ('localhost', 1111))    
