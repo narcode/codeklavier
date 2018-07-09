@@ -334,7 +334,9 @@ class Ckalculator(object):
         Compare two number expressions for equality\n
         \n
         """
-        self.mapscheme.formatAndSend('equal to', display=1, syntax_color='equal:')       
+        self.mapscheme.formatAndSend('equal to', display=1, syntax_color='equal:') 
+        self.mapscheme.formatAndSend('==', display=2, syntax_color='int:', spacing=False)                       
+        
         print('equal to')
         
         if len(self._numberStack) == 0:
@@ -354,7 +356,9 @@ class Ckalculator(object):
         Compare two number expressions for equality\n
         \n
         """
-        self.mapscheme.formatAndSend('greater than', display=1, syntax_color='gt:')       
+        self.mapscheme.formatAndSend('greater than', display=1, syntax_color='gt:') 
+        self.mapscheme.formatAndSend('>', display=2, syntax_color='int:', spacing=False)                       
+        
         print('greater than')
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
@@ -372,7 +376,8 @@ class Ckalculator(object):
         Compare two number expressions for equality\n
         \n
         """
-        self.mapscheme.formatAndSend('less than', display=1, syntax_color='lt:')               
+        self.mapscheme.formatAndSend('less than', display=1, syntax_color='lt:')  
+        self.mapscheme.formatAndSend('<', display=2, syntax_color='int:', spacing=False)                       
         print('less than')
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
@@ -395,8 +400,7 @@ class Ckalculator(object):
         """
         
         self.mapscheme.formatAndSend('apply functions', display=1, syntax_color='eval:')       
-        self.mapscheme.newLine(display=1)
-        self.mapscheme.newLine(display=2)
+        self.mapscheme.newLine(display=1)       
         
         def evaluate2args(function, *args):
             """Evaluate a function with 2 arguments.\n
@@ -423,6 +427,8 @@ class Ckalculator(object):
                 self._numberStack = [] 
                 self._tempNumberStack = []
                 if not temp:
+                    self.mapscheme.newLine(display=2)
+                    self.mapscheme.newLine(display=2)                    
                     self._numberStack.append(evaluate2args(self._functionStack[1], \
                                                            self._functionStack[0], \
                                                            self._functionStack[2]))             
