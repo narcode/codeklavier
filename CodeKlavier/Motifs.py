@@ -39,6 +39,7 @@ except KeyError:
     raise LookupError('Missing key information in the config file.')
 
 motifs = {}
+motifs_lambda = {}
 
 # motippets
 motifs['motif_1'] = list(map(int, motif_1))
@@ -60,18 +61,18 @@ motifs['conditional_result_4'] = [23,24,25]
 motifs['conditional_result_5'] = [26,23,23]
 
 # lambda calculus
-motifs['eval'] = list(map(int, evaluate_function))
-motifs['zero'] = list(map(int, identity_midi))
-motifs['true'] = list(map(int, select_first))
-motifs['false'] = list(map(int, select_second))
-motifs['successor'] = list(map(int, successor))
-motifs['predecessor'] = list(map(int, predecessor))
-motifs['addition'] = list(map(int, add_midi))
-motifs['substraction'] = list(map(int, substract_midi))
-motifs['multiplication'] = list(map(int, mult_midi))
-motifs['division'] = list(map(int, division_midi))
-motifs['equal'] = list(map(int, equal_than_midi))
-motifs['greater'] = list(map(int, greater_than_midi))
-motifs['less'] = list(map(int, less_than_midi))
+motifs_lambda['eval'] = list(map(int, evaluate_function))
+motifs_lambda['zero'] = list(map(int, identity_midi))
+motifs_lambda['true'] = list(map(int, select_first))
+motifs_lambda['false'] = list(map(int, select_second))
+motifs_lambda['successor'] = list(map(int, successor))
+motifs_lambda['predecessor'] = list(map(int, predecessor))
+motifs_lambda['addition'] = list(map(int, add_midi))
+motifs_lambda['substraction'] = list(map(int, substract_midi))
+motifs_lambda['multiplication'] = list(map(int, mult_midi))
+motifs_lambda['division'] = list(map(int, division_midi))
+motifs_lambda['equal'] = list(map(int, equal_than_midi))
+motifs_lambda['greater'] = list(map(int, greater_than_midi))
+motifs_lambda['less'] = list(map(int, less_than_midi))
 
 
