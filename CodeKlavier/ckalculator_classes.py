@@ -98,10 +98,10 @@ class Ckalculator(object):
             #print('Articulation delta: ', ck_deltatime_per_note)
             
             if note not in self._notesList:
-                print('wrong note', '\n...', 'shifting', '\n...')
+                print('...', '\nwrong note', '...', 'shifting', '\n...')
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
-                self.shift_mapping(1)
+                self.shift_mapping(1, 'octave shift')
             else:
             ### lambda calculus ###
                 if note in LambdaMapping.get('successor'):
@@ -565,19 +565,29 @@ class Ckalculator(object):
             if len(self._conditionalsBuffer) > length:
                 self._conditionalsBuffer = self._conditionalsBuffer[-length:]   
         
-    def shift_mapping(self, offset):
+    def shift_mapping(self, offset, shift_type='semitone'):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played
         :param int offset: the offset in semitones
+        :param str shift_type: the type of shifting to perform. options are now 'semitone' or 'octave shift'
         """
         mappings = list(LambdaMapping.items())
         self._notesList = []
-
-        for mapping in mappings:
-            LambdaMapping[mapping[0]] = list(map(lambda x: 
-                                                  self._pianoRange[(x + offset) % len(
-                                                      self._pianoRange) - 21], #compensate for lower note being 21 not 0
-                                                  mapping[1]))
+        print(shift_type)
+        
+        if shift_type == 'semitone':
+            for mapping in mappings:
+                LambdaMapping[mapping[0]] = list(map(lambda x: 
+                                                     self._pianoRange[(x + offset) % len(
+                                                         self._pianoRange) - 21], #compensate for lower note being 21 not 0
+                                                     mapping[1]))
+        elif shift_type == 'octave shift':
+            print('octave shift triggered')
+            for mapping in mappings:
+                LambdaMapping[mapping[0]] = list(map(lambda x: 
+                                                     self._pianoRange[(x + 12) % len(
+                                                         self._pianoRange) - 21],
+                                                     mapping[1]))
         
         for item in list(LambdaMapping.values()):
             for sub_item in item:
