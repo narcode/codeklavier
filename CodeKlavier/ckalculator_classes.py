@@ -3,9 +3,9 @@
 import functools
 import array
 from inspect import signature
+import random
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
-#import math
 #import operator
 from Motifs import motifs_lambda as LambdaMapping
 from Mapping import Mapping_Ckalculator
@@ -101,7 +101,7 @@ class Ckalculator(object):
                 print('...', '\nwrong note', '...', 'shifting', '\n...')
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
-                self.shift_mapping(1, 'octave shift')
+                self.shift_mapping(1, 'random')
             else:
             ### lambda calculus ###
                 if note in LambdaMapping.get('successor'):
@@ -573,9 +573,13 @@ class Ckalculator(object):
         """
         mappings = list(LambdaMapping.items())
         self._notesList = []
-        print(shift_type)
         
-        if shift_type == 'semitone':
+        if shift_type == 'random':
+            shift_type = random.choice(['octave shift', 'semitone shift'])
+            print(shift_type)
+            self.mapscheme.formatAndSend(shift_type, display=3, syntax_color='error:')
+        
+        if shift_type == 'semitone shift':
             for mapping in mappings:
                 LambdaMapping[mapping[0]] = list(map(lambda x: 
                                                      self._pianoRange[(x + offset) % len(
@@ -594,9 +598,13 @@ class Ckalculator(object):
                 if sub_item > 0:
                     self._notesList.append(sub_item)        
 
-        print('new mapping', LambdaMapping)
-        print('new valid notes', self._notesList)
-        
+        #print('new mapping', LambdaMapping)
+        note_names = {24:"C",25:"C#",26:"D",27:"D#",28:"E",29:"F",30:"F#",31:"G",32:"G#",33:"A",34:"A#",35:"B"}
+        self.mapscheme.formatAndSend('eval mapped to ' +
+                                     note_names.get((LambdaMapping.get('eval')[1]%len(note_names))+24) + '(' +
+                                     str(LambdaMapping.get('eval')[1]) + ')', display=3,
+                                     syntax_color='e_debug:');
+        #print('new valid notes', self._notesList)
 
                   
 class CK_lambda(object):
