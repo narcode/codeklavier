@@ -573,8 +573,8 @@ class Ckalculator(object):
         #print('new mapping', LambdaMapping)
         note_names = {24:"C",25:"C#",26:"D",27:"D#",28:"E",29:"F",30:"F#",31:"G",32:"G#",33:"A",34:"A#",35:"B"}
         self.mapscheme.formatAndSend('eval mapped to ' +
-                                     note_names.get((LambdaMapping.get('eval')[1]%len(note_names))+24) + ' (' +
-                                     str(LambdaMapping.get('eval')) + ')', display=3,
+                                     note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
+                                     str(LambdaMapping.get('eval')[0]) + ')', display=3,
                                      syntax_color='e_debug:');
         #print('new valid notes', self._notesList)
         
