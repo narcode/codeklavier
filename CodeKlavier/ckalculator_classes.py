@@ -229,7 +229,7 @@ class Ckalculator(object):
         :param function function: the function to apply the predecessor function to
         """
 
-        self.mapscheme.formatAndSend(function.__name__, display=2, syntax_color='pred:', spacing=False)
+        self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
         print(function.__name__)       
                 
         def nestFunc(function1):
@@ -251,7 +251,7 @@ class Ckalculator(object):
             else:
                 self._numberStack = self._numberStack[-1:]
                 if self._numberStack[0].__name__ is 'succ1':
-                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=3, syntax_color='zero:')                
+                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=2, syntax_color='int:')                
                     print(trampolineRecursiveCounter(self._numberStack[0]))
                 else:
                     print('predecessor receives only number expressions!')
