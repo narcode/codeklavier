@@ -381,7 +381,7 @@ def displayCode(display):
                 tag = tagmatch.group(0)[0:-1]  
                 ckcode = re.sub(''+tag+':', '', dump)                
                 try:
-                    if tag == 'result' or tag == 'error' or tag == 'pred':
+                    if tag == 'result' or tag == 'error':
                         ck_display[display].delete(1.0, tkinter.END)
                         ck_display[display].insert(tkinter.END, ckcode, tag)
                     else:   

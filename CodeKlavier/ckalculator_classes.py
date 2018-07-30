@@ -229,7 +229,7 @@ class Ckalculator(object):
         :param function function: the function to apply the predecessor function to
         """
 
-        self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
+        self.mapscheme.formatAndSend(function.__name__, display=2, syntax_color='pred:', spacing=False)
         print(function.__name__)       
                 
         def nestFunc(function1):
