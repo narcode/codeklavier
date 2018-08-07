@@ -125,6 +125,7 @@ class Ckalculator(object):
                 elif note in LambdaMapping.get('zero'):
                     print('identity')
                     self.zeroPlusRec()
+                    self._successorHead = []
                                                                             
                 elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
@@ -147,7 +148,7 @@ class Ckalculator(object):
                                 
                         
                         else:
-                            print(self.oscName)
+                            #print(self.oscName)
                             self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
                                                          syntax_color='result:')
                             self.mapscheme._osc.send_message("/"+self.oscName, self._numberStack[0].__name__)

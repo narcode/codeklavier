@@ -120,6 +120,7 @@ def main():
     elif int(display) == 3:
         print('CK displays 1-3 used for CKalculator', 'Listening on ports 1111, 2222 & 3333')
 
+        root.geometry("1920x400")
         s_width = root.winfo_screenwidth()
         s_height = root.winfo_screenheight()
         
