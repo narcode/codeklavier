@@ -33,6 +33,7 @@ def main(configfile='default_setup.ini'):
         raise LookupError('Missing key information in the config file.')
     
     codeK = Setup()
+    codeK.print_welcome(27)
     codeK.open_port(myPort)
     
     # Use your favourite mapping of the keys

@@ -58,9 +58,9 @@ class Setup(object):
                 print('##  ### ###  ###   ## # ##   ## # ### ###   ##   ## # ##')
             elif i == 6:
                 print('##'*num)            
-            time.sleep(0.2)
+            time.sleep(0.1)
 
-        print("\nWelcome to the Codeklavier v0.3!\n")
+        print("\nWelcome to the Codeklavier v0.4!\n")
 
     def show_ports(self):
         """Show the available MIDI devices.
@@ -124,8 +124,6 @@ class Setup(object):
 
     def get_message(self):
         """Get the MIDIin message
-
-        :rtype: string? array? dict? The midi message
         """
         return self.__midiin.get_message()
 

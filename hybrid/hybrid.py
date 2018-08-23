@@ -27,38 +27,10 @@ except KeyError:
 if (myPort == None or device_id == None):
     raise LookupError('Missing key information in the config file.')
 
-codeK = Setup()
-codeK.print_welcome(27)
-codeK.open_port(myPort)
-
 # activesense compensation
 ck_deltatime_mem = []
 ck_deltatime = 0
 ck_deltadif = 0
-
-# default mapping
-mapping = Mapping_Motippets(False)
-
-# main memory (i.e. listen to the whole register)
-mainMem = Motippets(mapping, device_id)
-
-# midi listening per register
-memLow = Motippets(mapping, device_id)
-memMid = Motippets(mapping, device_id)
-memHi = Motippets(mapping, device_id)
-
-#midi listening for tremolos
-tremoloHi = Motippets(mapping, device_id)
-tremoloMid = Motippets(mapping, device_id)
-tremoloLow = Motippets(mapping, device_id)
-
-#midi listening for conditionals
-conditionals = {1: Motippets(mapping, device_id),
-                2: Motippets(mapping, device_id),
-                3: Motippets(mapping, device_id)}
-
-conditionalsRange = Motippets(mapping, device_id)
-parameters = Motippets(mapping, device_id)
 
 #multiprocessing vars
 threads = {}
@@ -300,14 +272,43 @@ def main():
     global mapping, parameters, conditionalsRange, conditionals, \
            param_interval, threads_are_perpetual, range_trigger, \
            notecounter, hello_world_on, noteCounter, ck_deltatime, \
-           ck_deltatime_mem
+           ck_deltatime_mem, codeK, mainMem, memLow, memMid, memHi, \
+           tremoloHi, tremoloLow, tremoloMid
+    
+    codeK = Setup()
+    codeK.print_welcome(27)
+    codeK.open_port(myPort)    
 
     codeK.print_lines(20, 1)
-    print("Prototype loaded: Hybrid 0.2.2")
+    print("Prototype loaded: Hybrid 0.3")
     print("CodeKlavier is ready and LISTENING.")
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")
 
+    # default mapping
+    mapping = Mapping_Motippets(False)
+    
+    # main memory (i.e. listen to the whole register)
+    mainMem = Motippets(mapping, device_id)
+    
+    # midi listening per register
+    memLow = Motippets(mapping, device_id)
+    memMid = Motippets(mapping, device_id)
+    memHi = Motippets(mapping, device_id)
+    
+    #midi listening for tremolos
+    tremoloHi = Motippets(mapping, device_id)
+    tremoloMid = Motippets(mapping, device_id)
+    tremoloLow = Motippets(mapping, device_id)
+    
+    #midi listening for conditionals
+    conditionals = {1: Motippets(mapping, device_id),
+                    2: Motippets(mapping, device_id),
+                    3: Motippets(mapping, device_id)}
+    
+    conditionalsRange = Motippets(mapping, device_id)
+    parameters = Motippets(mapping, device_id)
+    
     try:
         while motippets_is_listening:
             msg = codeK.get_message()
@@ -435,27 +436,27 @@ def main():
                                                                              args=('random', 'more than', 2, conditional2_value, param_interval))
                                     threads[conditional2_value].start()
 
-                        if isinstance(conditional3_value, int) and conditional3_value > 0:
-                            conditionalsRange._conditionalStatus = conditional3_value
-                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                            if isinstance(conditional3_value, int) and conditional3_value > 0:
+                                conditionalsRange._conditionalStatus = conditional3_value
+                                conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
 
-                            # set range parameter:
-                            if isinstance(conditional_params, int) and conditional_params > 0:
-                                if conditional_value != 4:
-                                    threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
-                                    threads['set_param'].start()
-                                elif conditional_value == 4: #gong bomb
-                                    threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                    threads['set_param'].start()
+                                    # set range parameter:
+                                if isinstance(conditional_params, int) and conditional_params > 0:
+                                    if conditional_value != 4:
+                                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
+                                        threads['set_param'].start()
+                                    elif conditional_value == 4: #gong bomb
+                                        threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                                        threads['set_param'].start()
 
-                            if param_interval > 0:
-                                threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
-                                                                             args=('random', 'less than', 3, conditional3_value, param_interval))
-                                threads[conditional3_value].start()
+                                if param_interval > 0:
+                                    threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
+                                                                         args=('random', 'less than', 3, conditional3_value, param_interval))
+                                    threads[conditional3_value].start()
 
-                        #range parser
-                        if range_trigger == 1:
-                            conditionalsRange.parse_midi(msg, 'conditional_range')
+                            #range parser
+                            if range_trigger == 1:
+                                conditionalsRange.parse_midi(msg, 'conditional_range')
 
             time.sleep(0.01) #check
 

@@ -1,4 +1,5 @@
 pynput==1.3.6
 python-rtmidi==1.1.0
 python-osc==1.6.6
+fn==0.4.3
 sphinx
