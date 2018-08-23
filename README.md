@@ -3,7 +3,8 @@
 
 An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL**
 
-CodeKlavier development started in April 2017 and currently has three prototypes (newest on top):
+CodeKlavier development started in April 2017 and currently has four prototypes (newest on top):
++  *Ckalculator* (Lambda-calculus with the piano!)
 +  *Hybrid* (switching between the two prototypes and includes a custom code display via udp sockets)
 +  *Motippets* (coding via pianistic gestures/motifs)
 +  *hello world* (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
