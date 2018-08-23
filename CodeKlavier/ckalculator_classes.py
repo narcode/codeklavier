@@ -4,6 +4,7 @@ import functools
 import array
 from inspect import signature
 import random
+import configparser
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -140,6 +141,10 @@ class Ckalculator(object):
                                                              syntax_color='result:')
                                 print(self._evalStack[0])
                                 self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
+                                
+                                # Huygens easter eggs
+                                self.easterEggs(number=str(self._evalStack[0]), debug=True)
+                                
                             else: 
                                 self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
                                 self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
@@ -614,7 +619,29 @@ class Ckalculator(object):
                                 self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
                                                              syntax_color='result:')                                
                                 print(self._evalStack[0])                        
-                                self._tempFunctionStack = []        
+                                self._tempFunctionStack = []     
+                                
+    def easterEggs(self, configfile='default_setup.ini', number=100, debug=False):
+        """
+        Attach certain events to specific numbers. Easter egg style.
+        
+        :param string number: the number-key to grab the value from the config file
+        """
+        config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        config.read(configfile)
+
+        if number in config['easter eggs']:
+            print(config['easter eggs'].get(number))
+            self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))         
+
+        
+        ### USE THIS TO OPTIMIZE LOADING OF CONFIG IN OTHER MODULES:
+        #try:
+            #for num in config['easter eggs']:
+                #print(num, config['easter eggs'].get(num))
+        #except KeyError:
+            #raise LookupError('Missing key information in the config file.')        
+        
                   
 class CK_lambda(object):
     """CK_lambda Class
