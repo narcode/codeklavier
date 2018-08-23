@@ -78,14 +78,14 @@ def main():
         root.protocol("WM_DELETE_WINDOW", stopThreads)
 
     if int(display) == 1:
-        f[display] = tkinter.Frame(root, height=900, width=1920/3)
+        f[display] = tkinter.Frame(root, height=900, width=1920)
         f[display].pack(fill=tkinter.BOTH, side=tkinter.LEFT)
-        f[display].pack_propagate(0)
-        ck_display[display] = tkinter.Text(f[display], height=6, width=50)
+        f[display].pack_propagate(1)
+        ck_display[display] = tkinter.Text(f[display], height=6, width=150)
         ck_display[display].pack(fill=tkinter.Y, side=tkinter.LEFT)
-        ck_display[display].configure(bg='black',fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 25')
+        ck_display[display].configure(bg='black',fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 25')     
 
-        ck_display[display].insert(tkinter.END, "Code Space\n")
+        #ck_display[display].insert(tkinter.END, "Code Display\n")
         s[display].bind(('localhost', 1111))
         print('CK display 1 listening on port 1111')
 

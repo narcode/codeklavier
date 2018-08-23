@@ -1031,7 +1031,7 @@ class Mapping_Ckalculator:
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120)
 
 
-    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color='', spacing=True):
+    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True):
         """format and prepare a string for sending it over UDP socket
 
         :param str msg: the string to be sent
