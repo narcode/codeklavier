@@ -1031,7 +1031,7 @@ class Mapping_Ckalculator:
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120)
 
 
-    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True):
+    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
         """format and prepare a string for sending it over UDP socket
 
         :param str msg: the string to be sent
@@ -1040,6 +1040,7 @@ class Mapping_Ckalculator:
         :param int display: the UDP destination port
         :param str syntax_color: the tag to use for syntax coloring (loop, primitive, mid, low, hi, snippet)
         :param boolean spacing: wheather to put a \n (new line) before the msg
+        :param boolean spacechar: the character to place in between the msgs. Can be ''
         """
 
         if display == 1:
@@ -1052,7 +1053,7 @@ class Mapping_Ckalculator:
         if spacing:
             newline = '\n'
         else:
-            newline = ' '
+            newline = spacechar
 
         return self.__socket.sendto(bytes(syntax_color+msg+newline, encoding), (host, port))
 
