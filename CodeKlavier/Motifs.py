@@ -44,22 +44,22 @@ motifs_lambda = {}
 # motippets
 motifs['motif_1'] = list(map(int, motif_1))
 motifs['motif_2'] = list(map(int, motif_2))
-motifs['mini_motif_1_low'] = [35, 38, 42]
-motifs['mini_motif_2_low'] = [26, 32, 35, 38]
-motifs['mini_motif_3_low'] = [38, 42, 47]
-motifs['mini_motif_1_mid'] = [60, 64, 67]
-motifs['mini_motif_2_mid'] = [50, 56, 59, 62]
-motifs['mini_motif_1_hi'] = [86, 90, 93]
-motifs['mini_motif_2_hi'] = [86, 92, 95, 98]
+motifs['mini_motif_1_low'] = list(map(int, mini_motif_1_low))
+motifs['mini_motif_2_low'] = list(map(int, mini_motif_2_low))
+motifs['mini_motif_3_low'] = list(map(int, mini_motif_3_low))
+motifs['mini_motif_1_mid'] = list(map(int, mini_motif_1_mid))
+motifs['mini_motif_2_mid'] = list(map(int, mini_motif_2_mid))
+motifs['mini_motif_1_hi'] = list(map(int, mini_motif_1_hi))
+motifs['mini_motif_2_hi'] = list(map(int, mini_motif_2_hi))
 
-motifs['conditional_1'] = [36, 31, 29, 26, 28, 35, 38, 33, 24, 26, 31, 28, 33, 21, 23, 29]
-motifs['conditional_2'] = [49, 45, 48, 49, 43]
-motifs['conditional_3'] = [97, 93, 96, 97, 91]
-motifs['conditional_result_1'] = [68,74,74,63,69]
-motifs['conditional_result_2'] = [99, 92, 90, 89, 92, 94]
-motifs['conditional_result_3'] = [21,22,23]
-motifs['conditional_result_4'] = [23,24,25]
-motifs['conditional_result_5'] = [26,23,23]
+motifs['conditional_1'] = list(map(int, conditional_1))
+motifs['conditional_2'] = list(map(int, conditional_2))
+motifs['conditional_3'] = list(map(int, conditional_3))
+motifs['conditional_result_1'] = list(map(int, conditional_result_1))
+motifs['conditional_result_2'] = list(map(int, conditional_result_2))
+motifs['conditional_result_3'] = list(map(int, conditional_result_3))
+motifs['conditional_result_4'] = list(map(int, conditional_result_4))
+motifs['conditional_result_5'] = list(map(int, conditional_result_5))
 
 # lambda calculus
 motifs_lambda['eval'] = list(map(int, evaluate_function))
