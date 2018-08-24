@@ -106,6 +106,9 @@ class Mapping_HelloWorld():
         elif midinumber == 81:
             self.__keyboard.type('r')
             self.formatAndSend('r', display=2)
+        elif midinumber == 82:
+            self.__keyboard.type('g')
+            self.formatAndSend('g', display=2)            
         elif midinumber == 88:
             self.__keyboard.type('w')
             self.formatAndSend('w', display=2)
@@ -502,6 +505,9 @@ class Mapping_Motippets:
         elif midinumber == 81:
             self.__keyboard.type('r')
             self.formatAndSend('r', display=5, syntax_color='hello:', spacing=False)
+        elif midinumber == 82:
+            self.__keyboard.type('g')
+            self.formatAndSend('g', display=2)             
         elif midinumber == 88:
             self.__keyboard.type('w')
             self.formatAndSend('w', display=5, syntax_color='hello:', spacing=False)

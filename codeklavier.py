@@ -95,11 +95,12 @@ def perform(configfile='default_setup.ini', prototype='hello_world'):
     
     module = importlib.import_module(prototype)
     prototype = getattr(module, prototype)
-    
+        
     #from hello_world import hello_world
     #from motippets import motippets
     #from hybrid import hybrid
     #from ckalculator import ckalculator    
+
 
     eval(prototype.main())
     
