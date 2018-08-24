@@ -629,10 +629,16 @@ class Ckalculator(object):
         """
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile)
+        
+        if int(number)%100 is 0:
+            number = '100'
 
         if number in config['easter eggs']:
-            print(config['easter eggs'].get(number))
-            self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))         
+            if debug:
+                print('EASTER EGG FOUND: ', config['easter eggs'].get(number))
+            
+            self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
+            self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
 
         
         ### USE THIS TO OPTIMIZE LOADING OF CONFIG IN OTHER MODULES:
