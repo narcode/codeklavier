@@ -460,7 +460,7 @@ def main():
                                 if range_trigger == 1:
                                     conditionalsRange.parse_midi(msg, 'conditional_range')
     
-            time.sleep(0.01) #check
+                time.sleep(0.01) #check
 
     except KeyboardInterrupt:
         print('')

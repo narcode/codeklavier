@@ -640,14 +640,6 @@ class Ckalculator(object):
             self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
             self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
 
-        
-        ### USE THIS TO OPTIMIZE LOADING OF CONFIG IN OTHER MODULES:
-        #try:
-            #for num in config['easter eggs']:
-                #print(num, config['easter eggs'].get(num))
-        #except KeyError:
-            #raise LookupError('Missing key information in the config file.')        
-        
                   
 class CK_lambda(object):
     """CK_lambda Class

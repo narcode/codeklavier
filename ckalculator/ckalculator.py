@@ -33,10 +33,10 @@ def main(configfile='default_setup.ini'):
         sostenuto = config['articulation'].getfloat('sostenuto')
         chord = config['articulation'].getfloat('chord')
     except KeyError:
-        raise LookupError('Missing key information in the config file.')
+        raise LookupError('Missing midi and articulation information in the config file.')
     
     if (myPort == None or device_id == None):
-        raise LookupError('Missing key information in the config file.')
+        raise LookupError('Missing port and device id information in the config file.')
     
     codeK = Setup()
     codeK.print_welcome(27)
