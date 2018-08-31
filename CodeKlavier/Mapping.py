@@ -35,7 +35,7 @@ class Mapping_HelloWorld:
 
         #Read config and settings
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini')        
+        self._config.read('default_setup.ini')
         self.__keyboard = Controller()
         self.use_display = use_display
 
@@ -96,7 +96,7 @@ class Mapping_HelloWorld:
                 if debug:
                     print(midinumber, self._config[prototype].get(midis))
                 mapped_string = self._config[prototype].get(midis)
-                
+
                 if len(mapped_string) < 2:
                     # chars and nums
                     self.__keyboard.type(mapped_string)
@@ -117,20 +117,20 @@ class Mapping_HelloWorld:
                         self.formatAndSend('', display=5, syntax_color='delete:', spacing=False)
                     elif mapped_string == 'down':
                         self.goDown()
-                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)                        
+                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'sc-evaluate':
                         self.evaluateSC('noEnter_eval')
-                        self.formatAndSend('', display=5, syntax_color='hello:', spacing=False)  
+                        self.formatAndSend('', display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.tempo':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)                        
+                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.play':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False) 
+                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'motippetssc-evaluate':
-                        self.evaluateSC('eval')            
+                        self.evaluateSC('eval')
         except KeyError:
-            raise LookupError('Missing hello world information in the config file.')          
+            raise LookupError('Missing hello world information in the config file.')
 
 class Mapping_HelloWorld_NKK:
     """Mapping of the HelloWorld piece
@@ -399,7 +399,7 @@ class Mapping_Motippets:
                 if debug:
                     print(midinumber, self._config[prototype].get(midis))
                 mapped_string = self._config[prototype].get(midis)
-                
+
                 if len(mapped_string) < 2:
                     # chars and nums
                     self.__keyboard.type(mapped_string)
@@ -420,20 +420,20 @@ class Mapping_Motippets:
                         self.formatAndSend('', display=5, syntax_color='delete:', spacing=False)
                     elif mapped_string == 'down':
                         self.goDown()
-                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)                        
+                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'sc-evaluate':
                         self.evaluateSC('noEnter_eval')
-                        self.formatAndSend('', display=5, syntax_color='hello:', spacing=False)  
+                        self.formatAndSend('', display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.tempo':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)                        
+                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.play':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False) 
+                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'motippetssc-evaluate':
-                        self.evaluateSC('eval')            
+                        self.evaluateSC('eval')
         except KeyError:
-            raise LookupError('Missing hello world information in the config file.')  
+            raise LookupError('Missing hello world information in the config file.')
 
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color='', spacing=True):
@@ -757,7 +757,7 @@ class Mapping_Motippets:
                 self.__keyboard.type("")
                 self.enter()
             elif text == 'huygens':
-                self.__keyboard.type('~stop.now;')
+                self.__keyboard.type('~stop.all;')
                 self.__keyboard.type('~huygens.end;')
                 self.evaluateSC('eval')
 
