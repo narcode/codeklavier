@@ -813,7 +813,6 @@ class Mapping_Motippets:
         :param string content: the message or content
         """
         self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')            
-        self.formatAndSend('\n', display=3, syntax_color='comment:')                    
 
         if not osc_only:
             self.__keyboard.type(name + " " + content) 
