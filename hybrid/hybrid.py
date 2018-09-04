@@ -216,7 +216,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
 
             break
         else:
-            mapping.customPass('notes played: ', str(notecounter))
+            mapping.customPass('notes played: ', str(notecounter), True)
             conditionals[1]._conditionalStatus = 0
             conditionals[1]._resultCounter = 0
             conditionals[1]._conditionalCounter = 0

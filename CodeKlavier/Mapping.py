@@ -805,16 +805,20 @@ class Mapping_Motippets:
                 self.__keyboard.type('~huygens.end')
                 self.evaluateSC('eval')
 
-    def customPass(self, name, content):
+    def customPass(self, name, content, osc_only=False):
         """
         post custom string message on codespace and display
 
         :param string name: a label to print in front of the string
         :param string content: the message or content
         """
-        #self.__keyboard.type(name + " " + content) 
-        self.enter()
-        self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
+        self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')            
+        self.formatAndSend('\n', display=3, syntax_color='comment:')                    
+
+        if not osc_only:
+            self.__keyboard.type(name + " " + content) 
+            self.enter()
+
 
     def onlyDisplay(self, content, tag=1, warning=False):
         """
