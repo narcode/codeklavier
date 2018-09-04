@@ -669,7 +669,7 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> stop ~snippet2', display=3, syntax_color='snippet:')
             elif text == 'code':
-                self.__keyboard.type('~snippet2.stop(0.5);')
+                self.__keyboard.type('~snippet2.stop(10);')
                 self.evaluateSC('eval')
                 self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
             elif text == 'less than':
@@ -683,7 +683,7 @@ class Mapping_Motippets:
                 self.enter()
                 self.formatAndSend('if true -> stop ~snippet1', display=3, syntax_color='primitive:')
             elif text == 'code':
-                self.__keyboard.type('~snippet1.stop(10);')
+                self.__keyboard.type('~snippet1.stop(20);')
                 self.evaluateSC('eval')
                 self.formatAndSend('~snippet1.stop;', display=3)
             elif text == 'less than':
@@ -758,7 +758,7 @@ class Mapping_Motippets:
                 self.enter()
             elif text == 'huygens':
                 self.__keyboard.type('~stop.all;')
-                self.__keyboard.type('~huygens.end;')
+                self.__keyboard.type('~huygens.eind;') # ~huygens.end to not have the ending Huygens extract
                 self.evaluateSC('eval')
 
         elif result_num == 5:
@@ -802,7 +802,7 @@ class Mapping_Motippets:
                 self.__keyboard.type("")
                 self.enter()
             elif text == 'huygens':
-                self.__keyboard.type('~huygens.eind')
+                self.__keyboard.type('~huygens.end')
                 self.evaluateSC('eval')
 
     def customPass(self, name, content):
