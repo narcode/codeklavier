@@ -350,7 +350,7 @@ def main():
                                     #mapping = Mapping_HelloWorld()
     
                                     hello_world_on = True
-                                    notecounter = 0
+                                    #notecounter = 0
     
                                     threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
                                     threads['toggle_h'].start()
@@ -507,7 +507,7 @@ def ck_loop(prototype='hello world'):
 
                                     hello_world_on = False
                                     motippets_is_listening = True
-                                    notecounter = 0
+                                    #notecounter = 0
 
                                     threads['toggle_m'] = Thread(target=ck_loop, name='ck loop thread', args=('motippets',))
                                     threads['toggle_m'].start()
@@ -560,7 +560,7 @@ def ck_loop(prototype='hello world'):
 
                                 motippets_is_listening = False
                                 hello_world_on = True
-                                notecounter = 0
+                                #notecounter = 0
 
                                 threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
                                 threads['toggle_h'].start()
