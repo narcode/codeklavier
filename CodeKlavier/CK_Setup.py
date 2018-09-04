@@ -96,15 +96,19 @@ class Setup(object):
         :param int pnum: the port number
         :raises Exception: when there are no midi ports
         """
-        print("Using Midi device: ", self.__ports[pnum])
+        try:
+            print("Using Midi device: ", self.__ports[pnum])
 
-        if self.__ports:
-            #TODO: do we need to check on the existence of ports?
-            self.__midiin.open_port(pnum)
-            # ignore sysex, timing but not active sense messages
-            self.__midiin.ignore_types(True, True, False)            
-        else:
-            raise Exception("No midi ports! Maybe open a virtual device?")
+            if self.__ports:
+                #TODO: do we need to check on the existence of ports?
+                self.__midiin.open_port(pnum)
+                # ignore sysex, timing but not active sense messages
+                self.__midiin.ignore_types(True, True, False)            
+            else:
+                raise Exception(BColors.WARNING+"No midi ports! Maybe open a virtual device?"+BColors.ENDC)
+        except IndexError:
+            print(BColors.FAIL+"The chosen port in your config.ini file seems to be wrong\n", "\nplease check it and try again!"+BColors.ENDC)
+            sys.exit(0)
 
     def open_port_out(self, num):
         """Open the midi port as output.
