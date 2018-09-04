@@ -15,7 +15,7 @@ from hello_classes import HelloWorld
 
 #globals
 config = configparser.ConfigParser()
-config.read('default_setup.ini')
+config.read('default_setup.ini',encoding='utf8')
 
 try:
     myPort = config['midi'].getint('port')

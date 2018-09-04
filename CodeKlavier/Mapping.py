@@ -35,7 +35,7 @@ class Mapping_HelloWorld:
 
         #Read config and settings
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini')
+        self._config.read('default_setup.ini', encoding='utf8')
         self.__keyboard = Controller()
         self.use_display = use_display
 
@@ -282,7 +282,7 @@ class Mapping_Motippets:
 
         #Read config and settings
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini')
+        self._config.read('default_setup.ini', encoding='utf8')
 
         try:
             self.__snippet1 = self._config['snippets'].get('snippet1')

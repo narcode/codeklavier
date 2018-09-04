@@ -563,7 +563,7 @@ class Ckalculator(object):
         :param str shift_type: the type of shifting to perform. options are now 'semitone' or 'octave shift'
         """
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        config.read(configfile)
+        config.read(configfile, encoding='utf8')
         
         shift_on = config['ckalculator'].get('shift')
         
@@ -647,7 +647,7 @@ class Ckalculator(object):
         :param string number: the number-key to grab the value from the config file
         """
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        config.read(configfile)
+        config.read(configfile, encoding='utf8')
         
         if int(number)%100 is 0:
             number = '100'

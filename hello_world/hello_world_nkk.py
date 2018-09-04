@@ -22,7 +22,7 @@ def main(configfile='../default_setup.ini'):
 
     #Read config and settings
     config = configparser.ConfigParser()
-    config.read(configfile)
+    config.read(configfile, encoding='utf8')
     
     try:
         myPort = config['midi'].getint('port')

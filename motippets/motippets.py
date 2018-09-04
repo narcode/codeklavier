@@ -20,7 +20,7 @@ def main(configfile='default_setup.ini'):
     global mapping, parameters, conditionalsRange, conditionals, param_interval, threads_are_perpetual, range_trigger, notecounter
     #Read config and settings
     config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-    config.read(configfile)
+    config.read(configfile, encoding='utf8')
 
     try:
         myPort = config['midi'].getint('port')
