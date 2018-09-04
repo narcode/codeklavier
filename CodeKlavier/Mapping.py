@@ -812,7 +812,7 @@ class Mapping_Motippets:
         :param string name: a label to print in front of the string
         :param string content: the message or content
         """
-        self.__keyboard.type(name + " " + content)
+        #self.__keyboard.type(name + " " + content) 
         self.enter()
         self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
