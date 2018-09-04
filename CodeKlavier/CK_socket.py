@@ -268,7 +268,6 @@ def main():
             elif x == 5:
                 ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)     
                 ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
-                
                 ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
@@ -281,33 +280,33 @@ def main():
             ck_display[str(x)].tag_config('primitive', foreground='#ebb18a')
             ck_display[str(x)].tag_config('comment', foreground='#a3a3a3')
             ck_display[str(x)].tag_config('loop', foreground='cyan')
-            ck_display[str(x)].tag_config('warning', foreground='red')
+            ck_display[str(x)].tag_config('warning', foreground='red', font='MENLO 30')
             ck_display[str(x)].tag_config('loop2', foreground='#80f7a6')
             ck_display[str(x)].tag_config('loop3', foreground='#00b3ff')
 
 
             if x ==1:
-                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 2:
-                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 3:
-                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Conditionals and other stuff \n\n", 'title')                
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Conditionals\n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 4:
-                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Loops \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 5:
-                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Free Code\n\n", 'title')
                 ck_display[str(x)].configure(bg='black', bd=5, fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
