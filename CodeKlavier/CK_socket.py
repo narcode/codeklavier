@@ -151,7 +151,7 @@ def main():
             ck_display[str(x)].tag_config('gt', foreground='green')
             ck_display[str(x)].tag_config('lt', foreground='green')
             ck_display[str(x)].tag_config('int', foreground='white')
-            ck_display[str(x)].tag_config('error', foreground='red')
+            ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
             ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
             ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')            
 

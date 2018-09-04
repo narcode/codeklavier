@@ -234,7 +234,7 @@ class Ckalculator(object):
         \n
         :param function function: the function to apply the predecessor function to
         """
-
+        
         self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
         print(function.__name__)       
                 
@@ -257,8 +257,21 @@ class Ckalculator(object):
             else:
                 self._numberStack = self._numberStack[-1:]
                 if self._numberStack[0].__name__ is 'succ1':
-                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=2, syntax_color='int:')                
-                    print(trampolineRecursiveCounter(self._numberStack[0]))
+                    
+                    self._evalStack = []
+                    self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
+                    
+                    if (type(self._evalStack[0]) == int):
+                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                     syntax_color='result:')
+                        print(self._evalStack[0])
+                        self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
+                        
+                        # Huygens easter eggs
+                        self.easterEggs(number=str(self._evalStack[0]), debug=True)
+                        
+                    #self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=2, syntax_color='int:')                
+                    #print(trampolineRecursiveCounter(self._numberStack[0]))
                 else:
                     print('predecessor receives only number expressions!')
                 
@@ -543,46 +556,52 @@ class Ckalculator(object):
             if len(self._conditionalsBuffer) > length:
                 self._conditionalsBuffer = self._conditionalsBuffer[-length:]   
         
-    def shift_mapping(self, offset, shift_type='semitone'):
+    def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini'):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played
         :param int offset: the offset in semitones
         :param str shift_type: the type of shifting to perform. options are now 'semitone' or 'octave shift'
         """
-        mappings = list(LambdaMapping.items())
-        self._notesList = []
+        config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        config.read(configfile)
         
-        if shift_type == 'random':
-            shift_type = random.choice(['octave shift', 'semitone shift'])
-            print(shift_type)
-            self.mapscheme.formatAndSend(shift_type, display=3, syntax_color='error:')
+        shift_on = config['ckalculator'].get('shift')
         
-        if shift_type == 'semitone shift':
-            for mapping in mappings:
-                LambdaMapping[mapping[0]] = list(map(lambda x: 
-                                                     self._pianoRange[(x + offset) % len(
-                                                         self._pianoRange) - 21], #compensate for lower note being 21 not 0
-                                                     mapping[1]))
-        elif shift_type == 'octave shift':
-            print('octave shift triggered')
-            for mapping in mappings:
-                LambdaMapping[mapping[0]] = list(map(lambda x: 
-                                                     self._pianoRange[(x + 12) % len(
-                                                         self._pianoRange) - 21],
-                                                     mapping[1]))
-        
-        for item in list(LambdaMapping.values()):
-            for sub_item in item:
-                if sub_item > 0:
-                    self._notesList.append(sub_item)        
-
-        #print('new mapping', LambdaMapping)
-        note_names = {24:"C",25:"C#",26:"D",27:"D#",28:"E",29:"F",30:"F#",31:"G",32:"G#",33:"A",34:"A#",35:"B"}
-        self.mapscheme.formatAndSend('eval mapped to ' +
-                                     note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
-                                     str(LambdaMapping.get('eval')[0]) + ')', display=3,
-                                     syntax_color='e_debug:');
-        #print('new valid notes', self._notesList)
+        if shift_on == 'on':
+            mappings = list(LambdaMapping.items())
+            self._notesList = []
+                    
+            if shift_type == 'random':           
+                shift_type = random.choice(['octave shift', 'semitone shift'])
+                print(shift_type)
+                self.mapscheme.formatAndSend('Wrong note!\n'+shift_type, display=3, syntax_color='error:')
+            
+            if shift_type == 'semitone shift':
+                for mapping in mappings:
+                    LambdaMapping[mapping[0]] = list(map(lambda x: 
+                                                         self._pianoRange[(x + offset) % len(
+                                                             self._pianoRange) - 21], #compensate for lower note being 21 not 0
+                                                         mapping[1]))
+            elif shift_type == 'octave shift':
+                print('octave shift triggered')
+                for mapping in mappings:
+                    LambdaMapping[mapping[0]] = list(map(lambda x: 
+                                                         self._pianoRange[(x + 12) % len(
+                                                             self._pianoRange) - 21],
+                                                         mapping[1]))
+            
+            for item in list(LambdaMapping.values()):
+                for sub_item in item:
+                    if sub_item > 0:
+                        self._notesList.append(sub_item)        
+    
+            #print('new mapping', LambdaMapping)
+            note_names = {24:"C",25:"C#",26:"D",27:"D#",28:"E",29:"F",30:"F#",31:"G",32:"G#",33:"A",34:"A#",35:"B"}
+            self.mapscheme.formatAndSend('eval mapped to ' +
+                                         note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
+                                         str(LambdaMapping.get('eval')[0]) + ')', display=3,
+                                         syntax_color='e_debug:');
+            #print('new valid notes', self._notesList)
         
     def zeroPlusRec(self):
         if len(self._successorHead) > 0:
