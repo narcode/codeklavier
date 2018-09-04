@@ -6,7 +6,6 @@ CK listening server to display code from a specific piano register.
 * used for Madrid INSONORA Festival 2018
 
 TODO: Classify this
-
 """
 
 import socket
@@ -240,25 +239,36 @@ def main():
             s[str(x)].bind(('localhost', x*1111))
 
             f[str(x)] = tkinter.Frame(root, height=s_height, width=s_width/5)
-            f[str(x)].pack(fill=tkinter.Y, side=tkinter.LEFT)
+            f[str(x)].pack(fill=tkinter.NONE, side=tkinter.LEFT)
             f[str(x)].pack_propagate(0)
             f[str(x)].configure(bg='black', bd=3)
 
         for x in range(1, int(display)+1):
 
             if x == 1:
+                ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
                 ck_display[str(x)] = tkinter.Text(f['2'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 2:
+                ck_display['title'+str(x)] = tkinter.Text(f['3'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
                 ck_display[str(x)] = tkinter.Text(f['3'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 3:
+                ck_display['title'+str(x)] = tkinter.Text(f['4'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
                 ck_display[str(x)] = tkinter.Text(f['4'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 4:
+                ck_display['title'+str(x)] = tkinter.Text(f['5'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
                 ck_display[str(x)] = tkinter.Text(f['5'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 5:
+                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
+                
                 ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
@@ -277,20 +287,30 @@ def main():
 
 
             if x ==1:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 2:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 3:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Conditionals and other stuff \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n\n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 4:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Loops \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Loops \n\n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 5:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Free Code\n\n", 'title')
                 ck_display[str(x)].configure(bg='black', bd=5, fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Free Code \n\n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
 
 
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))
