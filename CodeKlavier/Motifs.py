@@ -14,7 +14,7 @@ currentpath = os.path.dirname(os.path.abspath(__file__))
 projectdir = os.path.abspath(os.path.join(currentpath, os.pardir))
 
 config = configparser.ConfigParser()
-config.read(projectdir + '/default_setup.ini')
+config.read(projectdir + '/default_setup.ini', encoding='utf8')
 
 try:
     motif_1 = config['snippets midi mapping'].get('motif_1').split(',')

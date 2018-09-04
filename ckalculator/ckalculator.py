@@ -22,7 +22,7 @@ def main(configfile='default_setup.ini'):
     global ckalculator_listens
        
     config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-    config.read(configfile)
+    config.read(configfile, encoding='utf8')
     
     try:
         myPort = config['midi'].getint('port')
