@@ -497,6 +497,7 @@ def ck_loop(prototype='hello world'):
                     if message[0] != 254 and message[0] != 208:
                         if message[2] > 0: #only noteOn
                             if (message[0] == device_id):
+                                notecounter += 1
 
                                 if message[1] == 106:
                                     print('toggle prototype -> Motippets')
