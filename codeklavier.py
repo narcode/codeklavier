@@ -207,7 +207,7 @@ if __name__ == '__main__':
     #no arguments -> print help
     print('What do you want CodeKlavier to do? Give me something!')
     print('These prototypes are available:')
-    for p in PIECES:
+    for p in PROTOTYPES:
         print(' - ', p)
     print('')
     print('Here is how CodeKlavier works:')
