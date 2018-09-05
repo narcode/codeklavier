@@ -212,6 +212,3 @@ if __name__ == '__main__':
     print('Here is how CodeKlavier works:')
     doHelp()
     sys.exit(0)
-    
-    
-    
