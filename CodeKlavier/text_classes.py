@@ -56,32 +56,32 @@ class TextPrint(object):
         """
         if text_id == '1':
             text = 'OP MIJNEN GEBOORT-DAGH\n\n\
-    Noch eens September, en noch eens die vierde dagh\n\
-    Die mij verschijnen sagh!\n\
-    Hoe veel Septembers, Heer, en hoe veel’ vierde dagen\n\
-    Wilt ghij mij noch verdragen?\n\
-    Ick bidd om geen verlang: ’tkan redelyck bestaen,\n\
-    Het ghen’ ick heb gegaen:\n\
-    En van mijn’ wiegh tot hier zijn soo veel dusend schreden\n\
-    Die ick heb doorgetreden,\n\
-    (Met vallen, lieve God, en opstaen, soo ghij weett,)\n\
-    Dat die all ’t selve leed\n\
-    En all’ de selve vreughd naer mij hadd door te reisen,\n\
-    Sich drijmael sou bepeisen\n\
-    Wat besten oorber waer, gelaten of gedaen.\n\
-    Mij, Heere, laet vrij gaen;\n\
-    Mijn’ roll is afgespeelt, en all wat kan gebeuren\n\
-    Van lacchen en van treuren\n\
-    Is mij te beurt geweest, en all wat beuren sal\n\
-    Sal ’tselve niet met all,\n\
-    En d’ oude schaduw zijn van dingen die wat schijnen\n\
-    En komende verdwijnen.\n\
-    Wat wacht ick meer op aerd, waerom en scheid’ ick niet?\n\
-    ’K wacht, Heer, dat ghij ’tgebiedt.\n\
-    Maer, magh ick noch een’ gunst by d’andere begeeren,\n\
-    Laet mij soo scheiden leeren,\n\
-    Dat yeder een die ’t siet mijn scheiden en het sijn\n\
-    Wensch’ eenerhand te zijn.\n'
+Noch eens September, en noch eens die vierde dagh\n\
+Die mij verschijnen sagh!\n\
+Hoe veel Septembers, Heer, en hoe veel’ vierde dagen\n\
+Wilt ghij mij noch verdragen?\n\
+Ick bidd om geen verlang: ’tkan redelyck bestaen,\n\
+Het ghen’ ick heb gegaen:\n\
+En van mijn’ wiegh tot hier zijn soo veel dusend schreden\n\
+Die ick heb doorgetreden,\n\
+(Met vallen, lieve God, en opstaen, soo ghij weett,)\n\
+Dat die all ’t selve leed\n\
+En all’ de selve vreughd naer mij hadd door te reisen,\n\
+Sich drijmael sou bepeisen\n\
+Wat besten oorber waer, gelaten of gedaen.\n\
+Mij, Heere, laet vrij gaen;\n\
+Mijn’ roll is afgespeelt, en all wat kan gebeuren\n\
+Van lacchen en van treuren\n\
+Is mij te beurt geweest, en all wat beuren sal\n\
+Sal ’tselve niet met all,\n\
+En d’ oude schaduw zijn van dingen die wat schijnen\n\
+En komende verdwijnen.\n\
+Wat wacht ick meer op aerd, waerom en scheid’ ick niet?\n\
+’K wacht, Heer, dat ghij ’tgebiedt.\n\
+Maer, magh ick noch een’ gunst by d’andere begeeren,\n\
+Laet mij soo scheiden leeren,\n\
+Dat yeder een die ’t siet mijn scheiden en het sijn\n\
+Wensch’ eenerhand te zijn.\n'
         else:
             text = 'DROOMEN YDELHEIT\n\n\
 Wie weet wat droomen is? ick weet het; en wie niet,\n\
