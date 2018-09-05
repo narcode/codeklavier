@@ -649,8 +649,8 @@ class Ckalculator(object):
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
         
-        if int(number)%100 is 0:
-            number = '100'
+        if int(number)%42 is 0:
+            number = '42'
 
         if number in config['easter eggs']:
             if debug:

@@ -84,7 +84,7 @@ def main():
         ck_display[display].pack(fill=tkinter.Y, side=tkinter.LEFT)
         ck_display[display].configure(bg='black',fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 25')     
 
-        #ck_display[display].insert(tkinter.END, "Code Display\n")
+        ck_display[display].insert(tkinter.END, "\n")
         s[display].bind(('localhost', 1111))
         print('CK display 1 listening on port 1111')
 
