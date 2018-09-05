@@ -41,8 +41,11 @@ def doHelp():
     print('-p | --prototype <<name>>')
     print('Boot CodeKlavier with prototype <<name>>')
     print('')
+    print('-o | --option <<number>>')
+    print('Boot CodeKlavier prototype <<name>> with specific <<option>> (if the prototype supports extra options)')
+    print('')    
     print('Example:')
-    print('./codeklavier.py -c custom_settings.ini -p hello_world')
+    print('./codeklavier.py -c custom_settings.ini -p hybrid')
 
 def miditest(configfile='default_setup.ini'):
     """
@@ -95,14 +98,10 @@ def perform(configfile='default_setup.ini', prototype='hello_world'):
     
     module = importlib.import_module(prototype)
     prototype = getattr(module, prototype)
-        
-    #from hello_world import hello_world
-    #from motippets import motippets
-    #from hybrid import hybrid
-    #from ckalculator import ckalculator    
-
-
-    eval(prototype.main())
+    if option == None:
+        eval(prototype.main())
+    else:
+        eval(prototype.main(option))
     
 def perform_interactive(configfile='default_setup.ini'):
     """
@@ -151,16 +150,18 @@ if __name__ == '__main__':
     useConfig = None
     createConfig = None
     play = None
+    option = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:ti',['help', 'configfile=', 'makeconfig=', 'play=', 'test', 'interactive'])
+        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:ti:o:',['help', 'configfile=', 'makeconfig=', 'play=', 'test', 'interactive, option'])
         selected_options = [x[0] for x in options]
     except getopt.GetoptError:
-        print('Something went wrong with parsing the options')
+        print('Something went wrong with parsing the optional arguments')
     if ('-c' in selected_options or '--configfile' in selected_options) \
         and ('-m' in selected_options or '--makeconfig' in selected_options):
         #cannot deal with creating a new one and using a specified config
         raise ValueError('Chooce either the "configfile-option" or the option to create a configfile. Not both.')
+    
     for o, a in options:
         if o in ('-h', '--help'):
             showHelp = True
@@ -170,6 +171,8 @@ if __name__ == '__main__':
             createConfig = a
         if o in ('-p', '--play'):
             play = a
+        if o in ('-o', '--option'):
+            option = a 
         if o in ('-t', '--test'):
             test = True
         if o in ('-i', '--interactive'):

@@ -11,17 +11,19 @@ class TextPrint(object):
     """ class to type one character of a pre-loaded text on every midi note on event
     """
 
-    def __init__(self, port, noteonid, pedal_id):
+    def __init__(self, port, noteonid, pedal_id, text_id):
         """Setup the class
 
         :param int port: the portnumber
-        :param dict mapping: the mapping to use
-        :param noteonid: the note-on id
+        :param int dict mapping: the mapping to use
+        :param int noteonid: the note-on id
+        :param int text_id: the id of the text to load
         """
         self.mapscheme = Mapping_Ckalculator(True, False)
         self.port = port
         self.noteonid = noteonid
         self.pedalid = pedal_id
+        self.text = text_id
         self.counter = 0
 
     def printText(self, event, data=None):
@@ -34,7 +36,7 @@ class TextPrint(object):
         if message[0] != 254:
             if message[2] > 0: #only noteOn
                 if (message[0] == self.noteonid):
-                    text = self.loadText(text_id=2)
+                    text = self.loadText(text_id=self.text)
                     
                     if self.counter < len(text):
                         print(text[self.counter])
@@ -52,7 +54,7 @@ class TextPrint(object):
         "param text_id int: choose the text to load
         TODO: add loading, now it's hardcoded text
         """
-        if text_id == 1:
+        if text_id == '1':
             text = 'OP MIJNEN GEBOORT-DAGH\n\n\
     Noch eens September, en noch eens die vierde dagh\n\
     Die mij verschijnen sagh!\n\

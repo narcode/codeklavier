@@ -10,13 +10,14 @@ import CK_configWriter
 from CK_Setup import Setup
 from text_classes import TextPrint
 
-def main(configfile='default_setup.ini'):
+def main(text_id=1, configfile='default_setup.ini'):
     """
     Start the Text Printer/ Typer
 
-    :param int configfile: use this configuration file. Defaults to 'default_setup.ini'.
+    :param string text_id: the text to load.
+    :param string configfile: use this configuration file. Defaults to 'default_setup.ini'.
     """
-
+    
     #Read config and settings
     config = configparser.ConfigParser()
     config.read(configfile, encoding='utf8')
@@ -41,7 +42,7 @@ def main(configfile='default_setup.ini'):
     print("\nPress Control-C to exit.")
     
     #codeK.set_callback(TextPrint(myPort, device_id, pedal_id))
-    text = TextPrint(myPort, device_id, pedal_id)
+    text = TextPrint(myPort, device_id, pedal_id, text_id)
     
     # Loop to program to keep listening for midi input
     try:
