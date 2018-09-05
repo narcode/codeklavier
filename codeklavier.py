@@ -15,7 +15,7 @@ import importlib
 import CK_configWriter
 from CK_Setup import Setup
 
-PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator', 'text')
+PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator', 'text', 'presenter')
 
 def doHelp():
     """

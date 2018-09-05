@@ -12,6 +12,7 @@ from pynput.keyboard import Key, Controller
 import socket
 from pythonosc import udp_client
 import configparser
+import re
 
 display1 = 1111
 display2 = 2222
@@ -279,42 +280,43 @@ class Mapping_Motippets:
 
        Includes Hello World mappings for the Hybrid prototype
     """
-    def __init__(self, debug=True):
+    def __init__(self, debug=True, snippets='snippets'):
         if debug:
             print("## Using the Motippets mapping ##")
 
         #Read config and settings
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         self._config.read('default_setup.ini', encoding='utf8')
-
+        
+        # TODO: optimize with new style!
         try:
-            self.__snippet1 = self._config['snippets'].get('snippet1')
-            self.__snippet2 = self._config['snippets'].get('snippet2')
+            self.__snippet1 = self._config[snippets].get('snippet1')
+            self.__snippet2 = self._config[snippets].get('snippet2')
 
-            self.__mini_snippet_hi_1 = self._config['snippets'].get('mini_snippet_hi_1')
-            self.__mini_unmap_hi_2 = self._config['snippets'].get('mini_unmap_hi_2')
+            self.__mini_snippet_hi_1 = self._config[snippets].get('mini_snippet_hi_1')
+            self.__mini_unmap_hi_2 = self._config[snippets].get('mini_unmap_hi_2')
 
-            self.__mini_snippet_hi_2 = self._config['snippets'].get('mini_snippet_hi_2')
-            self.__mini_unmap_hi_1 = self._config['snippets'].get('mini_unmap_hi_1')
+            self.__mini_snippet_hi_2 = self._config[snippets].get('mini_snippet_hi_2')
+            self.__mini_unmap_hi_1 = self._config[snippets].get('mini_unmap_hi_1')
 
-            self.__mini_snippet_mid_1 = self._config['snippets'].get('mini_snippet_mid_1')
-            self.__mini_unmap_mid_2 = self._config['snippets'].get('mini_unmap_mid_2')
+            self.__mini_snippet_mid_1 = self._config[snippets].get('mini_snippet_mid_1')
+            self.__mini_unmap_mid_2 = self._config[snippets].get('mini_unmap_mid_2')
 
-            self.__mini_snippet_mid_2 = self._config['snippets'].get('mini_snippet_mid_2')
-            self.__mini_snippet_mid_2b = self._config['snippets'].get('mini_snippet_mid_2') # check?
-            self.__mini_unmap_mid_1 = self._config['snippets'].get('mini_unmap_mid_1')
+            self.__mini_snippet_mid_2 = self._config[snippets].get('mini_snippet_mid_2')
+            self.__mini_snippet_mid_2b = self._config[snippets].get('mini_snippet_mid_2') # check?
+            self.__mini_unmap_mid_1 = self._config[snippets].get('mini_unmap_mid_1')
 
-            self.__mini_snippet_low_1 = self._config['snippets'].get('mini_snippet_low_1')
-            self.__mini_snippet_low_1_amp = self._config['snippets'].get('mini_snippet_low_1_amp')
-            self.__mini_unmap_low_1 = self._config['snippets'].get('mini_unmap_low_1')
-            self.__mini_unmap_low_2 = self._config['snippets'].get('mini_unmap_low_2')
-            self.__mini_unmap_low_3 = self._config['snippets'].get('mini_unmap_low_3')
+            self.__mini_snippet_low_1 = self._config[snippets].get('mini_snippet_low_1')
+            self.__mini_snippet_low_1_amp = self._config[snippets].get('mini_snippet_low_1_amp')
+            self.__mini_unmap_low_1 = self._config[snippets].get('mini_unmap_low_1')
+            self.__mini_unmap_low_2 = self._config[snippets].get('mini_unmap_low_2')
+            self.__mini_unmap_low_3 = self._config[snippets].get('mini_unmap_low_3')
 
-            self.__mini_snippet_low_2 = self._config['snippets'].get('mini_snippet_low_2')
-            self.__mini_snippet_low_1_amp = self._config['snippets'].get('mini_snippet_low_1_amp')
-            self.__mini_unmap_low_1 = self._config['snippets'].get('mini_unmap_low_1')
-            self.__mini_unmap_low_2 = self._config['snippets'].get('mini_unmap_low_2')
-            self.__mini_unmap_low_3 = self._config['snippets'].get('mini_unmap_low_3')
+            self.__mini_snippet_low_2 = self._config[snippets].get('mini_snippet_low_2')
+            self.__mini_snippet_low_1_amp = self._config[snippets].get('mini_snippet_low_1_amp')
+            self.__mini_unmap_low_1 = self._config[snippets].get('mini_unmap_low_1')
+            self.__mini_unmap_low_2 = self._config[snippets].get('mini_unmap_low_2')
+            self.__mini_unmap_low_3 = self._config[snippets].get('mini_unmap_low_3')
 
         except KeyError:
             raise LookupError('Missing snippets in the config file.')
@@ -408,6 +410,13 @@ class Mapping_Motippets:
                     self.__keyboard.type(mapped_string)
                     self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
                 else:
+                    # strings 
+                    string = re.findall('^\'.*', mapped_string)
+                    if len(string) > 0:
+                        mapped_string = string[0].replace("\'","")
+                        self.__keyboard.type(mapped_string)
+                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)                        
+                    
                     # special keys
                     if mapped_string == 'space':
                         self.__keyboard.press(Key.space)
@@ -433,6 +442,10 @@ class Mapping_Motippets:
                     elif mapped_string == '.play':
                         self.__keyboard.type(mapped_string)
                         self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
+                    elif mapped_string == '.load':
+                        self.__keyboard.type(mapped_string)
+                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
+                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)                        
                     elif mapped_string == 'motippetssc-evaluate':
                         self.evaluateSC('eval')
         except KeyError:
