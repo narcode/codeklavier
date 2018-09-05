@@ -23,12 +23,14 @@ def main(configfile='default_setup.ini'):
        
     config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
     config.read(configfile, encoding='utf8')
-    
+
+    # TODO: optimize...
     try:
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('device_id')
         noteoff_id = config['midi'].getint('noteoff_id')
         pedal_id = config['midi'].getint('pedal_id')
+        pedal_sostenuto = config['midi'].getint('pedal_midi_sostenuto')
         staccato = config['articulation'].getfloat('staccato')
         sostenuto = config['articulation'].getfloat('sostenuto')
         chord = config['articulation'].getfloat('chord')
@@ -69,7 +71,7 @@ def main(configfile='default_setup.ini'):
                     if (message[0] == noteoff_id or message[2] == 0):                
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note, ck_deltatime=ck_deltatime, articulaton=articulation)
                     
-                    if message[0] == pedal_id:
+                    if message[0] == pedal_id and message[1] == pedal_sostenuto:
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulaton=articulation)
 
                     if message[0] == device_id:

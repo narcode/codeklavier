@@ -97,12 +97,15 @@ class Mapping_HelloWorld:
                     print(midinumber, self._config[prototype].get(midis))
                 mapped_string = self._config[prototype].get(midis)
 
+                
                 if len(mapped_string) < 2:
                     # chars and nums
+                    if debug:
+                        print(mapped_string)
                     self.__keyboard.type(mapped_string)
                     self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
                 else:
-                    # special keys
+                    # special keys or stirngs
                     if mapped_string == 'space':
                         self.__keyboard.press(Key.space)
                         self.__keyboard.release(Key.space)
