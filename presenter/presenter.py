@@ -378,7 +378,7 @@ def ck_loop(prototype='hello world'):
                                     threads['toggle_m'] = Thread(target=ck_loop, name='ck loop thread', args=('motippets',))
                                     threads['toggle_m'].start()
 
-                                mapping.mapping(message[1], 'Presenter')
+                                mapping.mapping(message[1], 'Presenter', display=1)
 
                 time.sleep(0.01)
 

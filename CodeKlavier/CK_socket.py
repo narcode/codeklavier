@@ -380,8 +380,13 @@ def displayCode(display):
                 tag = tagmatch.group(0)[0:-1]
                 ckcode = re.sub(''+tag+':', '', dump)
                 try:
-                    ck_display[display].insert(tkinter.END, ckcode, tag)
-                    ck_display[display].see(tkinter.END)
+                    if tag == 'delete':
+                        ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
+                    elif tag == 'clear':
+                        ck_display[display].delete('1.0', tkinter.END)
+                    else:
+                        ck_display[display].insert(tkinter.END, ckcode, tag)
+                        ck_display[display].see(tkinter.END)
                 except RuntimeError as err:
                     break
             elif display == '2':

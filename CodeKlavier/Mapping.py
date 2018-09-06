@@ -393,10 +393,13 @@ class Mapping_Motippets:
         self.__keyboard.release(Key.backspace)
 
 
-    def mapping(self, midinumber, prototype='Hello World', debug=False):
+    def mapping(self, midinumber, prototype='Hello World', display=5, debug=False):
         """Type a letter that is coupled to this midi note.
 
         :param int midinumber: the midinumber that is played
+        :param string prototype: the section to grab from the config.ini file. Normally related to the prototype being played
+        :param int display: the display number to which to send the udp messages
+        :param boolean debug: print or not debug messages in the console
         """
         try:
             midis = str(midinumber)
@@ -408,44 +411,43 @@ class Mapping_Motippets:
                 if len(mapped_string) < 2:
                     # chars and nums
                     self.__keyboard.type(mapped_string)
-                    self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
+                    self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
                 else:
                     # strings 
                     string = re.findall('^\'.*', mapped_string)
                     if len(string) > 0:
                         mapped_string = string[0].replace("\'","")
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)                        
+                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)                        
                     
                     # special keys
                     if mapped_string == 'space':
                         self.__keyboard.press(Key.space)
                         self.__keyboard.release(Key.space)
-                        self.formatAndSend(' ', display=5, syntax_color='hello:', spacing=False)
+                        self.formatAndSend(' ', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'enter':
                         self.__keyboard.press(Key.enter)
                         self.__keyboard.release(Key.enter)
-                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
+                        self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'backspace':
                         self.__keyboard.press(Key.backspace)
                         self.__keyboard.release(Key.backspace)
-                        self.formatAndSend('', display=5, syntax_color='delete:', spacing=False)
+                        self.formatAndSend('', display=display, syntax_color='delete:', spacing=False)
                     elif mapped_string == 'down':
                         self.goDown()
-                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
+                        self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'sc-evaluate':
                         self.evaluateSC('noEnter_eval')
-                        self.formatAndSend('', display=5, syntax_color='hello:', spacing=False)
+                        self.formatAndSend('', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.tempo':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
+                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.play':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
-                    elif mapped_string == '.load':
+                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
+                    elif mapped_string == '.load' or mapped_string == '.close':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)                        
+                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'motippetssc-evaluate':
                         self.evaluateSC('eval')
         except KeyError:
@@ -702,7 +704,7 @@ class Mapping_Motippets:
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop(20);')
                 self.evaluateSC('eval')
-                self.formatAndSend('~snippet1.stop;', display=3)
+                self.formatAndSend('~snippet1.stop;', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval')
