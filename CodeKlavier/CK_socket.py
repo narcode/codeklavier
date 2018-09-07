@@ -368,7 +368,7 @@ def displayCode(display):
     :param display string: the display target (1-4)
     :param syntax_color string: the tag to use for coloring the syntax (snippet, mid, hi, low, primitive, loops)
     """
-    global ck_display
+    global ck_display, listen
 
     while listen:
         try:
@@ -376,70 +376,75 @@ def displayCode(display):
                 data, addr = s[display].recvfrom(1024)
                 print(str(data, 'utf-8'))
                 dump = str(data, 'utf-8')
-                tagmatch = re.match('.*:', dump)
-                tag = tagmatch.group(0)[0:-1]
-                ckcode = re.sub(''+tag+':', '', dump)
-                try:
-                    if tag == 'delete':
-                        ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
-                    elif tag == 'clear':
-                        ck_display[display].delete('1.0', tkinter.END)
-                    else:
-                        ck_display[display].insert(tkinter.END, ckcode, tag)
-                        ck_display[display].see(tkinter.END)
-                except RuntimeError as err:
-                    break
+                tagmatch = re.findall('.*:', dump)
+                if len(tagmatch) > 0:
+                    tag = tagmatch[0][0:-1]
+                    ckcode = re.sub(''+tag+':', '', dump)
+                    try:
+                        if tag == 'delete':
+                            ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
+                        elif tag == 'clear':
+                            ck_display[display].delete('1.0', tkinter.END)
+                        else:
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
+                    except RuntimeError as err:
+                        break
             elif display == '2':
                 data, addr = s[display].recvfrom(1024)
                 dump = str(data, 'utf-8')
-                tagmatch = re.match('.*:', dump)
-                tag = tagmatch.group(0)[0:-1]
-                ckcode = re.sub(''+tag+':', '', dump)
-                try:
-                    ck_display[display].insert(tkinter.END, ckcode, tag)
-                    ck_display[display].see(tkinter.END)
-                except RuntimeError as err:
-                    break
+                tagmatch = re.findall('.*:', dump)
+                if len(tagmatch) > 0:
+                    tag = tagmatch[0][0:-1]
+                    ckcode = re.sub(''+tag+':', '', dump)
+                    try:
+                        ck_display[display].insert(tkinter.END, ckcode, tag)
+                        ck_display[display].see(tkinter.END)
+                    except RuntimeError as err:
+                        break
             elif display == '3':
                 data, addr = s[display].recvfrom(1024)
                 dump = str(data, 'utf-8')
-                tagmatch = re.match('.*:', dump)
-                tag = tagmatch.group(0)[0:-1]
-                ckcode = re.sub(''+tag+':', '', dump)
-                try:
-                    if tag == 'result' or tag == 'error':
-                        ck_display[display].delete(1.0, tkinter.END)
-                        ck_display[display].insert(tkinter.END, ckcode, tag)
-                    else:
-                        ck_display[display].insert(tkinter.END, ckcode, tag)
-                        ck_display[display].see(tkinter.END)
-                except RuntimeError as err:
-                    break
+                tagmatch = re.findall('.*:', dump)
+                if len(tagmatch) > 0:
+                    tag = tagmatch[0][0:-1]
+                    ckcode = re.sub(''+tag+':', '', dump)
+                    try:
+                        if tag == 'result' or tag == 'error':
+                            ck_display[display].delete(1.0, tkinter.END)
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                        else:
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
+                    except RuntimeError as err:
+                        break
             elif display == '4':
                 data, addr = s[display].recvfrom(1024)
                 dump = str(data, 'utf-8')
-                tagmatch = re.match('.*:', dump)
-                tag = tagmatch.group(0)[0:-1]
-                ckcode = re.sub(''+tag+':', '', dump)
-                try:
-                    ck_display[display].insert(tkinter.END, ckcode, tag)
-                    ck_display[display].see(tkinter.END)
-                except RuntimeError as err:
-                    break
+                tagmatch = re.findall('.*:', dump)
+                if len(tagmatch) > 0:
+                    tag = tagmatch[0][0:-1]
+                    ckcode = re.sub(''+tag+':', '', dump)
+                    try:
+                        ck_display[display].insert(tkinter.END, ckcode, tag)
+                        ck_display[display].see(tkinter.END)
+                    except RuntimeError as err:
+                        break
             elif display == '5': #this is the codespace
                 data, addr = s[display].recvfrom(1024)
                 dump = str(data, 'utf-8')
-                tagmatch = re.match('.*:', dump)
-                tag = tagmatch.group(0)[0:-1]
-                ckcode = re.sub(''+tag+':', '', dump)
-                try:
-                    if tag == 'delete':
-                        ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
-                    else:
-                        ck_display[display].insert(tkinter.END, ckcode, tag)
-                        ck_display[display].see(tkinter.END)
-                except RuntimeError as err:
-                    break
+                tagmatch = re.findall('.*:', dump)
+                if len(tagmatch) > 0:
+                    tag = tagmatch[0][0:-1]
+                    ckcode = re.sub(''+tag+':', '', dump)
+                    try:
+                        if tag == 'delete':
+                            ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
+                        else:
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
+                    except RuntimeError as err:
+                        break
         except OSError as err:
             print(err)
             break
@@ -455,4 +460,4 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         stopThreads()
-        closeDisplay()
+        closeDisplay(display)
