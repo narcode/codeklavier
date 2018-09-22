@@ -12,6 +12,7 @@ import socket
 import getopt
 import sys
 import re
+#import time
 
 # Gui
 from threading import Thread
@@ -448,6 +449,8 @@ def displayCode(display):
         except OSError as err:
             print(err)
             break
+        
+    #time.sleep(0.01)
 
 if __name__ == '__main__':
     try:

@@ -153,7 +153,7 @@ if __name__ == '__main__':
     option = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:ti:o:',['help', 'configfile=', 'makeconfig=', 'play=', 'test', 'interactive, option'])
+        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:tio:',['help', 'configfile=', 'makeconfig=', 'play=', 'test', 'interactive, option'])
         selected_options = [x[0] for x in options]
     except getopt.GetoptError:
         print('Something went wrong with parsing the optional arguments')

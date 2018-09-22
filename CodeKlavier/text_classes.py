@@ -34,18 +34,17 @@ class TextPrint(object):
         """
         message, deltatime = event
         if message[0] != 254:
-            if message[2] > 0: #only noteOn
-                if (message[0] == self.noteonid):
-                    text = self.loadText(text_id=self.text)
-                    
-                    if self.counter < len(text):
-                        print(text[self.counter])
-                        self.mapscheme.formatAndSend(text[self.counter], display=1, spacing=False, spacechar='')
-                    
-                    self.counter += 1
-                    
-                #if (message[0] == self.pedalid):
-                    #print("pedal event handler not defined yet")
+            if (message[0] == self.noteonid and message[2] > 0):
+                text = self.loadText(text_id=self.text)
+                
+                if self.counter < len(text):
+                    print(text[self.counter])
+                    self.mapscheme.formatAndSend(text[self.counter], display=1, spacing=False, spacechar='')
+                
+                self.counter += 1
+                
+            #if (message[0] == self.pedalid):
+                #print("pedal event handler not defined yet")
                     
     def loadText(self, path=None, text_id=1):
         """ Load a text from a file
