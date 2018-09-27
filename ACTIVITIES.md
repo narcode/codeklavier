@@ -2,9 +2,15 @@
 ### This page gives a run down of public CodeKlavier presentations and milestones to date: 
 (newest on top)
 
+November 2018: Performance at Splendor
+
+October 2018: Performance at [ARTikulationen in Graz] (http://doctorartium.kug.ac.at/pdf/ARTikulationen2018Programm3.pdf). This will be the first time we use our custom built KeyScanner.
+
 September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl/) in Voorburg, Netherlands.
 
 August 2018: CodeKlavier paper and performance will be presented at the [International Computer Music Conference](https://icmc2018.org/) in Daegu, Korea! In the proceedings you can find our first CodeKlavier published paper.
+
+July 2018: CodeKlavier receives its custom built KeyScanner by Andrew McPherson.
 
 June 2018: Performance and lecture-demonstration at MuSA 2018 at IMWI Karlsruhe, Germany. Our presentation includes a special CodeKlavier "presentation mode" where we use various CodeKlavier piano techniques to live code the presentation. This event will also feature a performance of Huygbrid and a more developed version of the CKalculator.
 There was also a performance of Huygbrid (previously Hybrid) and CKalculator at Ephemere in Studio Loos, Netherlands. Watch the video of CKalculator [here](https://youtu.be/Ea4pUYqb8BA).
