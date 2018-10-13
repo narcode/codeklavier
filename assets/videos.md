@@ -23,7 +23,7 @@ vid 2
 
 <div style='display:flex; flex-flow:column; text-align:center'>
 <div>@ studio</div>
-vid 1
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_r2omaPtG5Y?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 <br><br>
 vid 2
 </div>
