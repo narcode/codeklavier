@@ -10,6 +10,10 @@ background-repeat: no-repeat;
 background-size: cover;
 }
 
+#headlink {
+text-decoration: none;
+}
+
 header h1, #headlink {
     font-size: 30px;
     line-height: 1.5;
@@ -21,6 +25,7 @@ header h1, #headlink {
     letter-spacing: -1px;
     -webkit-font-smoothing: antialiased;
 }
+
 
 header h2 {
 background-color: black;
