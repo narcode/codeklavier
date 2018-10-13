@@ -67,7 +67,7 @@ After installing the libraries, plug in your midi device and run the miditest by
 
 Be sure to setup the correct port and device ID via ``default_setup.ini``
 
-## Watch videos of the Codeklavier in action
+## Watch
 [Codeklavier Videos](http://codeklavier.space/videos)
 
 # This project is possible thanks to the Stimuleringsfonds Creatieve Industrie
