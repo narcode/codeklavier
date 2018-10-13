@@ -22,3 +22,9 @@ border: 2px solid #b5e853;
 background: black;
 border: 2px solid rgb(181, 232, 83);
 }
+
+.vids-cols {
+display: flex;
+flex-flow: row;
+justify-content: space-between;
+}
