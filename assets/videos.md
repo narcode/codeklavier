@@ -2,7 +2,7 @@
 permalink: /videos
 ---
 
-# Video examples of how the Codeklavier looks and sounds in it's current state 🎹
+# Video examples of how the Codeklavier looks and sounds in it's current state 🎥 🎹
 
 
 
