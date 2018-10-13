@@ -7,7 +7,7 @@ permalink: /videos
 <br>
 ### Introductory video by Stimuleringsfonds:
 <div style='text-align:center'>
-<iframe width="740" height="415" src="https://www.youtube-nocookie.com/embed/UPYYa30Syxw?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/UPYYa30Syxw?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div>
 
 <br><br>
