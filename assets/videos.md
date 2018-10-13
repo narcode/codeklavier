@@ -16,16 +16,16 @@ permalink: /videos
 
 <div style='display:flex; flex-flow:column; text-align:center'>
 <div>In concert</div>
-<iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/N_Vpo5jzH_c?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="740" height="415" src="https://www.youtube-nocookie.com/embed/N_Vpo5jzH_c?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 <br><br>
-vid
+vid 2
 </div>
 
 <div style='display:flex; flex-flow:column; text-align:center'>
 <div>@ studio</div>
-<iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/_r2omaPtG5Y?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+vid 1
 <br><br>
-vid
+vid 2
 </div>
 
 </div>
