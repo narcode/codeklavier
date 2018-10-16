@@ -25,6 +25,7 @@ class Motippets(object):
         self._miniMotifs = []
         self._miniMotifs2 = []
         self._miniMotifs3 = []
+        self._miniMotifs3m = []
         self._deltaHelper = []
         self._deltaHelper1 = []
         self._deltaHelper2 = []
@@ -40,6 +41,7 @@ class Motippets(object):
         self._unmapCounter1 = 0
         self._unmapCounter2 = 0
         self._unmapCounter3 = 0
+        self._unmapCounter3_m = 0
         self._conditionalCounter = 0
         self._conditionalsBuffer = []
         self._resultCounter = 0
@@ -143,6 +145,10 @@ class Motippets(object):
                         self._memory, 'mini2',
                         Motifs.get('mini_motif_2_mid'),
                         note, False)
+                    mini_motif_3_Mid_played = self.compare_motif(
+                        self._memory, 'mini3m',
+                        Motifs.get('mini_motif_3_mid'),
+                        note, False)                    
                     #if self._motif1_played: ??? make a delegate?
                     if (mini_motif_1_Mid_played and
                         self._unmapCounter2 == 0):
@@ -156,6 +162,16 @@ class Motippets(object):
                     elif (mini_motif_2_Mid_played and
                           self._unmapCounter1 > 0):
                         self.mapscheme.miniSnippets(2, 'mid with unmap')
+                    elif (mini_motif_3_Mid_played and
+                                          self._unmapCounter1 == 0 and
+                                          self._unmapCounter2 == 0):
+                        self.mapscheme.miniSnippets(3, 'mid') 
+                    elif (mini_motif_3_Mid_played and
+                          self._unmapCounter1 > 0):
+                        self.mapscheme.miniSnippets(3, 'mid with unmap 1')
+                    elif (mini_motif_3_Mid_played and
+                          self._unmapCounter2 > 0):
+                        self.mapscheme.miniSnippets(3, 'mid with unmap 2')                        
 
             ### HI SECTION
             elif section == 'hi':
@@ -623,6 +639,30 @@ class Motippets(object):
                           '\ncomparison: ' + str(compare))
 
                 return compare
+            
+        elif motiftype == 'mini3m':
+            if note in motif:
+                self._miniMotifs3m.append(note)
+            else:
+                self._miniMotifs3m = []
+                return False
+
+            if len(self._miniMotifs3m) >= len(motif):
+                self._miniMotifs3m = self._miniMotifs3m[-len(motif):]
+                if self._miniMotifs3m == motif:
+                    compare = True
+                    self._unmapCounter3_m += 1
+                    self._unmapCounter1 = 0
+                    self._unmapCounter2 = 0
+                else:
+                    compare = False
+
+                if debug:
+                    print('played ->' + str(self._miniMotifs3m),
+                          '\nmotif 3 ->' + str(motif),
+                          '\ncomparison: ' + str(compare))
+
+                return compare            
 
         elif motiftype == 'result 1':
             if note in motif:
@@ -877,6 +917,8 @@ class Motippets(object):
                             self.mapscheme.tremolo('mid_1', interval)
                         elif target == 2:
                             self.mapscheme.tremolo('mid_2', interval)
+                        elif target == 3:
+                            self.mapscheme.tremolo('mid_3', interval)                            
                     elif pianosection == 'low':
                         if target == 1:
                             self.mapscheme.tremolo('low_1', interval)

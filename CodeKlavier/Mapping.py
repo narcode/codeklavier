@@ -305,6 +305,9 @@ class Mapping_Motippets:
             self.__mini_snippet_mid_2 = self._config[snippets].get('mini_snippet_mid_2')
             self.__mini_snippet_mid_2b = self._config[snippets].get('mini_snippet_mid_2') # check?
             self.__mini_unmap_mid_1 = self._config[snippets].get('mini_unmap_mid_1')
+            
+            self.__mini_snippet_mid_3 = self._config[snippets].get('mini_snippet_mid_3')
+            self.__mini_unmap_mid_3 = self._config[snippets].get('mini_unmap_mid_3')            
 
             self.__mini_snippet_low_1 = self._config[snippets].get('mini_snippet_low_1')
             self.__mini_snippet_low_1_amp = self._config[snippets].get('mini_snippet_low_1_amp')
@@ -527,9 +530,29 @@ class Mapping_Motippets:
             #unmap
             self.__keyboard.type(self.__mini_unmap_mid_2)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num, syntax_color='snippet:')
+            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num, syntax_color='snippet:')          
 
-            ## LOW SECTION
+        if snippet_num == 3 and pianosection == 'mid':
+            self.__keyboard.type(self.__mini_snippet_mid_3)
+            self.evaluateSC('eval')
+            self.formatAndSend(self.__mini_unmap_mid_3, display=snippet_num, syntax_color='snippet:')     
+        if snippet_num == 3 and pianosection == 'mid with unmap 1':
+            self.__keyboard.type(self.__mini_snippet_mid_3)
+            self.evaluateSC('eval')
+            #unmap
+            self.__keyboard.type(self.__mini_unmap_mid_1)
+            self.evaluateSC('eval')
+            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num, syntax_color='snippet:')            
+        if snippet_num == 3 and pianosection == 'mid with unmap 2':
+            self.__keyboard.type(self.__mini_snippet_mid_3)
+            self.evaluateSC('eval')  
+            #unmap
+            self.__keyboard.type(self.__mini_unmap_mid_2)
+            self.evaluateSC('eval')
+            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num, syntax_color='snippet:')            
+    
+    
+         ## LOW SECTION
         if snippet_num == 1 and pianosection == 'low':
             self.__keyboard.type(self.__mini_snippet_low_1)
             self.evaluateSC('eval')
@@ -623,7 +646,8 @@ class Mapping_Motippets:
     def tremolo(self, pianoregister, value):
         """Type the tremolo command + the tremolo-value
 
-        :param string pianoregister: the pianoregister the tremolo is played in. Values are: 'hi_1', 'hi_2', 'mid_1', 'mid_2', 'low_1', 'low_2', 'low_3'.
+        :param string pianoregister: the pianoregister the tremolo is played in. Values are: 'hi_1', 'hi_2', 'mid_1', 
+        'mid_2', 'mid_3', 'low_1', 'low_2', 'low_3'.
         :param int value: the tremolo value as distance between the notes
         """
         if pianoregister == 'hi_1':
@@ -638,6 +662,9 @@ class Mapping_Motippets:
         elif pianoregister == 'mid_2':
             self.__keyboard.type('~tremoloM2 = ' + str(value))
             self.formatAndSend('~tremoloM2 = ' + str(value), display=2, syntax_color='mid:')
+        elif pianoregister == 'mid_3':
+            self.__keyboard.type('~tremoloM3 = ' + str(value))
+            self.formatAndSend('~tremoloM3 = ' + str(value), display=2, syntax_color='mid:')            
         elif pianoregister == 'low_1':
             self.__keyboard.type('~tremoloL1 = ' + str(value))
             self.formatAndSend('~tremoloL1 = ' + str(value), display=1, syntax_color='low:')
