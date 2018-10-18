@@ -2,10 +2,10 @@
 permalink: /videos
 ---
 
-# Video examples of how the Codeklavier looks and sounds in it's current state 🎥 🎹
+# Videos of the CodeKlavier in action to date 🎥 🎹
 
 <br>
-### Introductory video by Stimuleringsfonds:
+### Introductory video by Creative Industries Fund NL:
 <div style='text-align:center'>
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/UPYYa30Syxw?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div>
@@ -16,9 +16,9 @@ permalink: /videos
 
 <div style='display:flex; flex-flow:column; text-align:center'>
 <div>In concert</div>
-<iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/N_Vpo5jzH_c?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-<br><br>
 <iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/HrUNrb3ihl0?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<br><br>
+<iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/N_Vpo5jzH_c?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div>
 
 <div style='display:flex; flex-flow:column; text-align:center'>
