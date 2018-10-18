@@ -2,7 +2,7 @@
 permalink: /videos
 ---
 
-# Videos of the CodeKlavier in action to date 🎥 🎹
+# CodeKlavier VIDEOS 🎥 🎹
 
 <br>
 ### Introductory video by Creative Industries Fund NL:
@@ -11,7 +11,7 @@ permalink: /videos
 </div>
 
 <br>
-### CodeKlavier in action:
+## CodeKlavier in action:
 <div class='vids-cols'>
 
 <div style='display:flex; flex-flow:column; text-align:center'>
