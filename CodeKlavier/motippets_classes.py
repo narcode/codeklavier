@@ -168,7 +168,7 @@ class Motippets(object):
                         self.mapscheme.miniSnippets(3, 'mid') 
                     elif (mini_motif_3_Mid_played and
                           self._unmapCounter1 > 0):
-                        self.mapscheme.miniSnippets(3, 'mid with unmap 1')
+                        self.mapscheme.miniSnippets(3, 'mid with unmap 1', )
                     elif (mini_motif_3_Mid_played and
                           self._unmapCounter2 > 0):
                         self.mapscheme.miniSnippets(3, 'mid with unmap 2')                        

@@ -538,7 +538,7 @@ class Mapping_Motippets:
         if snippet_num == 3 and pianosection == 'mid':
             self.__keyboard.type(self.__mini_snippet_mid_3)
             self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_3, display=snippet_num, syntax_color='snippet:')     
+            self.formatAndSend(self.__mini_unmap_mid_3, display=5, syntax_color='snippet:')     
         if snippet_num == 3 and pianosection == 'mid with unmap 1':
             self.__keyboard.type(self.__mini_snippet_mid_3)
             self.evaluateSC('eval')
