@@ -373,9 +373,10 @@ class Mapping_Motippets:
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
 
-    def goDown(self):
+    def goDown(self, display=5):
         """Press command-arrow down and enter.
-        """
+        :param int display: the display number to which to send the udp messages
+        """       
         self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)        
         
         with self.__keyboard.pressed(Key.cmd):

@@ -488,7 +488,7 @@ def ck_loop(prototype='hello world'):
 
     #go to the end of the codespace screen
     mapping.goDown()
-
+    
     if prototype == 'hello world':
         try:
             while hello_world_on:
