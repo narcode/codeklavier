@@ -342,7 +342,7 @@ def main():
                                 else:
                                     ck_deltadif = 0
     
-                                if message[1] == 106:
+                                if message[1] == 107:
                                     print('toggle prototype -> Hello World')
     
                                     codeK.close_port()
@@ -502,7 +502,7 @@ def ck_loop(prototype='hello world'):
                             if (message[0] == device_id):
                                 notecounter += 1
 
-                                if message[1] == 106:
+                                if message[1] == 107:
                                     print('toggle prototype -> Motippets')
 
                                     codeK_thread.close_port()
@@ -555,7 +555,7 @@ def ck_loop(prototype='hello world'):
                             else:
                                 ck_deltadif = 0
 
-                            if message[1] == 106:
+                            if message[1] == 107:
                                 print('toggle prototype -> Hello World')
 
                                 codeK_thread.close_port()
