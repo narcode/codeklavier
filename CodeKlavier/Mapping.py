@@ -376,6 +376,8 @@ class Mapping_Motippets:
     def goDown(self):
         """Press command-arrow down and enter.
         """
+        self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)        
+        
         with self.__keyboard.pressed(Key.cmd):
             self.__keyboard.press(Key.down)
             self.__keyboard.release(Key.down)
