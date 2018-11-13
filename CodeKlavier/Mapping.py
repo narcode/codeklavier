@@ -328,11 +328,15 @@ class Mapping_Motippets:
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
 
-    def evaluateSC(self, what):
+    def evaluateSC(self, what, flash=True, display=5):
         """Evaluate the SuperCollider command 'what'
 
         :param string what: the command that should be evaluated
+        :param bool flash: should eval command flash the screen
+        :param int display: the display number that should flash to indicate evaluation
         """
+        if flash:
+            self.formatAndSend('evaluate:', display=display)
         if what == 'play':
             with self.__keyboard.pressed(Key.cmd):
                 self.__keyboard.press(Key.right)

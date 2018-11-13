@@ -12,7 +12,7 @@ import socket
 import getopt
 import sys
 import re
-#import time
+import time
 
 # Gui
 from threading import Thread
@@ -441,6 +441,11 @@ def displayCode(display):
                     try:
                         if tag == 'delete':
                             ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
+                        elif tag == 'evaluate':
+                            # show a quick flash when evaluating a command
+                            ck_display[str(display)].configure(bg='green', bd=5, fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                            time.sleep(0.2)
+                            ck_display[str(display)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                         else:
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
