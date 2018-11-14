@@ -106,7 +106,10 @@ def delta_difference(deltatime):
         ck_deltatime_mem = ck_deltatime_mem[-2:]
         
     if len(ck_deltatime_mem) == 2:
-        return ck_deltatime_mem[1] - ck_deltatime_mem[0]
+        dif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
+        if dif < 0:
+            dif = 0
+        return dif
     else:
         return 0  
     
