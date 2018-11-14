@@ -447,7 +447,7 @@ class Mapping_Motippets:
                         self.goDown()
                         self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'sc-evaluate':
-                        self.evaluateSC('noEnter_eval')
+                        self.evaluateSC('noEnter_eval', flash=display==5)
                         self.formatAndSend('', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.tempo':
                         self.__keyboard.type(mapped_string)
@@ -459,7 +459,7 @@ class Mapping_Motippets:
                         self.__keyboard.type(mapped_string)
                         self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'motippetssc-evaluate':
-                        self.evaluateSC('eval')
+                        self.evaluateSC('eval', flash=display==5)
         except KeyError:
             raise LookupError('Missing hello world information in the config file.')
 
