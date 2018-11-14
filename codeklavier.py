@@ -11,6 +11,7 @@ import os.path
 import sys
 import time
 import importlib
+import re
 
 import CK_configWriter
 from CK_Setup import Setup
@@ -44,6 +45,12 @@ def doHelp():
     print('-o | --option <<number>>')
     print('Boot CodeKlavier prototype <<name>> with specific <<option>> (if the prototype supports extra options)')
     print('')    
+    print('-r | --rec')
+    print('Boot CodeKlavier ready to record MIDI for machine learning')
+    print('')        
+    print('-t | --test')
+    print('Test if Codeklavier is receving MIDI')
+    print('')       
     print('Example:')
     print('./codeklavier.py -c custom_settings.ini -p hybrid')
 
@@ -85,6 +92,57 @@ def miditest(configfile='default_setup.ini'):
     finally:
         print("Bye-Bye :(")
         codeK.end()
+        
+def rec(configfile='default_setup.ini'):
+    """
+    Run a basic miditest to see how the CodeKlavier is receiving your midi.
+
+    :param string configfile: Path to the configuration file (default: default_setup.ini)
+    """
+    #Read config and settings
+    config = configparser.ConfigParser()
+    config.read(configfile, encoding='utf8')
+
+    try:
+        myPort = config['midi'].getint('port')
+        device_id = config['midi'].getint('device_id')
+    except KeyError:
+        raise LookupError('Missing key information in the config file.')
+
+    if (myPort == None or device_id == None):
+        raise LookupError('Missing key information in the config file.')
+
+    codeK = Setup()
+    codeK.open_port(myPort)
+    print('your device id is: ', device_id, '\n')
+    print("CodeKlavier is RECORDING. Press Control-C to exit.")
+    timestamp = time.strftime("%y-%m-%d")
+    
+    recfile = open('ml_data/_', 'w')
+    headers = 'source_id, midi_note, velocity,deltatime'
+    recfile.write(headers+'\n')
+    try:
+        while True:
+            msg = codeK.get_message()
+
+            if msg:
+                message, deltatime = msg
+                midimsg = list(map(str, msg))
+                data_line = ','.join(midimsg) + '\n'
+                clean_line = re.sub(r"\[?\]?", '', data_line)
+                recfile.write(clean_line)
+                print(clean_line)
+            #time.sleep(0.01)
+
+    except KeyboardInterrupt:
+        print('saving recording...')
+    finally:
+        recfile.close()
+        title = input('Dear CK user, please type a comprehensive title for the recording and press ENTER:');
+        usertitle = title+'_'+timestamp+'.csv'
+        os.rename("ml_data/_", "ml_data/"+usertitle)
+        print("recording saved with title: ", usertitle)
+        codeK.end()        
 
 def perform(configfile='default_setup.ini', prototype='hello_world'):
     """
@@ -113,7 +171,9 @@ def perform_interactive(configfile='default_setup.ini'):
     count = 1
     while True:
         codeK.print_welcome(28)
-        print('Type the number of the prototype you want to use,\n \'test\' for a miditest,\n or \'exit\' to quit.')
+        print('Type the number of the prototype you want to use,'\
+              '\n \'rec\' to start machine learning data recording'\
+              '\n \'test\' for a miditest,\n or \'exit\' to quit.')
         print('')
         print('The available prototypes are:')
 
@@ -126,6 +186,8 @@ def perform_interactive(configfile='default_setup.ini'):
             sys.exit(0)
         if (pi.lower() == 'test'):
             miditest(configfile=configfile)
+        if (pi.lower() == 'rec'):
+            rec(configfile=configfile)            
         try:
             perform(configfile=configfile, prototype=pi)
         except ValueError:
@@ -153,7 +215,7 @@ if __name__ == '__main__':
     option = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:tio:',['help', 'configfile=', 'makeconfig=', 'play=', 'test', 'interactive, option'])
+        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:rtio:',['help', 'configfile=', 'makeconfig=', 'play=', 'rec', 'test', 'interactive, option'])
         selected_options = [x[0] for x in options]
     except getopt.GetoptError:
         print('Something went wrong with parsing the optional arguments')
@@ -175,6 +237,8 @@ if __name__ == '__main__':
             option = a 
         if o in ('-t', '--test'):
             test = True
+        if o in ('-r', '--rec'):
+            record = True            
         if o in ('-i', '--interactive'):
             interactive = True
 
@@ -198,6 +262,10 @@ if __name__ == '__main__':
     if test:
         miditest(configfile=config)
         sys.exit(0)
+        
+    if rec:
+        rec(configfile=config)
+        sys.exit(0)        
 
     if play:
         perform(configfile=config, prototype=play)
