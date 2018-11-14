@@ -144,8 +144,8 @@ def rec(configfile='default_setup.ini'):
 
             if msg:
                 message, deltatime = msg
+                ck_deltatime += deltatime
                 if message[0] != 254:
-                    ck_deltatime += deltatime
                     dif = delta_difference(ck_deltatime)                    
                     midimsg = list(map(str, msg))
                     data_line = ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) +'\n'
