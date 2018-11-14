@@ -117,7 +117,7 @@ def rec(configfile='default_setup.ini'):
     print('your device id is: ', device_id, '\n')
     print("CodeKlavier is RECORDING. Press Control-C to exit.")
     timestamp = time.strftime("%y-%m-%d")
-    
+    ck_deltatime = 0
     recfile = open('ml_data/_', 'w')
     headers = 'source_id, midi_note, velocity,deltatime'
     recfile.write(headers+'\n')
@@ -127,11 +127,14 @@ def rec(configfile='default_setup.ini'):
 
             if msg:
                 message, deltatime = msg
-                midimsg = list(map(str, msg))
-                data_line = ','.join(midimsg) + '\n'
-                clean_line = re.sub(r"\[?\]?", '', data_line)
-                recfile.write(clean_line)
-                print(clean_line)
+                ck_deltatime += deltatime
+                if message[0] != 254:
+                    midimsg = list(map(str, message))
+                    #print(midimsg)
+                    data_line = ','.join(midimsg) + str(ck_deltatime)+'\n'
+                    clean_line = re.sub(r"\[?\]?", '', data_line)
+                    recfile.write(clean_line)
+                    print(clean_line)
             #time.sleep(0.01)
 
     except KeyboardInterrupt:
