@@ -135,8 +135,9 @@ def rec(configfile='default_setup.ini'):
     print("CodeKlavier is RECORDING. Press Control-C to exit.")
     timestamp = time.strftime("%y-%m-%d")
     ck_deltatime = 0
+    per_note = 0
     recfile = open('ml_data/_', 'w')
-    headers = 'source_id,midi_note,velocity,deltatime,ck_deltatime,dif_deltatime'
+    headers = 'source_id,midi_note,velocity,ck_deltatime,dif_deltatime'
     recfile.write(headers+'\n')
     try:
         while True:
@@ -145,10 +146,12 @@ def rec(configfile='default_setup.ini'):
             if msg:
                 message, deltatime = msg
                 ck_deltatime += deltatime
+                if message[0] == device_id:                    
+                    per_note += deltatime
                 if message[0] != 254:
-                    dif = delta_difference(ck_deltatime)                    
-                    midimsg = list(map(str, msg))
-                    data_line = ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) +'\n'
+                    dif = delta_difference(per_note)                    
+                    midimsg = list(map(str, message))
+                    data_line = ','.join(message) + ',' + str(ck_deltatime) + ',' + str(dif) +'\n'
                     clean_line = re.sub(r"\[?\]?", '', data_line)
                     recfile.write(clean_line)
                     print(clean_line)
