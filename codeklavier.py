@@ -147,9 +147,9 @@ def rec(configfile='default_setup.ini'):
                 message, deltatime = msg
                 ck_deltatime += deltatime
                 per_note += deltatime                
-                if message[0] == 128: #note-off hardcoded                    
-                    per_note = 0
                 if message[0] != 254:
+                    if message[0] == device_id: #note-off hardcoded                    
+                        per_note = 0                    
                     dif = delta_difference(per_note)                    
                     midimsg = list(map(str, message))
                     data_line = ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) +'\n'
