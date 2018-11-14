@@ -146,9 +146,8 @@ def rec(configfile='default_setup.ini'):
             if msg:
                 message, deltatime = msg
                 ck_deltatime += deltatime
-                if message[0] == device_id:                    
-                    per_note += deltatime
-                else:
+                per_note += deltatime                
+                if message[0] == 128: #note-off hardcoded                    
                     per_note = 0
                 if message[0] != 254:
                     dif = delta_difference(per_note)                    
