@@ -16,6 +16,8 @@ import re
 import CK_configWriter
 from CK_Setup import Setup
 
+ck_deltatime_mem = []
+
 PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator', 'text', 'presenter')
 
 def doHelp():
@@ -92,7 +94,22 @@ def miditest(configfile='default_setup.ini'):
     finally:
         print("Bye-Bye :(")
         codeK.end()
+
+def delta_difference(deltatime):   
+    # activesense compensation
+    global ck_deltatime_mem
+    
+    ck_deltatime_mem.append(deltatime)
+    #print('deltatimes stack: ', ck_deltatetime_mem)
+    
+    if len(ck_deltatime_mem) > 2:
+        ck_deltatime_mem = ck_deltatime_mem[-2:]
         
+    if len(ck_deltatime_mem) == 2:
+        return ck_deltatime_mem[1] - ck_deltatime_mem[0]
+    else:
+        return 0  
+    
 def rec(configfile='default_setup.ini'):
     """
     Run a basic miditest to see how the CodeKlavier is receiving your midi.
@@ -119,7 +136,7 @@ def rec(configfile='default_setup.ini'):
     timestamp = time.strftime("%y-%m-%d")
     ck_deltatime = 0
     recfile = open('ml_data/_', 'w')
-    headers = 'source_id, midi_note, velocity,deltatime'
+    headers = 'source_id,midi_note,velocity,deltatime,ck_deltatime,dif_deltatime'
     recfile.write(headers+'\n')
     try:
         while True:
@@ -128,10 +145,10 @@ def rec(configfile='default_setup.ini'):
             if msg:
                 message, deltatime = msg
                 ck_deltatime += deltatime
+                dif = delta_difference(ck_deltatime)
                 if message[0] != 254:
-                    midimsg = list(map(str, message))
-                    #print(midimsg)
-                    data_line = ','.join(midimsg) + str(ck_deltatime)+'\n'
+                    midimsg = list(map(str, msg))
+                    data_line = ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) +'\n'
                     clean_line = re.sub(r"\[?\]?", '', data_line)
                     recfile.write(clean_line)
                     print(clean_line)
