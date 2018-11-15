@@ -388,11 +388,11 @@ def displayCode(display):
                             ck_display[display].delete('1.0', tkinter.END)
                         else:
                             # show a quick flash when evaluating a command
-                            ck_display[str(display)].configure(bg='black', bd=20, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.RAISED)
+                            ck_display[str(display)].configure(relief=tkinter.RAISED)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
                             time.sleep(0.5)
-                            ck_display[str(display)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                            ck_display[str(display)].configure(relief=tkinter.SUNKEN)
                     except RuntimeError as err:
                         break
             elif display == '2':
@@ -404,11 +404,11 @@ def displayCode(display):
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
                         # show a quick flash when evaluating a command
-                        ck_display[str(display)].configure(bg='black', bd=20, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.RAISED)
+                        ck_display[str(display)].configure(relief=tkinter.RAISED)
                         ck_display[display].insert(tkinter.END, ckcode, tag)
                         ck_display[display].see(tkinter.END)
                         time.sleep(0.5)
-                        ck_display[str(display)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                        ck_display[str(display)].configure(relief=tkinter.SUNKEN)
                     except RuntimeError as err:
                         break
             elif display == '3':
@@ -423,6 +423,11 @@ def displayCode(display):
                             ck_display[display].delete(1.0, tkinter.END)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
+                            if dump.startswidth('~'):
+                                # show a quick flash when evaluating a command
+                                ck_display[str(display)].configure(relief=tkinter.RAISED)
+                                time.sleep(0.5)
+                                ck_display[str(display)].configure(relief=tkinter.SUNKEN)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
@@ -451,9 +456,9 @@ def displayCode(display):
                             ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
                         elif tag == 'evaluate':
                             # show a quick flash when evaluating a command
-                            ck_display[str(display)].configure(bg='black', bd=20, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.RAISED)
+                            ck_display[str(display)].configure(relief=tkinter.RAISED)
                             time.sleep(0.5)
-                            ck_display[str(display)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                            ck_display[str(display)].configure(relief=tkinter.SUNKEN)
                         else:
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
