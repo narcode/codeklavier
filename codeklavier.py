@@ -165,7 +165,8 @@ def rec(configfile='default_setup.ini'):
                         note_counter += 1
                     dif = delta_difference(per_note)                    
                     midimsg = list(map(str, message))
-                    data_line += ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif)
+                    data_line += ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) + ','
+                    print(data_line)
                     
                     if note_counter == 10:
                         data_line += '\n'
