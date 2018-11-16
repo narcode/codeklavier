@@ -139,9 +139,15 @@ def rec(configfile='default_setup.ini'):
     timestamp = time.strftime("%y-%m-%d")
     ck_deltatime = 0
     per_note = 0
+    note_counter = 0
     recfile = open('ml_data/_', 'w')
-    headers = 'source_id,midi_note,velocity,ck_deltatime,dif_deltatime'
+    headers = ''
+    for i in range(0,10):
+        index = str(i)
+        headers += 'source_id'+index+',midi_note'+index+',velocity'+index+',ck_deltatime'+index+',dif_deltatime'+index+''
+
     recfile.write(headers+'\n')
+    data_line = ''
     try:
         while True:
             msg = codeK.get_message()
@@ -152,13 +158,21 @@ def rec(configfile='default_setup.ini'):
                 per_note += deltatime                
                 if message[0] != 254:
                     if message[0] == device_id: #note-off hardcoded                    
-                        per_note = 0                    
+                        per_note = 0
+                        if note_counter > 10:
+                            note_counter = 0
+                            data_line = ''
+                        note_counter += 1
                     dif = delta_difference(per_note)                    
                     midimsg = list(map(str, message))
-                    data_line = ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) +'\n'
-                    clean_line = re.sub(r"\[?\]?", '', data_line)
-                    recfile.write(clean_line)
-                    print(clean_line)
+                    data_line += ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif)
+                    
+                    if note_counter == 10:
+                        data_line += '\n'
+                        clean_line = re.sub(r"\[?\]?", '', data_line)                    
+                        print(clean_line)
+                        recfile.write(clean_line)
+                    
             #time.sleep(0.01)
 
     except KeyboardInterrupt:
