@@ -144,7 +144,7 @@ def rec(configfile='default_setup.ini'):
     headers = ''
     for i in range(0,10):
         index = str(i)
-        headers += 'source_id'+index+',midi_note'+index+',velocity'+index+',ck_deltatime'+index+',dif_deltatime'+index+''
+        headers += 'source_id'+index+',midi_note'+index+',velocity'+index+',ck_deltatime'+index+',dif_deltatime'+index+','
 
     recfile.write(headers+'\n')
     data_line = ''
