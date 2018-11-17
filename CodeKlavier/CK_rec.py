@@ -102,7 +102,7 @@ class CK_Rec(object):
                             print(clean_line)
                             recfile.write(clean_line)
                         
-                #time.sleep(0.01)
+                time.sleep(0.01)
     
         except KeyboardInterrupt:
             print('saving recording...')
