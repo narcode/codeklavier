@@ -11,10 +11,10 @@ import os.path
 import sys
 import time
 import importlib
-import re
 
 import CK_configWriter
 from CK_Setup import Setup
+from CK_rec import CK_Rec
 
 ck_deltatime_mem = []
 
@@ -94,96 +94,6 @@ def miditest(configfile='default_setup.ini'):
     finally:
         print("Bye-Bye :(")
         codeK.end()
-
-def delta_difference(deltatime):   
-    # activesense compensation
-    global ck_deltatime_mem
-    
-    ck_deltatime_mem.append(deltatime)
-    #print('deltatimes stack: ', ck_deltatetime_mem)
-    
-    if len(ck_deltatime_mem) > 2:
-        ck_deltatime_mem = ck_deltatime_mem[-2:]
-        
-    if len(ck_deltatime_mem) == 2:
-        dif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-        if dif < 0:
-            dif = 0
-        return dif
-    else:
-        return 0  
-    
-def rec(configfile='default_setup.ini'):
-    """
-    Run a basic miditest to see how the CodeKlavier is receiving your midi.
-
-    :param string configfile: Path to the configuration file (default: default_setup.ini)
-    """
-    #Read config and settings
-    config = configparser.ConfigParser()
-    config.read(configfile, encoding='utf8')
-
-    try:
-        myPort = config['midi'].getint('port')
-        device_id = config['midi'].getint('device_id')
-    except KeyError:
-        raise LookupError('Missing key information in the config file.')
-
-    if (myPort == None or device_id == None):
-        raise LookupError('Missing key information in the config file.')
-
-    codeK = Setup()
-    codeK.open_port(myPort)
-    print('your device id is: ', device_id, '\n')
-    print("CodeKlavier is RECORDING. Press Control-C to exit.")
-    timestamp = time.strftime("%y-%m-%d")
-    ck_deltatime = 0
-    per_note = 0
-    note_counter = 0
-    recfile = open('ml_data/_', 'w')
-    headers = ''
-    for i in range(0,10):
-        index = str(i)
-        headers += 'source_id'+index+',midi_note'+index+',velocity'+index+',ck_deltatime'+index+',dif_deltatime'+index+','
-
-    recfile.write(headers+'\n')
-    data_line = ''
-    try:
-        while True:
-            msg = codeK.get_message()
-
-            if msg:
-                message, deltatime = msg
-                ck_deltatime += deltatime
-                per_note += deltatime                
-                if message[0] != 254:
-                    if message[0] == device_id: #note-off hardcoded                    
-                        per_note = 0
-                        if note_counter > 10:
-                            note_counter = 0
-                            data_line = ''
-                    note_counter += 1
-                    dif = delta_difference(per_note)                    
-                    midimsg = list(map(str, message))
-                    data_line += ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) + ','
-                    
-                    if note_counter == 10:
-                        data_line += '\n'
-                        clean_line = re.sub(r"\[?\]?", '', data_line)                
-                        print(clean_line)
-                        recfile.write(clean_line)
-                    
-            #time.sleep(0.01)
-
-    except KeyboardInterrupt:
-        print('saving recording...')
-    finally:
-        recfile.close()
-        title = input('Dear CK user, please type a comprehensive title for the recording and press ENTER:');
-        usertitle = title+'_'+timestamp+'.csv'
-        os.rename("ml_data/_", "ml_data/"+usertitle)
-        print("recording saved with title: ", usertitle)
-        codeK.end()        
 
 def perform(configfile='default_setup.ini', prototype='hello_world'):
     """
@@ -304,8 +214,9 @@ if __name__ == '__main__':
         miditest(configfile=config)
         sys.exit(0)
         
-    if rec:
-        rec(configfile=config)
+    if record:
+        rec = CK_Rec(configfile='default_setup.ini')
+        rec.record(framsize=10)
         sys.exit(0)        
 
     if play:
@@ -317,7 +228,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     #no arguments -> print help
-    print('What do you want CodeKlavier to do? Give me something!')
+    print('What do you want CodeKlavier to do? ...')
     print('These prototypes are available:')
     for p in PROTOTYPES:
         print(' - ', p)
