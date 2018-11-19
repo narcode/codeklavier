@@ -19,7 +19,7 @@ config.read('default_setup.ini', encoding='utf8')
 
 try:
     myPort = config['midi'].getint('port')
-    device_id = config['midi'].getint('device_id')
+    device_id = config['midi'].getint('noteon_id')
     noteoff_id = config['midi'].getint('noteoff_id')
 except KeyError:
     raise LookupError('Missing key information in the config file.')

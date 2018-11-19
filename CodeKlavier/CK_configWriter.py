@@ -22,7 +22,7 @@ def createConfig(configfile='my_settings.ini'):
     config = configparser.ConfigParser()
     config.add_section('midi')
     config['midi']['port'] = str(myPort)
-    config['midi']['device_id'] = str(device_id)
+    config['midi']['noteon_id'] = str(device_id)
 
     with open(configfile, 'w') as f:
         config.write(f)

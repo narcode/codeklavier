@@ -27,7 +27,7 @@ def main(configfile='default_setup.ini'):
     # TODO: optimize...
     try:
         myPort = config['midi'].getint('port')
-        device_id = config['midi'].getint('device_id')
+        device_id = config['midi'].getint('noteon_id')
         noteoff_id = config['midi'].getint('noteoff_id')
         pedal_id = config['midi'].getint('pedal_id')
         pedal_sostenuto = config['midi'].getint('pedal_midi_sostenuto')

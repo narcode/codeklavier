@@ -14,6 +14,9 @@ import importlib
 
 import CK_configWriter
 from CK_Setup import Setup
+from CK_rec import CK_Rec
+
+ck_deltatime_mem = []
 
 PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator', 'text', 'presenter')
 
@@ -44,6 +47,12 @@ def doHelp():
     print('-o | --option <<number>>')
     print('Boot CodeKlavier prototype <<name>> with specific <<option>> (if the prototype supports extra options)')
     print('')    
+    print('-r | --rec')
+    print('Boot CodeKlavier ready to record MIDI for machine learning')
+    print('')        
+    print('-t | --test')
+    print('Test if Codeklavier is receving MIDI')
+    print('')       
     print('Example:')
     print('./codeklavier.py -c custom_settings.ini -p hybrid')
 
@@ -113,7 +122,9 @@ def perform_interactive(configfile='default_setup.ini'):
     count = 1
     while True:
         codeK.print_welcome(28)
-        print('Type the number of the prototype you want to use,\n \'test\' for a miditest,\n or \'exit\' to quit.')
+        print('Type the number of the prototype you want to use,'\
+              '\n \'rec\' to start machine learning data recording'\
+              '\n \'test\' for a miditest,\n or \'exit\' to quit.')
         print('')
         print('The available prototypes are:')
 
@@ -126,6 +137,8 @@ def perform_interactive(configfile='default_setup.ini'):
             sys.exit(0)
         if (pi.lower() == 'test'):
             miditest(configfile=configfile)
+        if (pi.lower() == 'rec'):
+            rec(configfile=configfile)            
         try:
             perform(configfile=configfile, prototype=pi)
         except ValueError:
@@ -153,7 +166,7 @@ if __name__ == '__main__':
     option = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:tio:',['help', 'configfile=', 'makeconfig=', 'play=', 'test', 'interactive, option'])
+        options, args = getopt.getopt(sys.argv[1:],'hc:m:p:rtio:',['help', 'configfile=', 'makeconfig=', 'play=', 'rec', 'test', 'interactive, option'])
         selected_options = [x[0] for x in options]
     except getopt.GetoptError:
         print('Something went wrong with parsing the optional arguments')
@@ -175,6 +188,8 @@ if __name__ == '__main__':
             option = a 
         if o in ('-t', '--test'):
             test = True
+        if o in ('-r', '--rec'):
+            record = True            
         if o in ('-i', '--interactive'):
             interactive = True
 
@@ -198,6 +213,11 @@ if __name__ == '__main__':
     if test:
         miditest(configfile=config)
         sys.exit(0)
+        
+    if record:
+        rec = CK_Rec(configfile='default_setup.ini')
+        rec.record(framsize=10)
+        sys.exit(0)        
 
     if play:
         perform(configfile=config, prototype=play)
@@ -208,7 +228,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     #no arguments -> print help
-    print('What do you want CodeKlavier to do? Give me something!')
+    print('What do you want CodeKlavier to do? ...')
     print('These prototypes are available:')
     for p in PROTOTYPES:
         print(' - ', p)
