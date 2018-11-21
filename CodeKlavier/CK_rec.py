@@ -70,7 +70,7 @@ class CK_Rec(object):
         print('your note on id is: ', note_on, '\n')
         print("CodeKlavier is RECORDING. Press Control-C to save and exit.")
         for i in range(0,framsize):
-            if framsize = 1:
+            if framsize == 1:
                 index = ''
             else:
                 index = str(i)
