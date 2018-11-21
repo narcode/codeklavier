@@ -216,7 +216,7 @@ if __name__ == '__main__':
         
     if record:
         rec = CK_Rec(configfile='default_setup.ini')
-        rec.record(framsize=10)
+        rec.record(framsize=1)
         sys.exit(0)        
 
     if play:
