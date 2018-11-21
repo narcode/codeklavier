@@ -70,7 +70,10 @@ class CK_Rec(object):
         print('your note on id is: ', note_on, '\n')
         print("CodeKlavier is RECORDING. Press Control-C to save and exit.")
         for i in range(0,framsize):
-            index = str(i)
+            if framsize = 1:
+                index = ''
+            else:
+                index = str(i)
             headers += 'source_id'+index+',midi_note'+index+',velocity'+index+',ck_deltatime'+index+',dif_deltatime'+index+','
     
         recfile.write(headers+'\n')
