@@ -159,6 +159,7 @@ if __name__ == '__main__':
 
     showHelp = False
     test = False
+    record = False
     interactive = False
     useConfig = None
     createConfig = None
