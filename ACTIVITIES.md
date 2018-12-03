@@ -2,12 +2,12 @@
 ### This page gives a run down of public CodeKlavier presentations and milestones to date: 
 (newest on top)
 
-January 2018: Performance of new hybrid version for Disklavier at [Conlon X Gaudeamus] (https://gaudeamus.nl/events/gaudeamus-x-conlon-disklavier-projection-works/)
+January 2018: Performance of new hybrid version for Disklavier at [Conlon X Gaudeamus](https://gaudeamus.nl/events/gaudeamus-x-conlon-disklavier-projection-works/)
               Performance of the CKalculator at the International Conference on Live Coding
 
 November 2018: Performance at Splendor
 
-October 2018: Performance at [ARTikulationen in Graz] (http://doctorartium.kug.ac.at/pdf/ARTikulationen2018Programm3.pdf). This will be the first time we use our custom built KeyScanner.
+October 2018: Performance at [ARTikulationen in Graz](http://doctorartium.kug.ac.at/pdf/ARTikulationen2018Programm3.pdf). This will be the first time we use our custom built KeyScanner.
 
 September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl/) in Voorburg, Netherlands.
 
