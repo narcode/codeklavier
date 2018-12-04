@@ -37,7 +37,7 @@ class CK_Rec(object):
         else:
             return 0  
     
-    def record(self, framsize=10):
+    def record(self, framesize=10):
         """
         Run a basic miditest to see how the CodeKlavier is receiving your midi.
     
@@ -69,8 +69,8 @@ class CK_Rec(object):
         codeK.open_port(myPort)
         print('your note on id is: ', note_on, '\n')
         print("CodeKlavier is RECORDING. Press Control-C to save and exit.")
-        for i in range(0,framsize):
-            if framsize == 1:
+        for i in range(0,framesize):
+            if framesize == 1:
                 index = ''
             else:
                 index = str(i)
@@ -88,18 +88,18 @@ class CK_Rec(object):
                     ck_deltatime += deltatime
                     per_note += deltatime                
                     if message[0] != 254:
-                        if message[0] == note_on: #note-off hardcoded                    
+                        if message[0] == note_on:
                             per_note = 0
-                            if note_counter > framsize:
-                                note_counter = 0
-                                data_line = ''
-                                ck_deltatime = 0 # reset deltatime for the start of every frame
+                        if note_counter > framesize:
+                            note_counter = 0
+                            data_line = ''
+                            ck_deltatime = 0 # reset deltatime for the start of every frame
                         note_counter += 1
                         dif = self.delta_difference(per_note)                    
                         midimsg = list(map(str, message))
                         data_line += ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) + ','
                         
-                        if note_counter == framsize:
+                        if note_counter == framesize:
                             data_line += '\n'
                             clean_line = re.sub(r"\[?\]?", '', data_line)                
                             print(clean_line)

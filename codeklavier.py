@@ -68,7 +68,7 @@ def miditest(configfile='default_setup.ini'):
 
     try:
         myPort = config['midi'].getint('port')
-        device_id = config['midi'].getint('device_id')
+        device_id = config['midi'].getint('noteon_id')
     except KeyError:
         raise LookupError('Missing key information in the config file.')
 
@@ -217,7 +217,7 @@ if __name__ == '__main__':
         
     if record:
         rec = CK_Rec(configfile='default_setup.ini')
-        rec.record(framsize=1)
+        rec.record(framesize=1)
         sys.exit(0)        
 
     if play:
