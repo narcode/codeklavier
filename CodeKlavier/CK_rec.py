@@ -104,6 +104,7 @@ class CK_Rec(object):
                             #midimsg = list(map(str, message)) #full msg not needed
                             midinote = message[1]
                             label = note_counter/ostinato_length
+                            #label = 0
                             note_duration = ck_deltatime - deltatime_mem.pop(midinote)
                             data_line += str(midinote) + ',' + str(velocity) + ',' + str(note_duration) + ',' + str(label)
                             data_line += '\n'
