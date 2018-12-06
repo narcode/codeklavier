@@ -95,13 +95,15 @@ class CK_Rec(object):
                             deltatime_mem[message[1]] = ck_deltatime
                             velocity = message[2]
                         if message[0] == note_off:
+
                             if note_counter > 9:
                                 note_counter = 1
+                                
                             per_note = 0
                             dif = self.delta_difference(per_note)                    
                             #midimsg = list(map(str, message)) #full msg not needed
                             midinote = message[1]
-                            label = count/ostinato_length
+                            label = note_counter/ostinato_length
                             note_duration = ck_deltatime - deltatime_mem.pop(midinote)
                             data_line += str(midinote) + ',' + str(velocity) + ',' + str(note_duration) + ',' + str(label)
                             data_line += '\n'
