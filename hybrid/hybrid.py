@@ -19,12 +19,14 @@ config.read('default_setup.ini',encoding='utf8')
 
 try:
     myPort = config['midi'].getint('port')
-    device_id = config['midi'].getint('noteon_id')
+    noteon_id = config['midi'].getint('noteon_id')
     noteoff_id = config['midi'].getint('noteoff_id')
+    toggle_note = config['Hello World'].getint('toggle')
+    
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
-if (myPort == None or device_id == None):
+if (myPort == None or noteon_id == None):
     raise LookupError('Missing key information in the config file.')
 
 # activesense compensation
@@ -39,6 +41,7 @@ range_trigger = 0
 param_interval = 0
 threads_are_perpetual = True
 motippets_is_listening = True
+hello_world_on = False
 keep_main_alive = True
 
 def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, debug=True, perpetual=True):
@@ -274,7 +277,7 @@ def main():
            param_interval, threads_are_perpetual, range_trigger, \
            notecounter, hello_world_on, noteCounter, ck_deltatime, \
            ck_deltatime_mem, codeK, mainMem, memLow, memMid, memHi, \
-           tremoloHi, tremoloLow, tremoloMid
+           tremoloHi, tremoloLow, tremoloMid, motippets_is_listening
     
     codeK = Setup()
     codeK.print_welcome(27)
@@ -290,28 +293,31 @@ def main():
     mapping = Mapping_Motippets(False)
     
     # main memory (i.e. listen to the whole register)
-    mainMem = Motippets(mapping, device_id)
+    mainMem = Motippets(mapping, noteon_id)
     
     # midi listening per register
-    memLow = Motippets(mapping, device_id)
-    memMid = Motippets(mapping, device_id)
-    memHi = Motippets(mapping, device_id)
+    memLow = Motippets(mapping, noteon_id)
+    memMid = Motippets(mapping, noteon_id)
+    memHi = Motippets(mapping, noteon_id)
     
     #midi listening for tremolos
-    tremoloHi = Motippets(mapping, device_id)
-    tremoloMid = Motippets(mapping, device_id)
-    tremoloLow = Motippets(mapping, device_id)
+    tremoloHi = Motippets(mapping, noteon_id)
+    tremoloMid = Motippets(mapping, noteon_id)
+    tremoloLow = Motippets(mapping, noteon_id)
     
     #midi listening for conditionals
-    conditionals = {1: Motippets(mapping, device_id),
-                    2: Motippets(mapping, device_id),
-                    3: Motippets(mapping, device_id)}
+    conditionals = {1: Motippets(mapping, noteon_id),
+                    2: Motippets(mapping, noteon_id),
+                    3: Motippets(mapping, noteon_id)}
     
-    conditionalsRange = Motippets(mapping, device_id)
-    parameters = Motippets(mapping, device_id)
+    conditionalsRange = Motippets(mapping, noteon_id)
+    parameters = Motippets(mapping, noteon_id)
     
     try:
         while keep_main_alive:
+            while hello_world_on:
+                time.sleep(0.01)
+                
             while motippets_is_listening:
                 msg = codeK.get_message()
     
@@ -325,8 +331,8 @@ def main():
                         #if (message[0] == noteoff_id or message[2] == 0):
                             #ck_deltatime = 0
     
-                        if message[0] == device_id:
-                            if message[2] > 0 and message[0] == device_id:
+                        if message[0] == noteon_id:
+                            if message[2] > 0 and message[0] == noteon_id:
                                 notecounter += 1
     
                                 ck_deltatime_mem.append(ck_deltatime)
@@ -342,7 +348,7 @@ def main():
                                 else:
                                     ck_deltadif = 0
     
-                                if message[1] == 107:
+                                if message[1] == toggle_note:
                                     print('toggle prototype -> Hello World')
     
                                     codeK.close_port()
@@ -350,6 +356,7 @@ def main():
                                     #mapping = Mapping_HelloWorld()
     
                                     hello_world_on = True
+                                    motippets_is_listening = False
                                     #notecounter = 0
     
                                     threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
@@ -499,10 +506,10 @@ def ck_loop(prototype='hello world'):
 
                     if message[0] != 254 and message[0] != 208:
                         if message[2] > 0: #only noteOn
-                            if (message[0] == device_id):
+                            if (message[0] == noteon_id):
                                 notecounter += 1
 
-                                if message[1] == 107:
+                                if message[1] == toggle_note:
                                     print('toggle prototype -> Motippets')
 
                                     codeK_thread.close_port()
@@ -539,8 +546,8 @@ def ck_loop(prototype='hello world'):
                     message, deltatime = msg
                     ck_deltatime += deltatime
 
-                    if message[0] == device_id:
-                        if message[2] > 0 and message[0] == device_id:
+                    if message[0] == noteon_id:
+                        if message[2] > 0 and message[0] == noteon_id:
                             notecounter += 1
 
                             ck_deltatime_mem.append(ck_deltatime)
@@ -555,7 +562,7 @@ def ck_loop(prototype='hello world'):
                             else:
                                 ck_deltadif = 0
 
-                            if message[1] == 107:
+                            if message[1] == toggle_note:
                                 print('toggle prototype -> Hello World')
 
                                 codeK_thread.close_port()
