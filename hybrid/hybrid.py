@@ -383,6 +383,9 @@ def main():
                                 minimotif2_hi_mapped = memHi._unmapCounter2
     
                                 ##tremolos:
+                                if minimotif1_mid_mapped > 0:
+                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
+                                    
                                 if motif1_played > 0 or motif2_played > 0:
                                     if minimotif1_low_mapped > 0:
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 1)
@@ -390,9 +393,6 @@ def main():
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 2)
                                     elif minimotif3_low_mapped > 0:
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
-    
-                                    if minimotif1_mid_mapped > 0:
-                                        tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
                                     elif minimotif2_mid_mapped > 0:
                                         tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)
                                     elif minimotif3_mid_mapped > 0:
@@ -597,6 +597,9 @@ def ck_loop(prototype='hello world'):
                             minimotif2_hi_mapped = memHi._unmapCounter2
 
                             ##tremolos:
+                            if minimotif1_mid_mapped > 0:
+                                tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
+                                
                             if motif1_played > 0 or motif2_played > 0:
                                 if minimotif1_low_mapped > 0:
                                     tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 1)
@@ -605,8 +608,6 @@ def ck_loop(prototype='hello world'):
                                 elif minimotif3_low_mapped > 0:
                                     tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
 
-                                if minimotif1_mid_mapped > 0:
-                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
                                 elif minimotif2_mid_mapped > 0:
                                     tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)
                                 elif minimotif3_mid_mapped > 0:
