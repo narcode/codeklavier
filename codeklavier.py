@@ -135,6 +135,7 @@ def perform_interactive(configfile='default_setup.ini'):
         pi = input('Type your choice? ')
         if (pi.lower() == 'exit'):
             sys.exit(0)
+            
         if (pi.lower() == 'test'):
             miditest(configfile=configfile)
         if (pi.lower() == 'rec'):

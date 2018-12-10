@@ -410,7 +410,7 @@ class Motippets(object):
 
                         return self._conditionalStatus
 
-                    if (note > self._pianosections[0] and note <= self._pianosections[1]):
+                if (note > self._pianosections[0] and note <= self._pianosections[1]):
 
                         self.memorize(note, 20, False, 'Conditional Memory Mid: ')
 
