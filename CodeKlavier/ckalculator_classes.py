@@ -61,7 +61,7 @@ class Ckalculator(object):
 
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
-        :param float ck_deltatime_per_note: the deltatime between incoming note-on MIDI messages
+        :param float ck_deltatime_per_note: the note durations
         :param int target: target the parsing for a specific snippet. 0 is no target
         :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
         """   
@@ -96,10 +96,10 @@ class Ckalculator(object):
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
             self._deltatime = ck_deltatime_per_note 
-            #print('Articulation delta: ', ck_deltatime_per_note)
+            print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
             
             if note not in self._notesList:
-                print('...', '\nwrong note', '...', 'shifting', '\n...')
+                #print('...', '\nwrong note', '...', 'shifting', '\n...')
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')

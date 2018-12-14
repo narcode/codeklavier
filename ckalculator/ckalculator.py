@@ -14,12 +14,13 @@ sys.setrecursionlimit(3000)
 
 ckalculator_listens = True
 ck_deltatime_mem = []
+ck_note_dur = {}
 
 def main(configfile='default_setup.ini'):
     """
     start the CKalculator
     """
-    global ckalculator_listens
+    global ckalculator_listens, ck_deltatime_mem
        
     config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
     config.read(configfile, encoding='utf8')
@@ -27,7 +28,7 @@ def main(configfile='default_setup.ini'):
     # TODO: optimize...
     try:
         myPort = config['midi'].getint('port')
-        device_id = config['midi'].getint('noteon_id')
+        noteon_id = config['midi'].getint('noteon_id')
         noteoff_id = config['midi'].getint('noteoff_id')
         pedal_id = config['midi'].getint('pedal_id')
         pedal_sostenuto = config['midi'].getint('pedal_midi_sostenuto')
@@ -37,7 +38,7 @@ def main(configfile='default_setup.ini'):
     except KeyError:
         raise LookupError('Missing midi and articulation information in the config file.')
     
-    if (myPort == None or device_id == None):
+    if (myPort == None or noteon_id == None):
         raise LookupError('Missing port and device id information in the config file.')
     
     codeK = Setup()
@@ -50,7 +51,7 @@ def main(configfile='default_setup.ini'):
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(device_id, noteoff_id, pedal_id)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id)
     per_note = 0
     ck_deltatime = 0
     articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
@@ -68,14 +69,18 @@ def main(configfile='default_setup.ini'):
                 if message[0] != 254:
 
                     #note offs:
-                    if (message[0] == noteoff_id or message[2] == 0):                
-                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note, ck_deltatime=ck_deltatime, articulaton=articulation)
+                    if (message[0] == noteoff_id or message[2] == 0):        
+                        midinote = message[1]
+                        note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
+                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration, ck_deltatime=ck_deltatime, articulaton=articulation)
                     
                     if message[0] == pedal_id and message[1] == pedal_sostenuto:
+                        per_note = 0
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulaton=articulation)
 
-                    if message[0] == device_id:
-                        per_note = 0
+                    if message[0] == noteon_id:
+                        #per_note = 0
+                        ck_note_dur[message[1]] = ck_deltatime
                         if message[2] > 0: 
                             dif = delta_difference(ck_deltatime)
                             cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,ck_deltatime=dif, articulaton=articulation)
@@ -97,10 +102,14 @@ def delta_difference(deltatime):
     if len(ck_deltatime_mem) > 2:
         ck_deltatime_mem = ck_deltatime_mem[-2:]
         
-    if len(ck_deltatime_mem) == 2:
-        return ck_deltatime_mem[1] - ck_deltatime_mem[0]
-    else:
-        return 0     
+        if len(ck_deltatime_mem) == 2:
+            dif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
+            if dif < 0:
+                dif = 0
+            return dif
+        else:
+            return 0     
+        
         
 if (__name__ == '__main__'):
     try:
