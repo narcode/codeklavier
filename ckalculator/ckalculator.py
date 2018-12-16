@@ -52,6 +52,7 @@ def main(configfile='default_setup.ini'):
     print("\nPress Control-C to exit.\n")       
     
     cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id)
+    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id)
     per_note = 0
     ck_deltatime = 0
     articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
@@ -71,9 +72,10 @@ def main(configfile='default_setup.ini'):
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):        
                         midinote = message[1]
-                        print(ck_note_dur)
+                        #print(ck_note_dur)
                         note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration, ck_deltatime=ck_deltatime, articulaton=articulation)
+                        cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=note_duration, ck_deltatime=ck_deltatime, articulaton=articulation)                        
                     
                     if message[0] == pedal_id and message[1] == pedal_sostenuto:
                         per_note = 0
@@ -109,7 +111,7 @@ def delta_difference(deltatime):
                 dif = 0
             return dif
         else:
-            return 0     
+            return 0
         
         
 if (__name__ == '__main__'):

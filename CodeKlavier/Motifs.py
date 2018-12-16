@@ -92,3 +92,5 @@ motifs_lambda['division'] = list(map(int, division_midi))
 motifs_lambda['equal'] = list(map(int, equal_than_midi))
 motifs_lambda['greater'] = list(map(int, greater_than_midi))
 motifs_lambda['less'] = list(map(int, less_than_midi))
+
+

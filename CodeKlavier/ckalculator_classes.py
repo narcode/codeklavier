@@ -5,6 +5,7 @@ import array
 from inspect import signature
 import random
 import configparser
+import numpy
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -43,6 +44,9 @@ class Ckalculator(object):
         self._nonMappedNoteCounter = 0
         self._notesList = []
         self._pianoRange = []
+        self._fullMemory = []
+        self.ostinato = []
+        self._foundOstinato = False
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -96,15 +100,22 @@ class Ckalculator(object):
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
             self._deltatime = ck_deltatime_per_note 
-            print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
+            #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
             
-            if note not in self._notesList:
-                #print('...', '\nwrong note', '...', 'shifting', '\n...')
+            if self.wrong_note(note, True):
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')
+
             else:
-            ### lambda calculus ###
+                
+                if section == 'ostinatos':
+                    if not self._foundOstinato:
+                        self._fullMemory.append(note)
+                        self.find_ostinato(self._fullMemory, debug=True)
+                    
+                ### lambda calculus ###
+                    
                 if note in LambdaMapping.get('successor'):
                     
                     if self._deltatime <= articulaton['staccato']:
@@ -555,7 +566,64 @@ class Ckalculator(object):
             self._conditionalsBuffer.append(midinote)
             if len(self._conditionalsBuffer) > length:
                 self._conditionalsBuffer = self._conditionalsBuffer[-length:]   
+
+
+    def wrong_note(self, note, debug=False, configfile='default_setup.ini'):
+        """
+        calculate the wrong notes based on the semi-tone tolerance 
+        :param int note: the midinote coming in
+        """
+        config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        config.read(configfile, encoding='utf8')
         
+        tolerance = config['ckalculator'].getint('wrong_note_tolerance')      
+        
+        wrong_notes = list(map(lambda x: [x-tolerance, x+tolerance], self._notesList))
+        wrong_notes = list(numpy.array(wrong_notes).flat)
+        
+        if note in wrong_notes:
+            if debug:
+                print('wrong note! -> played', note)
+            return True
+        else:
+            return False
+        
+    def find_ostinato(self, array, size=4, repetitions=3, debug=False):
+        """
+        declare and make custom functions
+        """
+        length = size*repetitions*2
+        print(self._fullMemory)
+        if len(self._fullMemory) > length:
+                        
+            print('length is', length)
+            notes, index, counts = numpy.unique(self._fullMemory, True, False, True)
+            i = numpy.where(counts > 2)
+            print('i -> ', i)
+           
+            for item in i[0]:
+                self.ostinato.append(self._fullMemory[item])
+                
+                if len(self.ostinato) > 1:
+                    np_notes = numpy.array(self.ostinato)
+                    
+                if len(self.ostinato) > 3:
+                    # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
+                    self.ostinato = self.ostinato[-4:]
+                    
+                    if np_notes.max() - np_notes.min() < 12: #within an 8ve range
+                        self._foundOstinato = True
+                        if debug:
+                            print('found ostinato!')
+                    else:
+                        self._foundOstinato = False
+                        
+            if debug:
+                print(self.ostinato)
+        else:
+            self._fullMemory = self._fullMemory[-length:]
+                        
+    
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini'):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played
