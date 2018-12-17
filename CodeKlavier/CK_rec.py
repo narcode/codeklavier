@@ -37,7 +37,7 @@ class CK_Rec(object):
         else:
             return 0  
     
-    def record(self, framsize=10):
+    def record(self, framesize=10):
         """
         Run a basic miditest to see how the CodeKlavier is receiving your midi.
     
@@ -47,7 +47,6 @@ class CK_Rec(object):
         timestamp = time.strftime("%y-%m-%d")
         ck_deltatime = 0
         per_note = 0
-        note_counter = 0
         recfile = open('ml_data/_', 'w')
         headers = ''
         
@@ -69,12 +68,19 @@ class CK_Rec(object):
         codeK.open_port(myPort)
         print('your note on id is: ', note_on, '\n')
         print("CodeKlavier is RECORDING. Press Control-C to save and exit.")
-        for i in range(0,framsize):
-            index = str(i)
-            headers += 'source_id'+index+',midi_note'+index+',velocity'+index+',ck_deltatime'+index+',dif_deltatime'+index+','
+        for i in range(0,framesize):
+            if framesize == 1:
+                index = ''
+            else:
+                index = str(i)
+            headers += 'midi_note'+index+',velocity'+index+',duration'+index+',label'+index
     
         recfile.write(headers+'\n')
         data_line = ''
+        deltatime_mem = {}
+        ostinato_length = 9
+        note_counter = 1
+        
         
         try:
             while True:
@@ -85,22 +91,28 @@ class CK_Rec(object):
                     ck_deltatime += deltatime
                     per_note += deltatime                
                     if message[0] != 254:
-                        if message[0] == note_on: #note-off hardcoded                    
+                        if message[0] == note_on:
+                            deltatime_mem[message[1]] = ck_deltatime
+                            velocity = message[2]
+                        if message[0] == note_off:
+
+                            if note_counter > 9:
+                                note_counter = 1
+                                
                             per_note = 0
-                            if note_counter > framsize:
-                                note_counter = 0
-                                data_line = ''
-                                ck_deltatime = 0 # reset deltatime for the start of every frame
-                        note_counter += 1
-                        dif = self.delta_difference(per_note)                    
-                        midimsg = list(map(str, message))
-                        data_line += ','.join(midimsg) + ',' + str(ck_deltatime) + ',' + str(dif) + ','
-                        
-                        if note_counter == framsize:
+                            dif = self.delta_difference(per_note)                    
+                            #midimsg = list(map(str, message)) #full msg not needed
+                            midinote = message[1]
+                            label = note_counter/ostinato_length
+                            #label = 0
+                            note_duration = ck_deltatime - deltatime_mem.pop(midinote)
+                            data_line += str(midinote) + ',' + str(velocity) + ',' + str(note_duration) + ',' + str(label)
                             data_line += '\n'
                             clean_line = re.sub(r"\[?\]?", '', data_line)                
                             print(clean_line)
                             recfile.write(clean_line)
+                            data_line = ''
+                            note_counter += 1
                         
                 time.sleep(0.01)
     

@@ -68,7 +68,7 @@ def miditest(configfile='default_setup.ini'):
 
     try:
         myPort = config['midi'].getint('port')
-        device_id = config['midi'].getint('device_id')
+        device_id = config['midi'].getint('noteon_id')
     except KeyError:
         raise LookupError('Missing key information in the config file.')
 
@@ -135,6 +135,7 @@ def perform_interactive(configfile='default_setup.ini'):
         pi = input('Type your choice? ')
         if (pi.lower() == 'exit'):
             sys.exit(0)
+            
         if (pi.lower() == 'test'):
             miditest(configfile=configfile)
         if (pi.lower() == 'rec'):
@@ -159,6 +160,7 @@ if __name__ == '__main__':
 
     showHelp = False
     test = False
+    record = False
     interactive = False
     useConfig = None
     createConfig = None
@@ -216,7 +218,7 @@ if __name__ == '__main__':
         
     if record:
         rec = CK_Rec(configfile='default_setup.ini')
-        rec.record(framsize=10)
+        rec.record(framesize=1)
         sys.exit(0)        
 
     if play:

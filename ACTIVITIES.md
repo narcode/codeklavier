@@ -2,9 +2,13 @@
 ### This page gives a run down of public CodeKlavier presentations and milestones to date: 
 (newest on top)
 
+February 2019: Talk and performance with the CKaλulator at [Lambda Days](http://www.lambdadays.org/lambdadays2019) in Poland.
+
+January 2019: Performance of new hybrid version for Disklavier at [Conlon X Gaudeamus](https://gaudeamus.nl/events/gaudeamus-x-conlon-disklavier-projection-works/). We will also perform with the CKalculator at the [International Conference on Live Coding](http://iclc.livecodenetwork.org/2019/ingles.html)
+
 November 2018: Performance at Splendor
 
-October 2018: Performance at [ARTikulationen in Graz] (http://doctorartium.kug.ac.at/pdf/ARTikulationen2018Programm3.pdf). This will be the first time we use our custom built KeyScanner.
+October 2018: Performance at [ARTikulationen in Graz](http://doctorartium.kug.ac.at/pdf/ARTikulationen2018Programm3.pdf). This will be the first time we use our custom built KeyScanner.
 
 September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl/) in Voorburg, Netherlands.
 

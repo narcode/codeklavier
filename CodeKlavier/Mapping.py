@@ -710,7 +710,7 @@ class Mapping_Motippets:
         :param mod: some function
         :type mod: int or None
         """
-        if result_num == 1:
+        if result_num == 7: #testing...
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet2')
                 self.enter()
@@ -822,7 +822,7 @@ class Mapping_Motippets:
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
                 self.evaluateSC('eval', flash=False)
 
-        elif result_num == 5:
+        elif result_num == 8:
             if text == 'comment':
                 self.__keyboard.type('// if true -> play Huyg')
                 self.enter()
@@ -865,6 +865,34 @@ class Mapping_Motippets:
             elif text == 'huygens':
                 self.__keyboard.type('~huygens.end')
                 self.evaluateSC('eval', flash=False)
+                
+        elif result_num == 1:
+            if text == 'comment':
+                self.__keyboard.type('// if true -> play disklavier gong')
+                self.enter()
+                self.formatAndSend('if true -> play disklavier gong', display=3, syntax_color='primitive:')
+            elif text == 'code':
+                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/pianogong", str(mod)) #narcode check why with two text vars?
+                self.formatAndSend('DOOOOONG!;', display=3, syntax_color='snippet:')
+            elif text == 'less than':
+                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
+                #self.evaluateSC('eval')
+                self._osc.send_message("/pianogong", str(mod))
+                self.formatAndSend('DOOOOONG!', display=3, syntax_color='snippet:')     
+                
+        elif result_num == 5:
+            if text == 'comment':
+                self.__keyboard.type('// if true -> piano cluster takeover')
+                self.enter()
+                self.formatAndSend('if true -> piano cluster takeover', display=3, syntax_color='primitive:')
+            elif text == 'code':
+                self._osc.send_message("/pianotake", str(mod))
+                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
+            elif text == 'less than':
+                self._osc.send_message("/pianotake", str(mod))
+                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')                
 
     def customPass(self, name, content, osc_only=False):
         """
