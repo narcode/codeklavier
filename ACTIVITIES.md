@@ -10,7 +10,7 @@ November 2018: Performance at Splendor
 
 October 2018: Performance at [ARTikulationen in Graz](http://doctorartium.kug.ac.at/pdf/ARTikulationen2018Programm3.pdf). This will be the first time we use our custom built KeyScanner.
 
-September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl/) in Voorburg, Netherlands.
+September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl/) in Voorburg, Netherlands. We also did an [interview with Dennis Kastrup](https://www.radioeins.de/programm/sendungen/modo1316/strom-und-drang/codeklavier.html) about the project for Radio Eins.
 
 August 2018: CodeKlavier paper and performance will be presented at the [International Computer Music Conference](https://icmc2018.org/) in Daegu, Korea! In the proceedings you can find our first CodeKlavier published paper.
 
