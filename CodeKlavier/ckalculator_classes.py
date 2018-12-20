@@ -20,7 +20,7 @@ class Ckalculator(object):
     TODO: _fullStack is not used yet but added for the future. Evaluate the decision and either implement or deprecate
     """
     
-    def __init__(self, noteonid, noteoffid, pedal_id):
+    def __init__(self, noteonid, noteoffid, pedal_id, debug=False):
         """The method to initialise the class and prepare the class variables.
         """
         
@@ -45,6 +45,7 @@ class Ckalculator(object):
         self._notesList = []
         self._pianoRange = []
         self._fullMemory = []
+        self._postOstinatoMemory = []
         self.ostinato = []
         self._foundOstinato = False
         
@@ -56,7 +57,8 @@ class Ckalculator(object):
             for sub_item in item:
                 if sub_item > 0:
                     self._notesList.append(sub_item)
-        print('valid notes:', self._notesList)
+        if debug:
+            print('valid notes:', self._notesList)
         
 
         
@@ -107,12 +109,15 @@ class Ckalculator(object):
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')
 
-            else:
-                
+            else: 
                 if section == 'ostinatos':
                     if not self._foundOstinato:
                         self._fullMemory.append(note)
                         self.find_ostinato(self._fullMemory, debug=True)
+                    else:
+                        # detect ostinato change
+                        print('ostinato change...')
+                        
                     
                 ### lambda calculus ###
                     
@@ -590,40 +595,56 @@ class Ckalculator(object):
         
     def find_ostinato(self, array, size=4, repetitions=3, debug=False):
         """
-        declare and make custom functions
+        find ostinatos in the MIDI in stream
+        param array array: The array of MIDI notes to analyze for ostinato presence
+        param int size: the amount of notes that conforms the ostinato
+        param int repetitions: the amount of repetitions of notes to conform an ostinato
+        param boolean debug: print debugging messages
         """
-        length = size*repetitions*2
-        print(self._fullMemory)
+        length = size*repetitions+size
         if len(self._fullMemory) > length:
-                        
-            print('length is', length)
-            notes, index, counts = numpy.unique(self._fullMemory, True, False, True)
-            i = numpy.where(counts > 2)
-            print('i -> ', i)
-           
-            for item in i[0]:
-                self.ostinato.append(self._fullMemory[item])
-                
-                if len(self.ostinato) > 1:
-                    np_notes = numpy.array(self.ostinato)
-                    
-                if len(self.ostinato) > 3:
-                    # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
-                    self.ostinato = self.ostinato[-4:]
-                    
-                    if np_notes.max() - np_notes.min() < 12: #within an 8ve range
-                        self._foundOstinato = True
-                        if debug:
-                            print('found ostinato!')
-                    else:
-                        self._foundOstinato = False
-                        
-            if debug:
-                print(self.ostinato)
-        else:
             self._fullMemory = self._fullMemory[-length:]
+            
+            notes, index, counts = numpy.unique(self._fullMemory, True, False, True)
+            
+            if debug:                        
+                print('memory', self._fullMemory)
+                print('notes:', notes, 'counts:', counts)
+                
+            i = numpy.where(counts > 2)
+            
+            if i[0].shape[0] > 3:
+               
+                for item in i[0]:
+                    self.ostinato.append(notes[item])
+                    
+                    if len(self.ostinato) > 1:
+                        np_notes = numpy.array(self.ostinato)
                         
-    
+                    if len(self.ostinato) > 3:
+                        # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
+                        self.ostinato = self.ostinato[-4:]
+                        
+                        if np_notes.max() - np_notes.min() < 12: #within an 8ve range
+                            if debug:
+                                self._foundOstinato = True #pause listening to analyze the frame                                                
+                                if debug:
+                                    print('i -> ', i)
+                                    print('found ostinato!', self.ostinato)
+                                
+                        else:
+                            self._foundOstinato = False
+                       
+    def compare_ostinato(self, ostinato, note):
+        """
+        Detect deviations of an ostinato.
+        param array ostinato: the base ostinato
+        param int note: the incoming midi note
+        """
+        
+        
+                            
+                            
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini'):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played

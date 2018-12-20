@@ -75,7 +75,7 @@ def main(configfile='default_setup.ini'):
                         #print(ck_note_dur)
                         note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration, ck_deltatime=ck_deltatime, articulaton=articulation)
-                        cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=note_duration, ck_deltatime=ck_deltatime, articulaton=articulation)                        
+                        cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=note_duration, ck_deltatime=ck_deltatime, articulaton=articulation)
                     
                     if message[0] == pedal_id and message[1] == pedal_sostenuto:
                         per_note = 0
@@ -86,7 +86,8 @@ def main(configfile='default_setup.ini'):
                         ck_note_dur[message[1]] = ck_deltatime
                         if message[2] > 0: 
                             dif = delta_difference(ck_deltatime)
-                            cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,ck_deltatime=dif, articulaton=articulation)
+                            cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, ck_deltatime=dif, articulaton=articulation)                            
+                            #cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,ck_deltatime=dif, articulaton=articulation)
                             
             time.sleep(0.01)
                             
