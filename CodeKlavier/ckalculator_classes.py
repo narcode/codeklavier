@@ -102,7 +102,7 @@ class Ckalculator(object):
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._note_on_cue.append(message[1])
-                    self.find_ostinato(self._fullMemory, debug=True)
+                    #self.find_ostinato(self._fullMemory, debug=True)
                 else:
                     print('ostinato developed, awaiting arithmetic function')
             
@@ -121,6 +121,7 @@ class Ckalculator(object):
                 if section == 'ostinatos':
                     if not self._foundOstinato:
                         self._fullMemory.append(note)
+                        self.find_ostinato(self._fullMemory, debug=True)                        
                     #else:
                         # detect ostinato change
                         #print('ostinato change...')
