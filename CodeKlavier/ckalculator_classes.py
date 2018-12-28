@@ -117,7 +117,7 @@ class Ckalculator(object):
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')
 
-            #else: 
+            else: 
                 if section == 'ostinatos':
                     if not self._foundOstinato:
                         self._fullMemory.append(note)
