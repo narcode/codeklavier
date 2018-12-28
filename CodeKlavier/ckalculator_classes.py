@@ -118,9 +118,9 @@ class Ckalculator(object):
                 self.shift_mapping(1, 'random')
 
             #else: 
-                #if section == 'ostinatos':
-                    #if not self._foundOstinato:
-                    #self._fullMemory.append(note)
+                if section == 'ostinatos':
+                    if not self._foundOstinato:
+                        self._fullMemory.append(note)
                     #else:
                         # detect ostinato change
                         #print('ostinato change...')
@@ -609,11 +609,11 @@ class Ckalculator(object):
         param boolean debug: print debugging messages
         """
         length = size*repetitions+size
-        if len(self._note_on_cue) > length: #full_mem needed or better to only use _note_on_cue? 
+        if len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue? 
             self._fullMemory = self._fullMemory[-length:]
             self._note_on_cue = self._note_on_cue[-length:]
             
-            notes, index, counts = numpy.unique(self._note_on_cue, True, False, True)
+            notes, index, counts = numpy.unique(self._fullMemory, True, False, True)
             
             if debug:                        
                 print('memory:', self._fullMemory, '\nnote_on cue:', self._note_on_cue)
