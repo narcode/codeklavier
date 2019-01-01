@@ -83,7 +83,7 @@ def main():
         f[display].pack_propagate(1)
         ck_display[display] = tkinter.Text(f[display], height=6, width=150)
         ck_display[display].pack(fill=tkinter.Y, side=tkinter.LEFT)
-        ck_display[display].configure(bg='black',fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 25')     
+        ck_display[display].configure(bg='black',fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 25')
 
         ck_display[display].insert(tkinter.END, "\n")
         s[display].bind(('localhost', 1111))
@@ -153,7 +153,7 @@ def main():
             ck_display[str(x)].tag_config('int', foreground='white')
             ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
             ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
-            ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')            
+            ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')
 
 
             if x == 1:
@@ -247,27 +247,27 @@ def main():
         for x in range(1, int(display)+1):
 
             if x == 1:
-                ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['2'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 2:
-                ck_display['title'+str(x)] = tkinter.Text(f['3'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['3'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['3'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 3:
-                ck_display['title'+str(x)] = tkinter.Text(f['4'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['4'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['4'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 4:
-                ck_display['title'+str(x)] = tkinter.Text(f['5'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['5'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['5'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 5:
-                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)     
+                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)
                 ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
@@ -288,28 +288,28 @@ def main():
 
             if x ==1:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')                
-                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
+                ck_display[str(x)].configure(bg='black', highlightbackground='white', highlightthickness=4, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 2:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')                
-                ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
+                ck_display[str(x)].configure(bg='black', highlightbackground='white', highlightthickness=4, bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 3:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Conditionals\n\n", 'title')                
-                ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Conditionals\n\n", 'title')
+                ck_display[str(x)].configure(bg='black', highlightbackground='white', highlightthickness=4, bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 4:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Loops \n\n", 'title')                
-                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Loops \n\n", 'title')
+                ck_display[str(x)].configure(bg='black', highlightbackground='white', highlightthickness=4, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 5:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Free Code\n\n", 'title')
-                ck_display[str(x)].configure(bg='black', bd=5, fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='black', highlightbackground='white', highlightthickness=4, bd=5, fg='white',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
 
 
@@ -388,11 +388,11 @@ def displayCode(display):
                             ck_display[display].delete('1.0', tkinter.END)
                         else:
                             # show a quick flash when evaluating a command
-                            ck_display[str(display)].configure(relief=tkinter.RAISED)
+                            ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='cyan', highlightthickness=15)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
-                            time.sleep(0.5)
-                            ck_display[str(display)].configure(relief=tkinter.SUNKEN)
+                            time.sleep(0.3)
+                            ck_display[str(display)].configure(relief=tkinter.SUNKEN, bd=5, highlightbackground='white', highlightthickness=4)
                     except RuntimeError as err:
                         break
             elif display == '2':
@@ -404,16 +404,16 @@ def displayCode(display):
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
                         # show a quick flash when evaluating a command
-                        ck_display[str(display)].configure(relief=tkinter.RAISED)
+                        ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='cyan', highlightthickness=15)
                         ck_display[display].insert(tkinter.END, ckcode, tag)
                         ck_display[display].see(tkinter.END)
-                        time.sleep(0.5)
-                        ck_display[str(display)].configure(relief=tkinter.SUNKEN)
+                        time.sleep(0.3)
+                        ck_display[str(display)].configure(relief=tkinter.SUNKEN, bd=5, highlightbackground='white', highlightthickness=4)
                     except RuntimeError as err:
                         break
             elif display == '3':
                 data, addr = s[display].recvfrom(1024)
-                dump = str(data, 'utf-8')
+                dump = data.decode()
                 tagmatch = re.findall('.*:', dump)
                 if len(tagmatch) > 0:
                     tag = tagmatch[0][0:-1]
@@ -423,11 +423,11 @@ def displayCode(display):
                             ck_display[display].delete(1.0, tkinter.END)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
-                            if dump.startswidth('~'):
+                            if tag == 'snippet':
                                 # show a quick flash when evaluating a command
-                                ck_display[str(display)].configure(relief=tkinter.RAISED)
-                                time.sleep(0.5)
-                                ck_display[str(display)].configure(relief=tkinter.SUNKEN)
+                                ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='cyan', highlightthickness=15)
+                                time.sleep(0.3)
+                                ck_display[str(display)].configure(relief=tkinter.SUNKEN, bd=5, highlightbackground='white', highlightthickness=4)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
@@ -456,9 +456,9 @@ def displayCode(display):
                             ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
                         elif tag == 'evaluate':
                             # show a quick flash when evaluating a command
-                            ck_display[str(display)].configure(relief=tkinter.RAISED)
-                            time.sleep(0.5)
-                            ck_display[str(display)].configure(relief=tkinter.SUNKEN)
+                            ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='cyan', highlightthickness=15)
+                            time.sleep(0.3)
+                            ck_display[str(display)].configure(relief=tkinter.SUNKEN, bd=5, highlightbackground='white', highlightthickness=4)
                         else:
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
@@ -467,7 +467,7 @@ def displayCode(display):
         except OSError as err:
             print(err)
             break
-        
+
     #time.sleep(0.01)
 
 if __name__ == '__main__':

@@ -676,7 +676,8 @@ class Mapping_Motippets:
         elif pianoregister == 'low_3':
             self.__keyboard.type('~tremoloL1amp = ' + str(value))
             self.formatAndSend('~tremoloL1amp = ' + str(value), display=1, syntax_color='low:')
-        self.evaluateSC('eval', flash=False)
+        flash = pianoregister in ('mid_1', 'mid_3', )
+        self.evaluateSC('eval', flash=flash)
 
     def conditional(self, conditional_num):
         """Setup a conditional
@@ -865,7 +866,7 @@ class Mapping_Motippets:
             elif text == 'huygens':
                 self.__keyboard.type('~huygens.end')
                 self.evaluateSC('eval', flash=False)
-                
+
         elif result_num == 1:
             if text == 'comment':
                 self.__keyboard.type('// if true -> play disklavier gong')
@@ -880,8 +881,8 @@ class Mapping_Motippets:
                 #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 #self.evaluateSC('eval')
                 self._osc.send_message("/pianogong", str(mod))
-                self.formatAndSend('DOOOOONG!', display=3, syntax_color='snippet:')     
-                
+                self.formatAndSend('DOOOOONG!', display=3, syntax_color='snippet:')
+
         elif result_num == 5:
             if text == 'comment':
                 self.__keyboard.type('// if true -> piano cluster takeover')
@@ -892,7 +893,7 @@ class Mapping_Motippets:
                 self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 self._osc.send_message("/pianotake", str(mod))
-                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')                
+                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
 
     def customPass(self, name, content, osc_only=False):
         """
