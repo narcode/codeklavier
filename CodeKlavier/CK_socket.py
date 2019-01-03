@@ -303,13 +303,13 @@ def main():
                                                      font='MENLO 30',
                                                      relief=normal.get('relief'))
                 ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
-                ck_display[str(x)].configure(bg=normalg.get('background'),
+                ck_display[str(x)].configure(bg=normal.get('background'),
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
                                              bd=normal.get('bd'),
                                              fg=normal.get('fg'),
-                                             rap=tkinter.WORD,
-                                             pacing1=0.3,
+                                             wrap=tkinter.WORD,
+                                             spacing1=0.3,
                                              font='MENLO 20',
                                              relief=normal.get('relief'))
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
@@ -322,13 +322,13 @@ def main():
                                                      font='MENLO 30',
                                                      relief=normal.get('relief'))
                 ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
-                ck_display[str(x)].configure(bg=normalg.get('background'),
+                ck_display[str(x)].configure(bg=normal.get('background'),
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
                                              bd=normal.get('bd'),
                                              fg='magenta',
-                                             rap=tkinter.WORD,
-                                             pacing1=0.3,
+                                             wrap=tkinter.WORD,
+                                             spacing1=0.3,
                                              font='MENLO 20',
                                              relief=normal.get('relief'))
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
@@ -341,13 +341,13 @@ def main():
                                                      font='MENLO 30',
                                                      relief=normal.get('relief'))
                 ck_display['title'+str(x)].insert(tkinter.END, "Conditionals\n\n", 'title')
-                ck_display[str(x)].configure(bg=normalg.get('background'),
+                ck_display[str(x)].configure(bg=normal.get('background'),
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
                                              bd=normal.get('bd'),
                                              fg='yellow',
-                                             rap=tkinter.WORD,
-                                             pacing1=0.3,
+                                             wrap=tkinter.WORD,
+                                             spacing1=0.3,
                                              font='MENLO 20',
                                              relief=normal.get('relief'))
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
@@ -360,13 +360,13 @@ def main():
                                                      font='MENLO 30',
                                                      relief=normal.get('relief'))
                 ck_display['title'+str(x)].insert(tkinter.END, "Loops \n\n", 'title')
-                ck_display[str(x)].configure(bg=normalg.get('background'),
+                ck_display[str(x)].configure(bg=normal.get('background'),
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
                                              bd=normal.get('bd'),
                                              fg='cyan',
-                                             rap=tkinter.WORD,
-                                             pacing1=0.3,
+                                             wrap=tkinter.WORD,
+                                             spacing1=0.3,
                                              font='MENLO 20',
                                              relief=normal.get('relief'))
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
@@ -379,13 +379,13 @@ def main():
                                                      font='MENLO 30',
                                                      relief=normal.get('relief'))
                 ck_display['title'+str(x)].insert(tkinter.END, "Free Code\n\n", 'title')
-                ck_display[str(x)].configure(bg=normalg.get('background'),
+                ck_display[str(x)].configure(bg=normal.get('background'),
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
                                              bd=normal.get('bd'),
                                              fg='white',
-                                             rap=tkinter.WORD,
-                                             pacing1=0.3,
+                                             wrap=tkinter.WORD,
+                                             spacing1=0.3,
                                              font='MENLO 20',
                                              relief=normal.get('relief'))
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
@@ -456,7 +456,6 @@ def end_flash(display):
     time.sleep(0.3)
     ck_display[str(display)].configure(relief=tkinter.SUNKEN, bd=5, highlightbackground='white', highlightthickness=4)
 
-
 def displayCode(display):
     """
     Funtion to listen for incoming UDP stream.
@@ -469,11 +468,15 @@ def displayCode(display):
 
     while listen:
         try:
-            if display == '1':
-                data, addr = s[display].recvfrom(1024)
+            data, addr = s[display].recvfrom(1024)
+            dump = str(data, 'utf-8')
+            tagmatch = re.findall('.*:', dump)
+            print(dump, tagmatch, display)
+            if 'KILL:' in tagmatch:
+                ckcode = re.sub(''+tag+':', '', dump)
+                ck_display[str(display)].configure(bg=ckcode)
+            elif display == '1':
                 print(str(data, 'utf-8'))
-                dump = str(data, 'utf-8')
-                tagmatch = re.findall('.*:', dump)
                 if len(tagmatch) > 0:
                     tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
@@ -491,9 +494,6 @@ def displayCode(display):
                     except RuntimeError as err:
                         break
             elif display == '2':
-                data, addr = s[display].recvfrom(1024)
-                dump = str(data, 'utf-8')
-                tagmatch = re.findall('.*:', dump)
                 if len(tagmatch) > 0:
                     tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
@@ -505,9 +505,6 @@ def displayCode(display):
                     except RuntimeError as err:
                         break
             elif display == '3':
-                data, addr = s[display].recvfrom(1024)
-                dump = data.decode()
-                tagmatch = re.findall('.*:', dump)
                 if len(tagmatch) > 0:
                     tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
@@ -524,9 +521,6 @@ def displayCode(display):
                     except RuntimeError as err:
                         break
             elif display == '4':
-                data, addr = s[display].recvfrom(1024)
-                dump = str(data, 'utf-8')
-                tagmatch = re.findall('.*:', dump)
                 if len(tagmatch) > 0:
                     tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
@@ -536,9 +530,6 @@ def displayCode(display):
                     except RuntimeError as err:
                         break
             elif display == '5': #this is the codespace
-                data, addr = s[display].recvfrom(1024)
-                dump = str(data, 'utf-8')
-                tagmatch = re.findall('.*:', dump)
                 if len(tagmatch) > 0:
                     tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)

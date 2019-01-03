@@ -757,7 +757,6 @@ class Mapping_Motippets:
                 self._osc.send_message("/gong", str(mod))
                 self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
 
-
         elif result_num == 4:
             if text == 'comment':
                 self.__keyboard.type('HUYGENS! //is activating...')
@@ -818,6 +817,14 @@ class Mapping_Motippets:
                 self.formatAndSend("(_) \n\n (^0^)//¯  AIR DE COUR \n\n THE END ¯\('…')/¯ ", display=4, syntax_color='primitive:')
                 self.__keyboard.type("")
                 self.enter()
+
+                # BOOM KILL ALL (flash display)
+                for i in range(1, 3):
+                    for display_num in range(1, 5):
+                        self.formatAndSend('KILL:red', display=display_num)
+                    time.sleep(0.3)
+                    for display_num in range(1, 5):
+                        self.formatAndSend('KILL:black', display=display_num)
             elif text == 'huygens':
                 self.__keyboard.type('~stop.all;')
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
