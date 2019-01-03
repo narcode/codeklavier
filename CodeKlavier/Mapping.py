@@ -762,13 +762,13 @@ class Mapping_Motippets:
             if text == 'comment':
                 self.__keyboard.type('HUYGENS! //is activating...')
                 self.evaluateSC('eval', flash=False)
-                self.formatAndSend('HUYGENS', display=1, syntax_color='warning:')
+                self.formatAndSend('BOOM', display=1, syntax_color='warning:')
                 self.formatAndSend('IS', display=2, syntax_color='warning:')
                 self.formatAndSend('ACTIVATING...', display=3, syntax_color='warning:')
             elif text == 'start':
                 self.__keyboard.type('// HUYGENS countdown started!')
                 self.evaluateSC('eval', flash=False)
-                self.formatAndSend('HUYGENS', display=1, syntax_color='warning:')
+                self.formatAndSend('BOOM', display=1, syntax_color='warning:')
                 self.formatAndSend('COUNTDOWN', display=2, syntax_color='warning:')
                 self.formatAndSend('STARTED!', display=3, syntax_color='warning:')
             elif text == 'code':
