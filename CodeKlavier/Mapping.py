@@ -825,6 +825,7 @@ class Mapping_Motippets:
                     time.sleep(0.3)
                     for display_num in range(1, 5):
                         self.formatAndSend('KILL:black', display=display_num)
+                    time.sleep(0.3)
             elif text == 'huygens':
                 self.__keyboard.type('~stop.all;')
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract

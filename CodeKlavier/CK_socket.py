@@ -469,11 +469,11 @@ def displayCode(display):
     while listen:
         try:
             data, addr = s[display].recvfrom(1024)
-            dump = str(data, 'utf-8')
+            dump = data.decode()
             tagmatch = re.findall('.*:', dump)
             print(dump, tagmatch, display)
             if 'KILL:' in tagmatch:
-                ckcode = re.sub(''+tag+':', '', dump)
+                ckcode = re.sub('\nKILL:', '', dump)
                 ck_display[str(display)].configure(bg=ckcode)
             elif display == '1':
                 print(str(data, 'utf-8'))
@@ -498,7 +498,7 @@ def displayCode(display):
                     tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        start_flash(displaY)
+                        start_flash(display)
                         ck_display[display].insert(tkinter.END, ckcode, tag)
                         ck_display[display].see(tkinter.END)
                         end_flash(display)
