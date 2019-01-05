@@ -763,7 +763,7 @@ class Mapping_Motippets:
                 self.evaluateSC('eval', flash=False)
                 self.formatAndSend('boom:BOOM', display=1)
                 self.formatAndSend('boom:IS', display=2)
-                self.formatAndSend('boom:ACTIVATING...')
+                self.formatAndSend('boom:ACTIVATING...', display=3)
             elif text == 'start':
                 self.__keyboard.type('// HUYGENS countdown started!')
                 self.evaluateSC('eval', flash=False)
