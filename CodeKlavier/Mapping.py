@@ -819,11 +819,11 @@ class Mapping_Motippets:
                 self.enter()
 
                 # BOOM KILL ALL (flash display)
-                for i in range(1, 3):
-                    for display_num in range(1, 5):
+                for i in range(1, 4):
+                    for display_num in range(1, 6):
                         self.formatAndSend('KILL:red', display=display_num)
                     time.sleep(0.3)
-                    for display_num in range(1, 5):
+                    for display_num in range(1, 6):
                         self.formatAndSend('KILL:black', display=display_num)
                     time.sleep(0.3)
             elif text == 'huygens':

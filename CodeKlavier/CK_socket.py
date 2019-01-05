@@ -471,9 +471,8 @@ def displayCode(display):
             data, addr = s[display].recvfrom(1024)
             dump = data.decode()
             tagmatch = re.findall('.*:', dump)
-            print(dump, tagmatch, display)
             if 'KILL:' in tagmatch:
-                ckcode = re.sub('\nKILL:', '', dump)
+                ckcode = re.sub('\nKILL:', '', dump).replace('\n', '')
                 ck_display[str(display)].configure(bg=ckcode)
             elif display == '1':
                 print(str(data, 'utf-8'))
