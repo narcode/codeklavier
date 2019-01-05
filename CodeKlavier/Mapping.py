@@ -763,7 +763,7 @@ class Mapping_Motippets:
                 self.evaluateSC('eval', flash=False)
                 self.formatAndSend('boom:BOOM', display=1)
                 self.formatAndSend('boom:IS', display=2)
-                self.formatAndSend('boom:ACTIVATING...')
+                self.formatAndSend('boom:ACTIVATING...', display=3)
             elif text == 'start':
                 self.__keyboard.type('// HUYGENS countdown started!')
                 self.evaluateSC('eval', flash=False)
@@ -771,6 +771,15 @@ class Mapping_Motippets:
                 self.formatAndSend('boom:COUNTDOWN', display=2)
                 self.formatAndSend('boom:STARTED!', display=3)
             elif text == 'code':
+                # BOOM KILL ALL (flash display)
+                for i in range(1, 4):
+                    for display_num in range(1, 6):
+                        self.formatAndSend('KILL:red', display=display_num)
+                    time.sleep(0.3)
+                    for display_num in range(1, 6):
+                        self.formatAndSend('KILL:black', display=display_num)
+                    time.sleep(0.3)
+                
                 self.__keyboard.type("")
                 self.enter()
                 self.__keyboard.type("  ____   ____   ____  __  __ _ ")
@@ -817,15 +826,6 @@ class Mapping_Motippets:
                 self.formatAndSend("(_) \n\n (^0^)//¯  AIR DE COUR \n\n THE END ¯\('…')/¯ ", display=4, syntax_color='primitive:')
                 self.__keyboard.type("")
                 self.enter()
-
-                # BOOM KILL ALL (flash display)
-                for i in range(1, 4):
-                    for display_num in range(1, 6):
-                        self.formatAndSend('KILL:red', display=display_num)
-                    time.sleep(0.3)
-                    for display_num in range(1, 6):
-                        self.formatAndSend('KILL:black', display=display_num)
-                    time.sleep(0.3)
             elif text == 'huygens':
                 self.__keyboard.type('~stop.all;')
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
