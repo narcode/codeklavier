@@ -472,7 +472,10 @@ def displayCode(display):
             data, addr = s[display].recvfrom(1024)
             dump = data.decode()
             tagmatch = re.findall('.*:', dump)
-            tag = tagmatch[0][0:-1]
+            try:
+                tag = tagmatch[0][0:-1]
+            except IndexError:
+                tag = ''
             if 'KILL:' in tagmatch:
                 ckcode = re.sub('\nKILL:', '', dump).replace('\n', '')
                 ck_display[str(display)].configure(bg=ckcode)
@@ -534,10 +537,12 @@ def displayCode(display):
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        if tag in ('flash',)
+                        if tag in ('flash',):
                             start_flash(display)
                             end_flash(display)
-                        ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].insert(tkinter.END, ckcode)
+                        else:
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
                         ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
                         break
