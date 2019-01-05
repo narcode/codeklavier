@@ -830,6 +830,7 @@ class Mapping_Motippets:
                 self.enter()
             elif text == 'huygens':
                 self.__keyboard.type('~stop.all;')
+                self.formatAndSend('~stop.all;', display=3, syntax_color='snippet:')
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
                 self.evaluateSC('eval', flash=False)
 
