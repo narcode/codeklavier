@@ -733,8 +733,10 @@ class Mapping_Motippets:
                 self.formatAndSend('if true -> stop ~snippet1', display=3, syntax_color='primitive:')
             elif text == 'code':
                 self.__keyboard.type('~snippet1.stop(20);')
+                self.__keyboard.type('~snippet2.stop;')
                 self.evaluateSC('eval', flash=False)
                 self.formatAndSend('~snippet1.stop;', display=3, syntax_color='snippet:')
+                self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval', flash=False)
@@ -817,13 +819,13 @@ class Mapping_Motippets:
                 self.formatAndSend("| |__| |", display=2, syntax_color='primitive:')
                 self.formatAndSend("| |  | |", display=3, syntax_color='primitive:')
                 self.formatAndSend("|_| ", display=4, syntax_color='primitive:')
-                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  THE END ¯\('…')/¯ ")
+                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)")
                 self.enter()
                 self.formatAndSend("|____/", display=5, syntax_color='primitive:')
                 self.formatAndSend(" \____/", display=1, syntax_color='primitive:')
                 self.formatAndSend(" \____/", display=2, syntax_color='primitive:')
                 self.formatAndSend("|_|  |_|", display=3, syntax_color='primitive:')
-                self.formatAndSend("(_) \n\n (^0^)//¯  AIR DE COUR \n\n THE END ¯\('…')/¯ ", display=4, syntax_color='primitive:')
+                self.formatAndSend("(_)", display=4, syntax_color='primitive:')
                 self.__keyboard.type("")
                 self.enter()
             elif text == 'huygens':
