@@ -1,7 +1,7 @@
 # CodeKlavier
 ### Live coding with the piano as interface.
 
-An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL**
+An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL** and other sponsors.
 
 CodeKlavier development started in April 2017 and currently has four prototypes (newest on top):
 +  *Ckalculator* (Lambda-calculus with the piano!)
@@ -12,8 +12,7 @@ CodeKlavier development started in April 2017 and currently has four prototypes 
 More information about the specific prototypes can be found in their respective directories.
 
 
-A performance on these prototypes was presented at SHA2017 and can be viewed here:<br>
-[#sha2017 presentation](https://www.youtube.com/embed/efU7trVAPvA?start=1213) <br>
+Checkout our [videos page](https://codeklavier.space/videos) to see the Codeklavier in action or visit the [Activities page](https://github.com/narcode/codeklavier/blob/master/ACTIVITIES.md) for info on past and future performances. 
 
 <div class='dream'>
 <div><strong>The dream:</strong></div><div>🐍🎹 An intuitive programming language with the piano as interface.</div></div>
@@ -29,9 +28,9 @@ A performance on these prototypes was presented at SHA2017 and can be viewed her
 
 
 ## Equipment
-1. An acoustic-MIDI piano such as a Yamaha Disklavier, any piano fitted with a silent system or an acoustic intrument in combination with a MOOG piano bar. If an acoustic-MIDI piano is not available, any 88-key MIDI keyboard will suffice providing this instrument is of suitable sensitivity for the pianist.
+1. An acoustic-MIDI piano such as a  Disklavier, any piano fitted with a silent system or an acoustic intrument in combination with a MOOG piano bar or other MIDI keyscanner. If an acoustic-MIDI piano is not available, any 88-key MIDI keyboard will suffice providing this instrument is of suitable sensitivity for the pianist.
 
-2. MIDI interface (in case this is not present in the piano)
+2. MIDI interface (if not integrated in the piano)
 
 ## Libraries
 Install with pip3
@@ -39,6 +38,7 @@ Install with pip3
 1. python-rtmidi
 2. pynput
 3. sphinx
+4. numpy
 
 Run ``pip3 install -r requirements.txt`` to install the required libraries.
 
