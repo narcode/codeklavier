@@ -523,6 +523,9 @@ def displayCode(display):
                             ck_display[display].delete(1.0, tkinter.END) # TODO: also delete on tag 'result'?
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
+                            if tag in ('result', 'primitive'):
+                                start_flash(display)
+                                end_flash(display)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
