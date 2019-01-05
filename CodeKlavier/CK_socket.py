@@ -517,7 +517,7 @@ def displayCode(display):
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
                         if tag in ('result', 'error'):
-                            if tag in ('result',):
+                            if tag in ('result', 'primitive'):
                                 start_flash(display)
                                 end_flash(display)
                             ck_display[display].delete(1.0, tkinter.END) # TODO: also delete on tag 'result'?
