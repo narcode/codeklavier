@@ -91,8 +91,8 @@ def main(configfile='default_setup.ini'):
                             
                             # if cKost._developedOstinato: then section 'full' to get the arithmetic op and the value
                             # the defined function has to be saved somewhere. Maybe an ini file, json or function?
-                            #cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
-                                             #ck_deltatime=dif, articulaton=articulation)       
+                            cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
+                                             ck_deltatime=dif, articulaton=articulation)       
                             
                             #cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,
                                              #ck_deltatime=dif, articulaton=articulation)

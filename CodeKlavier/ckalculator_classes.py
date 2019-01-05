@@ -5,7 +5,7 @@ import array
 from inspect import signature
 import random
 import configparser
-import numpy
+import numpy as np
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -46,6 +46,7 @@ class Ckalculator(object):
         self._notesList = []
         self._pianoRange = []
         self._fullMemory = []
+        self._filtered_cue = []
         self._postOstinatoMemory = []
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
@@ -103,6 +104,7 @@ class Ckalculator(object):
                 if not self._developedOstinato:
                     self._note_on_cue.append(message[1])
                     #self.find_ostinato(self._fullMemory, debug=True)
+                    #print('note on mem:', self._note_on_cue)
                 else:
                     print('ostinato developed, awaiting arithmetic function')
             
@@ -119,9 +121,9 @@ class Ckalculator(object):
 
             else: 
                 if section == 'ostinatos':
-                    if not self._foundOstinato:
+                    if not self._developedOstinato:
                         self._fullMemory.append(note)
-                        self.find_ostinato(self._fullMemory, debug=True)                        
+                        self.find_ostinato(self._fullMemory, debug=False)                        
                     #else:
                         # detect ostinato change
                         #print('ostinato change...')
@@ -592,7 +594,7 @@ class Ckalculator(object):
         tolerance = config['ckalculator'].getint('wrong_note_tolerance')      
         
         wrong_notes = list(map(lambda x: [x-tolerance, x+tolerance], self._notesList))
-        wrong_notes = list(numpy.array(wrong_notes).flat)
+        wrong_notes = list(np.array(wrong_notes).flat)
         
         if note in wrong_notes:
             if debug:
@@ -601,7 +603,7 @@ class Ckalculator(object):
         else:
             return False
         
-    def find_ostinato(self, array, size=4, repetitions=3, debug=False):
+    def find_ostinato(self, array, size=4, repetitions=5, debug=False):
         """
         find ostinatos in the MIDI in stream
         param array array: The array of MIDI notes to analyze for ostinato presence
@@ -613,23 +615,38 @@ class Ckalculator(object):
         if len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue? 
             self._fullMemory = self._fullMemory[-length:]
             self._note_on_cue = self._note_on_cue[-length:]
+            self._filtered_cue = self._filtered_cue[-length:]
             
-            notes, index, counts = numpy.unique(self._fullMemory, True, False, True)
+            notes, index, reverse, counts = np.unique(self._fullMemory, True, True, True)
+            #cue_notes, cue_reverse = np.unique(self._note_on_cue, False, True, False)
             
             if debug:                        
                 print('memory:', self._fullMemory, '\nnote_on cue:', self._note_on_cue)
-                print('notes:', notes, '\ncounts:', counts)
+                print('notes:', notes, '\ncounts:', counts, '\nreverse:', reverse)
                 
-            i = numpy.where(counts > 2)
+            #self.get_ostinato_pattern(cue_reverse, size, True)
+                
+            i = np.where(counts > 2)
             
             if i[0].shape[0] > 3:
-               
+                # np_notes = notes[i] ### this is shorthand for what happend later ?
+                for x in self._note_on_cue:
+                    if x in notes[i]:
+                        self._filtered_cue.append(x)
+                
+                cue_notes, cue_reverse = np.unique(self._filtered_cue, False, True, False)
+                self.get_ostinato_pattern(cue_reverse, size, True)                        
+                
+                if debug:
+                    print('cue notes:', cue_notes, '\ncue_reverse:', cue_reverse)
+
+
                 for item in i[0]:
                     if not self._foundOstinato:
                         self.ostinato['first'].append(notes[item])
                         
                         if len(self.ostinato['first']) > 1:
-                            np_notes = numpy.array(self.ostinato['first'])
+                            np_notes = np.array(self.ostinato['first'])
                             
                         if len(self.ostinato['first']) > 3:
                             # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
@@ -648,19 +665,19 @@ class Ckalculator(object):
                         self.ostinato['compare'].append(notes[item])
                         
                         if len(self.ostinato['compare']) > 1:
-                            np_notes = numpy.array(self.ostinato['compare'])
+                            np_notes = np.array(self.ostinato['compare'])
                             
                         if len(self.ostinato['compare']) > 3:
                             # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
                             self.ostinato['compare'] = self.ostinato['compare'][-4:]
                             
                             if np_notes.max() - np_notes.min() < 12: #within an 8ve range
-                                if numpy.array_equal(self.ostinato['first'], self.ostinato['compare']):
+                                if np.array_equal(self.ostinato['first'], self.ostinato['compare']):
                                     if debug:
                                         print('ostinato has not change')
                                 else:
-                                    diff = numpy.subtract(self.ostinato['first'], self.ostinato['compare'])
-                                    if numpy.array_equal(sorted(diff), [0,0,0,1]):
+                                    diff = np.subtract(self.ostinato['first'], self.ostinato['compare'])
+                                    if np.array_equal(sorted(diff), [0,0,0,1]):
                                         self._developedOstinato = True
                                         self._fullMemory = []
                                         self._note_on_cue = []
@@ -672,6 +689,31 @@ class Ckalculator(object):
                                         print('first:',self.ostinato['first'],
                                               'compare:',self.ostinato['compare'])                                                      
                         
+    def get_ostinato_pattern(self, noteson_array, ostinato_size, debug=False):
+        """
+        Compare the pattern of notes in the note_on cue. In order to see if it is
+        a repeated pattern and thus an ostinato.
+        param array noteson_array: the notes cue
+        param int ostinato_size: number of notes conforming the ostinato
+        Returns True or False 
+        """
+        noteson_array = noteson_array[-12:] #correct it
+        if len(noteson_array) == 12:
+            pattern1 = noteson_array[0:ostinato_size]
+            pattern2 = noteson_array[4:ostinato_size*2]
+            pattern3 = noteson_array[8:ostinato_size*3]
+            #pattern4 = noteson_array[12:ostinato_size*4]
+        
+            pattern_stack = np.vstack([pattern1, pattern2, pattern3])
+              
+            pattern_check = (np.diff(pattern_stack.reshape(len(pattern_stack),-1), axis=0)==0).all()
+        
+            if debug:
+                if pattern_check:
+                    print(pattern1,'\n',pattern2,'\n',pattern3,'\n')
+                    print(pattern_check)        
+        
+                return pattern_check
                        
     def compare_ostinato(self, ostinato, note):
         """
