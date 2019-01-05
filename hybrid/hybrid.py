@@ -170,7 +170,7 @@ def set_parameters(value, conditional_func, debug=False):
     if conditional_func == 'amount':
         mapping.customPass('more than 100 notes played in the next ', str(value) + ' seconds?')
     elif conditional_func == 'range':
-        mapping.customPass('range set to: ', str(value) + ' semitones...')
+        mapping.customPass('range set to: ', str(value) + ' semitones...', flash=True)
     elif conditional_func == 'gomb':
         mapping.customPass('GOMB countdown set to: ', str(value))
 

@@ -519,14 +519,14 @@ def displayCode(display):
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        if tag in ('result', 'error'):
-                            if tag in ('result', 'primitive'):
+                        if tag in ('result', 'error', 'flash'):
+                            if tag in ('result', 'primitive', 'flash'):
                                 start_flash(display)
                                 end_flash(display)
                             ck_display[display].delete(1.0, tkinter.END) # TODO: also delete on tag 'result'?
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
-                            if tag in ('result', 'primitive'):
+                            if tag in ('result', 'primitive', 'flash'):
                                 start_flash(display)
                                 end_flash(display)
                             ck_display[display].insert(tkinter.END, ckcode, tag)

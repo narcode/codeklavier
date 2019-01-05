@@ -906,13 +906,15 @@ class Mapping_Motippets:
                 self._osc.send_message("/pianotake", str(mod))
                 self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
 
-    def customPass(self, name, content, osc_only=False):
+    def customPass(self, name, content, osc_only=False, flash=False):
         """
         post custom string message on codespace and display
 
         :param string name: a label to print in front of the string
         :param string content: the message or content
         """
+        if flash:
+            name = 'flash:' + name
         self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
         if not osc_only:
