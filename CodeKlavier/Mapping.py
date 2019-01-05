@@ -932,11 +932,11 @@ class Mapping_Motippets:
             self.formatAndSend(content, display=4, syntax_color='warning:')
         else:
             if tag == 2:
-                self.formatAndSend(content, display=4, syntax_color='loop2:', flash=flash)
+                self.formatAndSend(content, display=4, syntax_color='loop2:')
             elif tag == 3:
-                self.formatAndSend(content, display=4, syntax_color='loop3:', flash=flash)
+                self.formatAndSend(content, display=4, syntax_color='loop3:')
             else:
-                self.formatAndSend(content, display=4, syntax_color='loop:', flash=flash)
+                self.formatAndSend(content, display=4, syntax_color='loop:')
 
 class Mapping_Ckalculator:
     """Mapping for the Ckalculator prototype.
