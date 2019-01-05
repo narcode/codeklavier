@@ -817,7 +817,7 @@ class Mapping_Motippets:
                 self.formatAndSend("| |__| |", display=2, syntax_color='primitive:')
                 self.formatAndSend("| |  | |", display=3, syntax_color='primitive:')
                 self.formatAndSend("|_| ", display=4, syntax_color='primitive:')
-                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  THE END ¯\('…')/¯ ")
+                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)")
                 self.enter()
                 self.formatAndSend("|____/", display=5, syntax_color='primitive:')
                 self.formatAndSend(" \____/", display=1, syntax_color='primitive:')
