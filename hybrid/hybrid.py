@@ -154,7 +154,6 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
         time.sleep(1)
 
-
 def set_parameters(value, conditional_func, debug=False):
     """
     function to parse a full range tremolo. This value can be used as a param for the
@@ -168,11 +167,11 @@ def set_parameters(value, conditional_func, debug=False):
     print('thread started for parameter set')
 
     if conditional_func == 'amount':
-        mapping.customPass('more than 100 notes played in the next ', str(value) + ' seconds?')
+        mapping.customPass('more than 100 notes played in the next ', str(value) + ' seconds?', flash=True)
     elif conditional_func == 'range':
         mapping.customPass('range set to: ', str(value) + ' semitones...', flash=True)
     elif conditional_func == 'gomb':
-        mapping.customPass('GOMB countdown set to: ', str(value))
+        mapping.customPass('GOMB countdown set to: ', str(value), flash=True)
 
     if debug:
         print('value parameter is ', str(value))
