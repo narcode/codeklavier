@@ -830,6 +830,7 @@ class Mapping_Motippets:
                 self.enter()
             elif text == 'huygens':
                 self.__keyboard.type('~stop.all;')
+                self.formatAndSend('~stop.all;', display=3, syntax_color='snippet:')
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
                 self.evaluateSC('eval', flash=False)
 
@@ -918,7 +919,7 @@ class Mapping_Motippets:
             self.__keyboard.type(name + " " + content)
             self.enter()
 
-    def onlyDisplay(self, content, tag=1, warning=False):
+    def onlyDisplay(self, content, tag=1, warning=False, flash=False):
         """
         print a custom string on the UDP display only!
 
@@ -931,11 +932,11 @@ class Mapping_Motippets:
             self.formatAndSend(content, display=4, syntax_color='warning:')
         else:
             if tag == 2:
-                self.formatAndSend(content, display=4, syntax_color='loop2:')
+                self.formatAndSend(content, display=4, syntax_color='loop2:', flash=flash)
             elif tag == 3:
-                self.formatAndSend(content, display=4, syntax_color='loop3:')
+                self.formatAndSend(content, display=4, syntax_color='loop3:', flash=flash)
             else:
-                self.formatAndSend(content, display=4, syntax_color='loop:')
+                self.formatAndSend(content, display=4, syntax_color='loop:', flash=flash)
 
 class Mapping_Ckalculator:
     """Mapping for the Ckalculator prototype.
