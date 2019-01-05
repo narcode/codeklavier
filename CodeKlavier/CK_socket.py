@@ -290,6 +290,7 @@ def main():
             ck_display[str(x)].tag_config('comment', foreground='#a3a3a3')
             ck_display[str(x)].tag_config('loop', foreground='cyan')
             ck_display[str(x)].tag_config('warning', foreground='red', font='MENLO 30')
+            ck_display[str(x)].tag_config('boom', foreground='red', font='MENLO 30')
             ck_display[str(x)].tag_config('loop2', foreground='#80f7a6')
             ck_display[str(x)].tag_config('loop3', foreground='#00b3ff')
 
@@ -471,19 +472,23 @@ def displayCode(display):
             data, addr = s[display].recvfrom(1024)
             dump = data.decode()
             tagmatch = re.findall('.*:', dump)
+            tag = tagmatch[0][0:-1]
             if 'KILL:' in tagmatch:
                 ckcode = re.sub('\nKILL:', '', dump).replace('\n', '')
                 ck_display[str(display)].configure(bg=ckcode)
             elif display == '1':
                 print(str(data, 'utf-8'))
                 if len(tagmatch) > 0:
-                    tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
                         if tag == 'delete':
                             ck_display[display].delete("%s-1c" % tkinter.INSERT, tkinter.INSERT)
                         elif tag == 'clear':
                             ck_display[display].delete('1.0', tkinter.END)
+                        elif tag == 'boom':
+                            # activating BOOM
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
                         else:
                             # show a quick flash when evaluating a command
                             start_flash(display)
@@ -494,25 +499,28 @@ def displayCode(display):
                         break
             elif display == '2':
                 if len(tagmatch) > 0:
-                    tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        start_flash(display)
-                        ck_display[display].insert(tkinter.END, ckcode, tag)
-                        ck_display[display].see(tkinter.END)
-                        end_flash(display)
+                        if tag == 'boom':
+                            # activating BOOM
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
+                        else:
+                            start_flash(display)
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
+                            end_flash(display)
                     except RuntimeError as err:
                         break
             elif display == '3':
                 if len(tagmatch) > 0:
-                    tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        if tag == 'result' or tag == 'error':
+                        if tag in ('result', 'error'):
                             ck_display[display].delete(1.0, tkinter.END)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
-                            if tag == 'snippet':
+                            if tag in ('snippet', 'boom'):
                                 start_flash(display)
                                 end_flash(display)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
@@ -521,7 +529,6 @@ def displayCode(display):
                         break
             elif display == '4':
                 if len(tagmatch) > 0:
-                    tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
                         ck_display[display].insert(tkinter.END, ckcode, tag)
@@ -530,7 +537,6 @@ def displayCode(display):
                         break
             elif display == '5': #this is the codespace
                 if len(tagmatch) > 0:
-                    tag = tagmatch[0][0:-1]
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
                         if tag == 'delete':
