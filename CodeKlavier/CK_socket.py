@@ -537,10 +537,10 @@ def displayCode(display):
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        if tag in ('flash',):
+                        if 'flash:' in ckcode:
                             start_flash(display)
                             end_flash(display)
-                            ck_display[display].insert(tkinter.END, ckcode)
+                            ck_display[display].insert(tkinter.END, ckcode.replace('flash:', ''), 'conditional')
                         else:
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         ck_display[display].see(tkinter.END)
