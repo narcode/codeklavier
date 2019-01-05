@@ -262,7 +262,7 @@ def gong_bomb(countdown, debug=False):
             print(" | |_) | |  | | |  | | \  / | |")
             print(" |  _ <| |  | | |  | | |\/| | |")
             print(" | |_) | |__| | |__| | |  | |_|")
-            print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
+            print(" |____/ \____/ \____/|_|  |_(_)" + BColors.ENDC)
             print("")
             mapping.result(4, 'code')
 
