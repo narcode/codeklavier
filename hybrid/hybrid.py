@@ -74,7 +74,10 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
         if debug:
             print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)
             #mapping.onlyDisplay('cond: ' + str(num) + ' result: ' + str(result_num) + ' looptime: ' + str(timer - t) + '', num)
-            mapping.onlyDisplay('conditional looptime: ' + str(timer - t) + '', num, flash=timer)
+            if timer == t:
+                mapping.onlyDisplay('flash:conditional looptime: ' + str(timer - t) + '', num)
+            else:
+                mapping.onlyDisplay('conditional looptime: ' + str(timer - t) + '', num)
             #print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
         t += 1
