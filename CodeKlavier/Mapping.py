@@ -913,13 +913,14 @@ class Mapping_Motippets:
         :param string name: a label to print in front of the string
         :param string content: the message or content
         """
-        if flash:
-            name = 'flash:' + name
-        self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
         if not osc_only:
             self.__keyboard.type(name + " " + content)
             self.enter()
+
+        if flash:
+            name = 'flash:' + name
+        self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
     def onlyDisplay(self, content, tag=1, warning=False, flash=False):
         """
