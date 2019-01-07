@@ -395,7 +395,8 @@ def main():
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 2)
                                     elif minimotif3_low_mapped > 0:
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
-                                    elif minimotif2_mid_mapped > 0:
+                                   
+                                    if minimotif2_mid_mapped > 0:
                                         tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)
                                     elif minimotif3_mid_mapped > 0:
                                         tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 3)
@@ -620,7 +621,7 @@ def ck_loop(prototype='hello world'):
                                 elif minimotif3_low_mapped > 0:
                                     tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
 
-                                elif minimotif2_mid_mapped > 0:
+                                if minimotif2_mid_mapped > 0:
                                     tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)                                
 
                                 if minimotif1_hi_mapped > 0:
