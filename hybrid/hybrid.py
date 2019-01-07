@@ -603,6 +603,8 @@ def ck_loop(prototype='hello world'):
                             minimotif2_hi_mapped = memHi._unmapCounter2
 
                             ##tremolos:
+                            print('mini3_mid:', minimotif3_mid_mapped)
+                            print('mini2_mid:', minimotif2_mid_mapped)                            
                             if minimotif1_mid_mapped > 0:
                                 tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
                             elif minimotif3_mid_mapped > 0:
