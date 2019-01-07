@@ -761,15 +761,15 @@ class Mapping_Motippets:
 
         elif result_num == 4:
             if text == 'comment':
-                self.__keyboard.type('HUYGENS! //is activating...')
+                self.__keyboard.type('GOMB! //is activating...')
                 self.evaluateSC('eval', flash=False)
-                self.formatAndSend('boom:BOOM', display=1)
+                self.formatAndSend('boom:GOMB', display=1)
                 self.formatAndSend('boom:IS', display=2)
                 self.formatAndSend('boom:ACTIVATING...', display=3)
             elif text == 'start':
-                self.__keyboard.type('// HUYGENS countdown started!')
+                self.__keyboard.type('// GOMB countdown started!')
                 self.evaluateSC('eval', flash=False)
-                self.formatAndSend('boom:BOOM', display=1)
+                self.formatAndSend('boom:GOMB', display=1)
                 self.formatAndSend('boom:COUNTDOWN', display=2)
                 self.formatAndSend('boom:STARTED!', display=3)
             elif text == 'code':
