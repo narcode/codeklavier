@@ -615,9 +615,9 @@ class Mapping_Motippets:
             self.evaluateSC('eval', flash=False)
             self.formatAndSend(self.__mini_snippet_mid_2, display=snippet_num, syntax_color='mid:')
         if snippet_num == 2 and pianosection == 'mid with unmap':
-            self.__keyboard.type(self.__mini_snippet_mid_2b)
+            self.__keyboard.type(self.__mini_snippet_mid_2)
             self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_mid_2b, display=snippet_num, syntax_color='mid:')
+            self.formatAndSend(self.__mini_snippet_mid_2, display=snippet_num, syntax_color='mid:')
             #unmap
             self.__keyboard.type(self.__mini_unmap_mid_1)
             self.evaluateSC('eval', flash=False)
