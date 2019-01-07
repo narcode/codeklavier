@@ -583,6 +583,7 @@ class Motippets(object):
                     self._unmapCounter1 += 1
                     self._unmapCounter2 = 0
                     self._unmapCounter3 = 0
+                    self._unmapCounter3_m = 0
                 else:
                     compare = False
 
@@ -606,6 +607,7 @@ class Motippets(object):
                     self._unmapCounter2 += 1
                     self._unmapCounter1 = 0
                     self._unmapCounter3 = 0
+                    self._unmapCounter3_m = 0
                 else:
                     compare = False
 
@@ -630,6 +632,7 @@ class Motippets(object):
                     self._unmapCounter3 += 1
                     self._unmapCounter1 = 0
                     self._unmapCounter2 = 0
+                    self._unmapCounter3 = 0
                 else:
                     compare = False
 
@@ -654,6 +657,7 @@ class Motippets(object):
                     self._unmapCounter3_m += 1
                     self._unmapCounter1 = 0
                     self._unmapCounter2 = 0
+                    self._unmapCounter3 = 0                    
                 else:
                     compare = False
 
