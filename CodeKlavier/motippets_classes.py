@@ -144,7 +144,7 @@ class Motippets(object):
                     mini_motif_2_Mid_played = self.compare_motif(
                         self._memory, 'mini2',
                         Motifs.get('mini_motif_2_mid'),
-                        note, False)
+                        note, True)
                     mini_motif_3_Mid_played = self.compare_motif(
                         self._memory, 'mini3m',
                         Motifs.get('mini_motif_3_mid'),
