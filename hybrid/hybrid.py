@@ -603,6 +603,8 @@ def ck_loop(prototype='hello world'):
                             minimotif2_hi_mapped = memHi._unmapCounter2
 
                             ##tremolos:
+                            print('motif 2 played:', motif2_played)
+                            print('motif 1 played:', motif1_played)
                             print('mini3_mid:', minimotif3_mid_mapped)
                             print('mini2_mid:', minimotif2_mid_mapped)                            
                             if minimotif1_mid_mapped > 0:
