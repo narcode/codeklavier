@@ -887,12 +887,12 @@ class Mapping_Motippets:
                 #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 #self.evaluateSC('eval')
                 self._osc.send_message("/pianogong", str(mod)) #narcode check why with two text vars?
-                self.formatAndSend('DOOOOONG!;', display=3, syntax_color='snippet:')
+                self.formatAndSend('DOOOOOOOOOOOONG!;', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 #self.evaluateSC('eval')
                 self._osc.send_message("/pianogong", str(mod))
-                self.formatAndSend('DOOOOONG!', display=3, syntax_color='snippet:')
+                self.formatAndSend('DOOOOOOOOOOOONG!', display=3, syntax_color='snippet:')
 
         elif result_num == 5:
             if text == 'comment':
