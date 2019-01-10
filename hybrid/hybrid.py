@@ -389,6 +389,7 @@ def main():
                                     tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
                                     
                                 if motif1_played > 0 or motif2_played > 0:
+                                    print('debug anne', minimotif3_low_mapped)
                                     if minimotif1_low_mapped > 0:
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 1)
                                     elif minimotif2_low_mapped > 0:

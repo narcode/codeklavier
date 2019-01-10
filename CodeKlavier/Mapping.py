@@ -316,11 +316,7 @@ class Mapping_Motippets:
             self.__mini_unmap_low_3 = self._config[snippets].get('mini_unmap_low_3')
 
             self.__mini_snippet_low_2 = self._config[snippets].get('mini_snippet_low_2')
-            self.__mini_snippet_low_1_amp = self._config[snippets].get('mini_snippet_low_1_amp')
-            self.__mini_unmap_low_1 = self._config[snippets].get('mini_unmap_low_1')
-            self.__mini_unmap_low_2 = self._config[snippets].get('mini_unmap_low_2')
-            self.__mini_unmap_low_3 = self._config[snippets].get('mini_unmap_low_3')
-
+            
         except KeyError:
             raise LookupError('Missing snippets in the config file.')
 
