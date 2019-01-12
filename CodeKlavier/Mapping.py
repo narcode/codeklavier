@@ -716,7 +716,7 @@ class Mapping_Motippets:
                 self._osc.send_message("/ck_pp", "text1")
                 self.__keyboard.type('~snippet2.stop(10);')
                 self.evaluateSC('eval', flash=False)
-                self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
+                self.formatAndSend('~snippet2.stop', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval', flash=False)
@@ -731,8 +731,8 @@ class Mapping_Motippets:
                 self.__keyboard.type('~snippet1.stop(20);')
                 self.__keyboard.type('~snippet2.stop;')
                 self.evaluateSC('eval', flash=False)
-                self.formatAndSend('~snippet1.stop;', display=3, syntax_color='snippet:')
-                self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
+                self.formatAndSend('~snippet1.stop', display=3, syntax_color='snippet:')
+                self.formatAndSend('~snippet2.stop', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 self.__keyboard.type('//less than an 8ve. Nothing happens :(')
                 self.evaluateSC('eval', flash=False)
@@ -748,12 +748,12 @@ class Mapping_Motippets:
                 #self.evaluateSC('eval', flash=False)
                 self._osc.send_message("/ck_pp", "quote")
                 self._osc.send_message("/gong", str(mod))
-                self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
+                self.formatAndSend('~gong.play(' + str(mod) + ')', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 #self.__keyboard.type('~gong.play(' + str(mod) + ');');
                 #self.evaluateSC('eval', flash=False)
                 self._osc.send_message("/gong", str(mod))
-                self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
+                self.formatAndSend('~gong.play(' + str(mod) + ')', display=3, syntax_color='snippet:')
 
         elif result_num == 4:
             if text == 'comment':
@@ -826,7 +826,7 @@ class Mapping_Motippets:
                 self.enter()
             elif text == 'huygens':
                 self.__keyboard.type('~stop.all;')
-                self.formatAndSend('~stop.all;', display=3, syntax_color='snippet:')
+                self.formatAndSend('~stop.all', display=3, syntax_color='snippet:')
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
                 self.evaluateSC('eval', flash=False)
 
@@ -883,7 +883,7 @@ class Mapping_Motippets:
                 #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 #self.evaluateSC('eval')
                 self._osc.send_message("/pianogong", str(mod)) #narcode check why with two text vars?
-                self.formatAndSend('DOOOOOOOOOOOONG!;', display=3, syntax_color='snippet:')
+                self.formatAndSend('DOOOOOOOOOOOONG!', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 #self.evaluateSC('eval')
