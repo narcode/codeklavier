@@ -65,7 +65,8 @@ class Ckalculator(object):
         
 
         
-    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0, articulaton={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}):
+    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0, 
+                   articulaton={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, sendToDisplay=True):
         """Parse the midi signal and process it depending on the register.
 
         :param tuple event: describes the midi event that was received
@@ -80,14 +81,16 @@ class Ckalculator(object):
         if (message[0] == self.pedal):
             if message[2] == 127 and (')' in self._fullStack or self._temp == False):
                 print('(')
-                self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
                 self._fullStack.append('(')
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
             elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
-                self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
                 self._fullStack.append(')')
                 # to main stack
                 print('temp num stack:', self._tempNumberStack);
@@ -134,15 +137,15 @@ class Ckalculator(object):
                 if note in LambdaMapping.get('successor'):
                     
                     if self._deltatime <= articulaton['staccato']:
-                        self.build_succesor(successor)
+                        self.build_succesor(successor, sendToDisplay)
                     
                     elif self._deltatime > articulaton['staccato']: #this is either the func 'zero' or 'predecessor'
                         
                         if note in [LambdaMapping.get('successor')[0]]:
                             if len(self._numberStack) == 0:
-                                self.build_predecessor(zero) # what kind of result is better?
+                                self.build_predecessor(zero, sendToDisplay) # what kind of result is better?
                             else:
-                                self.build_predecessor(predecessor)
+                                self.build_predecessor(predecessor, sendToDisplay)
                                 
                         else: #zero + recursive counter:
                             self.zeroPlusRec()                                  
@@ -151,7 +154,7 @@ class Ckalculator(object):
                         
                 elif note in LambdaMapping.get('zero'):
                     print('identity')
-                    self.zeroPlusRec()
+                    self.zeroPlusRec(sendToDisplay)
                     self._successorHead = []
                                                                             
                 elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
@@ -163,25 +166,28 @@ class Ckalculator(object):
                             self._evalStack = []
                             self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
                             if (type(self._evalStack[0]) == int):
-                                self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                             syntax_color='result:')
+                                if sendToDisplay:
+                                    self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                 syntax_color='result:')
                                 print(self._evalStack[0])
                                 self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                                 
                                 # Huygens easter eggs
-                                self.easterEggs(number=str(self._evalStack[0]), debug=True)
+                                self.easterEggs(number=str(self._evalStack[0]), debug=True, sendToDisplay=sendToDisplay)
                                 
                             else: 
-                                self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
-                                self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
+                                if sendToDisplay:
+                                    self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
+                                    self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
                                 self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
                                 
                                 
                         
                         else:
                             #print(self.oscName)
-                            self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
-                                                         syntax_color='result:')
+                            if sendToDisplay:
+                                self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
+                                                             syntax_color='result:')
                             self.mapscheme._osc.send_message("/"+self.oscName, self._numberStack[0].__name__)
                             
                         self._functionStack = []
@@ -192,26 +198,26 @@ class Ckalculator(object):
                 elif note in LambdaMapping.get('addition'):
                     if self._deltatime <= articulaton['staccato']:
                         if not self._temp:
-                            self.add()
+                            self.add(False, sendToDisplay)
                         else:
                             self.add(temp=True)
                     elif self._deltatime > articulaton['staccato']:
                         if not self._temp:
-                            self.multiply() 
+                            self.multiply(False, sendToDisplay) 
                         else:
-                            self.multiply(True)                    
+                            self.multiply(True, sendToDisplay)                    
                     
                 elif note in LambdaMapping.get('substraction'):
                     if self._deltatime <= articulaton['staccato']:                
                         if not self._temp:
-                            self.substract()  
+                            self.substract(False, sendToDisplay)  
                         else:
-                            self.substract(True)
+                            self.substract(True, sendToDisplay)
                     elif self._deltatime > articulaton['staccato']:
                         if not self._temp:
-                            self.divide() 
+                            self.divide(False, sendToDisplay) 
                         else:
-                            self.divide(True)                    
+                            self.divide(True, sendToDisplay)                    
                     
                 elif note in LambdaMapping.get('multiplication'):
                     print('used via articulation under addition')
@@ -221,26 +227,26 @@ class Ckalculator(object):
                                     
                 # number comparisons    
                 elif note in LambdaMapping.get('equal'):
-                    self.equal() 
+                    self.equal(sendToDisplay) 
                     
                 elif note in LambdaMapping.get('greater'):
                     if self._deltatime <= articulaton['staccato']:                                
-                        self.greater_than() 
+                        self.greater_than(sendToDisplay) 
                     elif self._deltatime > articulaton['staccato']:
-                        self.less_than()  
+                        self.less_than(sendToDisplay)  
                         
                 elif note in LambdaMapping.get('less'):
                     print('used via articulation under greater than')                                              
 
                 
-    def build_succesor(self, function):
+    def build_succesor(self, function, sendToDisplay=True):
         """
         builds a successor functions chain.\n
         \n
         :param function function: the function to apply the successor function to
         """
-        
-        self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
+        if sendToDisplay:
+            self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
         print(function.__name__)       
                 
         def nestFunc(function1):
@@ -254,14 +260,14 @@ class Ckalculator(object):
         if len(self._successorHead) > 1:
             self._successorHead = self._successorHead[-1:]
             
-    def build_predecessor(self, function):
+    def build_predecessor(self, function, sendToDisplay=True):
         """
         builds a predecessor functions chain.\n
         \n
         :param function function: the function to apply the predecessor function to
         """
-        
-        self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
+        if sendToDisplay: 
+            self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
         print(function.__name__)       
                 
         def nestFunc(function1):
@@ -288,8 +294,9 @@ class Ckalculator(object):
                     self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
                     
                     if (type(self._evalStack[0]) == int):
-                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                     syntax_color='result:')
+                        if sendToDisplay:
+                            self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                         syntax_color='result:')
                         print(self._evalStack[0])
                         self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                         
@@ -302,13 +309,14 @@ class Ckalculator(object):
                     print('predecessor receives only number expressions!')
                 
                                             
-    def add(self, temp=False):
+    def add(self, temp=False, sendToDisplay=True):
         """
         Append an addition function to the functions stack and any existing number expression\n
         \n
         """
-        self.mapscheme.formatAndSend('+', display=2, syntax_color='add:', spacing=False)                       
-        self.mapscheme.formatAndSend('add', display=1, syntax_color='add:')               
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('+', display=2, syntax_color='add:', spacing=False)                       
+            self.mapscheme.formatAndSend('add', display=1, syntax_color='add:')               
         print('addition')
         
         if not temp:
@@ -334,13 +342,14 @@ class Ckalculator(object):
             if self._tempStack[0] == '(':
                 self._tempStack.append(add_trampoline)        
         
-    def substract(self, temp=False):
+    def substract(self, temp=False, sendToDisplay=True):
         """
         Append a substraction function to the functions stack and any existing number expression\n
         \n
         """
-        self.mapscheme.formatAndSend('-', display=2, syntax_color='min:',spacing=False)               
-        self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('-', display=2, syntax_color='min:',spacing=False)               
+            self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
         print('substraction')
         
         if not temp:
@@ -367,13 +376,14 @@ class Ckalculator(object):
                 self._tempStack.append(substract)         
 
 
-    def equal(self):
+    def equal(self, sendToDisplay=True):
         """
         Compare two number expressions for equality\n
         \n
         """
-        self.mapscheme.formatAndSend('equal to', display=1, syntax_color='equal:') 
-        self.mapscheme.formatAndSend('==', display=2, syntax_color='int:', spacing=False)                       
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('equal to', display=1, syntax_color='equal:') 
+            self.mapscheme.formatAndSend('==', display=2, syntax_color='int:', spacing=False)                       
         
         print('equal to')
         
@@ -389,13 +399,14 @@ class Ckalculator(object):
         
         
         
-    def greater_than(self):
+    def greater_than(self, sendToDisplay=True):
         """
         Compare two number expressions for equality\n
         \n
         """
-        self.mapscheme.formatAndSend('greater than', display=1, syntax_color='gt:') 
-        self.mapscheme.formatAndSend('>', display=2, syntax_color='int:', spacing=False)                       
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('greater than', display=1, syntax_color='gt:') 
+            self.mapscheme.formatAndSend('>', display=2, syntax_color='int:', spacing=False)                       
         
         print('greater than')
         if len(self._numberStack) == 0:
@@ -409,13 +420,14 @@ class Ckalculator(object):
         self.oscName = "ck_gt"
         
         
-    def less_than(self):
+    def less_than(self, sendToDisplay=True):
         """
         Compare two number expressions for equality\n
         \n
         """
-        self.mapscheme.formatAndSend('less than', display=1, syntax_color='lt:')  
-        self.mapscheme.formatAndSend('<', display=2, syntax_color='int:', spacing=False)                       
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('less than', display=1, syntax_color='lt:')  
+            self.mapscheme.formatAndSend('<', display=2, syntax_color='int:', spacing=False)                       
         print('less than')
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
@@ -430,15 +442,15 @@ class Ckalculator(object):
         
 
     ##stack and evaluation
-    def evaluateFunctionStack(self, stack, temp=False):
+    def evaluateFunctionStack(self, stack, temp=False, sendToDisplay=True):
         """Evaluate a function with 2 arguments.\n
         \n
         :param function function: the function to evaluate with the given args
         :param function args: the function arguments to pass
         """
-        
-        self.mapscheme.formatAndSend('apply functions', display=1, syntax_color='eval:')       
-        self.mapscheme.newLine(display=1)       
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('apply functions', display=1, syntax_color='eval:')       
+            self.mapscheme.newLine(display=1)       
         
         def evaluate2args(function, *args):
             """Evaluate a function with 2 arguments.\n
@@ -496,12 +508,13 @@ class Ckalculator(object):
         """
         
     
-    def multiply(self, temp=False):
+    def multiply(self, temp=False, sendToDisplay=True):
         """Append an addition function to the functions stack and any existing number expression\n
         \n
         """
-        self.mapscheme.formatAndSend('*', display=2, syntax_color='mul:', spacing=False)                        
-        self.mapscheme.formatAndSend('multiply', display=1, syntax_color='mul:')       
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('*', display=2, syntax_color='mul:', spacing=False)                        
+            self.mapscheme.formatAndSend('multiply', display=1, syntax_color='mul:')       
         print('multiplication')
         
         if not temp:
@@ -527,13 +540,14 @@ class Ckalculator(object):
                 self._tempStack.append(mult_trampoline)         
             
         
-    def divide(self, temp=False):
+    def divide(self, temp=False, sendToDisplay=True):
         """
         Append an addition function to the functions stack and any existing number expression\n
         \n
         """
-        self.mapscheme.formatAndSend('/', display=2, syntax_color='div:', spacing=False)                
-        self.mapscheme.formatAndSend('divide', display=1, syntax_color='div:')        
+        if sendToDisplay:
+            self.mapscheme.formatAndSend('/', display=2, syntax_color='div:', spacing=False)                
+            self.mapscheme.formatAndSend('divide', display=1, syntax_color='div:')        
         print('division')
         
         if not temp:
@@ -725,7 +739,7 @@ class Ckalculator(object):
         
                             
                             
-    def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini'):
+    def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played
         :param int offset: the offset in semitones
@@ -743,7 +757,8 @@ class Ckalculator(object):
             if shift_type == 'random':           
                 shift_type = random.choice(['octave shift', 'semitone shift'])
                 print(shift_type)
-                self.mapscheme.formatAndSend('Wrong note!\n'+shift_type, display=3, syntax_color='error:')
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('Wrong note!\n'+shift_type, display=3, syntax_color='error:')
             
             if shift_type == 'semitone shift':
                 for mapping in mappings:
@@ -766,50 +781,55 @@ class Ckalculator(object):
     
             #print('new mapping', LambdaMapping)
             note_names = {24:"C",25:"C#",26:"D",27:"D#",28:"E",29:"F",30:"F#",31:"G",32:"G#",33:"A",34:"A#",35:"B"}
-            self.mapscheme.formatAndSend('eval mapped to ' +
-                                         note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
-                                         str(LambdaMapping.get('eval')[0]) + ')', display=3,
-                                         syntax_color='e_debug:');
+            if sendToDisplay:
+                self.mapscheme.formatAndSend('eval mapped to ' +
+                                             note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
+                                             str(LambdaMapping.get('eval')[0]) + ')', display=3,
+                                             syntax_color='e_debug:');
             #print('new valid notes', self._notesList)
         
-    def zeroPlusRec(self):
+    def zeroPlusRec(self, sendToDisplay: True):
         if len(self._successorHead) > 0:
             print('succ head: ', trampolineRecursiveCounter(self._successorHead[0]))
             
             if self._temp is False:
                 self._numberStack = []                                
                 #print result:
-                self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
-                #self.mapscheme.newLine(display=1)
-                self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
-                                             display=2, syntax_color='int:', spacing=False)
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.newLine(display=1)
+                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
+                                                 display=2, syntax_color='int:', spacing=False)
 
                 self._numberStack.append(self._successorHead[0])
                 self._fullStack.append(self._successorHead[0])
                                                 
             
             else:
-                self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
-                #self.mapscheme.newLine(display=1)
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.newLine(display=1)
                 
                 if len(self._tempStack) > 0:
                     self._tempNumberStack = []                                                                            
                     if self._tempStack[0] == '(':
                         self._tempNumberStack.append(self._successorHead[0])
-                        self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
-                                                     display=2, syntax_color='int:', spacing=False)                                        
+                        if sendToDisplay:
+                            self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
+                                                         display=2, syntax_color='int:', spacing=False)                                        
                         
                         if len(self._tempFunctionStack) > 0:
                             self.evaluateFunctionStack(self._tempFunctionStack, True)                        
                             if (self._tempNumberStack[0].__name__ is 'succ1'):
                                 self._evalStack = []
                                 self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
-                                self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                             syntax_color='result:')                                
+                                if sendToDisplay:
+                                    self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                 syntax_color='result:')                                
                                 print(self._evalStack[0])                        
                                 self._tempFunctionStack = []     
                                 
-    def easterEggs(self, configfile='default_setup.ini', number=100, debug=False):
+    def easterEggs(self, configfile='default_setup.ini', number=100, debug=False, sendToDisplay=True):
         """
         Attach certain events to specific numbers. Easter egg style.
         
@@ -824,9 +844,10 @@ class Ckalculator(object):
         if number in config['easter eggs']:
             if debug:
                 print('EASTER EGG FOUND: ', config['easter eggs'].get(number))
-            
-            self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
-            self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
+
+            if sendToDisplay:
+                self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
+                self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
 
                   
 class CK_lambda(object):
