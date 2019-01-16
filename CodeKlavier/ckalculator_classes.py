@@ -148,7 +148,7 @@ class Ckalculator(object):
                                 self.build_predecessor(predecessor, sendToDisplay)
                                 
                         else: #zero + recursive counter:
-                            self.zeroPlusRec()                                  
+                            self.zeroPlusRec(sendToDisplay)                                  
                                 
                         self._successorHead = []
                         
@@ -301,7 +301,7 @@ class Ckalculator(object):
                         self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                         
                         # Huygens easter eggs
-                        self.easterEggs(number=str(self._evalStack[0]), debug=True)
+                        self.easterEggs(number=str(self._evalStack[0]), debug=True, sendToDisplay=sendToDisplay)
                         
                     #self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=2, syntax_color='int:')                
                     #print(trampolineRecursiveCounter(self._numberStack[0]))
@@ -829,7 +829,7 @@ class Ckalculator(object):
                                 print(self._evalStack[0])                        
                                 self._tempFunctionStack = []     
                                 
-    def easterEggs(self, configfile='default_setup.ini', number=100, debug=False, sendToDisplay=True):
+    def easterEggs(self, configfile='default_setup.ini', number=100, debug=False, special_num=7,sendToDisplay=True):
         """
         Attach certain events to specific numbers. Easter egg style.
         
@@ -838,8 +838,8 @@ class Ckalculator(object):
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
         
-        if int(number)%42 is 0:
-            number = '42'
+        if int(number)%special_num is 0: #for huygens its 42
+            number = str(special_num)
 
         if number in config['easter eggs']:
             if debug:
