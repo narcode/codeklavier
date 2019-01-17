@@ -161,7 +161,7 @@ class Ckalculator(object):
                     print('evaluate!')
                     self.mapscheme.newLine(display=1)
                     if len(self._functionStack) > 0 and len(self._numberStack) > 0:
-                        self.evaluateFunctionStack(self._functionStack)
+                        self.evaluateFunctionStack(self._functionStack, sendToDisplay=sendToDisplay)
                         if (self._numberStack[0].__name__ is 'succ1'):
                             self._evalStack = []
                             self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
@@ -179,7 +179,8 @@ class Ckalculator(object):
                                 if sendToDisplay:
                                     self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
                                     self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
-                                self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
+                                   
+                                    self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
                                 
                                 
                         
@@ -439,8 +440,6 @@ class Ckalculator(object):
         self._fullStack.append(less)
         self.oscName = "ck_lt"
         
-        
-
     ##stack and evaluation
     def evaluateFunctionStack(self, stack, temp=False, sendToDisplay=True):
         """Evaluate a function with 2 arguments.\n
@@ -819,7 +818,7 @@ class Ckalculator(object):
                                                          display=2, syntax_color='int:', spacing=False)                                        
                         
                         if len(self._tempFunctionStack) > 0:
-                            self.evaluateFunctionStack(self._tempFunctionStack, True)                        
+                            self.evaluateFunctionStack(self._tempFunctionStack, sendToDisplay=sendToDisplay)                        
                             if (self._tempNumberStack[0].__name__ is 'succ1'):
                                 self._evalStack = []
                                 self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
