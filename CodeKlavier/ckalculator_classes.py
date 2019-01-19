@@ -51,6 +51,8 @@ class Ckalculator(object):
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
         self._developedOstinato = False
+        self._ckar = [] 
+        self._rules = []
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -79,7 +81,7 @@ class Ckalculator(object):
         message, deltatime = event
 
         if (message[0] == self.pedal):
-            if message[2] == 127 and (')' in self._fullStack or self._temp == False):
+            if message[1] == 93 and (')' in self._fullStack or self._temp == False):
                 print('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
@@ -87,7 +89,7 @@ class Ckalculator(object):
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif message[1] == 96 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
@@ -95,12 +97,19 @@ class Ckalculator(object):
                 # to main stack
                 print('temp num stack:', self._tempNumberStack);
                 if len(self._tempNumberStack) > 0:
-                    self._numberStack.append(self._tempNumberStack.pop())
+                    #self._numberStack.append(self._tempNumberStack.pop())
+                    if len(self._ckar) == 0:
+                        self._ckar.append(trampolineRecursiveCounter(self._tempNumberStack.pop()))
+                        print('axiom: ', 'a.' + str(self._ckar[0]))                      
                 #self.evaluateTempStack(self._tempStack)
                 self._tempFunctionStack = []
                 self._tempNumberStack = []
                 self._temp = False
-                self._fullStack = []
+                self._fullStack = []              
+                #if len(self._ckar) > 0:
+                    #print('axiom to send: ', self._ckar[0])
+                    #self.mapscheme._osc.send_message("/ckar_a", self._ckar[0])
+                    
             
         if message[0] == self.note_on:
             if section == 'ostinatos':
@@ -148,17 +157,37 @@ class Ckalculator(object):
                                 self.build_predecessor(predecessor, sendToDisplay)
                                 
                         else: #zero + recursive counter:
-                            self.zeroPlusRec(sendToDisplay)                                  
+                            self.makeAxiom(sendToDisplay)                                  
                                 
                         self._successorHead = []
                         
                 elif note in LambdaMapping.get('zero'):
                     print('identity')
-                    self.zeroPlusRec(sendToDisplay)
+                    self.makeAxiom(sendToDisplay)
                     self._successorHead = []
                                                                             
                 elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
+                    print(self._rules)
+                    if len(self._rules) > 1:
+                        
+                        for index in range(0, len(self._rules)):
+                            item = self._rules[index]
+                            if index == 0:
+                                rule = str(item) + '.'
+                            else:
+                                rule += str(item)
+                                
+                        print('parsed rule: ', rule)
+                        
+                        if len(self._ckar) == 1:
+                            rule = 'a.'+str(self._ckar[0]) + ',' + rule
+                            self._ckar = []
+                            
+                        print("ckar rule :", rule)
+                        self.mapscheme._osc.send_message("/ckar", rule)
+                        self._rules = []
+                        
                     self.mapscheme.newLine(display=1)
                     if len(self._functionStack) > 0 and len(self._numberStack) > 0:
                         self.evaluateFunctionStack(self._functionStack, sendToDisplay=sendToDisplay)
@@ -170,6 +199,7 @@ class Ckalculator(object):
                                     self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
                                                                  syntax_color='result:')
                                 print(self._evalStack[0])
+                                
                                 self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                                 
                                 # Huygens easter eggs
@@ -257,7 +287,7 @@ class Ckalculator(object):
                 return function(self._successorHead[0])
 
         self._successorHead.append(nestFunc(function))
-                                    
+                                            
         if len(self._successorHead) > 1:
             self._successorHead = self._successorHead[-1:]
             
@@ -826,7 +856,52 @@ class Ckalculator(object):
                                     self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
                                                                  syntax_color='result:')                                
                                 print(self._evalStack[0])                        
-                                self._tempFunctionStack = []     
+                                self._tempFunctionStack = []  
+                                
+    def makeAxiom(self, sendToDisplay: True):
+        if len(self._successorHead) > 0:
+            print('succ head: ', trampolineRecursiveCounter(self._successorHead[0]))
+            
+            if self._temp is False:
+                self._numberStack = []                                
+                #print result:
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.newLine(display=1)
+                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
+                                                 display=2, syntax_color='int:', spacing=False)
+
+                self._numberStack.append(self._successorHead[0])
+                self._fullStack.append(self._successorHead[0])
+                
+                self._rules.append(trampolineRecursiveCounter(self._successorHead[0]))
+                print('rules now: ', self._rules)
+                                                 
+            else:
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.newLine(display=1)
+                
+                if len(self._tempStack) > 0:
+                    self._tempNumberStack = []                                                                            
+                    if self._tempStack[0] == '(':
+                        self._tempNumberStack.append(self._successorHead[0])
+                        if sendToDisplay:
+                            self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
+                                                         display=2, syntax_color='int:', spacing=False)                                        
+                        
+                        if len(self._tempFunctionStack) > 0:
+                            self.evaluateFunctionStack(self._tempFunctionStack, sendToDisplay=sendToDisplay)                        
+                            if (self._tempNumberStack[0].__name__ is 'succ1'):
+                                self._evalStack = []
+                                self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
+                                self._ckar.append(self._evalStack[0]);
+                                if sendToDisplay:
+                                    self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                 syntax_color='result:')                                
+                                print(self._evalStack[0])
+                                print("ckar axiom: ", self._ckar[0])
+                                self._tempFunctionStack = []                                 
                                 
     def easterEggs(self, configfile='default_setup.ini', number=100, debug=False, special_num=7,sendToDisplay=True):
         """
