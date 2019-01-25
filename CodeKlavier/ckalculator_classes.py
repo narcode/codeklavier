@@ -51,6 +51,7 @@ class Ckalculator(object):
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
         self._developedOstinato = False
+        self._functionBody = ''
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -66,7 +67,7 @@ class Ckalculator(object):
 
         
     def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0, 
-                   articulaton={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, sendToDisplay=True):
+                   articulation={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, sendToDisplay=True):
         """Parse the midi signal and process it depending on the register.
 
         :param tuple event: describes the midi event that was received
@@ -109,7 +110,8 @@ class Ckalculator(object):
                     #self.find_ostinato(self._fullMemory, debug=True)
                     #print('note on mem:', self._note_on_cue)
                 else:
-                    print('ostinato developed, awaiting arithmetic function')
+                    if self._functionBody == '':
+                        print('ostinato developed, awaiting arithmetic function')
             
 
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
@@ -128,19 +130,19 @@ class Ckalculator(object):
                 if not self._developedOstinato:
                     self._fullMemory.append(note)
                     self.find_ostinato(self._fullMemory, debug=True)                        
-                #else:
-                    # detect ostinato change
-                    #print('ostinato change...')
-                        
+                else:
+                    if self._functionBody == '':
+                        print('define func body...')
+                        self.define_function_body(note, articulation)
                     
                 ### lambda calculus ###
-                    
+            if section == 'full':        
                 if note in LambdaMapping.get('successor'):
-                    
-                    if self._deltatime <= articulaton['staccato']:
+
+                    if self._deltatime <= articulation['staccato']:
                         self.build_succesor(successor, sendToDisplay)
                     
-                    elif self._deltatime > articulaton['staccato']: #this is either the func 'zero' or 'predecessor'
+                    elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
                         
                         if note in [LambdaMapping.get('successor')[0]]:
                             if len(self._numberStack) == 0:
@@ -198,24 +200,24 @@ class Ckalculator(object):
                     print('used via articulation under 1 succesor')
                         
                 elif note in LambdaMapping.get('addition'):
-                    if self._deltatime <= articulaton['staccato']:
+                    if self._deltatime <= articulation['staccato']:
                         if not self._temp:
                             self.add(False, sendToDisplay)
                         else:
                             self.add(temp=True)
-                    elif self._deltatime > articulaton['staccato']:
+                    elif self._deltatime > articulation['staccato']:
                         if not self._temp:
                             self.multiply(False, sendToDisplay) 
                         else:
                             self.multiply(True, sendToDisplay)                    
                     
                 elif note in LambdaMapping.get('substraction'):
-                    if self._deltatime <= articulaton['staccato']:                
+                    if self._deltatime <= articulation['staccato']:                
                         if not self._temp:
                             self.substract(False, sendToDisplay)  
                         else:
                             self.substract(True, sendToDisplay)
-                    elif self._deltatime > articulaton['staccato']:
+                    elif self._deltatime > articulation['staccato']:
                         if not self._temp:
                             self.divide(False, sendToDisplay) 
                         else:
@@ -232,9 +234,9 @@ class Ckalculator(object):
                     self.equal(sendToDisplay) 
                     
                 elif note in LambdaMapping.get('greater'):
-                    if self._deltatime <= articulaton['staccato']:                                
+                    if self._deltatime <= articulation['staccato']:                                
                         self.greater_than(sendToDisplay) 
-                    elif self._deltatime > articulaton['staccato']:
+                    elif self._deltatime > articulation['staccato']:
                         self.less_than(sendToDisplay)  
                         
                 elif note in LambdaMapping.get('less'):
@@ -730,7 +732,7 @@ class Ckalculator(object):
         else:
             diff = np.subtract(ostinato1, ostinato2)
             
-            if np.array_equal(sorted(diff), [0,0,0,1]):
+            if np.array_equal(sorted(np.abs(diff)), [0,0,0,1]):
                 self._developedOstinato = True
                 self._fullMemory = []
                 self._note_on_cue = []
@@ -741,8 +743,88 @@ class Ckalculator(object):
             print('first:',ostinato1,
                   'compare:',ostinato2)      
        
-                            
-                            
+    def define_function_body(self, note, articulation, debug=True):
+        """
+        High level function to choose a lambda function to be used as part of the function body 
+        of a function definition.
+      
+        :param int note: incoming MIDI note
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
+        """  
+        if note in LambdaMapping.get('successor'):
+
+            if self._deltatime <= articulation['staccato']:
+                self._functionBody = 'succesor'
+            
+            elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
+                
+                if note in [LambdaMapping.get('successor')[0]]:
+                    self._functionBody = 'predecessor'
+                        
+        elif note in LambdaMapping.get('zero'):
+            self._functionBody = 'zero'
+           
+        elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
+            self._functionBody = 'eval'
+            
+        elif note in LambdaMapping.get('predecessor'):
+            self._functionBody = 'predecessor'
+            
+        elif note in LambdaMapping.get('addition'):
+            if self._deltatime <= articulation['staccato']:
+                self._functionBody = 'add'
+                
+            elif self._deltatime > articulation['staccato']:
+                self._functionBody = 'multiply'
+                
+        elif note in LambdaMapping.get('substraction'):
+            if self._deltatime <= articulation['staccato']:                
+                self._functionBody = 'substract'
+                
+            elif self._deltatime > articulation['staccato']:
+                self._functionBody = 'divide'
+                
+        # number comparisons    
+        elif note in LambdaMapping.get('equal'):
+            self._functionBody = 'equal'
+            
+        elif note in LambdaMapping.get('greater'):
+            if self._deltatime <= articulation['staccato']:
+                self._functionBody = 'greater'
+            elif self._deltatime > articulation['staccato']:
+                self._functionBody = 'less'                
+                
+        if debug:
+            print('function body is:', self._functionBody)
+        
+        if self._functionBody != '':
+            self.storeFunction()
+            
+    def storeFunction(self, funcfile='ck_functions.ini', debug=True):
+        """
+        Store the defined function in a .ini file for future use.
+        """
+        ck_functions = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        ck_functions.read(funcfile, encoding='utf8')
+        
+        func_num = len(ck_functions['functions'])
+        
+        name = 'function' + repr(func_num+1) + ': '
+        name2 = 'function' + repr(func_num+2) + ': '
+        chord = ','.join(map(str, self.ostinato['first']))
+        chord2 = ','.join(map(str, self.ostinato['compare']))
+        body = chord + ' -> (' + self._functionBody + ' x)\n'
+        body2 = chord2 + ' -> (' + self._functionBody + ' x)\n'
+        
+        with open(funcfile, 'a') as file:
+            file.write(name + body + name2 + body2)
+            file.close()
+
+        #reset the ostinato analysis
+        self.ostinato = {'first': [], 'compare': []}
+        self._foundOstinato = False
+        self._developedOstinato = False 
+                
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played
