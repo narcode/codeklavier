@@ -122,14 +122,15 @@ class Ckalculator(object):
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')
 
-            else: 
-                if section == 'ostinatos':
-                    if not self._developedOstinato:
-                        self._fullMemory.append(note)
-                        self.find_ostinato(self._fullMemory, debug=False)                        
-                    #else:
-                        # detect ostinato change
-                        #print('ostinato change...')
+            #else: #no worng note for now... 
+            
+            if section == 'ostinatos':
+                if not self._developedOstinato:
+                    self._fullMemory.append(note)
+                    self.find_ostinato(self._fullMemory, debug=True)                        
+                #else:
+                    # detect ostinato change
+                    #print('ostinato change...')
                         
                     
                 ### lambda calculus ###
@@ -640,6 +641,8 @@ class Ckalculator(object):
             #self.get_ostinato_pattern(cue_reverse, size, True)
                 
             i = np.where(counts > 2)
+
+            #print('i:', i)
             
             if i[0].shape[0] > 3:
                 # np_notes = notes[i] ### this is shorthand for what happend later ?
@@ -648,59 +651,46 @@ class Ckalculator(object):
                         self._filtered_cue.append(x)
                 
                 cue_notes, cue_reverse = np.unique(self._filtered_cue, False, True, False)
-                self.get_ostinato_pattern(cue_reverse, size, True)                        
+                pattern_match = self.get_ostinato_pattern(cue_reverse, size, True)                        
                 
                 if debug:
                     print('cue notes:', cue_notes, '\ncue_reverse:', cue_reverse)
 
-
-                for item in i[0]:
-                    if not self._foundOstinato:
-                        self.ostinato['first'].append(notes[item])
-                        
-                        if len(self.ostinato['first']) > 1:
-                            np_notes = np.array(self.ostinato['first'])
+                if pattern_match:
+                    for item in i[0]:
+                        if not self._foundOstinato:
+                            self.ostinato['first'].append(notes[item])
                             
-                        if len(self.ostinato['first']) > 3:
-                            # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
-                            self.ostinato['first'] = self.ostinato['first'][-4:]
-                            
-                            if np_notes.max() - np_notes.min() < 12: #within an 8ve range
-                                self._foundOstinato = True #pause listening to analyze the frame
-                                self._fullMemory = []
-                                self._note_on_cue = []
-                                if debug:
-                                    print('i -> ', i)
-                                    print('found ostinato!', self.ostinato['first'])              
-                            else:
-                                self._foundOstinato = False
-                    else:
-                        self.ostinato['compare'].append(notes[item])
-                        
-                        if len(self.ostinato['compare']) > 1:
-                            np_notes = np.array(self.ostinato['compare'])
-                            
-                        if len(self.ostinato['compare']) > 3:
-                            # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
-                            self.ostinato['compare'] = self.ostinato['compare'][-4:]
-                            
-                            if np_notes.max() - np_notes.min() < 12: #within an 8ve range
-                                if np.array_equal(self.ostinato['first'], self.ostinato['compare']):
+                            if len(self.ostinato['first']) > 1:
+                                np_notes = np.array(self.ostinato['first'])
+                                
+                            if len(self.ostinato['first']) > 3:
+                                # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
+                                self.ostinato['first'] = self.ostinato['first'][-4:]
+                                
+                                if np_notes.max() - np_notes.min() < 12: #within an 8ve range
+                                    self._foundOstinato = True #pause listening to analyze the frame
+                                    self._fullMemory = []
+                                    self._note_on_cue = []
                                     if debug:
-                                        print('ostinato has not change')
+                                        print('i -> ', i)
+                                        print('found ostinato!', self.ostinato['first'])              
                                 else:
-                                    diff = np.subtract(self.ostinato['first'], self.ostinato['compare'])
-                                    if np.array_equal(sorted(diff), [0,0,0,1]):
-                                        self._developedOstinato = True
-                                        self._fullMemory = []
-                                        self._note_on_cue = []
-                                        if debug:
-                                            print('ostinato has 1 note difference! -> ', diff)
-                                            print('first:',self.ostinato['first'],
-                                                  'compare:',self.ostinato['compare'])              
-                                    else:
-                                        print('first:',self.ostinato['first'],
-                                              'compare:',self.ostinato['compare'])                                                      
+                                    self._foundOstinato = False
+                        else:
+                            self.ostinato['compare'].append(notes[item])
+                            
+                            if len(self.ostinato['compare']) > 1:
+                                np_notes = np.array(self.ostinato['compare'])
+                                
+                            if len(self.ostinato['compare']) > 3:
+                                # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
+                                self.ostinato['compare'] = self.ostinato['compare'][-4:]
+                                
+                                if np_notes.max() - np_notes.min() < 12: #within an 8ve range
+                                    self.compare_ostinato(self.ostinato['first'], self.ostinato['compare'],
+                                                          debug=True)
+                                                                                   
                         
     def get_ostinato_pattern(self, noteson_array, ostinato_size, debug=False):
         """
@@ -728,14 +718,29 @@ class Ckalculator(object):
         
                 return pattern_check
                        
-    def compare_ostinato(self, ostinato, note):
+    def compare_ostinato(self, ostinato1, ostinato2, debug=False):
         """
         Detect deviations of an ostinato.
         param array ostinato: the base ostinato
-        param int note: the incoming midi note
+        param int note: the ostinato to compare
         """
-        
-        
+        if np.array_equal(ostinato1, ostinato2):
+            if debug:
+                print('ostinato has not change')
+        else:
+            diff = np.subtract(ostinato1, ostinato2)
+            
+            if np.array_equal(sorted(diff), [0,0,0,1]):
+                self._developedOstinato = True
+                self._fullMemory = []
+                self._note_on_cue = []
+                
+                if debug:
+                    print('ostinato has 1 note difference! -> ', diff)
+                    
+            print('first:',ostinato1,
+                  'compare:',ostinato2)      
+       
                             
                             
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
