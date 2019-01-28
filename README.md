@@ -70,4 +70,8 @@ Be sure to setup the correct port and device ID via ``default_setup.ini``
 ## Watch
 [Codeklavier Videos](http://codeklavier.space/videos)
 
-# This project is possible thanks to the Stimuleringsfonds Creatieve Industrie
+## Support
+This project is made possible by the Creative Industries Fonds NL, our angel sponsor and the festivals and venues that book us for paid concerts. 
+
+If you would like to support the project, please consider donating via <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#46b798', 'J3J7PGIE');kofiwidget2.draw();</script> 
+
