@@ -51,7 +51,8 @@ class Ckalculator(object):
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
         self._developedOstinato = False
-        self._functionBody = ''
+        self._functionBody = {}
+        self._numForFunctionBody = None
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -131,7 +132,7 @@ class Ckalculator(object):
                     self._fullMemory.append(note)
                     self.find_ostinato(self._fullMemory, debug=True)                        
                 else:
-                    if self._functionBody == '':
+                    if len(self._functionBody) < 2:
                         print('define func body...')
                         self.define_function_body(note, articulation)
                     
@@ -151,7 +152,7 @@ class Ckalculator(object):
                                 self.build_predecessor(predecessor, sendToDisplay)
                                 
                         else: #zero + recursive counter:
-                            self.zeroPlusRec(sendToDisplay)                                  
+                            self.zeroPlusRec(sendToDisplay)                         
                                 
                         self._successorHead = []
                         
@@ -169,6 +170,7 @@ class Ckalculator(object):
                             self._evalStack = []
                             self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
                             if (type(self._evalStack[0]) == int):
+                                                               
                                 if sendToDisplay:
                                     self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
                                                                  syntax_color='result:')
@@ -750,55 +752,61 @@ class Ckalculator(object):
       
         :param int note: incoming MIDI note
         :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
-        """  
-        if note in LambdaMapping.get('successor'):
-
-            if self._deltatime <= articulation['staccato']:
-                self._functionBody = 'succesor'
-            
-            elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
+        """ 
+        if len(self._functionBody) == 0:
+            if note in LambdaMapping.get('successor'):
+    
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'succesor'
                 
-                if note in [LambdaMapping.get('successor')[0]]:
-                    self._functionBody = 'predecessor'
+                elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
+                    
+                    if note in [LambdaMapping.get('successor')[0]]:
+                        self._functionBody['arg1'] = 'predecessor'
+                            
+            elif note in LambdaMapping.get('zero'):
+                self._functionBody['arg1'] = 'zero'
+               
+            elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
+                self._functionBody['arg1'] = 'eval'
+                
+            elif note in LambdaMapping.get('predecessor'):
+                self._functionBody['arg1'] = 'predecessor'
+                
+            elif note in LambdaMapping.get('addition'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'add'
+                    
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'multiply'
+                    
+            elif note in LambdaMapping.get('substraction'):
+                if self._deltatime <= articulation['staccato']:                
+                    self._functionBody['arg1'] = 'substract'
+                    
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'divide'
+                    
+            # number comparisons    
+            elif note in LambdaMapping.get('equal'):
+                self._functionBody['arg1'] = 'equal'
+                
+            elif note in LambdaMapping.get('greater'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'greater'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'less'                
+                    
+        elif len(self._functionBody) == 1:
+            if debug:
+                print('function body arg 1 is:', self._functionBody['arg1'])
+                
+        elif len(self._functionBody) == 2:
+            if debug:
+                print('function body arg 1 is:', self._functionBody['arg2'])
                         
-        elif note in LambdaMapping.get('zero'):
-            self._functionBody = 'zero'
-           
-        elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
-            self._functionBody = 'eval'
-            
-        elif note in LambdaMapping.get('predecessor'):
-            self._functionBody = 'predecessor'
-            
-        elif note in LambdaMapping.get('addition'):
-            if self._deltatime <= articulation['staccato']:
-                self._functionBody = 'add'
-                
-            elif self._deltatime > articulation['staccato']:
-                self._functionBody = 'multiply'
-                
-        elif note in LambdaMapping.get('substraction'):
-            if self._deltatime <= articulation['staccato']:                
-                self._functionBody = 'substract'
-                
-            elif self._deltatime > articulation['staccato']:
-                self._functionBody = 'divide'
-                
-        # number comparisons    
-        elif note in LambdaMapping.get('equal'):
-            self._functionBody = 'equal'
-            
-        elif note in LambdaMapping.get('greater'):
-            if self._deltatime <= articulation['staccato']:
-                self._functionBody = 'greater'
-            elif self._deltatime > articulation['staccato']:
-                self._functionBody = 'less'                
-                
-        if debug:
-            print('function body is:', self._functionBody)
-        
-        if self._functionBody != '':
-            self.storeFunction()
+            #if self._functionBody != '':
+                #self.storeFunction()
             
     def storeFunction(self, funcfile='ck_functions.ini', debug=True):
         """
@@ -813,8 +821,8 @@ class Ckalculator(object):
         name2 = 'function' + repr(func_num+2) + ': '
         chord = ','.join(map(str, self.ostinato['first']))
         chord2 = ','.join(map(str, self.ostinato['compare']))
-        body = chord + ' -> (' + self._functionBody + ' x)\n'
-        body2 = chord2 + ' -> (' + self._functionBody + ' x)\n'
+        body = chord + ' -> (' + self._functionBody['arg1'] + ' ' + repr(self._functionBody['arg2']) + ' x)\n'
+        body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ' ' + repr(self._functionBody['arg2']) + ' x)\n'
         
         with open(funcfile, 'a') as file:
             file.write(name + body + name2 + body2)
@@ -876,8 +884,12 @@ class Ckalculator(object):
         
     def zeroPlusRec(self, sendToDisplay: True):
         if len(self._successorHead) > 0:
-            print('succ head: ', trampolineRecursiveCounter(self._successorHead[0]))
+            num = trampolineRecursiveCounter(self._successorHead[0])
+            print('succ head: ', num)
             
+            if len(self._functionBody) > 0:
+                self._numForFunctionBody = num 
+                
             if self._temp is False:
                 self._numberStack = []                                
                 #print result:
