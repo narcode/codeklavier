@@ -4,6 +4,7 @@ Contains basic Lambda calculus expressions
 """    
 
 import functools
+import re
 from fn import recur
 
 def zero(body=''):
@@ -389,3 +390,38 @@ def with_trampoline(f):
         return args
 
     return g
+
+def parseCKfunc(function_string):
+    """
+    parse a function string definition to convert it to a function CK can understand
+    param str function_string: the function definition in the form (name -> (func num arg) )
+    equivalent to λx.(func num x)
+    """
+    name = re.findall(r'\d+', function_string)[:4] #names have 4 notes
+    body = re.findall(r'[\(\)].*', function_string)[0]
+    args = re.findall(r'\w+', body)
+    func = args[0]
+    arg1 = args[1]
+    variable = args[2]
+    
+    if re.match(r'\d', arg1):
+        arg1 = int(arg1)
+    
+    # make name integers:
+    name = list(map(int, name))
+    
+    # return the parsed function in list form
+    parsed = {}
+    parsed['name'] = name
+    parsed['body'] = {}
+    parsed['body']['func'] = func
+    parsed['body']['arg1'] = arg1
+    parsed['body']['var'] = variable
+   
+    return parsed 
+    
+     
+    
+
+    
+    

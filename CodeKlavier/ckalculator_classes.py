@@ -62,6 +62,9 @@ class Ckalculator(object):
             for sub_item in item:
                 if sub_item > 0:
                     self._notesList.append(sub_item)
+                    
+        self.ckFunc(debug=True)
+        
         if debug:
             print('valid notes:', self._notesList)
         
@@ -947,6 +950,21 @@ class Ckalculator(object):
                 self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
                 self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
 
+    
+    def ckFunc(self, funcfile='ck_functions.ini', debug=False, sendToDisplay=True):
+        """
+        Load and parse a CK custom function
+        """
+
+        funcs = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        funcs.read(funcfile, encoding='utf8')
+        
+        for function in funcs['functions']:
+            if debug:
+                print(parseCKfunc(funcs['functions'].get(function)))
+            
+
+        
                   
 class CK_lambda(object):
     """CK_lambda Class
