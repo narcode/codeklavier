@@ -12,6 +12,7 @@ import numpy as np
 from Motifs import motifs_lambda as LambdaMapping
 from Mapping import Mapping_Ckalculator
 from CK_lambda import *
+from CK_parser import *
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -63,7 +64,7 @@ class Ckalculator(object):
                 if sub_item > 0:
                     self._notesList.append(sub_item)
                     
-        self.ckFunc(debug=True)
+        #self.ckFunc(debug=True)
         
         if debug:
             print('valid notes:', self._notesList)
@@ -116,12 +117,12 @@ class Ckalculator(object):
                 else:
                     if self._functionBody == '':
                         print('ostinato developed, awaiting arithmetic function')
-            
 
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
             self._deltatime = ck_deltatime_per_note 
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
+
             
             if self.wrong_note(note, True):
                 #self._nonMappedNoteCounter += 1
@@ -133,7 +134,7 @@ class Ckalculator(object):
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._fullMemory.append(note)
-                    self.find_ostinato(self._fullMemory, debug=True)                        
+                    self.find_ostinato(self._fullMemory, debug=False)                        
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
@@ -141,6 +142,10 @@ class Ckalculator(object):
                     
                 ### lambda calculus ###
             if section == 'full':        
+                
+                basechord = self.ckFunc(debug=False)[0]['name']
+                print(compareChordRecursive(basechord, note, ck_deltatime, deltatolerance=0.03, debug=True))
+           
                 if note in LambdaMapping.get('successor'):
 
                     if self._deltatime <= articulation['staccato']:
@@ -696,7 +701,7 @@ class Ckalculator(object):
                                 
                                 if np_notes.max() - np_notes.min() < 12: #within an 8ve range
                                     self.compare_ostinato(self.ostinato['first'], self.ostinato['compare'],
-                                                          debug=True)
+                                                          debug=False)
                                                                                    
                         
     def get_ostinato_pattern(self, noteson_array, ostinato_size, debug=False):
@@ -958,13 +963,15 @@ class Ckalculator(object):
 
         funcs = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         funcs.read(funcfile, encoding='utf8')
+        functions = []
         
         for function in funcs['functions']:
+            functions.append(parseCKfunc(funcs['functions'].get(function)))
             if debug:
                 print(parseCKfunc(funcs['functions'].get(function)))
-            
-
         
+        return functions
+                   
                   
 class CK_lambda(object):
     """CK_lambda Class
