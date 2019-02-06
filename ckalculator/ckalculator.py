@@ -62,13 +62,15 @@ def main(configfile='default_setup.ini'):
             msg = codeK.get_message()
             
             if msg:
+                #print(msg)
                 message, deltatime = msg
                 per_note += deltatime
                 ck_deltatime += deltatime
-                #print(message)
+                #print('delta per note:', per_note)
+                #print('delta ck:', ck_deltatime)
 
                 if message[0] != 254:
-
+                    
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):        
                         midinote = message[1]
@@ -102,6 +104,8 @@ def main(configfile='default_setup.ini'):
                             
                             cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
                                              ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
+                            
+                            cKalc._noteon_delta[message[1]] = per_note
                             
             time.sleep(0.01)
                             

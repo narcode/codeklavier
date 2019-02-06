@@ -391,7 +391,7 @@ def with_trampoline(f):
 
     return g
 
-def parseCKfunc(function_string):
+def parseCKfunc(function_string, functionnum):
     """
     parse a function string definition to convert it to a function CK can understand
     param str function_string: the function definition in the form (name -> (func num arg) )
@@ -412,6 +412,7 @@ def parseCKfunc(function_string):
     
     # return the parsed function in list form
     parsed = {}
+    parsed['ref'] = functionnum
     parsed['name'] = name
     parsed['body'] = {}
     parsed['body']['func'] = func

@@ -6,6 +6,7 @@ from inspect import signature
 import random
 import configparser
 import numpy as np
+from multiprocessing import Pool
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -54,6 +55,10 @@ class Ckalculator(object):
         self._developedOstinato = False
         self._functionBody = {}
         self._numForFunctionBody = None
+        self._threads = {}
+        self._memories = {}
+        self.parser = CK_Parser();
+        self._noteon_delta = {}
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -71,7 +76,7 @@ class Ckalculator(object):
         
 
         
-    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0, 
+    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
                    articulation={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, sendToDisplay=True):
         """Parse the midi signal and process it depending on the register.
 
@@ -108,7 +113,8 @@ class Ckalculator(object):
                 self._temp = False
                 self._fullStack = []
             
-        if message[0] == self.note_on:
+        if message[0] == self.note_on and message[2] > 0:
+
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._note_on_cue.append(message[1])
@@ -117,6 +123,8 @@ class Ckalculator(object):
                 else:
                     if self._functionBody == '':
                         print('ostinato developed, awaiting arithmetic function')
+                        
+        print(self._noteon_delta)
 
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
@@ -143,8 +151,26 @@ class Ckalculator(object):
                 ### lambda calculus ###
             if section == 'full':        
                 
-                basechord = self.ckFunc(debug=False)[0]['name']
-                print(compareChordRecursive(basechord, note, ck_deltatime, deltatolerance=0.03, debug=True))
+                #for f in self.ckFunc(debug=False):
+                    #spawn threda for comparing chords:
+                    #print(f['ref'])
+                    #self._threads[f['ref']] = Thread(target=compareChordRecursive, args=(f['name'], note, ck_deltatime, 0.03, [], [], True))
+                    #self._threads[f['ref']].start()
+                    #print(self._threads[f['ref']])
+                   
+                    #with Pool(len(self.ckFunc())) as pool:
+                        #result = pool.apply_async(compareChordRecursive, (f['name'], note, ck_deltatime, 0.03,))
+                        #print('process result: ', result.get())
+                f = self.ckFunc()[0]   
+                #ck_parser = CK_Parser()
+                #print('delta on:', self._noteon_delta)
+                last_events = sorted(self._noteon_delta.values())[-2:]
+                print(last_events)
+                if last_events[-1] - last_events[0] < 0.03:
+                    print('return:', self.parser.parseChord(note, 4, self._noteon_delta[note], 0.03, debug=True))
+                else:
+                    self.parser._chordmemory = []
+                    self.parser._deltamemory = []
            
                 if note in LambdaMapping.get('successor'):
 
@@ -956,7 +982,7 @@ class Ckalculator(object):
                 self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
 
     
-    def ckFunc(self, funcfile='ck_functions.ini', debug=False, sendToDisplay=True):
+    def ckFunc(self, funcfile='ck_functions.ini', debug=False):
         """
         Load and parse a CK custom function
         """
@@ -966,9 +992,10 @@ class Ckalculator(object):
         functions = []
         
         for function in funcs['functions']:
-            functions.append(parseCKfunc(funcs['functions'].get(function)))
-            if debug:
-                print(parseCKfunc(funcs['functions'].get(function)))
+            functions.append(parseCKfunc(funcs['functions'].get(function), function))
+        
+        if debug:
+            print(functions)
         
         return functions
                    
