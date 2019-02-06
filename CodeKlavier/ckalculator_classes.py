@@ -161,7 +161,7 @@ class Ckalculator(object):
                     #with Pool(len(self.ckFunc())) as pool:
                         #result = pool.apply_async(compareChordRecursive, (f['name'], note, ck_deltatime, 0.03,))
                         #print('process result: ', result.get())
-                f = self.ckFunc()[0]   
+                #f = self.ckFunc()[0]  
                 #ck_parser = CK_Parser()
                 #print('delta on:', self._noteon_delta)
                 last_events = sorted(self._noteon_delta.values())[-2:]
