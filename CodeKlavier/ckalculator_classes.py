@@ -7,7 +7,7 @@ import random
 import configparser
 import numpy as np
 #from multiprocessing import Pool
-from multiprocessing.pool import ThreadPool
+from multiprocessing.pool import ThreadPool, Pool
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -160,11 +160,17 @@ class Ckalculator(object):
                     chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
                                                                                 self._noteon_delta[note], 
                                                                                 0.03, True))
-                    print(chordparse.get())
-                   
-                    #with Pool(len(self.ckFunc())) as pool:
-                        #result = pool.apply_async(compareChordRecursive, (f['name'], note, ck_deltatime, 0.03,))
-                        #print('process result: ', result.get())
+                    #print(chordparse.get())
+                    chordfound, chord = chordparse.get()
+
+                    if chordfound:
+                        #f = self.ckFunc()[0]
+                        #print('compared: ', self.parser.compareChordRecursive(f['name'], chord))
+                        
+                        for f in self.ckFunc():
+                            with Pool(len(self.ckFunc())) as pool:
+                                result = pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))
+                                print('process result for ' + f['ref'], result.get())
                 #f = self.ckFunc()[0]  
                 #ck_parser = CK_Parser()
                 #print('delta on:', self._noteon_delta)

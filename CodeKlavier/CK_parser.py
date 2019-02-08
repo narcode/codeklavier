@@ -14,7 +14,7 @@ class CK_Parser(object):
         self._chordmemory = []
         self._deltamemory = []      
 
-    def compareChordRecursive(self, basechord, note, deltatime=0, deltatolerance=0.03,debug=False):
+    def compareChordRecursiveFull(self, basechord, note, deltatime=0, deltatolerance=0.03,debug=False):
         """
         Compare played chord with a stored chord. Returns True if the chord matches.
     
@@ -25,6 +25,8 @@ class CK_Parser(object):
         param float deltatime: the deltatime of the incoming MIDI message
         param float deltatolerance: the minimum deltatime tolerance to consider the 
         incoming notes a chord (i.e. simultanously played)
+        
+        **** func challenge ****
         """
         compare = False
         
@@ -115,11 +117,31 @@ class CK_Parser(object):
                 chord = self._chordmemory
                 self._chordmemory = []
                 self._deltamemory = []
-                return True, chord, average
+                return True, chord 
             
         if debug:
             print('chordmem: ', self._chordmemory, 'deltamem', self._deltamemory)
 
 
-        return False, None, None     
-    
+        return False, None 
+
+
+    def compareChordRecursive(self, basechord, chord, compare=None, debug=True):
+        """
+        compare 2 arrays representing chords.
+        """
+        if debug:
+            print('base:', basechord, 'chord:', chord)
+
+        if len(chord) == 0 or compare == False:
+            return compare
+        
+        note = chord.pop()
+        if note in basechord:
+            basechord.pop(basechord.index(note))
+            compare = True
+        else:
+            compare = False
+            
+        return self.compareChordRecursive(basechord, chord, compare)
+            
