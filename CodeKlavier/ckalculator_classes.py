@@ -159,7 +159,7 @@ class Ckalculator(object):
                     #spawn threda for comparing chords:
                     chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
                                                                                 self._noteon_delta[note], 
-                                                                                0.03, True))
+                                                                                0.03, False))
                     #print(chordparse.get())
                     chordfound, chord = chordparse.get()
 
@@ -169,18 +169,20 @@ class Ckalculator(object):
                         
                         for f in self.ckFunc():
                             with Pool(len(self.ckFunc())) as pool:
-                                result = pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))
+                                result = pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
                                 print('process result for ' + f['ref'], result.get())
-                #f = self.ckFunc()[0]  
-                #ck_parser = CK_Parser()
-                #print('delta on:', self._noteon_delta)
+                                if result.get():
+                                    
+                                    try:
+                                        function_to_call = getattr(self, f['body']['func'])
+                                    except AttributeError:
+                                        raise NotImplementedError("Class `{}` does not implement `{}`".
+                                                                  format(self.__class__.__name__, 
+                                                                         function_to_call))
+                                    
+                                    function_to_call(False, sendToDisplay)
+                                    
 
-                #if last_events[-1] - last_events[0] < 0.03:
-                    #print('return:', self.parser.parseChord(note, 4, self._noteon_delta[note], 0.03, debug=True))
-                #else:
-                    #self.parser._chordmemory = []
-                    #self.parser._deltamemory = []
-           
                 if note in LambdaMapping.get('successor'):
 
                     if self._deltatime <= articulation['staccato']:

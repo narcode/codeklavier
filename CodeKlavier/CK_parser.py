@@ -126,7 +126,7 @@ class CK_Parser(object):
         return False, None 
 
 
-    def compareChordRecursive(self, basechord, chord, compare=None, debug=True):
+    def compareChordRecursive(self, basechord, chord, compare=None, debug=False):
         """
         compare 2 arrays representing chords.
         """
