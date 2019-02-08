@@ -165,12 +165,12 @@ class Ckalculator(object):
                 #ck_parser = CK_Parser()
                 #print('delta on:', self._noteon_delta)
                 last_events = sorted(self._noteon_delta.values())[-2:]
-                print(last_events)
+                print('last events:', last_events)
                 if last_events[-1] - last_events[0] < 0.03:
                     print('return:', self.parser.parseChord(note, 4, self._noteon_delta[note], 0.03, debug=True))
-                else:
-                    self.parser._chordmemory = []
-                    self.parser._deltamemory = []
+                #else:
+                    #self.parser._chordmemory = []
+                    #self.parser._deltamemory = []
            
                 if note in LambdaMapping.get('successor'):
 
