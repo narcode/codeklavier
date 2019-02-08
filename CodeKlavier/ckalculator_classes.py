@@ -6,7 +6,8 @@ from inspect import signature
 import random
 import configparser
 import numpy as np
-from multiprocessing import Pool
+#from multiprocessing import Pool
+from multiprocessing.pool import ThreadPool
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -55,7 +56,7 @@ class Ckalculator(object):
         self._developedOstinato = False
         self._functionBody = {}
         self._numForFunctionBody = None
-        self._threads = {}
+        self._pool = ThreadPool(processes=1)
         self._memories = {}
         self.parser = CK_Parser();
         self._noteon_delta = {}
@@ -151,12 +152,15 @@ class Ckalculator(object):
                 ### lambda calculus ###
             if section == 'full':        
                 
-                #for f in self.ckFunc(debug=False):
+                last_events = sorted(self._noteon_delta.values())[-2:]
+                print('last events:', last_events)
+                
+                if last_events[-1] - last_events[0] < 0.03:                    
                     #spawn threda for comparing chords:
-                    #print(f['ref'])
-                    #self._threads[f['ref']] = Thread(target=compareChordRecursive, args=(f['name'], note, ck_deltatime, 0.03, [], [], True))
-                    #self._threads[f['ref']].start()
-                    #print(self._threads[f['ref']])
+                    chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
+                                                                                self._noteon_delta[note], 
+                                                                                0.03, True))
+                    print(chordparse.get())
                    
                     #with Pool(len(self.ckFunc())) as pool:
                         #result = pool.apply_async(compareChordRecursive, (f['name'], note, ck_deltatime, 0.03,))
@@ -164,10 +168,9 @@ class Ckalculator(object):
                 #f = self.ckFunc()[0]  
                 #ck_parser = CK_Parser()
                 #print('delta on:', self._noteon_delta)
-                last_events = sorted(self._noteon_delta.values())[-2:]
-                print('last events:', last_events)
-                if last_events[-1] - last_events[0] < 0.03:
-                    print('return:', self.parser.parseChord(note, 4, self._noteon_delta[note], 0.03, debug=True))
+
+                #if last_events[-1] - last_events[0] < 0.03:
+                    #print('return:', self.parser.parseChord(note, 4, self._noteon_delta[note], 0.03, debug=True))
                 #else:
                     #self.parser._chordmemory = []
                     #self.parser._deltamemory = []
