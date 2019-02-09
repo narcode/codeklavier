@@ -75,7 +75,8 @@ def main(configfile='default_setup.ini'):
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):        
                         midinote = message[1]
                         #print(ck_note_dur)
-                        note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
+                        if midinote in ck_note_dur:
+                            note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
                         
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration, 
                                          ck_deltatime=ck_deltatime, articulation=articulation)
