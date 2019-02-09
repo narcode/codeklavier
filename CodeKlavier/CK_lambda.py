@@ -405,7 +405,8 @@ def parseCKfunc(function_string, functionnum):
     variable = args[2]
     
     if re.match(r'\d', arg1):
-        arg1 = int(arg1)
+        #arg1 = int(arg1)
+        arg1 = numToLambda(int(arg1))
     
     # make name integers:
     name = list(map(int, name))
@@ -421,8 +422,18 @@ def parseCKfunc(function_string, functionnum):
    
     return parsed 
     
-     
-    
 
+def numToLambda(num, function_expression=zero):
+    """
+    turns an integer into its lambda function representation (using the successor function)
+    """
+    #print('num is: ', num)
+
+    if num == 0:
+        return function_expression
+    
+    return numToLambda(num-1, successor(function_expression))
+    
+    
     
     

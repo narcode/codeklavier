@@ -105,7 +105,7 @@ class CK_Parser(object):
             
         if len(self._chordmemory) > 1:
             average = np.average(np.diff(self._deltamemory))
-            print('diff:', average)
+            #print('diff:', average)
             #if average > deltatolerance:
                 #self._chordmemory = []
                 #self._deltamemory = []
@@ -120,7 +120,8 @@ class CK_Parser(object):
                 return True, chord 
             
         if debug:
-            print('chordmem: ', self._chordmemory, 'deltamem', self._deltamemory)
+            print('chordmem: ', self._chordmemory, 'deltamem', 
+                  self._deltamemory, 'average', average)
 
 
         return False, None 

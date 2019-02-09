@@ -70,13 +70,10 @@ class Ckalculator(object):
                 if sub_item > 0:
                     self._notesList.append(sub_item)
                     
-        #self.ckFunc(debug=True)
-        
         if debug:
             print('valid notes:', self._notesList)
         
 
-        
     def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
                    articulation={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, sendToDisplay=True):
         """Parse the midi signal and process it depending on the register.
@@ -125,7 +122,7 @@ class Ckalculator(object):
                     if self._functionBody == '':
                         print('ostinato developed, awaiting arithmetic function')
                         
-        print(self._noteon_delta)
+        #print(self._noteon_delta)
 
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
@@ -149,24 +146,22 @@ class Ckalculator(object):
                         print('define func body...')
                         self.define_function_body(note, articulation)
                     
-                ### lambda calculus ###
+                             
             if section == 'full':        
                 
+        ########### CK function definition ############
+                
                 last_events = sorted(self._noteon_delta.values())[-2:]
-                print('last events:', last_events)
+                #print('last events:', last_events)
                 
                 if last_events[-1] - last_events[0] < 0.03:                    
-                    #spawn threda for comparing chords:
+                    #spawn thread for detecting chords:
                     chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
                                                                                 self._noteon_delta[note], 
                                                                                 0.03, False))
-                    #print(chordparse.get())
                     chordfound, chord = chordparse.get()
 
                     if chordfound:
-                        #f = self.ckFunc()[0]
-                        #print('compared: ', self.parser.compareChordRecursive(f['name'], chord))
-                        
                         for f in self.ckFunc():
                             with Pool(len(self.ckFunc())) as pool:
                                 result = pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
@@ -182,7 +177,14 @@ class Ckalculator(object):
                                     
                                     function_to_call(False, sendToDisplay)
                                     
-
+                                    if f['body']['arg1'].__name__ == 'succ1':
+                                        self.append_succesor(f['body']['arg1'])
+                                        self.zeroPlusRec(False)                                    
+                                    
+                        ########################
+                ########### lambda calculus  ###########
+                        ########################
+                                    
                 if note in LambdaMapping.get('successor'):
 
                     if self._deltatime <= articulation['staccato']:
@@ -310,6 +312,21 @@ class Ckalculator(object):
                                     
         if len(self._successorHead) > 1:
             self._successorHead = self._successorHead[-1:]
+    
+    def append_succesor(self, function, sendToDisplay=True):
+        """
+        Append a successor function to the successorHead stack\n
+        \n
+        :param function function: the function to apply the successor function to
+        """
+        if sendToDisplay:
+            self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
+        print(function.__name__)       
+                
+        self._successorHead.append(function)
+                                    
+        if len(self._successorHead) > 1:
+            self._successorHead = self._successorHead[-1:]      
             
     def build_predecessor(self, function, sendToDisplay=True):
         """
@@ -700,7 +717,7 @@ class Ckalculator(object):
                         self._filtered_cue.append(x)
                 
                 cue_notes, cue_reverse = np.unique(self._filtered_cue, False, True, False)
-                pattern_match = self.get_ostinato_pattern(cue_reverse, size, True)                        
+                pattern_match = self.get_ostinato_pattern(cue_reverse, size, False)                        
                 
                 if debug:
                     print('cue notes:', cue_notes, '\ncue_reverse:', cue_reverse)
@@ -763,7 +780,7 @@ class Ckalculator(object):
             if debug:
                 if pattern_check:
                     print(pattern1,'\n',pattern2,'\n',pattern3,'\n')
-                    print(pattern_check)        
+                    print(pattern_check)       
         
                 return pattern_check
                        
@@ -848,12 +865,12 @@ class Ckalculator(object):
                 
         elif len(self._functionBody) == 2:
             if debug:
-                print('function body arg 1 is:', self._functionBody['arg2'])
+                print('function body arg 2 is:', self._functionBody['arg2'])
                         
             #if self._functionBody != '':
                 #self.storeFunction()
             
-    def storeFunction(self, funcfile='ck_functions.ini', debug=True):
+    def storeFunction(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
         """
         Store the defined function in a .ini file for future use.
         """
@@ -872,7 +889,10 @@ class Ckalculator(object):
         with open(funcfile, 'a') as file:
             file.write(name + body + name2 + body2)
             file.close()
-
+            
+        if sendToDisplay:
+            self.mapscheme.formatAndSend(name + body, display=3, syntax_color='result:')
+            
         #reset the ostinato analysis
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
