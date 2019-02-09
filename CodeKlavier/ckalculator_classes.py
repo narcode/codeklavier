@@ -130,7 +130,7 @@ class Ckalculator(object):
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
 
             
-            if self.wrong_note(note, True):
+            if self.wrong_note(note, False):
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')
@@ -140,7 +140,7 @@ class Ckalculator(object):
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._fullMemory.append(note)
-                    self.find_ostinato(self._fullMemory, debug=True)                        
+                    self.find_ostinato(self._fullMemory, debug=False)                        
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
@@ -717,7 +717,7 @@ class Ckalculator(object):
                         self._filtered_cue.append(x)
                 
                 cue_notes, cue_reverse = np.unique(self._filtered_cue, False, True, False)
-                pattern_match = self.get_ostinato_pattern(cue_reverse, size, True)                        
+                pattern_match = self.get_ostinato_pattern(cue_reverse, size, False)                        
                 
                 if debug:
                     print('cue notes:', cue_notes, '\ncue_reverse:', cue_reverse)
@@ -740,7 +740,7 @@ class Ckalculator(object):
                                     self._note_on_cue = []
                                     if debug:
                                         print('i -> ', i)
-                                        print('found ostinato!', self.ostinato['first'])              
+                                    print('found ostinato!', self.ostinato['first'])              
                                 else:
                                     self._foundOstinato = False
                         else:
@@ -782,7 +782,7 @@ class Ckalculator(object):
                     print(pattern1,'\n',pattern2,'\n',pattern3,'\n')
                     print(pattern_check)       
         
-                return pattern_check
+            return pattern_check
                        
     def compare_ostinato(self, ostinato1, ostinato2, debug=False):
         """
@@ -866,9 +866,7 @@ class Ckalculator(object):
         elif len(self._functionBody) == 2:
             if debug:
                 print('function body arg 2 is:', self._functionBody['arg2'])
-                        
-            #if self._functionBody != '':
-                #self.storeFunction()
+
             
     def storeFunction(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
         """
@@ -876,6 +874,12 @@ class Ckalculator(object):
         """
         ck_functions = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         ck_functions.read(funcfile, encoding='utf8')
+        existingfuncs = []
+        
+        for f in self.ckFunc():
+            existingfuncs.append(f['name'])
+            
+        print(existingfuncs)   
         
         func_num = len(ck_functions['functions'])
         
@@ -887,7 +891,18 @@ class Ckalculator(object):
         body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ' ' + repr(self._functionBody['arg2']) + ' x)\n'
         
         with open(funcfile, 'a') as file:
-            file.write(name + body + name2 + body2)
+            if self.ostinato['first'] not in existingfuncs:
+                file.write(name + body)
+                print('function saved')
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            if self.ostinato['compare'] not in existingfuncs:
+                file.write(name2 + body2)
+                print('function saved')
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
             file.close()
             
         if sendToDisplay:
@@ -895,6 +910,7 @@ class Ckalculator(object):
             
         #reset the ostinato analysis
         self.ostinato = {'first': [], 'compare': []}
+        self._functionBody = {}
         self._foundOstinato = False
         self._developedOstinato = False 
                 
