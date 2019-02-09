@@ -130,7 +130,7 @@ class Ckalculator(object):
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
 
             
-            if self.wrong_note(note, False):
+            if self.wrong_note(note, True):
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')
@@ -717,7 +717,7 @@ class Ckalculator(object):
                         self._filtered_cue.append(x)
                 
                 cue_notes, cue_reverse = np.unique(self._filtered_cue, False, True, False)
-                pattern_match = self.get_ostinato_pattern(cue_reverse, size, False)                        
+                pattern_match = self.get_ostinato_pattern(cue_reverse, size, True)                        
                 
                 if debug:
                     print('cue notes:', cue_notes, '\ncue_reverse:', cue_reverse)
@@ -755,7 +755,7 @@ class Ckalculator(object):
                                 
                                 if np_notes.max() - np_notes.min() < 12: #within an 8ve range
                                     self.compare_ostinato(self.ostinato['first'], self.ostinato['compare'],
-                                                          debug=False)
+                                                          debug=True)
                                                                                    
                         
     def get_ostinato_pattern(self, noteson_array, ostinato_size, debug=False):
