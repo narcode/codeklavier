@@ -798,12 +798,16 @@ class Ckalculator(object):
             
             if np.array_equal(sorted(np.abs(diff)), [0,0,0,1]):
                 self._developedOstinato = True
-                self._fullMemory = []
-                self._note_on_cue = []
                 
                 if debug:
                     print('ostinato has 1 note difference! -> ', diff)
-                    
+            else:
+                print('ostinato was not developed correctly. Memory erased')
+            
+            # clean ostinato memory
+            self._fullMemory = []
+            self._note_on_cue = []
+
             print('first:',ostinato1,
                   'compare:',ostinato2)      
        
