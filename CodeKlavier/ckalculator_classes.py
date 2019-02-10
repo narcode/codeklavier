@@ -140,7 +140,7 @@ class Ckalculator(object):
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._fullMemory.append(note)
-                    self.find_ostinato(self._fullMemory, debug=False)                        
+                    self.find_ostinato(self._fullMemory, debug=True)                        
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
