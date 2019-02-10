@@ -807,6 +807,7 @@ class Ckalculator(object):
             # clean ostinato memory
             self._fullMemory = []
             self._note_on_cue = []
+            self.ostinato = {'first': [], 'compare': []}
 
             print('first:',ostinato1,
                   'compare:',ostinato2)      
