@@ -802,13 +802,13 @@ class Ckalculator(object):
                 if debug:
                     print('ostinato has 1 note difference! -> ', diff)
             else:
-                print('ostinato was not developed correctly. Memory erased')
+                print('ostinato was not developed correctly. Memory should be erased')
             
             # clean ostinato memory
-            self._fullMemory = []
-            self._note_on_cue = []
-            self._filtered_cue = []
-            self.ostinato = {'first': [], 'compare': []}
+            #self._fullMemory = []
+            #self._note_on_cue = []
+            #self._filtered_cue = []
+            #self.ostinato = {'first': [], 'compare': []}
 
             print('first:',ostinato1,
                   'compare:',ostinato2)      
