@@ -58,8 +58,10 @@ class Ckalculator(object):
         self._numForFunctionBody = None
         self._pool = ThreadPool(processes=1)
         self._memories = {}
-        self.parser = CK_Parser();
+        self.parser = CK_Parser()
         self._noteon_delta = {}
+        self._lastnotes = []
+        self._lastdeltas = []
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -150,15 +152,37 @@ class Ckalculator(object):
             if section == 'full':        
                 
         ########### CK function definition ############
-                
+                print('incoming:', note)
+                self._lastnotes.append(note)
+                self._lastdeltas.append(self._noteon_delta[note])
+                if len(self._lastnotes) > 2:
+                    self._lastnotes = self._lastnotes[-2:]
+                    self._lastdeltas = self._lastdeltas[-2:]
+                    
                 last_events = sorted(self._noteon_delta.values())[-2:]
+                last_events_new = np.diff(sorted(self._lastdeltas))
+                #for n in self._noteon_delta.items():
+                    #for l in last_events:
+                        #if l in n:
+                            #self._lastnotes.append(n)
+                print(self._noteon_delta[note])
                 #print('last events:', last_events)
+                print('last notes:', self._lastnotes)
+                print('last deltas:', self._lastdeltas)
+                #print('diff: ', last_events[-1] - last_events[0])
+                print('diff new: ', last_events_new)
+
                 
-                if last_events[-1] - last_events[0] < 0.03:                    
-                    #spawn thread for detecting chords:
-                    chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
-                                                                                self._noteon_delta[note], 
-                                                                                0.03, False))
+                if last_events_new < 0.05: #deltatime tolerance between the notes of a chord
+                    chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
+                                                                                self._lastdeltas, 
+                                                                                0.03, True)) 
+                
+                #if last_events[-1] - last_events[0] < 0.03:                    
+                    ##spawn thread for detecting chords:
+                    #chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
+                                                                                #self._noteon_delta[note], 
+                                                                                #0.03, True))
                     chordfound, chord = chordparse.get()
 
                     if chordfound:

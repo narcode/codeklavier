@@ -105,8 +105,11 @@ class CK_Parser(object):
             
         if len(self._chordmemory) > 1:
             average = np.average(np.diff(self._deltamemory))
-            #print('diff:', average)
-            #if average > deltatolerance:
+            if debug:
+                print('average:', average)
+            if average > deltatolerance:
+                self._chordmemory.pop(0)
+                self._deltamemory.pop(0)
                 #self._chordmemory = []
                 #self._deltamemory = []
 
@@ -117,16 +120,75 @@ class CK_Parser(object):
                 chord = self._chordmemory
                 self._chordmemory = []
                 self._deltamemory = []
-                return True, chord 
+                return True, chord
+            #else:
+                #chord = self._chordmemory
+                #self._chordmemory = []
+                #self._deltamemory = []                
             
         if debug:
             print('chordmem: ', self._chordmemory, 'deltamem', 
-                  self._deltamemory, 'average', average)
+                  self._deltamemory)
 
 
         return False, None 
 
 
+    def parseChordTuple(self, notes=None, size=4, deltatimes=None, deltatolerance=0.03, debug=False):
+        """
+        Parse notes than are played simultanously and store them in a list
+        param int notes: The incoming MIDI notes as a tuple
+        param int size: The amount of notes that would conform the chord
+        param float deltatime: the deltatime of the incoming MIDI message
+        param float deltatolerance: the minimum deltatime tolerance to consider the 
+        incoming notes a chord (i.e. simultanously played)
+        """
+        
+        for note in notes:
+            if note not in self._chordmemory:
+                self._chordmemory.append(note)
+        for deltatime in deltatimes:
+            if deltatime not in self._deltamemory:
+                self._deltamemory.append(deltatime)
+        
+        if len(self._chordmemory) > size:
+            self._chordmemory = self._chordmemory[1:]
+            self._deltamemory = self._deltamemory[1:]
+        
+        if debug:
+            print('b chordmem: ', self._chordmemory, 'b deltamem', self._deltamemory)
+            
+        if len(self._chordmemory) > 1:
+            average = np.average(np.diff(self._deltamemory))
+            if debug:
+                print('average:', average)
+            if average > deltatolerance:
+                self._chordmemory.pop(0)
+                self._deltamemory.pop(0)
+                #self._chordmemory = []
+                #self._deltamemory = []
+
+        if len(self._chordmemory) == size:
+            average = np.average(np.diff(self._deltamemory))
+            
+            if average < deltatolerance:
+                chord = self._chordmemory
+                self._chordmemory = []
+                self._deltamemory = []
+                return True, chord
+            #else:
+                #chord = self._chordmemory
+                #self._chordmemory = []
+                #self._deltamemory = []                
+            
+        if debug:
+            print('chordmem: ', self._chordmemory, 'deltamem', 
+                  self._deltamemory)
+
+
+        return False, None 
+    
+    
     def compareChordRecursive(self, basechord, chord, compare=None, debug=False):
         """
         compare 2 arrays representing chords.
