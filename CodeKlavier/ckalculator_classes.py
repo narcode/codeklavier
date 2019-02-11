@@ -140,7 +140,7 @@ class Ckalculator(object):
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._fullMemory.append(note)
-                    self.find_ostinato(self._fullMemory, debug=True)                        
+                    self.find_ostinato(self._fullMemory, debug=False)                        
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
@@ -734,7 +734,7 @@ class Ckalculator(object):
                                 # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
                                 self.ostinato['first'] = self.ostinato['first'][-4:]
                                 
-                                if np_notes.max() - np_notes.min() < 12: #within an 8ve range
+                                if np_notes.max() - np_notes.min() <= 12: #within an 8ve range
                                     self._foundOstinato = True #pause listening to analyze the frame
                                     self._fullMemory = []
                                     self._note_on_cue = []
@@ -753,7 +753,7 @@ class Ckalculator(object):
                                 # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
                                 self.ostinato['compare'] = self.ostinato['compare'][-4:]
                                 
-                                if np_notes.max() - np_notes.min() < 12: #within an 8ve range
+                                if np_notes.max() - np_notes.min() <= 12: #within an 8ve range
                                     self.compare_ostinato(self.ostinato['first'], self.ostinato['compare'],
                                                           debug=True)
                                                                                    
@@ -800,15 +800,16 @@ class Ckalculator(object):
                 self._developedOstinato = True
                 
                 if debug:
-                    print('ostinato has 1 note difference! -> ', diff)
+                    print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
             else:
-                print('ostinato was not developed correctly. Memory should be erased')
+                print('ostinato was not developed correctly. Please try again 👸🏼🎹')
             
-            # clean ostinato memory
-            #self._fullMemory = []
-            #self._note_on_cue = []
-            #self._filtered_cue = []
-            #self.ostinato = {'first': [], 'compare': []}
+                # clean ostinato memory
+                self._foundOstinato = False
+                self._fullMemory = []
+                self._note_on_cue = []
+                #self._filtered_cue = []
+                self.ostinato = {'first': [], 'compare': []}
 
             print('first:',ostinato1,
                   'compare:',ostinato2)      
