@@ -152,7 +152,7 @@ class Ckalculator(object):
             if section == 'full':        
                 
         ########### CK function definition ############
-                print('incoming:', note)
+                #print('incoming:', note)
                 self._lastnotes.append(note)
                 self._lastdeltas.append(self._noteon_delta[note])
                 if len(self._lastnotes) > 2:
@@ -165,12 +165,12 @@ class Ckalculator(object):
                     #for l in last_events:
                         #if l in n:
                             #self._lastnotes.append(n)
-                print(self._noteon_delta[note])
+                #print(self._noteon_delta[note])
                 #print('last events:', last_events)
-                print('last notes:', self._lastnotes)
-                print('last deltas:', self._lastdeltas)
+                #print('last notes:', self._lastnotes)
+                #print('last deltas:', self._lastdeltas)
                 #print('diff: ', last_events[-1] - last_events[0])
-                print('diff new: ', last_events_new)
+                #print('diff new: ', last_events_new)
 
                 
                 if last_events_new < 0.05: #deltatime tolerance between the notes of a chord
