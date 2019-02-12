@@ -153,10 +153,11 @@ class Ckalculator(object):
                 
         ########### CK function definition ############
                 #print('incoming:', note)
-                self._lastnotes.append(note)
+                self._lastnotes.append(note) # coming from note on messages in main()
                 self._lastdeltas.append(self._noteon_delta[note])
                 if len(self._lastnotes) > 2:
                     self._lastnotes = self._lastnotes[-2:]
+                if len(self._lastdeltas) > 2:
                     self._lastdeltas = self._lastdeltas[-2:]
                     
                 last_events = sorted(self._noteon_delta.values())[-2:]
@@ -170,10 +171,10 @@ class Ckalculator(object):
                 #print('last notes:', self._lastnotes)
                 #print('last deltas:', self._lastdeltas)
                 #print('diff: ', last_events[-1] - last_events[0])
-                #print('diff new: ', last_events_new)
+                print('diff new: ', last_events_new)
 
                 
-                if last_events_new < 0.05: #deltatime tolerance between the notes of a chord
+                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
                                                                                 self._lastdeltas, 
                                                                                 0.03, True)) 

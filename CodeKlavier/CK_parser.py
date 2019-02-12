@@ -98,6 +98,7 @@ class CK_Parser(object):
         
         if len(self._chordmemory) > size:
             self._chordmemory = self._chordmemory[1:]
+        if len(self._deltamemory) > size:
             self._deltamemory = self._deltamemory[1:]
         
         if debug:
@@ -153,6 +154,7 @@ class CK_Parser(object):
         
         if len(self._chordmemory) > size:
             self._chordmemory = self._chordmemory[1:]
+        if len(self._deltamemory) > size:
             self._deltamemory = self._deltamemory[1:]
         
         if debug:
