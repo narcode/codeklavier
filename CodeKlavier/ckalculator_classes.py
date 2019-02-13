@@ -142,7 +142,7 @@ class Ckalculator(object):
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._fullMemory.append(note)
-                    self.find_ostinato(self._fullMemory, debug=False)                        
+                    self.find_ostinato(self._fullMemory, debug=True)                        
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
@@ -171,7 +171,7 @@ class Ckalculator(object):
                 #print('last notes:', self._lastnotes)
                 #print('last deltas:', self._lastdeltas)
                 #print('diff: ', last_events[-1] - last_events[0])
-                print('diff new: ', last_events_new)
+                #print('diff new: ', last_events_new)
 
                 
                 if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
@@ -717,7 +717,7 @@ class Ckalculator(object):
         param boolean debug: print debugging messages
         """
         length = size*repetitions+size
-        if len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue? 
+        if len(self._fullMemory) > length and not self._developedOstinato: #full_mem needed or better to only use _note_on_cue? 
             self._fullMemory = self._fullMemory[-length:]
             self._note_on_cue = self._note_on_cue[-length:]
             self._filtered_cue = self._filtered_cue[-length:]
@@ -742,7 +742,7 @@ class Ckalculator(object):
                         self._filtered_cue.append(x)
                 
                 cue_notes, cue_reverse = np.unique(self._filtered_cue, False, True, False)
-                pattern_match = self.get_ostinato_pattern(cue_reverse, size, False)                        
+                pattern_match = self.get_ostinato_pattern(cue_reverse, size, True)                        
                 
                 if debug:
                     print('cue notes:', cue_notes, '\ncue_reverse:', cue_reverse)
@@ -765,18 +765,21 @@ class Ckalculator(object):
                                     self._note_on_cue = []
                                     if debug:
                                         print('i -> ', i)
-                                    print('found ostinato!', self.ostinato['first'])              
+                                    print('found ostinato!', self.ostinato)              
                                 else:
                                     self._foundOstinato = False
                         else:
                             self.ostinato['compare'].append(notes[item])
                             
-                            if len(self.ostinato['compare']) > 1:
-                                np_notes = np.array(self.ostinato['compare'])
+                            #if len(self.ostinato['compare']) > 1:
+                                #np_notes = np.array(self.ostinato['compare'])
                                 
                             if len(self.ostinato['compare']) > 3:
                                 # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
                                 self.ostinato['compare'] = self.ostinato['compare'][-4:]
+                                np_notes = np.array(self.ostinato['compare'])
+                                
+                                print('debug: ', self.ostinato['compare'])
                                 
                                 if np_notes.max() - np_notes.min() <= 12: #within an 8ve range
                                     self.compare_ostinato(self.ostinato['first'], self.ostinato['compare'],
@@ -816,6 +819,7 @@ class Ckalculator(object):
         param int note: the ostinato to compare
         """
         if np.array_equal(ostinato1, ostinato2):
+            self.ostinato = {'first': [], 'compare': []}
             if debug:
                 print('ostinato has not change')
         else:
@@ -827,17 +831,19 @@ class Ckalculator(object):
                 if debug:
                     print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
             else:
-                print('ostinato was not developed correctly. Please try again 👸🏼🎹')
-            
-                # clean ostinato memory
-                self._foundOstinato = False
-                self._fullMemory = []
-                self._note_on_cue = []
-                #self._filtered_cue = []
+                print('😤 ostinato was not developed correctly. Please try again')
+                self._developedOstinato = False
                 self.ostinato = {'first': [], 'compare': []}
+            
+        # clean ostinato memory
+        self._foundOstinato = False
+        self._fullMemory = []
+        self._note_on_cue = []
+        self._filtered_cue = []
+        #self.ostinato = {'first': [], 'compare': []}
 
-            print('first:',ostinato1,
-                  'compare:',ostinato2)      
+        print('first:',ostinato1,
+              'compare:',ostinato2)      
        
     def define_function_body(self, note, articulation, debug=True):
         """
@@ -942,6 +948,9 @@ class Ckalculator(object):
             
         #reset the ostinato analysis
         self.ostinato = {'first': [], 'compare': []}
+        self._fullMemory = []
+        self._note_on_cue = []
+        self._filtered_cue = []
         self._functionBody = {}
         self._foundOstinato = False
         self._developedOstinato = False 
