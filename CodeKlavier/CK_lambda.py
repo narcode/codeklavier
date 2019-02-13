@@ -297,9 +297,9 @@ def divide(x, y, acc=zero):
 
 
 @recur.tco
-def substract(x, y):
+def subtract(x, y):
     """
-    function to get the result of the substraction of two number expressions.\n
+    function to get the result of the subtraction of two number expressions.\n
     IT DOES NOT HANDLE NEGATIVE NUMBERS, SO NEGATIVE NUMBERS RETURN ZERO
     Returns the resulting representation of an integer\n
     \n

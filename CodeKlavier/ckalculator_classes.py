@@ -285,12 +285,12 @@ class Ckalculator(object):
                         else:
                             self.multiply(True, sendToDisplay)                    
                     
-                elif note in LambdaMapping.get('substraction'):
+                elif note in LambdaMapping.get('subtraction'):
                     if self._deltatime <= articulation['staccato']:                
                         if not self._temp:
-                            self.substract(False, sendToDisplay)  
+                            self.subtract(False, sendToDisplay)  
                         else:
-                            self.substract(True, sendToDisplay)
+                            self.subtract(True, sendToDisplay)
                     elif self._deltatime > articulation['staccato']:
                         if not self._temp:
                             self.divide(False, sendToDisplay) 
@@ -301,7 +301,7 @@ class Ckalculator(object):
                     print('used via articulation under addition')
                     
                 elif note in LambdaMapping.get('division'):
-                    print('used via articulation under substraction')
+                    print('used via articulation under subtraction')
                                     
                 # number comparisons    
                 elif note in LambdaMapping.get('equal'):
@@ -435,15 +435,15 @@ class Ckalculator(object):
             if self._tempStack[0] == '(':
                 self._tempStack.append(add_trampoline)        
         
-    def substract(self, temp=False, sendToDisplay=True):
+    def subtract(self, temp=False, sendToDisplay=True):
         """
-        Append a substraction function to the functions stack and any existing number expression\n
+        Append a subtraction function to the functions stack and any existing number expression\n
         \n
         """
         if sendToDisplay:
             self.mapscheme.formatAndSend('-', display=2, syntax_color='min:',spacing=False)               
             self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
-        print('substraction')
+        print('subtraction')
         
         if not temp:
             if len(self._numberStack) == 0:
@@ -452,7 +452,7 @@ class Ckalculator(object):
                 self._functionStack.append(self._numberStack[0])
             #append the operator        
             #self._functionStack.append(self._lambda.add)
-            self._functionStack.append(substract) 
+            self._functionStack.append(subtract) 
         else:
             if len(self._tempNumberStack) == 0:
                 self._tempFunctionStack.append(zero)
@@ -460,13 +460,13 @@ class Ckalculator(object):
                 self._tempFunctionStack.append(self._tempNumberStack[0])
             #append the operator        
             #self._functionStack.append(self._lambda.add)
-            self._tempFunctionStack.append(substract)           
+            self._tempFunctionStack.append(subtract)           
             
         
-        self._fullStack.append(substract)
+        self._fullStack.append(subtract)
         if len(self._tempStack) > 0:
             if self._tempStack[0] == '(':
-                self._tempStack.append(substract)         
+                self._tempStack.append(subtract)         
 
 
     def equal(self, sendToDisplay=True):
@@ -874,9 +874,9 @@ class Ckalculator(object):
                 elif self._deltatime > articulation['staccato']:
                     self._functionBody['arg1'] = 'multiply'
                     
-            elif note in LambdaMapping.get('substraction'):
+            elif note in LambdaMapping.get('subtraction'):
                 if self._deltatime <= articulation['staccato']:                
-                    self._functionBody['arg1'] = 'substract'
+                    self._functionBody['arg1'] = 'subtract'
                     
                 elif self._deltatime > articulation['staccato']:
                     self._functionBody['arg1'] = 'divide'
