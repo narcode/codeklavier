@@ -51,7 +51,7 @@ def main(configfile='default_setup.ini'):
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True)
     cKost = Ckalculator(noteon_id, noteoff_id, pedal_id)
     per_note = 0
     ck_deltatime = 0
@@ -86,6 +86,8 @@ def main(configfile='default_setup.ini'):
                             if cKalc._numForFunctionBody != None:
                                 cKost._functionBody['arg2'] = cKalc._numForFunctionBody
                                 print('function body complete...')
+                                cKalc.mapscheme.formatAndSend('function body complete...', display=4, 
+                                                              syntax_color='function:')
                                 cKost.storeFunction()
                                 cKalc._functionBody = {}
                                 cKalc._numForFunctionBody = None

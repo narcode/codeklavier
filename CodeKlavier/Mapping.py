@@ -961,6 +961,8 @@ class Mapping_Ckalculator:
             port = 2222
         elif display == 3:
             port = 3333
+        elif display == 4:
+            port = 4444        
 
         if spacing:
             newline = '\n'
@@ -979,5 +981,7 @@ class Mapping_Ckalculator:
             port = 2222
         elif display == 3:
             port = 3333
-
+        elif display == 4:
+            port = 4444 
+            
         return self.__socket.sendto(bytes('line:\n', 'utf-8'), ('localhost', port))

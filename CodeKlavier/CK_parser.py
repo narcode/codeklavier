@@ -209,4 +209,50 @@ class CK_Parser(object):
             compare = False
             
         return self.compareChordRecursive(basechord, chord, compare)
-            
+    
+
+
+# handy functions
+
+def midiToNotesRec(notes, totalnotes, note_names=[]):
+    """
+    Translate midi note numbers to note names. Recursive Style.
+    C1 is 24
+    """
+    names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+    
+    #print(note_names)
+    
+    def recMidiToNotes(notes, note_namesr=[]):
+        if notes == []:
+            return
+        
+        head = notes.pop(0)
+        name = names[head%12]
+        octave = int((head-12)/12)
+        note_namesr.append(name + str(octave))
+        print('rec names:', note_namesr)
+        return note_namesr
+    
+    if len(note_names) == totalnotes:
+        return note_names
+    
+    midiToNotes(notes, totalnotes, recMidiToNotes(notes, note_names))
+    
+    
+    
+def midiToNotes(notes):
+    """
+    Translate midi note numbers to note names
+    C1 is 24
+    """
+    names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+    chord = []
+    
+    for note in notes:
+        name = names[note%12]
+        octave = int((note-12)/12)
+        chord.append(name + str(octave))
+        
+    return chord
+        

@@ -293,7 +293,7 @@ def divide(x, y, acc=zero):
         return False, acc
     else:
         acc = successor(acc)        
-        return True, (substract(x, y), y, acc)
+        return True, (subtract(x, y), y, acc)
 
 
 @recur.tco
@@ -343,7 +343,7 @@ def greater(x, y):
     :param function y: functional representation of an integer
     """    
     
-    return negation(iszero(substract(x, y)))
+    return negation(iszero(subtract(x, y)))
 
 def less(x, y):
     """
@@ -355,7 +355,7 @@ def less(x, y):
     :param function y: functional representation of an integer
     """    
     
-    return negation(iszero(substract(y, x)))
+    return negation(iszero(subtract(y, x)))
     
 def test_func(*args):
     return "narcode"
@@ -402,6 +402,7 @@ def parseCKfunc(function_string, functionnum):
     args = re.findall(r'\w+', body)
     func = args[0]
     arg1 = args[1]
+    arg1str = args[1]
     variable = args[2]
     
     if re.match(r'\d', arg1):
@@ -419,6 +420,8 @@ def parseCKfunc(function_string, functionnum):
     parsed['body']['func'] = func
     parsed['body']['arg1'] = arg1
     parsed['body']['var'] = variable
+    
+    parsed['body']['arg1str'] = arg1str
    
     return parsed 
     
