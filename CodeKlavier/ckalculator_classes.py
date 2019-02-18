@@ -860,7 +860,7 @@ class Ckalculator(object):
                 self._developedOstinato = False
                 self.ostinato = {'first': [], 'compare': []}
                 
-            self.mapscheme.formatAndSend('ostinato was not developed correctly. Please try again', display=4,
+                self.mapscheme.formatAndSend('ostinato was not developed correctly. Please try again', display=4,
                                              syntax_color='function:')
         # clean ostinato memory
         self._foundOstinato = False
