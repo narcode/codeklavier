@@ -11,7 +11,7 @@ def zero(body=''):
     """
     lambda identity function. Also represents 0 (zero)\n
     returns the function/argument it was applied to\n
-    (in lambda notation: ƛx.x)\n
+    (in lambda notation: λx.x)\n
     \n
     :param function body: body variable to replace with the application argument\n
     """
@@ -21,7 +21,7 @@ def true(function1):
     """
     lambda select first function. Also represents TRUE\n
     returns the first variable (function1)\n 
-    (in lambda notation: ƛx.ƛy.x)\n
+    (in lambda notation: λx.λy.x)\n
     \n
     :param function function1: expression that will be returned\n
     :param function function2: expression that will be discarded/destroyed\n
@@ -36,7 +36,7 @@ def false(function1):
     """
     lambda select second function. Also represents FALSE\n
     returns the second variable (function2)\n 
-    (in lambda notation: ƛx.ƛy.y)\n
+    (in lambda notation: λx.λy.y)\n
     \n
     :param function function1: expression that will be discarded/destroyed\n
     :param function function2: expression that will be returned\n
@@ -50,7 +50,7 @@ def iszero(number_expression):
     """
     lambda function to return true (select_first) if the number expression is zero (i.e. identity func)\n
     otherwise returns false (selet_second)\n
-    [in lambda notation: ƛn.(n true) ]\n
+    [in lambda notation: λn.(n true) ]\n
     \n
     :param function number_expression: a funtional representation of an integer (with succesor function)
     """
@@ -62,7 +62,7 @@ def negation(boolean_expression):
     returns the negation of the expression.\n
     The expression is a boolean functions, either true or false.\n
     \n
-    [in lambda notation: ƛx.((x, false), true) ]
+    [in lambda notation: λx.((x, false), true) ]
     """
     
     return boolean_expression(false)(true)
@@ -108,7 +108,7 @@ def successor(number):
     """
     lambda successor function. Returns a pair function with FALSE as first
     argument and the original number (function expression) as second argument.\n
-    [in lambda notation: ƛn.ƛs.((s false) n) ]\n
+    [in lambda notation: λn.λs.((s false) n) ]\n
     
     :param function number: zero or successors of zero as integer representations  
     """
@@ -127,7 +127,7 @@ def predecessor(number):
     """
     lambda predecessor function. Returns a function which returns zero if number argument is zero otherwise\n 
     reduces the number expression argument by one level\n
-    [in lambda notation: ƛn.(((iszero n) zero)(n false)) ]\n
+    [in lambda notation: λn.(((iszero n) zero)(n false)) ]\n
     
     :param function number: zero or successors of zero as integer representations
     \n

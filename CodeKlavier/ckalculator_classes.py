@@ -223,7 +223,7 @@ class Ckalculator(object):
                                     
                                             if f['body']['arg1'].__name__ == 'succ1':
                                                 self.append_successor(f['body']['arg1'])
-                                                self.zeroPlusRec(False)                                    
+                                                self.zeroPlusRec(False, True)                                    
                                     
                         ########################
                 ########### lambda calculus  ###########
@@ -364,7 +364,9 @@ class Ckalculator(object):
         :param function function: the function to apply the successor function to
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
+            succesors = trampolineRecursiveCounter(function)
+            for s in range(succesors):
+                self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
         print(function.__name__)       
                 
         self._successorHead.append(function)
@@ -1049,7 +1051,7 @@ class Ckalculator(object):
                                              syntax_color='e_debug:');
             #print('new valid notes', self._notesList)
         
-    def zeroPlusRec(self, sendToDisplay: True):
+    def zeroPlusRec(self, sendToDisplay=True, sendToStack=False):
         if len(self._successorHead) > 0:
             num = trampolineRecursiveCounter(self._successorHead[0])
             print('succ head: ', num)
@@ -1060,7 +1062,7 @@ class Ckalculator(object):
             if self._temp is False:
                 self._numberStack = []                                
                 #print result:
-                if sendToDisplay:
+                if sendToDisplay or sendToStack:
                     self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
                     #self.mapscheme.newLine(display=1)
                     self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
@@ -1079,7 +1081,7 @@ class Ckalculator(object):
                     self._tempNumberStack = []                                                                            
                     if self._tempStack[0] == '(':
                         self._tempNumberStack.append(self._successorHead[0])
-                        if sendToDisplay:
+                        if sendToDisplay or sendToStack:
                             self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
                                                          display=2, syntax_color='int:', spacing=False)                                        
                         
@@ -1160,7 +1162,7 @@ class CK_lambda(object):
         """
         lambda identity function. Also represents 0 (zero)\n
         returns the function/argument it was applied to\n
-        (in lambda notation: ƛx.x)\n
+        (in lambda notation: λx.x)\n
         \n
         :param function body: body variable to replace with the application argument\n
         """
@@ -1170,7 +1172,7 @@ class CK_lambda(object):
         """
         lambda select first function. Also represents TRUE\n
         returns the first variable (function1)\n 
-        (in lambda notation: ƛx.ƛy.x)\n
+        (in lambda notation: λx.λy.x)\n
         \n
         :param function function1: expression that will be returned\n
         :param function function2: expression that will be discarded/destroyed\n
@@ -1185,7 +1187,7 @@ class CK_lambda(object):
         """
         lambda select second function. Also represents FALSE\n
         returns the second variable (function2)\n 
-        (in lambda notation: ƛx.ƛy.y)\n
+        (in lambda notation: λx.λy.y)\n
         \n
         :param function function1: expression that will be discarded/destroyed\n
         :param function function2: expression that will be returned\n
@@ -1199,7 +1201,7 @@ class CK_lambda(object):
         """
         lambda function to return true (select_first) if the number expression is zero (i.e. identity func)\n
         otherwise returns false (selet_second)\n
-        [in lambda notation: ƛn.(n true) ]\n
+        [in lambda notation: λn.(n true) ]\n
         \n
         :param function number_expression: a funtional representation of an integer (with successor function)
         """
@@ -1248,7 +1250,7 @@ class CK_lambda(object):
         """
         lambda successor function. Returns a pair function with FALSE as first
         argument and the original number (function expression) as second argument.\n
-        [in lambda notation: ƛn.ƛs.((s false) n) ]\n
+        [in lambda notation: λn.λs.((s false) n) ]\n
         
         :param function number: zero or successors of zero as integer representations  
         """
@@ -1267,7 +1269,7 @@ class CK_lambda(object):
         """
         lambda predecessor function. Returns a function which returns zero if number argument is zero otherwise\n 
         reduces the number expression argument by one level\n
-        [in lambda notation: ƛn.(((iszero n) zero)(n false)) ]\n
+        [in lambda notation: λn.(((iszero n) zero)(n false)) ]\n
         
         :param function number: zero or successors of zero as integer representations
         \n
