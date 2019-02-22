@@ -71,7 +71,7 @@ Be sure to setup the correct port and device ID via ``default_setup.ini``
 [Codeklavier Videos](http://codeklavier.space/videos)
 
 ## Papers
-[Coding with the Piano](https://drive.google.com/file/d/1UIr2JyPqRw833OIkBgDrx2P6VjZcEKf1/view?usp=sharing), International Computer Music Conference 2018
+[Coding with a Piano: The first phase of the CodeKlavier's development](https://drive.google.com/file/d/1UIr2JyPqRw833OIkBgDrx2P6VjZcEKf1/view?usp=sharing), International Computer Music Conference 2018
 
 ## Support
 This project is made possible by the Creative Industries Fonds NL, our angel sponsor and the festivals and venues that book us for paid concerts. However, our funding will soon run out so if you believe in the project and would like to support it, please consider "buying us a coffee". Every little bit counts and we greatly appreciate your support! [![ko-fi](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/J3J7PGIE)
