@@ -51,7 +51,7 @@ def main(configfile='default_setup.ini'):
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True)
     cKost = Ckalculator(noteon_id, noteoff_id, pedal_id)
     per_note = 0
     ck_deltatime = 0
@@ -62,26 +62,42 @@ def main(configfile='default_setup.ini'):
             msg = codeK.get_message()
             
             if msg:
+                #print(msg)
                 message, deltatime = msg
                 per_note += deltatime
                 ck_deltatime += deltatime
-                #print(message)
+                #print('delta per note:', per_note)
+                #print('delta ck:', ck_deltatime)
 
                 if message[0] != 254:
-
+                    
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):        
                         midinote = message[1]
                         #print(ck_note_dur)
-                        note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
+                        if midinote in ck_note_dur:
+                            note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
+                        
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration, 
-                                         ck_deltatime=ck_deltatime, articulaton=articulation)
+                                         ck_deltatime=ck_deltatime, articulation=articulation)
+                        
+                        if len(cKost._functionBody) == 1:
+                            cKalc._functionBody['grab_num'] = True
+                            if cKalc._numForFunctionBody != None:
+                                cKost._functionBody['arg2'] = cKalc._numForFunctionBody
+                                print('function body complete...')
+                                cKalc.mapscheme.formatAndSend('function body complete...', display=4, 
+                                                              syntax_color='function:')
+                                cKost.storeFunction()
+                                cKalc._functionBody = {}
+                                cKalc._numForFunctionBody = None
+                        
                         cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=note_duration,
-                                         ck_deltatime=ck_deltatime, articulaton=articulation, sendToDisplay=False) # needed?
+                                         ck_deltatime=ck_deltatime, articulation=articulation, sendToDisplay=False) # needed?
                     
                     if message[0] == pedal_id and message[1] == pedal_sostenuto:
                         per_note = 0
-                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulaton=articulation)
+                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulation=articulation)
 
                     if message[0] == noteon_id:
                         #per_note = 0
@@ -89,13 +105,10 @@ def main(configfile='default_setup.ini'):
                         if message[2] > 0: 
                             dif = delta_difference(ck_deltatime) # not getting real note duration, only dt between events.
                             
-                            # if cKost._developedOstinato: then section 'full' to get the arithmetic op and the value
-                            # the defined function has to be saved somewhere. Maybe an ini file, json or function?
                             cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
-                                             ck_deltatime=dif, articulaton=articulation, sendToDisplay=False)       
+                                             ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
                             
-                            #cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=per_note,
-                                             #ck_deltatime=dif, articulaton=articulation)
+                            cKalc._noteon_delta[message[1]] = per_note
                             
             time.sleep(0.01)
                             

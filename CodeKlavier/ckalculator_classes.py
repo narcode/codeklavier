@@ -6,12 +6,15 @@ from inspect import signature
 import random
 import configparser
 import numpy as np
+#from multiprocessing import Pool
+from multiprocessing.pool import ThreadPool, Pool
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
 from Motifs import motifs_lambda as LambdaMapping
 from Mapping import Mapping_Ckalculator
 from CK_lambda import *
+from CK_parser import *
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -20,7 +23,7 @@ class Ckalculator(object):
     TODO: _fullStack is not used yet but added for the future. Evaluate the decision and either implement or deprecate
     """
     
-    def __init__(self, noteonid, noteoffid, pedal_id, debug=False):
+    def __init__(self, noteonid, noteoffid, pedal_id, debug=False, print_functions=False):
         """The method to initialise the class and prepare the class variables.
         """
         
@@ -51,8 +54,20 @@ class Ckalculator(object):
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
         self._developedOstinato = False
+        self._functionBody = {}
+        self._numForFunctionBody = None
+        self._pool = ThreadPool(processes=1)
+        self._memories = {}
+        self.parser = CK_Parser()
+        self._noteon_delta = {}
+        self._lastnotes = []
+        self._lastdeltas = []
+        self._defineCounter = 0
+        self._arg1Counter = 0
+        self._arg2Counter = 0 
         self._ckar = [] 
         self._rules = []
+        self._operand = []
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -62,13 +77,19 @@ class Ckalculator(object):
             for sub_item in item:
                 if sub_item > 0:
                     self._notesList.append(sub_item)
+                    
         if debug:
             print('valid notes:', self._notesList)
         
+        if print_functions:
+            for f in self.ckFunc():
+                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                
 
-        
-    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0, 
-                   articulaton={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, sendToDisplay=True):
+    def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
+                   articulation={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, sendToDisplay=True):
         """Parse the midi signal and process it depending on the register.
 
         :param tuple event: describes the midi event that was received
@@ -111,54 +132,129 @@ class Ckalculator(object):
                     #self.mapscheme._osc.send_message("/ckar_a", self._ckar[0])
                     
             
-        if message[0] == self.note_on:
+        if message[0] == self.note_on and message[2] > 0:
+
             if section == 'ostinatos':
                 if not self._developedOstinato:
                     self._note_on_cue.append(message[1])
                     #self.find_ostinato(self._fullMemory, debug=True)
                     #print('note on mem:', self._note_on_cue)
                 else:
-                    print('ostinato developed, awaiting arithmetic function')
-            
+                    if self._functionBody == '':
+                        print('ostinato developed, awaiting arithmetic function')
+                        self.mapscheme.formatAndSend('ostinato developed, awaiting arithmetic function', display=2, 
+                                                     syntax_color='result:')
+                        
+        #print(self._noteon_delta)
 
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
             self._deltatime = ck_deltatime_per_note 
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
+
             
-            if self.wrong_note(note, True):
+            if self.wrong_note(note, False):
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
                 self.shift_mapping(1, 'random')
 
-            else: 
-                if section == 'ostinatos':
-                    if not self._developedOstinato:
-                        self._fullMemory.append(note)
-                        self.find_ostinato(self._fullMemory, debug=False)                        
-                    #else:
-                        # detect ostinato change
-                        #print('ostinato change...')
-                        
+            #else: #no worng note for now... 
+            
+            if section == 'ostinatos':
+                if not self._developedOstinato:
+                    self._fullMemory.append(note)
+                    self.find_ostinato(self._fullMemory, debug=False)                        
+                else:
+                    if len(self._functionBody) < 2:
+                        print('define func body...')
+                        if self._defineCounter == 0:
+                            self.mapscheme.formatAndSend('define func body...', display=4, syntax_color='function:')
+                            self._defineCounter += 1
+                        self.define_function_body(note, articulation)
                     
-                ### lambda calculus ###
+                             
+            if section == 'full':        
+                
+        ########### CK function definition ############
+                #print('incoming:', note)
+                self._lastnotes.append(note) # coming from note on messages in main()
+                self._lastdeltas.append(self._noteon_delta[note])
+                if len(self._lastnotes) > 2:
+                    self._lastnotes = self._lastnotes[-2:]
+                if len(self._lastdeltas) > 2:
+                    self._lastdeltas = self._lastdeltas[-2:]
                     
+                last_events = sorted(self._noteon_delta.values())[-2:]
+                last_events_new = np.diff(sorted(self._lastdeltas))
+                #for n in self._noteon_delta.items():
+                    #for l in last_events:
+                        #if l in n:
+                            #self._lastnotes.append(n)
+                #print(self._noteon_delta[note])
+                #print('last events:', last_events)
+                #print('last notes:', self._lastnotes)
+                #print('last deltas:', self._lastdeltas)
+                #print('diff: ', last_events[-1] - last_events[0])
+                #print('diff new: ', last_events_new)
+
+                
+                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
+                    chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
+                                                                                self._lastdeltas, 
+                                                                                0.03, True)) 
+                
+                #if last_events[-1] - last_events[0] < 0.03:                    
+                    ##spawn thread for detecting chords:
+                    #chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
+                                                                                #self._noteon_delta[note], 
+                                                                                #0.03, True))
+                    chordfound, chord = chordparse.get()
+
+                    if chordfound:
+                        for f in self.ckFunc():
+                            with Pool(len(self.ckFunc())) as pool:
+                                result = pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
+                                #print('process result for ' + f['ref'], result.get())
+                                if result.get():
+                                    
+                                    try:
+                                        function_to_call = getattr(self, f['body']['func'])
+                                        func_exists = True
+                                    except AttributeError:
+                                        #raise NotImplementedError("Class `{}` does not implement `{}`".
+                                                                  #format(self.__class__.__name__, 
+                                                                         #function_to_call))
+                                        func_exists = False
+                                        print('function not implemented for now... ')
+                                    
+                                    if func_exists:
+                                        if function_to_call.__name__ not in ['successor', 'predecessor']:
+                                            function_to_call(False, sendToDisplay)
+                                    
+                                            if f['body']['arg1'].__name__ == 'succ1':
+                                                self.append_successor(f['body']['arg1'])
+                                                self.zeroPlusRec(False, True)                                    
+                                    
+                        ########################
+                ########### lambda calculus  ###########
+                        ########################
+                                    
                 if note in LambdaMapping.get('successor'):
+
+                    if self._deltatime <= articulation['staccato']:
+                        self.successor(successor, sendToDisplay)
                     
-                    if self._deltatime <= articulaton['staccato']:
-                        self.build_succesor(successor, sendToDisplay)
-                    
-                    elif self._deltatime > articulaton['staccato']: #this is either the func 'zero' or 'predecessor'
+                    elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
                         
                         if note in [LambdaMapping.get('successor')[0]]:
                             if len(self._numberStack) == 0:
-                                self.build_predecessor(zero, sendToDisplay) # what kind of result is better?
+                                self.predecessor(zero, sendToDisplay) # what kind of result is better?
                             else:
-                                self.build_predecessor(predecessor, sendToDisplay)
+                                self.predecessor(predecessor, sendToDisplay)
                                 
                         else: #zero + recursive counter:
                             self.makeAxiom(sendToDisplay)                                  
-                                
+
                         self._successorHead = []
                         
                 elif note in LambdaMapping.get('zero'):
@@ -195,6 +291,7 @@ class Ckalculator(object):
                             self._evalStack = []
                             self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
                             if (type(self._evalStack[0]) == int):
+                                                               
                                 if sendToDisplay:
                                     self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
                                                                  syntax_color='result:')
@@ -224,27 +321,27 @@ class Ckalculator(object):
                         self._functionStack = []
                     
                 elif note in LambdaMapping.get('predecessor'):
-                    print('used via articulation under 1 succesor')
+                    print('used via articulation under 1 successor')
                         
                 elif note in LambdaMapping.get('addition'):
-                    if self._deltatime <= articulaton['staccato']:
+                    if self._deltatime <= articulation['staccato']:
                         if not self._temp:
                             self.add(False, sendToDisplay)
                         else:
                             self.add(temp=True)
-                    elif self._deltatime > articulaton['staccato']:
+                    elif self._deltatime > articulation['staccato']:
                         if not self._temp:
                             self.multiply(False, sendToDisplay) 
                         else:
                             self.multiply(True, sendToDisplay)                    
                     
-                elif note in LambdaMapping.get('substraction'):
-                    if self._deltatime <= articulaton['staccato']:                
+                elif note in LambdaMapping.get('subtraction'):
+                    if self._deltatime <= articulation['staccato']:                
                         if not self._temp:
-                            self.substract(False, sendToDisplay)  
+                            self.subtract(False, sendToDisplay)  
                         else:
-                            self.substract(True, sendToDisplay)
-                    elif self._deltatime > articulaton['staccato']:
+                            self.subtract(True, sendToDisplay)
+                    elif self._deltatime > articulation['staccato']:
                         if not self._temp:
                             self.divide(False, sendToDisplay) 
                         else:
@@ -254,23 +351,23 @@ class Ckalculator(object):
                     print('used via articulation under addition')
                     
                 elif note in LambdaMapping.get('division'):
-                    print('used via articulation under substraction')
+                    print('used via articulation under subtraction')
                                     
                 # number comparisons    
                 elif note in LambdaMapping.get('equal'):
                     self.equal(sendToDisplay) 
                     
                 elif note in LambdaMapping.get('greater'):
-                    if self._deltatime <= articulaton['staccato']:                                
+                    if self._deltatime <= articulation['staccato']:                                
                         self.greater_than(sendToDisplay) 
-                    elif self._deltatime > articulaton['staccato']:
+                    elif self._deltatime > articulation['staccato']:
                         self.less_than(sendToDisplay)  
                         
                 elif note in LambdaMapping.get('less'):
                     print('used via articulation under greater than')                                              
 
                 
-    def build_succesor(self, function, sendToDisplay=True):
+    def successor(self, function, sendToDisplay=True):
         """
         builds a successor functions chain.\n
         \n
@@ -290,8 +387,25 @@ class Ckalculator(object):
                                             
         if len(self._successorHead) > 1:
             self._successorHead = self._successorHead[-1:]
+    
+    def append_successor(self, function, sendToDisplay=True):
+        """
+        Append a successor function to the successorHead stack\n
+        \n
+        :param function function: the function to apply the successor function to
+        """
+        if sendToDisplay:
+            succesors = trampolineRecursiveCounter(function)
+            for s in range(succesors):
+                self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
+        print(function.__name__)       
+                
+        self._successorHead.append(function)
+                                    
+        if len(self._successorHead) > 1:
+            self._successorHead = self._successorHead[-1:]      
             
-    def build_predecessor(self, function, sendToDisplay=True):
+    def predecessor(self, function, sendToDisplay=True):
         """
         builds a predecessor functions chain.\n
         \n
@@ -373,15 +487,15 @@ class Ckalculator(object):
             if self._tempStack[0] == '(':
                 self._tempStack.append(add_trampoline)        
         
-    def substract(self, temp=False, sendToDisplay=True):
+    def subtract(self, temp=False, sendToDisplay=True):
         """
-        Append a substraction function to the functions stack and any existing number expression\n
+        Append a subtraction function to the functions stack and any existing number expression\n
         \n
         """
         if sendToDisplay:
             self.mapscheme.formatAndSend('-', display=2, syntax_color='min:',spacing=False)               
             self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
-        print('substraction')
+        print('subtraction')
         
         if not temp:
             if len(self._numberStack) == 0:
@@ -390,7 +504,7 @@ class Ckalculator(object):
                 self._functionStack.append(self._numberStack[0])
             #append the operator        
             #self._functionStack.append(self._lambda.add)
-            self._functionStack.append(substract) 
+            self._functionStack.append(subtract) 
         else:
             if len(self._tempNumberStack) == 0:
                 self._tempFunctionStack.append(zero)
@@ -398,13 +512,13 @@ class Ckalculator(object):
                 self._tempFunctionStack.append(self._tempNumberStack[0])
             #append the operator        
             #self._functionStack.append(self._lambda.add)
-            self._tempFunctionStack.append(substract)           
+            self._tempFunctionStack.append(subtract)           
             
         
-        self._fullStack.append(substract)
+        self._fullStack.append(subtract)
         if len(self._tempStack) > 0:
             if self._tempStack[0] == '(':
-                self._tempStack.append(substract)         
+                self._tempStack.append(subtract)         
 
 
     def equal(self, sendToDisplay=True):
@@ -655,7 +769,7 @@ class Ckalculator(object):
         param boolean debug: print debugging messages
         """
         length = size*repetitions+size
-        if len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue? 
+        if not self._developedOstinato and len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue?
             self._fullMemory = self._fullMemory[-length:]
             self._note_on_cue = self._note_on_cue[-length:]
             self._filtered_cue = self._filtered_cue[-length:]
@@ -669,7 +783,9 @@ class Ckalculator(object):
                 
             #self.get_ostinato_pattern(cue_reverse, size, True)
                 
-            i = np.where(counts > 2)
+            i = np.where(counts > 3)
+
+            #print('i:', i)
             
             if i[0].shape[0] > 3:
                 # np_notes = notes[i] ### this is shorthand for what happend later ?
@@ -678,59 +794,52 @@ class Ckalculator(object):
                         self._filtered_cue.append(x)
                 
                 cue_notes, cue_reverse = np.unique(self._filtered_cue, False, True, False)
-                self.get_ostinato_pattern(cue_reverse, size, True)                        
+                pattern_match = self.get_ostinato_pattern(cue_reverse, size, False)                        
                 
                 if debug:
                     print('cue notes:', cue_notes, '\ncue_reverse:', cue_reverse)
 
-
-                for item in i[0]:
-                    if not self._foundOstinato:
-                        self.ostinato['first'].append(notes[item])
-                        
-                        if len(self.ostinato['first']) > 1:
-                            np_notes = np.array(self.ostinato['first'])
+                if pattern_match:
+                    for item in i[0]:
+                        if not self._foundOstinato:
+                            self.ostinato['first'].append(notes[item])
                             
-                        if len(self.ostinato['first']) > 3:
-                            # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
-                            self.ostinato['first'] = self.ostinato['first'][-4:]
-                            
-                            if np_notes.max() - np_notes.min() < 12: #within an 8ve range
-                                self._foundOstinato = True #pause listening to analyze the frame
-                                self._fullMemory = []
-                                self._note_on_cue = []
-                                if debug:
-                                    print('i -> ', i)
-                                    print('found ostinato!', self.ostinato['first'])              
-                            else:
-                                self._foundOstinato = False
-                    else:
-                        self.ostinato['compare'].append(notes[item])
-                        
-                        if len(self.ostinato['compare']) > 1:
-                            np_notes = np.array(self.ostinato['compare'])
-                            
-                        if len(self.ostinato['compare']) > 3:
-                            # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
-                            self.ostinato['compare'] = self.ostinato['compare'][-4:]
-                            
-                            if np_notes.max() - np_notes.min() < 12: #within an 8ve range
-                                if np.array_equal(self.ostinato['first'], self.ostinato['compare']):
+                            if len(self.ostinato['first']) > 1:
+                                np_notes = np.array(self.ostinato['first'])
+                                
+                            if len(self.ostinato['first']) > 3:
+                                # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
+                                self.ostinato['first'] = self.ostinato['first'][-4:]
+                                
+                                if np_notes.max() - np_notes.min() <= 12: #within an 8ve range
+                                    self._foundOstinato = True #pause listening to analyze the frame
+                                    self._fullMemory = []
+                                    self._note_on_cue = []
                                     if debug:
-                                        print('ostinato has not change')
+                                        print('i -> ', i)
+                                    print('found ostinato!', midiToNotes(self.ostinato['first']))
+                                    msg_notes = (',').join(midiToNotes(self.ostinato['first']))
+                                    self.mapscheme.formatAndSend('found ostinato ' + msg_notes, 
+                                                                 display=4, syntax_color='function:')
                                 else:
-                                    diff = np.subtract(self.ostinato['first'], self.ostinato['compare'])
-                                    if np.array_equal(sorted(diff), [0,0,0,1]):
-                                        self._developedOstinato = True
-                                        self._fullMemory = []
-                                        self._note_on_cue = []
-                                        if debug:
-                                            print('ostinato has 1 note difference! -> ', diff)
-                                            print('first:',self.ostinato['first'],
-                                                  'compare:',self.ostinato['compare'])              
-                                    else:
-                                        print('first:',self.ostinato['first'],
-                                              'compare:',self.ostinato['compare'])                                                      
+                                    self._foundOstinato = False
+                        else:
+                            self.ostinato['compare'].append(notes[item])
+                            
+                            #if len(self.ostinato['compare']) > 1:
+                                #np_notes = np.array(self.ostinato['compare'])
+                                
+                            if len(self.ostinato['compare']) > 3:
+                                # get uniquness! (i.e. [49, 95, 49, 95]) and 8ve range
+                                self.ostinato['compare'] = self.ostinato['compare'][-4:]
+                                np_notes = np.array(self.ostinato['compare'])
+                                
+                                print('compare: ', midiToNotes(self.ostinato['compare']))
+                                
+                                if np_notes.max() - np_notes.min() <= 12: #within an 8ve range
+                                    self.compare_ostinato(self.ostinato['first'], self.ostinato['compare'],
+                                                          debug=True)
+                                                                                   
                         
     def get_ostinato_pattern(self, noteson_array, ostinato_size, debug=False):
         """
@@ -754,20 +863,176 @@ class Ckalculator(object):
             if debug:
                 if pattern_check:
                     print(pattern1,'\n',pattern2,'\n',pattern3,'\n')
-                    print(pattern_check)        
+                    print(pattern_check)       
         
-                return pattern_check
+            return pattern_check
                        
-    def compare_ostinato(self, ostinato, note):
+    def compare_ostinato(self, ostinato1, ostinato2, debug=False):
         """
         Detect deviations of an ostinato.
         param array ostinato: the base ostinato
-        param int note: the incoming midi note
+        param int note: the ostinato to compare
         """
-        
-        
+        if np.array_equal(ostinato1, ostinato2):
+            self.ostinato = {'first': [], 'compare': []}
+            if debug:
+                print('ostinato did not change')
+                self.mapscheme.formatAndSend('ostinato did not change', display=4, syntax_color='function:')
+        else:
+            diff = np.subtract(ostinato1, ostinato2)
+            
+            if np.array_equal(sorted(np.abs(diff)), [0,0,0,1]):
+                self._developedOstinato = True
+                
+                if debug:
+                    print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
+                self.mapscheme.formatAndSend('ostinato has 1 note difference! Well done', display=4,
+                                                 syntax_color='function:')
+            else:
+                print('😤 ostinato was not developed correctly. Please try again')
+                self._developedOstinato = False
+                self.ostinato = {'first': [], 'compare': []}
+                
+                self.mapscheme.formatAndSend('ostinato was not developed correctly. Please try again', display=4,
+                                             syntax_color='function:')
+        # clean ostinato memory
+        self._foundOstinato = False
+        self._fullMemory = []
+        self._note_on_cue = []
+        self._filtered_cue = []
+        #self.ostinato = {'first': [], 'compare': []}
+
+        print('first:', midiToNotes(ostinato1),
+              'compare:', midiToNotes(ostinato2))      
+       
+    def define_function_body(self, note, articulation, debug=True):
+        """
+        High level function to choose a lambda function to be used as part of the function body 
+        of a function definition.
+      
+        :param int note: incoming MIDI note
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
+        """ 
+        if len(self._functionBody) == 0:
+            if note in LambdaMapping.get('successor'):
+    
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'successor'
+                
+                elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
+                    
+                    if note in [LambdaMapping.get('successor')[0]]:
+                        self._functionBody['arg1'] = 'predecessor'
                             
-                            
+            elif note in LambdaMapping.get('zero'):
+                self._functionBody['arg1'] = 'zero'
+               
+            elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
+                self._functionBody['arg1'] = 'eval'
+                
+            elif note in LambdaMapping.get('predecessor'):
+                self._functionBody['arg1'] = 'predecessor'
+                
+            elif note in LambdaMapping.get('addition'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'add'
+                    
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'multiply'
+                    
+            elif note in LambdaMapping.get('subtraction'):
+                if self._deltatime <= articulation['staccato']:                
+                    self._functionBody['arg1'] = 'subtract'
+                    
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'divide'
+                    
+            # number comparisons    
+            elif note in LambdaMapping.get('equal'):
+                self._functionBody['arg1'] = 'equal'
+                
+            elif note in LambdaMapping.get('greater'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'greater'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'less'                
+                    
+        elif len(self._functionBody) == 1:
+            if debug:
+                print('function body arg 1 is: ', self._functionBody['arg1'])
+            if self._arg1Counter == 0:
+                self.mapscheme.formatAndSend('function body arg 1 is:' + self._functionBody['arg1'], display=4,
+                                             syntax_color='function:')
+            self._arg1Counter += 1
+                
+        elif len(self._functionBody) == 2:
+            if debug:
+                print('function body arg 2 is: ', self._functionBody['arg2'])
+            if self.arg2Counter == 0:
+                self.mapscheme.formatAndSend('function body arg 2 is:' + self._functionBody['arg2'], display=4,
+                                             syntax_color='function:')
+            self._arg2Counter += 1
+
+            
+    def storeFunction(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
+        """
+        Store the defined function in a .ini file for future use.
+        """
+        ck_functions = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        ck_functions.read(funcfile, encoding='utf8')
+        existingfuncs = []
+        
+        for f in self.ckFunc():
+            existingfuncs.append(f['name'])
+            
+        print(existingfuncs)   
+        
+        func_num = len(ck_functions['functions'])
+
+        name = 'function' + repr(func_num+1) + ': '
+        name2 = 'function' + repr(func_num+2) + ': '
+        chord = ','.join(map(str, self.ostinato['first']))
+        chord2 = ','.join(map(str, self.ostinato['compare']))
+        body = chord + ' -> (' + self._functionBody['arg1'] + ' ' + repr(self._functionBody['arg2']) + ' x)\n'
+        body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ' ' + repr(self._functionBody['arg2']) + ' x)\n'
+        
+        with open(funcfile, 'a') as file:
+            if self.ostinato['first'] not in existingfuncs:
+                file.write(name + body)
+                print('function saved 1', midiToNotes(self.ostinato['first']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            if self.ostinato['compare'] not in existingfuncs:
+                file.write(name2 + body2)
+                print('function saved 2', midiToNotes(self.ostinato['compare']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            file.close()
+            
+        if sendToDisplay:
+            total = len(self.ckFunc())
+            count = 0
+            for f in self.ckFunc():
+                count += 1
+                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                if count == total:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                else:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='saved:')
+            
+        #reset the ostinato analysis
+        self.ostinato = {'first': [], 'compare': []}
+        self._fullMemory = []
+        self._note_on_cue = []
+        self._filtered_cue = []
+        self._functionBody = {}
+        self._defineCounter = 0
+        self._foundOstinato = False
+        self._developedOstinato = False 
+                
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played
@@ -817,14 +1082,18 @@ class Ckalculator(object):
                                              syntax_color='e_debug:');
             #print('new valid notes', self._notesList)
         
-    def zeroPlusRec(self, sendToDisplay: True):
+    def zeroPlusRec(self, sendToDisplay=True, sendToStack=False):
         if len(self._successorHead) > 0:
-            print('succ head: ', trampolineRecursiveCounter(self._successorHead[0]))
+            num = trampolineRecursiveCounter(self._successorHead[0])
+            print('succ head: ', num)
             
+            if len(self._functionBody) > 0:
+                self._numForFunctionBody = num 
+                
             if self._temp is False:
                 self._numberStack = []                                
                 #print result:
-                if sendToDisplay:
+                if sendToDisplay or sendToStack:
                     self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
                     #self.mapscheme.newLine(display=1)
                     self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
@@ -843,7 +1112,7 @@ class Ckalculator(object):
                     self._tempNumberStack = []                                                                            
                     if self._tempStack[0] == '(':
                         self._tempNumberStack.append(self._successorHead[0])
-                        if sendToDisplay:
+                        if sendToDisplay or sendToStack:
                             self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
                                                          display=2, syntax_color='int:', spacing=False)                                        
                         
@@ -923,6 +1192,38 @@ class Ckalculator(object):
                 self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
                 self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
 
+    
+    def ckFunc(self, funcfile='ck_functions.ini', debug=False):
+        """
+        Load and parse a CK custom function
+        """
+
+        funcs = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        funcs.read(funcfile, encoding='utf8')
+        functions = []
+        
+        for function in funcs['functions']:
+            functions.append(parseCKfunc(funcs['functions'].get(function), function))
+        
+        if debug:
+            print(functions)
+        
+        return functions
+                   
+    #def dumpCkfunctions(self, funcfile='ck_functions.ini', debug=False):
+        #"""
+        #Dump existing CK custom functions
+        #"""
+
+        #funcs = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        #funcs.read(funcfile, encoding='utf8') 
+        #functions = []
+        
+        #for function in funcs['functions']:
+            #functions.append(funcs['functions'].get(function))
+            
+        #return functions
+        
                   
 class CK_lambda(object):
     """CK_lambda Class
@@ -937,7 +1238,7 @@ class CK_lambda(object):
         """
         lambda identity function. Also represents 0 (zero)\n
         returns the function/argument it was applied to\n
-        (in lambda notation: ƛx.x)\n
+        (in lambda notation: λx.x)\n
         \n
         :param function body: body variable to replace with the application argument\n
         """
@@ -947,7 +1248,7 @@ class CK_lambda(object):
         """
         lambda select first function. Also represents TRUE\n
         returns the first variable (function1)\n 
-        (in lambda notation: ƛx.ƛy.x)\n
+        (in lambda notation: λx.λy.x)\n
         \n
         :param function function1: expression that will be returned\n
         :param function function2: expression that will be discarded/destroyed\n
@@ -962,7 +1263,7 @@ class CK_lambda(object):
         """
         lambda select second function. Also represents FALSE\n
         returns the second variable (function2)\n 
-        (in lambda notation: ƛx.ƛy.y)\n
+        (in lambda notation: λx.λy.y)\n
         \n
         :param function function1: expression that will be discarded/destroyed\n
         :param function function2: expression that will be returned\n
@@ -976,9 +1277,9 @@ class CK_lambda(object):
         """
         lambda function to return true (select_first) if the number expression is zero (i.e. identity func)\n
         otherwise returns false (selet_second)\n
-        [in lambda notation: ƛn.(n true) ]\n
+        [in lambda notation: λn.(n true) ]\n
         \n
-        :param function number_expression: a funtional representation of an integer (with succesor function)
+        :param function number_expression: a funtional representation of an integer (with successor function)
         """
         
         return number_expression(self.true)
@@ -1025,14 +1326,14 @@ class CK_lambda(object):
         """
         lambda successor function. Returns a pair function with FALSE as first
         argument and the original number (function expression) as second argument.\n
-        [in lambda notation: ƛn.ƛs.((s false) n) ]\n
+        [in lambda notation: λn.λs.((s false) n) ]\n
         
         :param function number: zero or successors of zero as integer representations  
         """
         
         def succ1(successor):
             """
-            :param function succesor: a bound variable to be replaced by the argument after final application (i.e. select_first)
+            :param function successor: a bound variable to be replaced by the argument after final application (i.e. select_first)
                     
             """
             return successor(self.false)(number)
@@ -1044,7 +1345,7 @@ class CK_lambda(object):
         """
         lambda predecessor function. Returns a function which returns zero if number argument is zero otherwise\n 
         reduces the number expression argument by one level\n
-        [in lambda notation: ƛn.(((iszero n) zero)(n false)) ]\n
+        [in lambda notation: λn.(((iszero n) zero)(n false)) ]\n
         
         :param function number: zero or successors of zero as integer representations
         \n
@@ -1060,11 +1361,11 @@ class CK_lambda(object):
             if number[0].__name__ is 'mult_trampoline':
                 return number[1][1](self.false)
                 
-    def recursiveCounter(self, succesor_expression, counter=0):
+    def recursiveCounter(self, successor_expression, counter=0):
         """
-        function to count how many times succesor functions are nested until the zero is reached. Returns the count as int.
+        function to count how many times successor functions are nested until the zero is reached. Returns the count as int.
         
-        :param function succesor_expression: the nested succesor functions to be reduced until zero\n
+        :param function successor_expression: the nested successor functions to be reduced until zero\n
         :param int counter: the integer to increment on each recursion\n
         :param boolean debug: wheather to print debg messages or not
         """
@@ -1080,42 +1381,42 @@ class CK_lambda(object):
         
         def countreduce(reducedfunc):
             """
-            applies the succesor function to select_second recursively\n
+            applies the successor function to select_second recursively\n
             \n
             :param function reducedfunc: the function to reduce
             """
             #nonlocal reduced # this is really functional now            
             return reducedfunc(self.false)              
         
-        if succesor_expression.__name__ is 'succ1':
+        if successor_expression.__name__ is 'succ1':
             #recursion point 1
-            return self.recursiveCounter(countreduce(succesor_expression),
+            return self.recursiveCounter(countreduce(successor_expression),
                                          sum_one(counter))
         
-        elif succesor_expression.__name__ is 'zero':
+        elif successor_expression.__name__ is 'zero':
             if self._debug:
                 print(counter)
             return counter
                        
         else:
-            if succesor_expression.__name__ is 'successor':
+            if successor_expression.__name__ is 'successor':
                 print('missing a zero to close the successor chain!')
             else:
                 print('this function can only process number expression functions as argument!')
                 
-    def trampolineRecursiveCounter(self, succesor_expression, counter=0):
+    def trampolineRecursiveCounter(self, successor_expression, counter=0):
         """
-        function to count how many times succesor functions are nested until the zero is reached. Returns the count as int.
+        function to count how many times successor functions are nested until the zero is reached. Returns the count as int.
         
-        :param function succesor_expression: the nested succesor functions to be reduced until zero\n
+        :param function successor_expression: the nested successor functions to be reduced until zero\n
         :param int counter: the integer to increment on each recursion\n
         :param boolean debug: wheather to print debg messages or not
         """         
         
-        if type(succesor_expression) is tuple:
-            expression = succesor_expression[1]            
+        if type(successor_expression) is tuple:
+            expression = successor_expression[1]            
         else:
-            expression = succesor_expression
+            expression = successor_expression
         
         if expression.__name__ is 'succ1' or expression.__name__ is 'mult_add':
             #recursion point 1
@@ -1138,7 +1439,7 @@ class CK_lambda(object):
         function to get the result of the addition of two number expressions.\n
         Returns the resulting representation of an integer\n
         \n
-        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function x: functional representation of an integer [i.e. successor(successor(zero)) ]
         :param function y: functional representation of an integer
         """
         
@@ -1153,7 +1454,7 @@ class CK_lambda(object):
         function to get the result of the addition of two number expressions.\n
         Returns the resulting representation of an integer\n
         \n
-        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function x: functional representation of an integer [i.e. successor(successor(zero)) ]
         :param function y: functional representation of an integer
         """   
         
@@ -1168,7 +1469,7 @@ class CK_lambda(object):
         function to get the result of the multiplication of two number expressions.\n
         Returns the resulting representation of an integer\n
         \n
-        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function x: functional representation of an integer [i.e. successor(successor(zero)) ]
         :param function y: functional representation of an integer
         """
         
@@ -1182,7 +1483,7 @@ class CK_lambda(object):
         function to get the result of the multiplication of two number expressions.\n
         Returns the resulting representation of an integer\n
         \n
-        :param function x: functional representation of an integer [i.e. succesor(succesor(zero)) ]
+        :param function x: functional representation of an integer [i.e. successor(successor(zero)) ]
         :param function y: functional representation of an integer
         """
                    
