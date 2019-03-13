@@ -100,7 +100,7 @@ class Ckalculator(object):
                     #self._numberStack.append(self._tempNumberStack.pop())
                     if len(self._ckar) == 0:
                         self._ckar.append(trampolineRecursiveCounter(self._tempNumberStack.pop()))
-                        print('axiom: ', 'a.' + str(self._ckar[0]))                      
+                        print('axiom: ', '*.' + str(self._ckar[0]))                      
                 #self.evaluateTempStack(self._tempStack)
                 self._tempFunctionStack = []
                 self._tempNumberStack = []
@@ -181,7 +181,7 @@ class Ckalculator(object):
                         print('parsed rule: ', rule)
                         
                         if len(self._ckar) == 1:
-                            rule = 'a.'+str(self._ckar[0]) + ',' + rule
+                            rule = '*.'+str(self._ckar[0]) + ',' + rule
                             self._ckar = []
                             
                         print("ckar rule :", rule)
