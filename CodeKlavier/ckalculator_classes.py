@@ -123,10 +123,12 @@ class Ckalculator(object):
                     
                     if '.' in self._rules:
                         self._tempEvalStack.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
+                        print(self._tempEvalStack)
                         if (type(self._tempEvalStack[0]) == int):
                             self._rules.append(trampolineRecursiveCounter(self._tempNumberStack[-1]));
                         
-                    self._numberStack.append(self._tempNumberStack.pop())
+                    #self._numberStack.append(self._tempNumberStack.pop())
+                    
                     if len(self._ckar) == 0:
                         print('axiom: ', '*' + ('').join(map(str, self._ckar)))                 
                 #self.evaluateTempStack(self._tempStack)
