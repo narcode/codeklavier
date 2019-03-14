@@ -50,12 +50,15 @@ try:
     equal_than_midi = config['lambda'].get('equality_midi').split(',')
     greater_than_midi = config['lambda'].get('greater_than_midi').split(',')
     less_than_midi = config['lambda'].get('less_than_midi').split(',')
+    
+    dot = config['ar'].get('dot').split(',')
 
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
 motifs = {}
 motifs_lambda = {}
+motifs_ar = {}
 
 # motippets
 motifs['motif_1'] = list(map(int, motif_1))
@@ -93,4 +96,5 @@ motifs_lambda['equal'] = list(map(int, equal_than_midi))
 motifs_lambda['greater'] = list(map(int, greater_than_midi))
 motifs_lambda['less'] = list(map(int, less_than_midi))
 
-
+# AR module
+motifs_ar['dot'] = list(map(int, dot))
