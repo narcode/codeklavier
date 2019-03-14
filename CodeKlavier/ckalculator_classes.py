@@ -122,7 +122,9 @@ class Ckalculator(object):
                 if len(self._tempNumberStack) > 0:
                     
                     if '.' in self._rules:
-                        self._rules.append(trampolineRecursiveCounter(self._tempNumberStack[-1]));
+                        self._tempEvalStack.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
+                        if (type(self._tempEvalStack[0]) == int):
+                            self._rules.append(trampolineRecursiveCounter(self._tempNumberStack[-1]));
                         
                     self._numberStack.append(self._tempNumberStack.pop())
                     if len(self._ckar) == 0:
