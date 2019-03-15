@@ -109,6 +109,7 @@ def main(configfile='default_setup.ini'):
                                              ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
                             
                             cKalc._noteon_delta[message[1]] = per_note
+                            cKalc._noteon_velocity[message[1]] = message[2]
                             
             time.sleep(0.01)
                             
