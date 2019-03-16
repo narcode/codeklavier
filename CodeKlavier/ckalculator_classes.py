@@ -142,7 +142,7 @@ class Ckalculator(object):
                                             
                     if len(self._ckar) == 0:
                         print('axiom: ', '*' + ('').join(map(str, self._ckar)))
-                        self.mapscheme._osc.send_message("/ckconsole", 'axiom: ', '*' + ('').join(map(str, self._ckar)))
+                        self.mapscheme._osc.send_message("/ckconsole", 'axiom: ' + '*' + ('').join(map(str, self._ckar)))
                         
                     
                     self._numberStack.append(self._tempNumberStack.pop())                    
@@ -321,7 +321,7 @@ class Ckalculator(object):
                                         self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))  
 
                                         self._rules.append('N')
-                                        self._rule_dynamics.append('0')
+                                        #self._rule_dynamics.append('0')
 
                             self._tempFunctionStack = []                        
                         
@@ -1308,9 +1308,9 @@ class Ckalculator(object):
             if self._temp is False:
                 self._rules.append(trampolineRecursiveCounter(zero))
 
-                if '.' in self._rules:
+                #if '.' in self._rules:
                     #velocity = int(numpy.average(self._dynamics).round())                                    
-                    self._rule_dynamics.append(0)                    
+                    #self._rule_dynamics.append(0)                    
                 self._rule_dynamics.append(0)
                 self._dynamics = []
                 print(self._rules)
