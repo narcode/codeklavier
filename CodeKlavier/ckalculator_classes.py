@@ -136,9 +136,9 @@ class Ckalculator(object):
                     self._rule_dynamics.append(velocity)
                         
                     print('rule till now: ', self._rules)
-                    self.mapscheme._osc.send_message("/ckconsole", self._rules)
+                    self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
                     print('vel till now: ', self._rule_dynamics)
-                    self.mapscheme._osc.send_message("/ckconsole", self._rule_dynamics)
+                    self.mapscheme._osc.send_message("/ckconsole", str(self._rule_dynamics))
                                             
                     if len(self._ckar) == 0:
                         print('axiom: ', '*' + ('').join(map(str, self._ckar)))
@@ -327,7 +327,7 @@ class Ckalculator(object):
                         
                     else:
                         print(self._rules)
-                        self.mapscheme._osc.send_message("/ckconsole", self._rules)
+                        self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
                         
                         if len(self._rules) > 1 or len(self._ckar) > 0:
                             
@@ -372,7 +372,7 @@ class Ckalculator(object):
                                         self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
                                                                      syntax_color='result:')
                                     print(self._evalStack[0])
-                                    self.mapscheme._osc.send_message("/ckconsole", self._evalStack[0])
+                                    self.mapscheme._osc.send_message("/ckconsole", str(self._evalStack[0]))
                                     
                                     self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                                     
@@ -563,7 +563,7 @@ class Ckalculator(object):
             self._tempFunctionStack.append(add_trampoline)
             
             print(self._tempFunctionStack)
-            self.mapscheme._osc.send_message("/ckconsole", self._tempFunctionStack)
+            self.mapscheme._osc.send_message("/ckconsole", str(self._tempFunctionStack))
             
             
         self._fullStack.append(add_trampoline)
@@ -739,7 +739,7 @@ class Ckalculator(object):
                                                            self._tempFunctionStack[2])) 
                     
                     print('TEMP NUM STACK: ', self._tempNumberStack)
-                    self.mapscheme._osc.send_message("/ckconsole", self._tempNumberStack)
+                    self.mapscheme._osc.send_message("/ckconsole", str(self._tempNumberStack))
                     
                     print('NORM STACK: ', self._numberStack)
     
@@ -1196,7 +1196,7 @@ class Ckalculator(object):
         if len(self._successorHead) > 0:
             num = trampolineRecursiveCounter(self._successorHead[0])
             print('succ head: ', num)
-            self.mapscheme._osc.send_message("/ckconsole", num)
+            self.mapscheme._osc.send_message("/ckconsole", str(num))
             
             
             if len(self._functionBody) > 0:
@@ -1243,7 +1243,7 @@ class Ckalculator(object):
     def makeLS(self, sendToDisplay: True):
         if len(self._successorHead) > 0:
             print('succ head: ', trampolineRecursiveCounter(self._successorHead[0])) 
-            self.mapscheme._osc.send_message("/ckconsole", trampolineRecursiveCounter(self._successorHead[0]))
+            self.mapscheme._osc.send_message("/ckconsole", str(trampolineRecursiveCounter(self._successorHead[0])))
             
             
             if self._temp is False:
