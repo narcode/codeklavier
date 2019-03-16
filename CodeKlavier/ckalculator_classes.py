@@ -344,7 +344,8 @@ class Ckalculator(object):
                             if rule != '':
                                 self.mapscheme._osc.send_message("/ckconsole", rule)
                                 print('parsed dynamics: ', velocity)
-                                self.mapscheme._osc.send_message("/ckconsole", velocity)
+                                if velocity != '':
+                                    self.mapscheme._osc.send_message("/ckconsole", velocity)
                             
                             if len(self._ckar) > 0:
                                 if rule != '':
