@@ -1308,10 +1308,10 @@ class Ckalculator(object):
             if self._temp is False:
                 self._rules.append(trampolineRecursiveCounter(zero))
 
-                #if '.' in self._rules:
-                    #velocity = int(numpy.average(self._dynamics).round())                                    
-                    #self._rule_dynamics.append(0)                    
-                self._rule_dynamics.append(0)
+                if '.' in self._rules:
+                    velocity = int(numpy.average(self._dynamics).round())                                    
+                    self._rule_dynamics.append(0)                    
+                #self._rule_dynamics.append(0)
                 self._dynamics = []
                 print(self._rules)
                 self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
