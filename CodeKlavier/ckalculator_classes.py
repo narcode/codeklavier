@@ -1309,7 +1309,7 @@ class Ckalculator(object):
                 self._rules.append(trampolineRecursiveCounter(zero))
 
                 if '.' in self._rules:
-                    velocity = int(numpy.average(self._dynamics).round())                                    
+                    #velocity = int(numpy.average(self._dynamics).round())                                    
                     self._rule_dynamics.append(0)                    
                 #self._rule_dynamics.append(0)
                 self._dynamics = []
