@@ -866,7 +866,7 @@ class Mapping_Motippets:
             elif text == 'huygens':
                 self.__keyboard.type('~huygens.end')
                 self.evaluateSC('eval')
-                
+
         elif result_num == 1:
             if text == 'comment':
                 self.__keyboard.type('// if true -> play disklavier gong')
@@ -881,8 +881,8 @@ class Mapping_Motippets:
                 #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
                 #self.evaluateSC('eval')
                 self._osc.send_message("/pianogong", str(mod))
-                self.formatAndSend('DOOOOONG!', display=3, syntax_color='snippet:')     
-                
+                self.formatAndSend('DOOOOONG!', display=3, syntax_color='snippet:')
+
         elif result_num == 5:
             if text == 'comment':
                 self.__keyboard.type('// if true -> piano cluster takeover')
@@ -893,7 +893,7 @@ class Mapping_Motippets:
                 self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
             elif text == 'less than':
                 self._osc.send_message("/pianotake", str(mod))
-                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')                
+                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
 
     def customPass(self, name, content, osc_only=False):
         """
@@ -940,7 +940,7 @@ class Mapping_Ckalculator:
         if use_display:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        self._osc = udp_client.SimpleUDPClient('192.168.1.110', 57140) 
+        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57140) 
 
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
@@ -962,7 +962,7 @@ class Mapping_Ckalculator:
         elif display == 3:
             port = 3333
         elif display == 4:
-            port = 4444        
+            port = 4444
 
         if spacing:
             newline = '\n'
@@ -982,6 +982,6 @@ class Mapping_Ckalculator:
         elif display == 3:
             port = 3333
         elif display == 4:
-            port = 4444 
-            
+            port = 4444
+
         return self.__socket.sendto(bytes('line:\n', 'utf-8'), ('localhost', port))
