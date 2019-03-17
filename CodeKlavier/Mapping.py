@@ -940,7 +940,7 @@ class Mapping_Ckalculator:
         if use_display:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57140) 
+        self._osc = udp_client.SimpleUDPClient('192.168.2.255', 57140) 
 
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
