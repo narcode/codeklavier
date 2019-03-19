@@ -707,7 +707,7 @@ class Mapping_Motippets:
         :param mod: some function
         :type mod: int or None
         """
-        if result_num == 7: #testing...
+        if result_num == 1: #testing...
             if text == 'comment':
                 self.__keyboard.type('// if true -> stop ~snippet2')
                 self.enter()
@@ -830,7 +830,7 @@ class Mapping_Motippets:
                 self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
                 self.evaluateSC('eval', flash=False)
 
-        elif result_num == 8:
+        elif result_num == 5:
             if text == 'comment':
                 self.__keyboard.type('// if true -> play Huyg')
                 self.enter()
@@ -874,7 +874,7 @@ class Mapping_Motippets:
                 self.__keyboard.type('~huygens.end')
                 self.evaluateSC('eval', flash=False)
 
-        elif result_num == 1:
+        elif result_num == 7:
             if text == 'comment':
                 self.__keyboard.type('// if true -> play disklavier gong')
                 self.enter()
@@ -890,7 +890,7 @@ class Mapping_Motippets:
                 self._osc.send_message("/pianogong", str(mod))
                 self.formatAndSend('DOOOOOOOOOOOONG!', display=3, syntax_color='snippet:')
 
-        elif result_num == 5:
+        elif result_num == 8:
             if text == 'comment':
                 self.__keyboard.type('// if true -> piano cluster takeover')
                 self.enter()
