@@ -18,7 +18,7 @@ This requires minimal equipment  and setup time where the AR visuals are project
 In this type of presentation the audience is free to move around at all times so as to experience the augmented reality visuals from different perspectives. Each audience member will be able to either download an Android app or use an Android smartphone or tablet device provided for the performance. The equipment needed for such a performance would be all of the above alongside the provision of ±30 android tablets or smartphones.
 
 ## Impression
-Please watch our short trailer for an impression https://youtu.be/p65YavCUEuQ 
+Please watch our [short trailer](https://youtu.be/p65YavCUEuQ) for an impression 
 
 ## Team
 Codeklavier Language: Felipe Ignacio Noriega 
