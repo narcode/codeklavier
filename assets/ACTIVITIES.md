@@ -1,3 +1,7 @@
+---
+permalink: /activities
+---
+
 # CodeKlavier Activities
 ### This page gives a run down of public CodeKlavier presentations and milestones to date: 
 (newest on top)
