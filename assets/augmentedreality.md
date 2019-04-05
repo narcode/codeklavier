@@ -1,5 +1,7 @@
-
-# CodeKlavier meets Augmented Reality
+---
+permalink: /augmentedreality
+---
+# CodeKlavier meets Augmented Reality 📱 🌱 
 
 The CodeKlavier is a system which enables a pianist to code through playing the piano as a performative experience. The CK+AR (CodeKlavier + Augmented Reality)  is the next step in our artistic mission of combining classically inspired pianistic, new media, and live coding performance practises into an innovative, united genre. In the CK+AR, the piano playing becomes the interface for coding and the coding unfolds as piano playing and as a visual AR experience, making the three mediums indistinguishable from one another (AR visuals + piano playing + live programming). 
 
