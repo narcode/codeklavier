@@ -58,11 +58,11 @@ PYTHONPATH="/Users/narcodeb/Development/Repos/codeklavier-python/CodeKlavier:$PY
 `
 ## Extensions
 
-### Augmented Reality
+#### Augmented Reality
 
-Standalone AR Extension Developed for the Ckalculator in collaboration with [Patrick Borgeat](https://github.com/). Read more about it or watch it in action [Codeklavier/augmentedreality](https://codeklavier.space/augmentedreality)
+Standalone AR Extension Developed for the Ckalculator in collaboration with [Patrick Borgeat](https://github.com/cappelnord). Read more about it or watch it in action [Codeklavier/augmentedreality](https://codeklavier.space/augmentedreality)
 
-### SuperCollider
+#### SuperCollider
 
 Use the Codeklavier to code electronic music. This is our default, built-in extension. We will release it as a Quark soon. Please install the latest release of [SuperCollider](http://supercollider.github.io)
 
