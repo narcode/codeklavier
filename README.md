@@ -12,7 +12,7 @@ CodeKlavier development started in April 2017 and currently has four prototypes 
 More information about the specific prototypes can be found in their respective directories.
 
 
-Checkout our [videos page](https://codeklavier.space/videos) to see the Codeklavier in action or visit the [Activities page](https://github.com/narcode/codeklavier/blob/master/ACTIVITIES.md) for info on past and future performances. 
+Checkout our [videos page](https://codeklavier.space/videos) to see the Codeklavier in action or visit the [Activities page](https://codeklavier.space/activities) for info on past and future performances. 
 
 <div class='dream'>
 <div><strong>The dream:</strong></div><div>🐍🎹 An intuitive programming language with the piano as interface.</div></div>
