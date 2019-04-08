@@ -74,7 +74,10 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
         if debug:
             print('cond', num, 'res', result_num, 'timer: ', timer - t, 'loop time: ', timer)
             #mapping.onlyDisplay('cond: ' + str(num) + ' result: ' + str(result_num) + ' looptime: ' + str(timer - t) + '', num)
-            mapping.onlyDisplay('conditional looptime: ' + str(timer - t) + '', num)
+            if timer == t+1:
+                mapping.onlyDisplay('flash:conditional looptime: ' + str(timer - t) + '', num)
+            else:
+                mapping.onlyDisplay('conditional looptime: ' + str(timer - t) + '', num)
             #print('Range conditional memory: ', conditionalsRange._memory)
         conditionalsRange._timer += 1
         t += 1
@@ -151,7 +154,6 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
 
         time.sleep(1)
 
-
 def set_parameters(value, conditional_func, debug=False):
     """
     function to parse a full range tremolo. This value can be used as a param for the
@@ -165,11 +167,11 @@ def set_parameters(value, conditional_func, debug=False):
     print('thread started for parameter set')
 
     if conditional_func == 'amount':
-        mapping.customPass('more than 100 notes played in the next ', str(value) + ' seconds?')
+        mapping.customPass('more than 100 notes played in the next ', str(value) + ' seconds?', flash=True)
     elif conditional_func == 'range':
-        mapping.customPass('range set to: ', str(value) + ' semitones...')
+        mapping.customPass('range set to: ', str(value) + ' semitones...', flash=True)
     elif conditional_func == 'gomb':
-        mapping.customPass('GOMB countdown set to: ', str(value))
+        mapping.customPass('GOMB countdown set to: ', str(value), flash=True)
 
     if debug:
         print('value parameter is ', str(value))
@@ -262,7 +264,7 @@ def gong_bomb(countdown, debug=False):
             print(" | |_) | |  | | |  | | \  / | |")
             print(" |  _ <| |  | | |  | | |\/| | |")
             print(" | |_) | |__| | |__| | |  | |_|")
-            print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
+            print(" |____/ \____/ \____/|_|  |_(_)" + BColors.ENDC)
             print("")
             mapping.result(4, 'code')
 
@@ -393,7 +395,8 @@ def main():
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 2)
                                     elif minimotif3_low_mapped > 0:
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
-                                    elif minimotif2_mid_mapped > 0:
+                                   
+                                    if minimotif2_mid_mapped > 0:
                                         tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)
                                     elif minimotif3_mid_mapped > 0:
                                         tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 3)
@@ -524,6 +527,10 @@ def ck_loop(prototype='hello world'):
                                     threads['toggle_m'].start()
 
                                 mapping.mapping(message[1])
+                                
+                                #range parser
+                                if range_trigger == 1:
+                                    conditionalsRange.parse_midi(msg, 'conditional_range')
 
                 time.sleep(0.01)
 
@@ -599,7 +606,9 @@ def ck_loop(prototype='hello world'):
                             ##tremolos:
                             if minimotif1_mid_mapped > 0:
                                 tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
-                                
+                            elif minimotif3_mid_mapped > 0:
+                                tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 3)                                
+                       
                             if motif1_played > 0 or motif2_played > 0:
                                 if minimotif1_low_mapped > 0:
                                     tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 1)
@@ -608,10 +617,8 @@ def ck_loop(prototype='hello world'):
                                 elif minimotif3_low_mapped > 0:
                                     tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
 
-                                elif minimotif2_mid_mapped > 0:
-                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)
-                                elif minimotif3_mid_mapped > 0:
-                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 3)
+                                if minimotif2_mid_mapped > 0:
+                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)                                
 
                                 if minimotif1_hi_mapped > 0:
                                     tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, 1)

@@ -1,14 +1,22 @@
-# CodeKlavier Activities
+---
+permalink: /activities
+---
+
+# CodeKlavier Activities 🎹🎤
+
 ### This page gives a run down of public CodeKlavier presentations and milestones to date: 
 (newest on top)
 
-January 2018: Performance of new hybrid version for Disklavier at [Conlon X Gaudeamus](https://gaudeamus.nl/events/gaudeamus-x-conlon-disklavier-projection-works/). We will also perform with the CKalculator at the International Conference on Live Coding
+February 2019: Talk and performance with the CKaλulator at [Lambda Days](http://www.lambdadays.org/lambdadays2019) in Poland.
+
+January 2019: Performance of new hybrid version for Disklavier at [Conlon X Gaudeamus](https://gaudeamus.nl/events/gaudeamus-x-conlon-disklavier-projection-works/) - Watch the [trailer](https://drive.google.com/file/d/1_IZ2OyttF5yVMxsXt9oTTatKtjRafIaY/view)!
+We will also perform with the CKalculator at the [International Conference on Live Coding](http://iclc.livecodenetwork.org/2019/ingles.html)
 
 November 2018: Performance at Splendor
 
 October 2018: Performance at [ARTikulationen in Graz](http://doctorartium.kug.ac.at/pdf/ARTikulationen2018Programm3.pdf). This will be the first time we use our custom built KeyScanner.
 
-September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl/) in Voorburg, Netherlands.
+September 2018: Performance at the [Huygens Festival](https://huygensfestival.nl/) in Voorburg, Netherlands. We also did an [interview with Dennis Kastrup](https://www.radioeins.de/programm/sendungen/modo1316/strom-und-drang/codeklavier.html) about the project for Radio Eins.
 
 August 2018: CodeKlavier paper and performance will be presented at the [International Computer Music Conference](https://icmc2018.org/) in Daegu, Korea! In the proceedings you can find our first CodeKlavier published paper.
 
