@@ -4,13 +4,14 @@ Contains basic Lambda calculus expressions
 """    
 
 import functools
+import re
 from fn import recur
 
 def zero(body=''):
     """
     lambda identity function. Also represents 0 (zero)\n
     returns the function/argument it was applied to\n
-    (in lambda notation: ƛx.x)\n
+    (in lambda notation: λx.x)\n
     \n
     :param function body: body variable to replace with the application argument\n
     """
@@ -20,7 +21,7 @@ def true(function1):
     """
     lambda select first function. Also represents TRUE\n
     returns the first variable (function1)\n 
-    (in lambda notation: ƛx.ƛy.x)\n
+    (in lambda notation: λx.λy.x)\n
     \n
     :param function function1: expression that will be returned\n
     :param function function2: expression that will be discarded/destroyed\n
@@ -35,7 +36,7 @@ def false(function1):
     """
     lambda select second function. Also represents FALSE\n
     returns the second variable (function2)\n 
-    (in lambda notation: ƛx.ƛy.y)\n
+    (in lambda notation: λx.λy.y)\n
     \n
     :param function function1: expression that will be discarded/destroyed\n
     :param function function2: expression that will be returned\n
@@ -49,7 +50,7 @@ def iszero(number_expression):
     """
     lambda function to return true (select_first) if the number expression is zero (i.e. identity func)\n
     otherwise returns false (selet_second)\n
-    [in lambda notation: ƛn.(n true) ]\n
+    [in lambda notation: λn.(n true) ]\n
     \n
     :param function number_expression: a funtional representation of an integer (with succesor function)
     """
@@ -61,7 +62,7 @@ def negation(boolean_expression):
     returns the negation of the expression.\n
     The expression is a boolean functions, either true or false.\n
     \n
-    [in lambda notation: ƛx.((x, false), true) ]
+    [in lambda notation: λx.((x, false), true) ]
     """
     
     return boolean_expression(false)(true)
@@ -107,7 +108,7 @@ def successor(number):
     """
     lambda successor function. Returns a pair function with FALSE as first
     argument and the original number (function expression) as second argument.\n
-    [in lambda notation: ƛn.ƛs.((s false) n) ]\n
+    [in lambda notation: λn.λs.((s false) n) ]\n
     
     :param function number: zero or successors of zero as integer representations  
     """
@@ -126,7 +127,7 @@ def predecessor(number):
     """
     lambda predecessor function. Returns a function which returns zero if number argument is zero otherwise\n 
     reduces the number expression argument by one level\n
-    [in lambda notation: ƛn.(((iszero n) zero)(n false)) ]\n
+    [in lambda notation: λn.(((iszero n) zero)(n false)) ]\n
     
     :param function number: zero or successors of zero as integer representations
     \n
@@ -292,13 +293,13 @@ def divide(x, y, acc=zero):
         return False, acc
     else:
         acc = successor(acc)        
-        return True, (substract(x, y), y, acc)
+        return True, (subtract(x, y), y, acc)
 
 
 @recur.tco
-def substract(x, y):
+def subtract(x, y):
     """
-    function to get the result of the substraction of two number expressions.\n
+    function to get the result of the subtraction of two number expressions.\n
     IT DOES NOT HANDLE NEGATIVE NUMBERS, SO NEGATIVE NUMBERS RETURN ZERO
     Returns the resulting representation of an integer\n
     \n
@@ -342,7 +343,7 @@ def greater(x, y):
     :param function y: functional representation of an integer
     """    
     
-    return negation(iszero(substract(x, y)))
+    return negation(iszero(subtract(x, y)))
 
 def less(x, y):
     """
@@ -354,7 +355,7 @@ def less(x, y):
     :param function y: functional representation of an integer
     """    
     
-    return negation(iszero(substract(y, x)))
+    return negation(iszero(subtract(y, x)))
     
 def test_func(*args):
     return "narcode"
@@ -389,3 +390,53 @@ def with_trampoline(f):
         return args
 
     return g
+
+def parseCKfunc(function_string, functionnum):
+    """
+    parse a function string definition to convert it to a function CK can understand
+    param str function_string: the function definition in the form (name -> (func num arg) )
+    equivalent to λx.(func num x)
+    """
+    name = re.findall(r'\d+', function_string)[:4] #names have 4 notes
+    body = re.findall(r'[\(\)].*', function_string)[0]
+    args = re.findall(r'\w+', body)
+    func = args[0]
+    arg1 = args[1]
+    arg1str = args[1]
+    variable = args[2]
+    
+    if re.match(r'\d', arg1):
+        #arg1 = int(arg1)
+        arg1 = numToLambda(int(arg1))
+    
+    # make name integers:
+    name = list(map(int, name))
+    
+    # return the parsed function in list form
+    parsed = {}
+    parsed['ref'] = functionnum
+    parsed['name'] = name
+    parsed['body'] = {}
+    parsed['body']['func'] = func
+    parsed['body']['arg1'] = arg1
+    parsed['body']['var'] = variable
+    
+    parsed['body']['arg1str'] = arg1str
+   
+    return parsed 
+    
+
+def numToLambda(num, function_expression=zero):
+    """
+    turns an integer into its lambda function representation (using the successor function)
+    """
+    #print('num is: ', num)
+
+    if num == 0:
+        return function_expression
+    
+    return numToLambda(num-1, successor(function_expression))
+    
+    
+    
+    

@@ -3,7 +3,7 @@
 """
 CK listening server to display code from a specific piano register.
 
-* used for Madrid INSONORA Festival 2018
+* originally used for Madrid INSONORA Festival 2018
 
 TODO: Classify this
 """
@@ -124,7 +124,7 @@ def main():
         closeDisplay(display)
 
     elif int(display) == 3:
-        print('CK displays 1-3 used for CKalculator', 'Listening on ports 1111, 2222 & 3333')
+        print('CK displays 1-3 used for CKalculator legacy', 'Listening on ports 1111, 2222 & 3333')
 
         root.geometry("1920x400")
         s_width = root.winfo_screenwidth()
@@ -181,8 +181,9 @@ def main():
         closeDisplay(display)
 
     elif int(display) == 4:
-        print('CK displays 1-4 listening on ports 1111, 2222, 3333, 4444')
+        print('CK displays 1-4 used for CKalculator. Listening on ports 1111, 2222, 3333, 4444')
 
+        root.geometry("1920x400")
         s_width = root.winfo_screenwidth()
         s_height = root.winfo_screenheight()
 
@@ -194,38 +195,77 @@ def main():
             f[str(x)].pack(fill=tkinter.Y, side=tkinter.LEFT)
             f[str(x)].pack_propagate(0)
             f[str(x)].configure(bg='black', bd=3)
+            
+        for x in range(1, int(display)+1):
 
-            ck_display[str(x)] = tkinter.Text(f[str(x)], height=6, width=50)
-            ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            if x == 1:
+                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            elif x == 2:
+                ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display[str(x)] = tkinter.Text(f['2'], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            elif x == 3:
+                ck_display['title'+str(x)] = tkinter.Text(f['3'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display[str(x)] = tkinter.Text(f['3'], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            elif x == 4:
+                ck_display['title'+str(x)] = tkinter.Text(f['4'], height=1, width=50)     
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display[str(x)] = tkinter.Text(f['4'], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
             # syntax colors
-            ck_display[str(x)].tag_config('title', foreground='cyan')
-            ck_display[str(x)].tag_config('snippets', foreground='white')
-            ck_display[str(x)].tag_config('low', foreground='#b3649d')
-            ck_display[str(x)].tag_config('mid', foreground='#6477b3')
-            ck_display[str(x)].tag_config('hi', foreground='#67b371')
-            ck_display[str(x)].tag_config('primitive', foreground='#ebb18a')
-            ck_display[str(x)].tag_config('comment', foreground='#a3a3a3')
-            ck_display[str(x)].tag_config('loop', foreground='cyan')
-            ck_display[str(x)].tag_config('warning', foreground='red')
-            ck_display[str(x)].tag_config('loop2', foreground='#80f7a6')
-            ck_display[str(x)].tag_config('loop3', foreground='#00b3ff')
+            ck_display[str(x)].tag_config('add', foreground='cyan')
+            ck_display[str(x)].tag_config('min', foreground='white')
+            ck_display[str(x)].tag_config('div', foreground='#b3649d')
+            ck_display[str(x)].tag_config('mul', foreground='#6477b3')
+            ck_display[str(x)].tag_config('eval', foreground='#67b371')
+            ck_display[str(x)].tag_config('pred', foreground='#ebb18a')
+            ck_display[str(x)].tag_config('succ', foreground='#a3a3a3')
+            ck_display[str(x)].tag_config('zero', foreground='#eb218a')
+            ck_display[str(x)].tag_config('result', foreground='green')
+            ck_display[str(x)].tag_config('equal', foreground='green')
+            ck_display[str(x)].tag_config('gt', foreground='green')
+            ck_display[str(x)].tag_config('lt', foreground='green')
+            ck_display[str(x)].tag_config('int', foreground='white')
+            ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
+            ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
+            ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')
+            ck_display[str(x)].tag_config('function', foreground='#f38ada', font='MENLO 20') 
+            ck_display[str(x)].tag_config('saved', foreground='cyan', font='MENLO 20') 
+            
 
-
-           # TODO: use settings files to configure ck_diplay (like code block for int(display)=5
-            if x ==1:
+            if x == 1:
+                #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                #ck_display[str(x)].insert(tkinter.END, "λ Functions \n")
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "λ Functions \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
+                ck_display[str(x)].insert(tkinter.END, "", 'title')                
             elif x == 2:
-                ck_display[str(x)].configure(bg='black', bd=5, fg='magenta',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n", 'title')
-            elif x == 3:
-                ck_display[str(x)].configure(bg='black', bd=5, fg='yellow',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "Conditionals and other stuff \n", 'title')
-            elif x == 4:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Stack \n\n", 'title')                
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "loops \n", 'title')
-
+                ck_display[str(x)].insert(tkinter.END, "", 'title') 
+            elif x == 3:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 60', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Result \n\n", 'title')                
+                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].insert(tkinter.END, "", 'title') 
+                
+                #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                #ck_display[str(x)].insert(tkinter.END, "Result \n")
+            elif x == 4:
+                ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].insert(tkinter.END, "Piano functions \n\n", 'title')                
+                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].insert(tkinter.END, "", 'title') 
+                
 
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))
             codedump[str(x)].start()
@@ -543,8 +583,12 @@ def displayCode(display):
                             end_flash(display)
                             ck_display[display].insert(tkinter.END, ckcode.replace('flash:', ''), 'conditional')
                         else:
-                            ck_display[display].insert(tkinter.END, ckcode, tag)
-                        ck_display[display].see(tkinter.END)
+                          if tag == 'result' or tag == 'error':
+                              ck_display[display].delete(1.0, tkinter.END)
+                              ck_display[display].insert(tkinter.END, ckcode, tag)
+                          else:
+                              ck_display[display].insert(tkinter.END, ckcode, tag)
+                              ck_display[display].see(tkinter.END)                          
                     except RuntimeError as err:
                         break
             elif display == '5': #this is the codespace
