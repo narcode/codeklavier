@@ -34,7 +34,7 @@ def doHelp():
     print('')
     print('-h | --help')
     print('Show this help text.')
-    print('')
+    print('').a
     print('-i | --interactive')
     print('Start CodeKlavier in interactive mode')
     print('')
@@ -232,7 +232,7 @@ if __name__ == '__main__':
     #no arguments -> print help
     print('What do you want CodeKlavier to do? ...')
     print('These prototypes are available:')
-    for p in PROTOTYPES:
+    for p in PROTOTYPES:   
         print(' - ', p)
     print('')
     print('Here is how CodeKlavier works:')
