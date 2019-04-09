@@ -6,9 +6,10 @@ permalink: /activities
 
 ### This page gives a run down of public CodeKlavier presentations and milestones to date:
 (newest on top)
+
 May 2019: Performaces of the CKalcuλator at Sounds like Soup on the 19th and at Young Amsterdam Artists concert on the 23rd. Both concerts are in Amsterdam. Our second residency with Patrick Borgeat working on the AR extension will take place.
 
-March 2019: First residency with Patrick Borgeat working on the AR extension
+March 2019: First residency with Patrick Borgeat working on the AR extension. Watch the teaser [here](https://youtu.be/p65YavCUEuQ)
 
 February 2019: Talk and performance with the Ckalcuλator at [Lambda Days](http://www.lambdadays.org/lambdadays2019) in Poland. Watch the video [here](https://youtu.be/0fL40oLU8C4)
 
