@@ -195,27 +195,27 @@ def main():
             f[str(x)].pack(fill=tkinter.Y, side=tkinter.LEFT)
             f[str(x)].pack_propagate(0)
             f[str(x)].configure(bg='black', bd=3)
-            
+
         for x in range(1, int(display)+1):
 
             if x == 1:
-                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 2:
-                ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['2'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 3:
-                ck_display['title'+str(x)] = tkinter.Text(f['3'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['3'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['3'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 4:
-                ck_display['title'+str(x)] = tkinter.Text(f['4'], height=1, width=50)     
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)                
+                ck_display['title'+str(x)] = tkinter.Text(f['4'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['4'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
@@ -236,36 +236,36 @@ def main():
             ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
             ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
             ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')
-            ck_display[str(x)].tag_config('function', foreground='#f38ada', font='MENLO 20') 
-            ck_display[str(x)].tag_config('saved', foreground='cyan', font='MENLO 20') 
-            
+            ck_display[str(x)].tag_config('function', foreground='#f38ada', font='MENLO 20')
+            ck_display[str(x)].tag_config('saved', foreground='cyan', font='MENLO 20')
+
 
             if x == 1:
                 #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 #ck_display[str(x)].insert(tkinter.END, "λ Functions \n")
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "λ Functions \n\n", 'title')                
+                ck_display['title'+str(x)].insert(tkinter.END, "λ Functions \n\n", 'title')
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "", 'title')                
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 2:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Stack \n\n", 'title')                
+                ck_display['title'+str(x)].insert(tkinter.END, "Stack \n\n", 'title')
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "", 'title') 
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 3:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 60', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Result \n\n", 'title')                
+                ck_display['title'+str(x)].insert(tkinter.END, "Result \n\n", 'title')
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "", 'title') 
-                
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
+
                 #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 #ck_display[str(x)].insert(tkinter.END, "Result \n")
             elif x == 4:
                 ck_display['title'+str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
-                ck_display['title'+str(x)].insert(tkinter.END, "Piano functions \n\n", 'title')                
+                ck_display['title'+str(x)].insert(tkinter.END, "Piano functions \n\n", 'title')
                 ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
-                ck_display[str(x)].insert(tkinter.END, "", 'title') 
-                
+                ck_display[str(x)].insert(tkinter.END, "", 'title')
+
 
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))
             codedump[str(x)].start()
@@ -578,17 +578,12 @@ def displayCode(display):
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        if 'flash:' in ckcode:
-                            start_flash(display)
-                            end_flash(display)
-                            ck_display[display].insert(tkinter.END, ckcode.replace('flash:', ''), 'conditional')
+                        if tag == 'result' or tag == 'error':
+                            ck_display[display].delete(1.0, tkinter.END)
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
-                          if tag == 'result' or tag == 'error':
-                              ck_display[display].delete(1.0, tkinter.END)
-                              ck_display[display].insert(tkinter.END, ckcode, tag)
-                          else:
-                              ck_display[display].insert(tkinter.END, ckcode, tag)
-                              ck_display[display].see(tkinter.END)                          
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
                         break
             elif display == '5': #this is the codespace
