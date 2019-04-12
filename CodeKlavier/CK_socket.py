@@ -486,7 +486,7 @@ def start_flash(display):
 
     :param int display: the display to flash to
     """
-    ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='cyan', highlightthickness=15)
+    ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='cyan', highlightthickness=8)
 
 def end_flash(display):
     """
@@ -495,7 +495,7 @@ def end_flash(display):
     :param int display: the display to flash to
     """
     time.sleep(0.3)
-    ck_display[str(display)].configure(relief=tkinter.SUNKEN, bd=5, highlightbackground='white', highlightthickness=4)
+    ck_display[str(display)].configure(relief=tkinter.SUNKEN, bd=5, highlightbackground='white', highlightthickness=2)
 
 def displayCode(display):
     """
@@ -520,7 +520,7 @@ def displayCode(display):
                 ckcode = re.sub('\nKILL:', '', dump).replace('\n', '')
                 ck_display[str(display)].configure(bg=ckcode)
             elif display == '1':
-                print(str(data, 'utf-8'))
+                #print(str(data, 'utf-8'))
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
@@ -534,12 +534,11 @@ def displayCode(display):
                             ck_display[display].see(tkinter.END)
                         else:
                             # show a quick flash when evaluating a command
-                            if tag == 'flash':
+                            if tag in  ('snippet', 'hi', 'low', ''):
                                 start_flash(display)
                                 end_flash(display)
-                            else:
-                                ck_display[display].insert(tkinter.END, ckcode, tag)
-                                ck_display[display].see(tkinter.END)
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
                         break
             elif display == '2':
@@ -551,23 +550,19 @@ def displayCode(display):
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
                         else:
-                            if tag == 'flash':
+                            if tag in ('snippet', 'hi', 'low', ''):
                                 start_flash(display)
                                 end_flash(display)
-                            else:
-                                ck_display[display].insert(tkinter.END, ckcode, tag)
-                                ck_display[display].see(tkinter.END)
+                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
                         break
             elif display == '3':
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        if tag in ('flash'):
-                            if tag in ('primitive'):
-                                start_flash(display)
-                                end_flash(display)
-                            ck_display[display].delete(1.0, tkinter.END) # TODO: also delete on tag 'result'?
+                        if tag == 'result' or tag == 'error':
+                            ck_display[display].delete(1.0, tkinter.END)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
                             if tag in ('primitive') or 'flash:' in ckcode:
@@ -581,13 +576,17 @@ def displayCode(display):
             elif display == '4':
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
-                    print(ckcode) 
                     try:
                         if tag == 'result' or tag == 'error':
                             ck_display[display].delete(1.0, tkinter.END)
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
-                            ck_display[display].insert(tkinter.END, ckcode, tag)
+                            if 'flash:' in ckcode:
+                                start_flash(display)
+                                end_flash(display)
+                                ck_display[display].insert(tkinter.END, ckcode.replace('flash:', ''), 'conditional')                            
+                            else:
+                                ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
                         break
