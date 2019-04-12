@@ -223,7 +223,8 @@ class Ckalculator(object):
                                     
                                             if f['body']['arg1'].__name__ == 'succ1':
                                                 self.append_successor(f['body']['arg1'])
-                                                self.zeroPlusRec(False, True)                                    
+                                                self.zeroPlusRec(False, True) ## check 2nd argument    
+                                                self._successorHead = []
                                     
                         ########################
                 ########### lambda calculus  ###########
@@ -602,8 +603,8 @@ class Ckalculator(object):
                                                            self._tempFunctionStack[0], \
                                                            self._tempFunctionStack[2])) 
                     
-                    #print('TEMP NUM STACK: ', self._tempNumberStack)
-                    #print('NORM STACK: ', self._numberStack)
+                #print('TEMP NUM STACK: ', self._tempNumberStack)
+                #print('NORM STACK: ', self._numberStack)
                      
     
     def evaluateTempStack(self, stack):
