@@ -534,10 +534,12 @@ def displayCode(display):
                             ck_display[display].see(tkinter.END)
                         else:
                             # show a quick flash when evaluating a command
-                            start_flash(display)
-                            ck_display[display].insert(tkinter.END, ckcode, tag)
-                            ck_display[display].see(tkinter.END)
-                            end_flash(display)
+                            if tag == 'flash':
+                                start_flash(display)
+                                end_flash(display)
+                            else:
+                                ck_display[display].insert(tkinter.END, ckcode, tag)
+                                ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
                         break
             elif display == '2':
@@ -549,24 +551,26 @@ def displayCode(display):
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                             ck_display[display].see(tkinter.END)
                         else:
-                            start_flash(display)
-                            ck_display[display].insert(tkinter.END, ckcode, tag)
-                            ck_display[display].see(tkinter.END)
-                            end_flash(display)
+                            if tag == 'flash':
+                                start_flash(display)
+                                end_flash(display)
+                            else:
+                                ck_display[display].insert(tkinter.END, ckcode, tag)
+                                ck_display[display].see(tkinter.END)
                     except RuntimeError as err:
                         break
             elif display == '3':
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
                     try:
-                        if tag in ('result', 'error', 'flash'):
-                            if tag in ('result', 'primitive'):
+                        if tag in ('flash'):
+                            if tag in ('primitive'):
                                 start_flash(display)
                                 end_flash(display)
                             ck_display[display].delete(1.0, tkinter.END) # TODO: also delete on tag 'result'?
                             ck_display[display].insert(tkinter.END, ckcode, tag)
                         else:
-                            if tag in ('result', 'primitive') or 'flash:' in ckcode:
+                            if tag in ('primitive') or 'flash:' in ckcode:
                                 start_flash(display)
                                 end_flash(display)
                                 ckcode = ckcode.replace('flash:', '')
@@ -577,6 +581,7 @@ def displayCode(display):
             elif display == '4':
                 if len(tagmatch) > 0:
                     ckcode = re.sub(''+tag+':', '', dump)
+                    print(ckcode) 
                     try:
                         if tag == 'result' or tag == 'error':
                             ck_display[display].delete(1.0, tkinter.END)
