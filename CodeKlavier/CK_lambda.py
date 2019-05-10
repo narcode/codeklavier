@@ -358,7 +358,7 @@ def less(x, y):
     return negation(iszero(subtract(y, x)))
     
 def test_func(*args):
-    return "narcode"
+    return args
 
 # solutions for stack overflow due to recursive limit
 def callTrampoline(f):
@@ -437,6 +437,60 @@ def numToLambda(num, function_expression=zero):
     
     return numToLambda(num-1, successor(function_expression))
     
+
+##### implementing recursion #####
+
+def self_application(f):
+    """ apply a fucntion to itself, If applied to itself will result in non-termination!
+    λs.(s s)"""
+    return f(f)
     
+
+def abstractForRecursion(f):
+    """ Build a copy of a function with an abstracted recursive point to remove self-reference and 
+    non-termination """
+    if callable(f):
+        def abstracted(*args): #packed args
+            return f(*args) #upacked args
+        
+        return abstracted
     
+    else:
+        print("expecting a function as an argument!")
     
+
+def recursive(f):
+    """ Paradoxical combinator function in lambda literature 
+    (builds a recursive definition out of a non recursive function)
+    \nλf.( λs.(f (s s)) λs.(f (s s)) ) """
+    if callable(f):
+        def abstractSelfApply(s):
+            return f( self_application(s) )
+        
+        def recursiveCopy():
+            #TODO: wrap TCO
+            return f( abstractSelfApply( abstractSelfApply(f) ) )
+        
+        return recursiveCopy()
+    
+    else:
+        print("argument needs to be a function")
+        
+### tests 
+def radd(x,y):
+    if iszero(y).__name__ is 'true':
+        print('add zero', trampolineRecursiveCounter(x))
+        return x
+    else:
+        print('add', trampolineRecursiveCounter(x))
+        return recursive(abstractForRecursion)(radd)(successor(x), predecessor(y))    
+
+
+def rmul(x,y):
+    if y.__name__ is 'zero':
+        print('zero', trampolineRecursiveCounter(y))
+        return zero
+    else:
+        recursion = recursive(abstractForRecursion(rmul)(x, predecessor(y)))
+        print('mult', trampolineRecursiveCounter(y))
+        return radd(x, recursion)    
