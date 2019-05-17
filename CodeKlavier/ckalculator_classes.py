@@ -137,13 +137,15 @@ class Ckalculator(object):
                         
                     print('rule till now: ', self._rules)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                     print('vel till now: ', self._rule_dynamics)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rule_dynamics))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rule_dynamics)))
                                             
                     if len(self._ckar) == 0:
                         print('axiom: ', '*' + ('').join(map(str, self._ckar)))
                         self.mapscheme._osc.send_message("/ckconsole", 'axiom: ' + '*' + ('').join(map(str, self._ckar)))
-                        
+                        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'axiom: ' + '*' + ('').join(map(str, self._ckar))))
                     
                     self._numberStack.append(self._tempNumberStack.pop())                    
                 #self.evaluateTempStack(self._tempStack)
@@ -292,12 +294,14 @@ class Ckalculator(object):
                     
                     print('identity')
                     self.mapscheme._osc.send_message("/ckconsole", 'identity')
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'identity'))
                     self.makeLS(sendToDisplay)
                     self._successorHead = []
                                                                             
                 elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
                     self.mapscheme._osc.send_message("/ckconsole", 'evaluate')
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'evaluate'))
                     
                     
                     if self._temp is True:
@@ -328,6 +332,7 @@ class Ckalculator(object):
                     else:
                         print(self._rules)
                         self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                         
                         if len(self._rules) > 1 or len(self._ckar) > 0:
                             
@@ -343,9 +348,12 @@ class Ckalculator(object):
                             print('parsed rule: ', rule)
                             if rule != '':
                                 self.mapscheme._osc.send_message("/ckconsole", rule)
+                                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', rule))
+                                #self.mapscheme.websocketSend(rule)
                                 print('parsed dynamics: ', velocity)
                                 if velocity != '':
                                     self.mapscheme._osc.send_message("/ckconsole", velocity)
+                                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', velocity))
                             
                             if len(self._ckar) > 0:
                                 if rule != '':
@@ -357,6 +365,7 @@ class Ckalculator(object):
                                 
                             print("ckar rule :", rule + rule_dynamics)
                             self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
+                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('lsys', rule + rule_dynamics))
                             self._rules = []
                             self._dynamics = []
                             self._rule_dynamics = []
@@ -374,6 +383,7 @@ class Ckalculator(object):
                                                                      syntax_color='result:')
                                     print(self._evalStack[0])
                                     self.mapscheme._osc.send_message("/ckconsole", str(self._evalStack[0]))
+                                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._evalStack[0])))
                                     
                                     self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                                     
@@ -442,6 +452,7 @@ class Ckalculator(object):
                 elif note in AR.get('dot'):
                     self._rules.append('.')
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                     print(self._rules)
                 
     def successor(self, function, sendToDisplay=True):
@@ -454,6 +465,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
         print(function.__name__)
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', function.__name__))
                 
         def nestFunc(function1):
             if len(self._successorHead) == 0:
@@ -478,6 +490,7 @@ class Ckalculator(object):
                 self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
         print(function.__name__) 
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', function.__name__))
         
                 
         self._successorHead.append(function)
@@ -495,6 +508,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
         print(function.__name__) 
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', function.__name__))
         
                 
         def nestFunc(function1):
@@ -565,6 +579,7 @@ class Ckalculator(object):
             
             print(self._tempFunctionStack)
             self.mapscheme._osc.send_message("/ckconsole", str(self._tempFunctionStack))
+            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._tempFunctionStack)))
             
             
         self._fullStack.append(add_trampoline)
@@ -583,6 +598,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
         print('subtraction')
         self.mapscheme._osc.send_message("/ckconsole", 'subtraction')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'substraction'))
         
         
         if not temp:
@@ -620,6 +636,7 @@ class Ckalculator(object):
         
         print('equal to')
         self.mapscheme._osc.send_message("/ckconsole", 'equal to')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'equal to'))
         
         
         if len(self._numberStack) == 0:
@@ -678,6 +695,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('<', display=2, syntax_color='int:', spacing=False)                       
         print('less than')
         self.mapscheme._osc.send_message("/ckconsole", 'less than')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'less than'))
         
         
         if len(self._numberStack) == 0:
@@ -741,6 +759,7 @@ class Ckalculator(object):
                     
                     print('TEMP NUM STACK: ', self._tempNumberStack)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._tempNumberStack))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._tempNumberStack)))
                     
                     print('NORM STACK: ', self._numberStack)
     
@@ -767,6 +786,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('multiply', display=1, syntax_color='mul:')       
         print('multiplication')
         self.mapscheme._osc.send_message("/ckconsole", 'multiplication')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'multiplication'))
         
         
         if not temp:
@@ -802,7 +822,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('divide', display=1, syntax_color='div:')        
         print('division')
         self.mapscheme._osc.send_message("/ckconsole", 'division')
-        
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'division'))
         
         if not temp:
             if len(self._numberStack) == 0:
@@ -1198,6 +1218,7 @@ class Ckalculator(object):
             num = trampolineRecursiveCounter(self._successorHead[0])
             print('succ head: ', num)
             self.mapscheme._osc.send_message("/ckconsole", str(num))
+            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(num)))
             
             
             if len(self._functionBody) > 0:
@@ -1245,6 +1266,7 @@ class Ckalculator(object):
         if len(self._successorHead) > 0:
             print('succ head: ', trampolineRecursiveCounter(self._successorHead[0])) 
             self.mapscheme._osc.send_message("/ckconsole", str(trampolineRecursiveCounter(self._successorHead[0])))
+            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(trampolineRecursiveCounter(self._successorHead[0]))))
             
             
             if self._temp is False:
@@ -1267,6 +1289,7 @@ class Ckalculator(object):
                 self._rules.append(trampolineRecursiveCounter(self._successorHead[0]))
                 print('rules now osc: ', self._rules)
                 self.mapscheme._osc.send_message("/ckconsole", str( self._rules))
+                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                 print('dynamics now: ', self._rule_dynamics)
                 self._dynamics = []
                 
@@ -1284,6 +1307,7 @@ class Ckalculator(object):
                             self._ckar.append(trampolineRecursiveCounter(self._successorHead[0]))
                             print(self._ckar)
                             self.mapscheme._osc.send_message("/ckconsole", str( self._ckar))
+                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._ckar)))
                             
                         
                         if sendToDisplay:
@@ -1316,10 +1340,12 @@ class Ckalculator(object):
                 self._dynamics = []
                 print(self._rules)
                 self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
             else:
                 self._ckar.append(trampolineRecursiveCounter(zero))
                 print(self._ckar)
                 self.mapscheme._osc.send_message("/ckconsole", str(self._ckar))
+                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._ckar)))
                 
                 
                                 
