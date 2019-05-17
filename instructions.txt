@@ -1,0 +1,12 @@
+To make an axiom, the values must be within brackets and without a rule)
+For example:
+    (2 1 2)
+    
+To make a rule put the values of what you want changed, followed by the '.' and what it should become.
+For example:
+    (2.1 0 1)
+    
+You can also make 'no numbers' by in brackets making a comparison and adding a value to the True/False value.
+For example:
+    (5 > 4 [eval] + 3) essentialy this becomes (True + 3)
+This translates to the 'N' token which removes the symbol
