@@ -14,6 +14,7 @@ from multiprocessing.pool import ThreadPool, Pool
 from Motifs import motifs_lambda as LambdaMapping
 from Motifs import motifs_ar as AR
 from Mapping import Mapping_Ckalculator
+from ar_classes import CkAR
 from CK_lambda import *
 from CK_parser import *
 import numpy
@@ -30,6 +31,7 @@ class Ckalculator(object):
         """
         
         self.mapscheme = Mapping_Ckalculator(True, False)
+        self.ar = CkAR()
         self.note_on = noteonid
         self.note_off = noteoffid
         self.pedal = pedal_id
@@ -56,7 +58,7 @@ class Ckalculator(object):
         self._postOstinatoMemory = []
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
-        self._developedOstinato = False
+        self._developedOstinato = (False,0)
         self._functionBody = {}
         self._numForFunctionBody = None
         self._pool = ThreadPool(processes=1)
@@ -90,9 +92,13 @@ class Ckalculator(object):
         
         if print_functions:
             for f in self.ckFunc():
-                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
-                self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                if len(f['body']) > 1:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                else:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
                 
 
     def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
@@ -163,7 +169,7 @@ class Ckalculator(object):
         if message[0] == self.note_on and message[2] > 0:
 
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._note_on_cue.append(message[1])
                     #self.find_ostinato(self._fullMemory, debug=True)
                     #print('note on mem:', self._note_on_cue)
@@ -189,7 +195,7 @@ class Ckalculator(object):
             #else: #no worng note for now... 
             
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._fullMemory.append(note)
                     self.find_ostinato(self._fullMemory, debug=False)                        
                 else:
@@ -198,7 +204,10 @@ class Ckalculator(object):
                         if self._defineCounter == 0:
                             self.mapscheme.formatAndSend('define func body...', display=4, syntax_color='function:')
                             self._defineCounter += 1
-                        self.define_function_body(note, articulation)
+                        if self._developedOstinato[1] == 1:
+                            self.define_function_body(note, articulation)
+                        else:
+                            self.define_function_bodyAR(note, articulation)
                     
                              
             if section == 'full':        
@@ -247,21 +256,32 @@ class Ckalculator(object):
                                     
                                     try:
                                         function_to_call = getattr(self, f['body']['func'])
-                                        func_exists = True
+                                        func_exists = (True, 'ckalc')
                                     except AttributeError:
                                         #raise NotImplementedError("Class `{}` does not implement `{}`".
                                                                   #format(self.__class__.__name__, 
                                                                          #function_to_call))
-                                        func_exists = False
-                                        print('function not implemented for now... ')
+                                        try:
+                                            function_to_call = getattr(self.ar, f['body']['func'])
+                                            func_exists = (True, 'ar')
+                                            
+                                        except AttributeError:    
+                                            func_exists = (False, '')
+                                            print('function not implemented for now... ')
                                     
-                                    if func_exists:
-                                        if function_to_call.__name__ not in ['successor', 'predecessor']:
-                                            function_to_call(False, sendToDisplay)
+                                    if func_exists[0]:
+                                        if func_exists[1] == 'ckalc':
+                                            if function_to_call.__name__ not in ['successor', 'predecessor']:
+                                                function_to_call(False, sendToDisplay)
                                     
-                                            if f['body']['arg1'].__name__ == 'succ1':
-                                                self.append_successor(f['body']['arg1'])
-                                                self.zeroPlusRec(False, True)                                    
+                                                if f['body']['arg1'].__name__ == 'succ1':
+                                                    self.append_successor(f['body']['arg1'])
+                                                    self.zeroPlusRec(False, True)
+                                                    
+                                            if func_exists[1] == 'ar':
+                                                print('This is an AR function')
+                                                
+                                    
                                     
                         ########################
                 ########### lambda calculus  ###########
@@ -364,8 +384,12 @@ class Ckalculator(object):
                                 self._ckar = []
                                 
                             print("ckar rule :", rule + rule_dynamics)
+                            print("current tree:", self.ar.currentTree())
                             self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
-                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('lsys', rule + rule_dynamics))
+                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('lsys', 
+                                                                                    str(self.ar.currentTree()) 
+                                                                                    + '@' +
+                                                                                    rule + rule_dynamics))
                             self._rules = []
                             self._dynamics = []
                             self._rule_dynamics = []
@@ -454,6 +478,23 @@ class Ckalculator(object):
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
                     self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                     print(self._rules)
+                
+                elif note in AR.get('next'):
+                    if self._deltatime <= articulation['staccato']:                                
+                        self.ar.nextT() 
+                    elif self._deltatime > articulation['staccato']:
+                        self.ar.prev()
+                        
+                elif note in AR.get('create'):
+                    self.ar.create()
+                    
+                elif note in AR.get('select'):
+                    if self._deltatime <= articulation['staccato']:
+                        self.ar.select()
+                    elif self._deltatime > articulation['staccato']:
+                        self.ar.collect()
+   
+    ######
                 
     def successor(self, function, sendToDisplay=True):
         """
@@ -900,7 +941,7 @@ class Ckalculator(object):
         param boolean debug: print debugging messages
         """
         length = size*repetitions+size
-        if not self._developedOstinato and len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue?
+        if not self._developedOstinato[0] and len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue?
             self._fullMemory = self._fullMemory[-length:]
             self._note_on_cue = self._note_on_cue[-length:]
             self._filtered_cue = self._filtered_cue[-length:]
@@ -1013,15 +1054,21 @@ class Ckalculator(object):
             diff = np.subtract(ostinato1, ostinato2)
             
             if np.array_equal(sorted(np.abs(diff)), [0,0,0,1]):
-                self._developedOstinato = True
+                self._developedOstinato = (True, 1)
                 
                 if debug:
                     print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
                 self.mapscheme.formatAndSend('ostinato has 1 note difference! Well done', display=4,
                                                  syntax_color='function:')
+            
+            elif np.array_equal(sorted(np.abs(diff)), [0,0,0,2]):
+                self._developedOstinato = (True, 2)
+                if debug:
+                    print('ostinato has 2 note difference! well done')
+                
             else:
                 print('😤 ostinato was not developed correctly. Please try again')
-                self._developedOstinato = False
+                self._developedOstinato = (False, 0)
                 self.ostinato = {'first': [], 'compare': []}
                 
                 self.mapscheme.formatAndSend('ostinato was not developed correctly. Please try again', display=4,
@@ -1103,6 +1150,29 @@ class Ckalculator(object):
                 self.mapscheme.formatAndSend('function body arg 2 is:' + self._functionBody['arg2'], display=4,
                                              syntax_color='function:')
             self._arg2Counter += 1
+            
+
+    def define_function_bodyAR(self, note, articulation, debug=True):
+        """
+        High level function to choose an AR function to be used as part of the function body 
+        of a function definition.
+      
+        :param int note: incoming MIDI note
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
+        """ 
+        if len(self._functionBody) == 0:
+                            
+            if note in AR.get('create'):
+                self._functionBody['arg1'] = 'create'
+               
+            elif note in AR.get('next'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'next'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'prev'                
+            
+            self._arg1Counter += 1
+            #self._arg2Counter += 1            
 
             
     def storeFunction(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
@@ -1162,7 +1232,65 @@ class Ckalculator(object):
         self._functionBody = {}
         self._defineCounter = 0
         self._foundOstinato = False
-        self._developedOstinato = False 
+        self._developedOstinato = (False,0)
+        
+    def storeFunctionAR(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
+        """
+        Store the defined function in a .ini file for future use.
+        """
+        ck_functions = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        ck_functions.read(funcfile, encoding='utf8')
+        existingfuncs = []
+        
+        for f in self.ckFunc():
+            existingfuncs.append(f['name'])
+            
+        print(existingfuncs)   
+        
+        func_num = len(ck_functions['functions'])
+
+        name = 'function' + repr(func_num+1) + ': '
+        name2 = 'function' + repr(func_num+2) + ': '
+        chord = ','.join(map(str, self.ostinato['first']))
+        chord2 = ','.join(map(str, self.ostinato['compare']))
+        body = chord + ' -> (' + self._functionBody['arg1'] + ')\n'
+        body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ')\n'
+        
+        with open(funcfile, 'a') as file:
+            if self.ostinato['first'] not in existingfuncs:
+                file.write(name + body)
+                print('function saved 1', midiToNotes(self.ostinato['first']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            if self.ostinato['compare'] not in existingfuncs:
+                file.write(name2 + body2)
+                print('function saved 2', midiToNotes(self.ostinato['compare']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            file.close()
+            
+        if sendToDisplay:
+            total = len(self.ckFunc())
+            count = 0
+            for f in self.ckFunc():
+                count += 1
+                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func']  + ')'
+                if count == total:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                else:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='saved:')
+            
+        #reset the ostinato analysis
+        self.ostinato = {'first': [], 'compare': []}
+        self._fullMemory = []
+        self._note_on_cue = []
+        self._filtered_cue = []
+        self._functionBody = {}
+        self._defineCounter = 0
+        self._foundOstinato = False
+        self._developedOstinato = (False,0)        
                 
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
         """

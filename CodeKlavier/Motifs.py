@@ -52,6 +52,9 @@ try:
     less_than_midi = config['lambda'].get('less_than_midi').split(',')
     
     dot = config['ar'].get('dot').split(',')
+    create = config['ar'].get('create').split(',')
+    select = config['ar'].get('select').split(',')
+    nextt = config['ar'].get('nextt').split(',')
 
 except KeyError:
     raise LookupError('Missing key information in the config file.')
@@ -98,3 +101,6 @@ motifs_lambda['less'] = list(map(int, less_than_midi))
 
 # AR module
 motifs_ar['dot'] = list(map(int, dot))
+motifs_ar['create'] = list(map(int, create))
+motifs_ar['select'] = list(map(int, select))
+motifs_ar['next'] = list(map(int, nextt))

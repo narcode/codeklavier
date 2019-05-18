@@ -34,7 +34,7 @@ def doHelp():
     print('')
     print('-h | --help')
     print('Show this help text.')
-    print('').a
+    print('')
     print('-i | --interactive')
     print('Start CodeKlavier in interactive mode')
     print('')

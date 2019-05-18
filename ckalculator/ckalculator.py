@@ -82,15 +82,25 @@ def main(configfile='default_setup.ini'):
                                          ck_deltatime=ck_deltatime, articulation=articulation)
                         
                         if len(cKost._functionBody) == 1:
-                            cKalc._functionBody['grab_num'] = True
-                            if cKalc._numForFunctionBody != None:
-                                cKost._functionBody['arg2'] = cKalc._numForFunctionBody
-                                print('function body complete...')
-                                cKalc.mapscheme.formatAndSend('function body complete...', display=4, 
-                                                              syntax_color='function:')
-                                cKost.storeFunction()
-                                cKalc._functionBody = {}
-                                cKalc._numForFunctionBody = None
+                            if cKost._developedOstinato[1] == 1:
+                                cKalc._functionBody['grab_num'] = True
+                               
+                                if cKalc._numForFunctionBody != None:
+                                    cKost._functionBody['arg2'] = cKalc._numForFunctionBody
+                                    print('function body complete...')
+                                    cKalc.mapscheme.formatAndSend('function body complete...', display=4, 
+                                                                  syntax_color='function:')
+                                    cKost.storeFunction()
+                                    cKalc._functionBody = {}
+                                    cKalc._numForFunctionBody = None                                
+                            else:
+                                cKost._functionBody['arg2'] = ''
+                                print('function with no args complete...')
+                                if cKost._arg2Counter == 0:                                    
+                                    cKost.storeFunctionAR()
+                                    cKalc._functionBody = {}
+                                
+
                         
                         cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=note_duration,
                                          ck_deltatime=ck_deltatime, articulation=articulation, sendToDisplay=False) # needed?
