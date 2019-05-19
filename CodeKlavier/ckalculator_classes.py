@@ -381,18 +381,19 @@ class Ckalculator(object):
                                     comma = ''
                                 rule = '*.'+ ('').join(map(str, self._ckar)) + comma + rule
                                 self._ckar = []
-                                
+                                    
                             print("ckar rule :", rule + rule_dynamics)
                             print("current tree:", self.ar.currentTree())
+
                             if len(self.ar._parallelTrees) > 0:
-                                tree = (',').join(map(str, self.ar._parallelTrees))
+                                trees = []
+                                for t in self.ar._parallelTrees:
+                                    trees.append(str(t) + '@' + rule + rule_dynamics)
+                                tree = ('#').join(trees)
                             else:
-                                tree = str(self.ar.currentTree())
+                                tree = str(self.ar.currentTree()) + '@' + rule + rule_dynamics 
                             self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
-                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('lsys', 
-                                                                                    tree 
-                                                                                    + '@' +
-                                                                                    rule + rule_dynamics))
+                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('lsys', tree))
                             self._rules = []
                             self._dynamics = []
                             self._rule_dynamics = []
