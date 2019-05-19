@@ -223,16 +223,6 @@ class Ckalculator(object):
                     
                 last_events = sorted(self._noteon_delta.values())[-2:]
                 last_events_new = np.diff(sorted(self._lastdeltas))
-                #for n in self._noteon_delta.items():
-                    #for l in last_events:
-                        #if l in n:
-                            #self._lastnotes.append(n)
-                #print(self._noteon_delta[note])
-                #print('last events:', last_events)
-                #print('last notes:', self._lastnotes)
-                #print('last deltas:', self._lastdeltas)
-                #print('diff: ', last_events[-1] - last_events[0])
-                #print('diff new: ', last_events_new)
 
                 
                 if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
@@ -246,6 +236,8 @@ class Ckalculator(object):
                                                                                 #self._noteon_delta[note], 
                                                                                 #0.03, True))
                     chordfound, chord = chordparse.get()
+                    
+                    #print('chord:', chord, '\nfound:', chordfound)
 
                     if chordfound:
                         for f in self.ckFunc():
@@ -278,8 +270,13 @@ class Ckalculator(object):
                                                     self.append_successor(f['body']['arg1'])
                                                     self.zeroPlusRec(False, True)
                                                     
-                                            if func_exists[1] == 'ar':
-                                                print('This is an AR function')
+                                        if func_exists[1] == 'ar':
+                                            if function_to_call.__name__ in ['collect']:
+                                                if len(self._numberStack) > 0:
+                                                    num = trampolineRecursiveCounter(self._numberStack[0])
+                                                function_to_call(num)
+                                            else:
+                                                function_to_call()
                                                 
                                     
                                     
@@ -493,6 +490,9 @@ class Ckalculator(object):
                         self.ar.select()
                     elif self._deltatime > articulation['staccato']:
                         self.ar.collect()
+                        
+                elif note in AR.get('transform'):
+                    self.ar.transform()
    
     ######
                 
@@ -1133,7 +1133,15 @@ class Ckalculator(object):
                 if self._deltatime <= articulation['staccato']:
                     self._functionBody['arg1'] = 'greater'
                 elif self._deltatime > articulation['staccato']:
-                    self._functionBody['arg1'] = 'less'                
+                    self._functionBody['arg1'] = 'less'
+                    
+            # AR
+            elif note in AR.get('select'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'select'          
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'collect'
+                
                     
         elif len(self._functionBody) == 1:
             if debug:
@@ -1167,7 +1175,7 @@ class Ckalculator(object):
                
             elif note in AR.get('next'):
                 if self._deltatime <= articulation['staccato']:
-                    self._functionBody['arg1'] = 'next'
+                    self._functionBody['arg1'] = 'nextT'
                 elif self._deltatime > articulation['staccato']:
                     self._functionBody['arg1'] = 'prev'                
             
@@ -1217,8 +1225,11 @@ class Ckalculator(object):
             count = 0
             for f in self.ckFunc():
                 count += 1
-                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                if len(f['body']) > 1:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                else:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
                 if count == total:
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
                 else:
@@ -1392,7 +1403,11 @@ class Ckalculator(object):
                                 
     def makeLS(self, sendToDisplay: True):
         if len(self._successorHead) > 0:
-            print('succ head: ', trampolineRecursiveCounter(self._successorHead[0])) 
+            num = trampolineRecursiveCounter(self._successorHead[0])
+            print('succ head: ', num) 
+            if len(self._functionBody) > 0: ### for functions
+                self._numForFunctionBody = num            
+                
             self.mapscheme._osc.send_message("/ckconsole", str(trampolineRecursiveCounter(self._successorHead[0])))
             self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(trampolineRecursiveCounter(self._successorHead[0]))))
             

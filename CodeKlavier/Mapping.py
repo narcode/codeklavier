@@ -1035,7 +1035,10 @@ class Mapping_CKAR:
             print('websocket offline!')
             pass
         
-    
     def prepareJson(self, wstype='lsys', payload=''):
         return json.dumps({'type': wstype, 'payload': payload})
+    
+    def prepareJsonTransform(self, tree='1', position=[]):
+        return json.dumps({'type': 'transform', 'tree': tree, 'position': position, 'scale': [1,1,1], 
+                          'rotation': [0,0,0]})
     
