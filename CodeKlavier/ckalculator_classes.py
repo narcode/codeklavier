@@ -271,14 +271,16 @@ class Ckalculator(object):
                                                     self.zeroPlusRec(False, True)
                                                     
                                         if func_exists[1] == 'ar':
-                                            if function_to_call.__name__ in ['collect']:
+                                            if function_to_call.__name__ in ['collect', 'drop']:
                                                 if len(self._numberStack) > 0:
                                                     num = trampolineRecursiveCounter(self._numberStack[0])
-                                                function_to_call(num)
+                                                    function_to_call(num)
                                             else:
                                                 function_to_call()
-                                                
-                                    
+                                            #clear the rule stack
+                                            self._ckar = []
+                                            self._rules = []
+                                            self._dynamics = []
                                     
                         ########################
                 ########### lambda calculus  ###########
@@ -382,9 +384,13 @@ class Ckalculator(object):
                                 
                             print("ckar rule :", rule + rule_dynamics)
                             print("current tree:", self.ar.currentTree())
+                            if len(self.ar._parallelTrees) > 0:
+                                tree = (',').join(map(str, self.ar._parallelTrees))
+                            else:
+                                tree = str(self.ar.currentTree())
                             self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
                             self.mapscheme.websocketSend(self.mapscheme.prepareJson('lsys', 
-                                                                                    str(self.ar.currentTree()) 
+                                                                                    tree 
                                                                                     + '@' +
                                                                                     rule + rule_dynamics))
                             self._rules = []
@@ -487,7 +493,7 @@ class Ckalculator(object):
                     
                 elif note in AR.get('select'):
                     if self._deltatime <= articulation['staccato']:
-                        self.ar.select()
+                        self.ar.drop()
                     elif self._deltatime > articulation['staccato']:
                         self.ar.collect()
                         
@@ -1138,7 +1144,7 @@ class Ckalculator(object):
             # AR
             elif note in AR.get('select'):
                 if self._deltatime <= articulation['staccato']:
-                    self._functionBody['arg1'] = 'select'          
+                    self._functionBody['arg1'] = 'drop'          
                 elif self._deltatime > articulation['staccato']:
                     self._functionBody['arg1'] = 'collect'
                 

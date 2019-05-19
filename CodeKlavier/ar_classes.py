@@ -55,12 +55,23 @@ class CkAR(object):
         """
         print('select tree id:', tree)
         
+    def drop(self, tree=1):
+        """ Drop a specific tree from the collection """
+        if tree in self._parallelTrees:
+            self._parallelTrees.remove(tree)
+        else: 
+            print('\ntree not created yet or already collected, TREE:', tree, '\n')
+
+        print('collected trees:', self._parallelTrees)
+        
     def collect(self, tree=1):
         """Collect a LS-tree for parallel processing"""
-        if tree not in self._parallelTrees:
+        if tree not in self._parallelTrees and tree <= self.trees:
             self._parallelTrees.append(tree)
+        else: 
+            print('\ntree not created yet or already collected, TREE:', tree, '\n')
             
-        print('collected tres:', self._parallelTrees)
+        print('collected trees:', self._parallelTrees)
         
     def transform(self):
         current = self.currentTree()
