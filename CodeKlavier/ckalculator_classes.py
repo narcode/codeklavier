@@ -14,6 +14,7 @@ from multiprocessing.pool import ThreadPool, Pool
 from Motifs import motifs_lambda as LambdaMapping
 from Motifs import motifs_ar as AR
 from Mapping import Mapping_Ckalculator
+from ar_classes import CkAR
 from CK_lambda import *
 from CK_parser import *
 import numpy
@@ -30,6 +31,7 @@ class Ckalculator(object):
         """
         
         self.mapscheme = Mapping_Ckalculator(True, False)
+        self.ar = CkAR()
         self.note_on = noteonid
         self.note_off = noteoffid
         self.pedal = pedal_id
@@ -56,7 +58,7 @@ class Ckalculator(object):
         self._postOstinatoMemory = []
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
-        self._developedOstinato = False
+        self._developedOstinato = (False,0)
         self._functionBody = {}
         self._numForFunctionBody = None
         self._pool = ThreadPool(processes=1)
@@ -90,9 +92,13 @@ class Ckalculator(object):
         
         if print_functions:
             for f in self.ckFunc():
-                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
-                self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                if len(f['body']) > 1:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                else:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
                 
 
     def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
@@ -109,7 +115,7 @@ class Ckalculator(object):
         message, deltatime = event
 
         if (message[0] == self.pedal):
-            if message[2] == 127 and (')' in self._fullStack or self._temp == False):
+            if message[2] > 90 and (')' in self._fullStack or self._temp == False):
                 print('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
@@ -117,7 +123,7 @@ class Ckalculator(object):
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif message[2] < 30 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
@@ -137,13 +143,15 @@ class Ckalculator(object):
                         
                     print('rule till now: ', self._rules)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                     print('vel till now: ', self._rule_dynamics)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rule_dynamics))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rule_dynamics)))
                                             
                     if len(self._ckar) == 0:
                         print('axiom: ', '*' + ('').join(map(str, self._ckar)))
                         self.mapscheme._osc.send_message("/ckconsole", 'axiom: ' + '*' + ('').join(map(str, self._ckar)))
-                        
+                        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'axiom: ' + '*' + ('').join(map(str, self._ckar))))
                     
                     self._numberStack.append(self._tempNumberStack.pop())                    
                 #self.evaluateTempStack(self._tempStack)
@@ -161,7 +169,7 @@ class Ckalculator(object):
         if message[0] == self.note_on and message[2] > 0:
 
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._note_on_cue.append(message[1])
                     #self.find_ostinato(self._fullMemory, debug=True)
                     #print('note on mem:', self._note_on_cue)
@@ -187,7 +195,7 @@ class Ckalculator(object):
             #else: #no worng note for now... 
             
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._fullMemory.append(note)
                     self.find_ostinato(self._fullMemory, debug=False)                        
                 else:
@@ -196,7 +204,10 @@ class Ckalculator(object):
                         if self._defineCounter == 0:
                             self.mapscheme.formatAndSend('define func body...', display=4, syntax_color='function:')
                             self._defineCounter += 1
-                        self.define_function_body(note, articulation)
+                        if self._developedOstinato[1] == 1:
+                            self.define_function_body(note, articulation)
+                        else:
+                            self.define_function_bodyAR(note, articulation)
                     
                              
             if section == 'full':        
@@ -212,16 +223,6 @@ class Ckalculator(object):
                     
                 last_events = sorted(self._noteon_delta.values())[-2:]
                 last_events_new = np.diff(sorted(self._lastdeltas))
-                #for n in self._noteon_delta.items():
-                    #for l in last_events:
-                        #if l in n:
-                            #self._lastnotes.append(n)
-                #print(self._noteon_delta[note])
-                #print('last events:', last_events)
-                #print('last notes:', self._lastnotes)
-                #print('last deltas:', self._lastdeltas)
-                #print('diff: ', last_events[-1] - last_events[0])
-                #print('diff new: ', last_events_new)
 
                 
                 if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
@@ -235,6 +236,8 @@ class Ckalculator(object):
                                                                                 #self._noteon_delta[note], 
                                                                                 #0.03, True))
                     chordfound, chord = chordparse.get()
+                    
+                    #print('chord:', chord, '\nfound:', chordfound)
 
                     if chordfound:
                         for f in self.ckFunc():
@@ -245,21 +248,39 @@ class Ckalculator(object):
                                     
                                     try:
                                         function_to_call = getattr(self, f['body']['func'])
-                                        func_exists = True
+                                        func_exists = (True, 'ckalc')
                                     except AttributeError:
                                         #raise NotImplementedError("Class `{}` does not implement `{}`".
                                                                   #format(self.__class__.__name__, 
                                                                          #function_to_call))
-                                        func_exists = False
-                                        print('function not implemented for now... ')
+                                        try:
+                                            function_to_call = getattr(self.ar, f['body']['func'])
+                                            func_exists = (True, 'ar')
+                                            
+                                        except AttributeError:    
+                                            func_exists = (False, '')
+                                            print('function not implemented for now... ')
                                     
-                                    if func_exists:
-                                        if function_to_call.__name__ not in ['successor', 'predecessor']:
-                                            function_to_call(False, sendToDisplay)
+                                    if func_exists[0]:
+                                        if func_exists[1] == 'ckalc':
+                                            if function_to_call.__name__ not in ['successor', 'predecessor']:
+                                                function_to_call(False, sendToDisplay)
                                     
-                                            if f['body']['arg1'].__name__ == 'succ1':
-                                                self.append_successor(f['body']['arg1'])
-                                                self.zeroPlusRec(False, True)                                    
+                                                if f['body']['arg1'].__name__ == 'succ1':
+                                                    self.append_successor(f['body']['arg1'])
+                                                    self.zeroPlusRec(False, True)
+                                                    
+                                        if func_exists[1] == 'ar':
+                                            if function_to_call.__name__ in ['collect', 'drop']:
+                                                if len(self._numberStack) > 0:
+                                                    num = trampolineRecursiveCounter(self._numberStack[0])
+                                                    function_to_call(num)
+                                            else:
+                                                function_to_call()
+                                            #clear the rule stack
+                                            self._ckar = []
+                                            self._rules = []
+                                            self._dynamics = []
                                     
                         ########################
                 ########### lambda calculus  ###########
@@ -292,12 +313,14 @@ class Ckalculator(object):
                     
                     print('identity')
                     self.mapscheme._osc.send_message("/ckconsole", 'identity')
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'identity'))
                     self.makeLS(sendToDisplay)
                     self._successorHead = []
                                                                             
                 elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
                     self.mapscheme._osc.send_message("/ckconsole", 'evaluate')
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'evaluate'))
                     
                     
                     if self._temp is True:
@@ -328,6 +351,7 @@ class Ckalculator(object):
                     else:
                         print(self._rules)
                         self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                         
                         if len(self._rules) > 1 or len(self._ckar) > 0:
                             
@@ -343,9 +367,12 @@ class Ckalculator(object):
                             print('parsed rule: ', rule)
                             if rule != '':
                                 self.mapscheme._osc.send_message("/ckconsole", rule)
+                                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', rule))
+                                #self.mapscheme.websocketSend(rule)
                                 print('parsed dynamics: ', velocity)
                                 if velocity != '':
                                     self.mapscheme._osc.send_message("/ckconsole", velocity)
+                                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', velocity))
                             
                             if len(self._ckar) > 0:
                                 if rule != '':
@@ -354,9 +381,19 @@ class Ckalculator(object):
                                     comma = ''
                                 rule = '*.'+ ('').join(map(str, self._ckar)) + comma + rule
                                 self._ckar = []
-                                
+                                    
                             print("ckar rule :", rule + rule_dynamics)
+                            print("current tree:", self.ar.currentTree())
+
+                            if len(self.ar._parallelTrees) > 0:
+                                trees = []
+                                for t in self.ar._parallelTrees:
+                                    trees.append(str(t) + '@' + rule + rule_dynamics)
+                                tree = ('#').join(trees)
+                            else:
+                                tree = str(self.ar.currentTree()) + '@' + rule + rule_dynamics 
                             self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
+                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('lsys', tree))
                             self._rules = []
                             self._dynamics = []
                             self._rule_dynamics = []
@@ -374,6 +411,7 @@ class Ckalculator(object):
                                                                      syntax_color='result:')
                                     print(self._evalStack[0])
                                     self.mapscheme._osc.send_message("/ckconsole", str(self._evalStack[0]))
+                                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._evalStack[0])))
                                     
                                     self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                                     
@@ -442,7 +480,28 @@ class Ckalculator(object):
                 elif note in AR.get('dot'):
                     self._rules.append('.')
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                     print(self._rules)
+                
+                elif note in AR.get('next'):
+                    if self._deltatime <= articulation['staccato']:                                
+                        self.ar.nextT() 
+                    elif self._deltatime > articulation['staccato']:
+                        self.ar.prev()
+                        
+                elif note in AR.get('create'):
+                    self.ar.create()
+                    
+                elif note in AR.get('select'):
+                    if self._deltatime <= articulation['staccato']:
+                        self.ar.drop()
+                    elif self._deltatime > articulation['staccato']:
+                        self.ar.collect()
+                        
+                elif note in AR.get('transform'):
+                    self.ar.transform()
+   
+    ######
                 
     def successor(self, function, sendToDisplay=True):
         """
@@ -454,6 +513,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
         print(function.__name__)
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', function.__name__))
                 
         def nestFunc(function1):
             if len(self._successorHead) == 0:
@@ -478,6 +538,7 @@ class Ckalculator(object):
                 self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
         print(function.__name__) 
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', function.__name__))
         
                 
         self._successorHead.append(function)
@@ -495,6 +556,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
         print(function.__name__) 
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', function.__name__))
         
                 
         def nestFunc(function1):
@@ -565,6 +627,7 @@ class Ckalculator(object):
             
             print(self._tempFunctionStack)
             self.mapscheme._osc.send_message("/ckconsole", str(self._tempFunctionStack))
+            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._tempFunctionStack)))
             
             
         self._fullStack.append(add_trampoline)
@@ -583,6 +646,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
         print('subtraction')
         self.mapscheme._osc.send_message("/ckconsole", 'subtraction')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'substraction'))
         
         
         if not temp:
@@ -620,6 +684,7 @@ class Ckalculator(object):
         
         print('equal to')
         self.mapscheme._osc.send_message("/ckconsole", 'equal to')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'equal to'))
         
         
         if len(self._numberStack) == 0:
@@ -678,6 +743,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('<', display=2, syntax_color='int:', spacing=False)                       
         print('less than')
         self.mapscheme._osc.send_message("/ckconsole", 'less than')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'less than'))
         
         
         if len(self._numberStack) == 0:
@@ -741,6 +807,7 @@ class Ckalculator(object):
                     
                     print('TEMP NUM STACK: ', self._tempNumberStack)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._tempNumberStack))
+                    self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._tempNumberStack)))
                     
                     print('NORM STACK: ', self._numberStack)
     
@@ -767,6 +834,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('multiply', display=1, syntax_color='mul:')       
         print('multiplication')
         self.mapscheme._osc.send_message("/ckconsole", 'multiplication')
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'multiplication'))
         
         
         if not temp:
@@ -802,7 +870,7 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('divide', display=1, syntax_color='div:')        
         print('division')
         self.mapscheme._osc.send_message("/ckconsole", 'division')
-        
+        self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', 'division'))
         
         if not temp:
             if len(self._numberStack) == 0:
@@ -880,7 +948,7 @@ class Ckalculator(object):
         param boolean debug: print debugging messages
         """
         length = size*repetitions+size
-        if not self._developedOstinato and len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue?
+        if not self._developedOstinato[0] and len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue?
             self._fullMemory = self._fullMemory[-length:]
             self._note_on_cue = self._note_on_cue[-length:]
             self._filtered_cue = self._filtered_cue[-length:]
@@ -993,15 +1061,21 @@ class Ckalculator(object):
             diff = np.subtract(ostinato1, ostinato2)
             
             if np.array_equal(sorted(np.abs(diff)), [0,0,0,1]):
-                self._developedOstinato = True
+                self._developedOstinato = (True, 1)
                 
                 if debug:
                     print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
                 self.mapscheme.formatAndSend('ostinato has 1 note difference! Well done', display=4,
                                                  syntax_color='function:')
+            
+            elif np.array_equal(sorted(np.abs(diff)), [0,0,0,2]):
+                self._developedOstinato = (True, 2)
+                if debug:
+                    print('ostinato has 2 note difference! well done')
+                
             else:
                 print('😤 ostinato was not developed correctly. Please try again')
-                self._developedOstinato = False
+                self._developedOstinato = (False, 0)
                 self.ostinato = {'first': [], 'compare': []}
                 
                 self.mapscheme.formatAndSend('ostinato was not developed correctly. Please try again', display=4,
@@ -1066,7 +1140,15 @@ class Ckalculator(object):
                 if self._deltatime <= articulation['staccato']:
                     self._functionBody['arg1'] = 'greater'
                 elif self._deltatime > articulation['staccato']:
-                    self._functionBody['arg1'] = 'less'                
+                    self._functionBody['arg1'] = 'less'
+                    
+            # AR
+            elif note in AR.get('select'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'drop'          
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'collect'
+                
                     
         elif len(self._functionBody) == 1:
             if debug:
@@ -1083,6 +1165,29 @@ class Ckalculator(object):
                 self.mapscheme.formatAndSend('function body arg 2 is:' + self._functionBody['arg2'], display=4,
                                              syntax_color='function:')
             self._arg2Counter += 1
+            
+
+    def define_function_bodyAR(self, note, articulation, debug=True):
+        """
+        High level function to choose an AR function to be used as part of the function body 
+        of a function definition.
+      
+        :param int note: incoming MIDI note
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
+        """ 
+        if len(self._functionBody) == 0:
+                            
+            if note in AR.get('create'):
+                self._functionBody['arg1'] = 'create'
+               
+            elif note in AR.get('next'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'nextT'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'prev'                
+            
+            self._arg1Counter += 1
+            #self._arg2Counter += 1            
 
             
     def storeFunction(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
@@ -1127,8 +1232,11 @@ class Ckalculator(object):
             count = 0
             for f in self.ckFunc():
                 count += 1
-                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                if len(f['body']) > 1:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                else:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
                 if count == total:
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
                 else:
@@ -1142,7 +1250,65 @@ class Ckalculator(object):
         self._functionBody = {}
         self._defineCounter = 0
         self._foundOstinato = False
-        self._developedOstinato = False 
+        self._developedOstinato = (False,0)
+        
+    def storeFunctionAR(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
+        """
+        Store the defined function in a .ini file for future use.
+        """
+        ck_functions = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        ck_functions.read(funcfile, encoding='utf8')
+        existingfuncs = []
+        
+        for f in self.ckFunc():
+            existingfuncs.append(f['name'])
+            
+        print(existingfuncs)   
+        
+        func_num = len(ck_functions['functions'])
+
+        name = 'function' + repr(func_num+1) + ': '
+        name2 = 'function' + repr(func_num+2) + ': '
+        chord = ','.join(map(str, self.ostinato['first']))
+        chord2 = ','.join(map(str, self.ostinato['compare']))
+        body = chord + ' -> (' + self._functionBody['arg1'] + ')\n'
+        body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ')\n'
+        
+        with open(funcfile, 'a') as file:
+            if self.ostinato['first'] not in existingfuncs:
+                file.write(name + body)
+                print('function saved 1', midiToNotes(self.ostinato['first']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            if self.ostinato['compare'] not in existingfuncs:
+                file.write(name2 + body2)
+                print('function saved 2', midiToNotes(self.ostinato['compare']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            file.close()
+            
+        if sendToDisplay:
+            total = len(self.ckFunc())
+            count = 0
+            for f in self.ckFunc():
+                count += 1
+                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func']  + ')'
+                if count == total:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                else:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='saved:')
+            
+        #reset the ostinato analysis
+        self.ostinato = {'first': [], 'compare': []}
+        self._fullMemory = []
+        self._note_on_cue = []
+        self._filtered_cue = []
+        self._functionBody = {}
+        self._defineCounter = 0
+        self._foundOstinato = False
+        self._developedOstinato = (False,0)        
                 
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
         """
@@ -1198,6 +1364,7 @@ class Ckalculator(object):
             num = trampolineRecursiveCounter(self._successorHead[0])
             print('succ head: ', num)
             self.mapscheme._osc.send_message("/ckconsole", str(num))
+            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(num)))
             
             
             if len(self._functionBody) > 0:
@@ -1243,8 +1410,13 @@ class Ckalculator(object):
                                 
     def makeLS(self, sendToDisplay: True):
         if len(self._successorHead) > 0:
-            print('succ head: ', trampolineRecursiveCounter(self._successorHead[0])) 
+            num = trampolineRecursiveCounter(self._successorHead[0])
+            print('succ head: ', num) 
+            if len(self._functionBody) > 0: ### for functions
+                self._numForFunctionBody = num            
+                
             self.mapscheme._osc.send_message("/ckconsole", str(trampolineRecursiveCounter(self._successorHead[0])))
+            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(trampolineRecursiveCounter(self._successorHead[0]))))
             
             
             if self._temp is False:
@@ -1267,6 +1439,7 @@ class Ckalculator(object):
                 self._rules.append(trampolineRecursiveCounter(self._successorHead[0]))
                 print('rules now osc: ', self._rules)
                 self.mapscheme._osc.send_message("/ckconsole", str( self._rules))
+                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
                 print('dynamics now: ', self._rule_dynamics)
                 self._dynamics = []
                 
@@ -1284,6 +1457,7 @@ class Ckalculator(object):
                             self._ckar.append(trampolineRecursiveCounter(self._successorHead[0]))
                             print(self._ckar)
                             self.mapscheme._osc.send_message("/ckconsole", str( self._ckar))
+                            self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._ckar)))
                             
                         
                         if sendToDisplay:
@@ -1316,10 +1490,12 @@ class Ckalculator(object):
                 self._dynamics = []
                 print(self._rules)
                 self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._rules)))
             else:
                 self._ckar.append(trampolineRecursiveCounter(zero))
                 print(self._ckar)
                 self.mapscheme._osc.send_message("/ckconsole", str(self._ckar))
+                self.mapscheme.websocketSend(self.mapscheme.prepareJson('console', str(self._ckar)))
                 
                 
                                 

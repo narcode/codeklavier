@@ -16,6 +16,8 @@ import CK_configWriter
 from CK_Setup import Setup
 from CK_rec import CK_Rec
 
+
+
 ck_deltatime_mem = []
 
 PROTOTYPES = ('hello_world', 'motippets', 'hybrid', 'ckalculator', 'text', 'presenter')
@@ -34,7 +36,7 @@ def doHelp():
     print('')
     print('-h | --help')
     print('Show this help text.')
-    print('').a
+    print('')
     print('-i | --interactive')
     print('Start CodeKlavier in interactive mode')
     print('')

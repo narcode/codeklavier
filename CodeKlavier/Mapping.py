@@ -13,6 +13,10 @@ import socket
 from pythonosc import udp_client
 import configparser
 import re
+import asyncio
+import websockets
+import json
+import urllib.request
 
 display1 = 1111
 display2 = 2222
@@ -929,7 +933,7 @@ class Mapping_Motippets:
                 self.formatAndSend(content, display=4, syntax_color='loop:')
 
 class Mapping_Ckalculator:
-    """Mapping for the Ckalculator prototype.
+    """Mapping for the Ckalculator
     """
     def __init__(self, use_display=False, debug=True):
         if debug:
@@ -941,8 +945,29 @@ class Mapping_Ckalculator:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57140, True)
-    # self._osc = udp_client.SimpleUDPClient('192.168.2.255', 57140, True) sending
+        #self._websocketUri = '192.168.178.235:8080/ckar_serve'
 
+        with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
+            self._wsUri = json.loads(u.read(100))
+            print(self._wsUri)
+
+#### websockets for AR ####
+    async def websocketConnect(self, json):
+        async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
+            await websocket.send(json)
+        
+    def websocketSend(self, json):
+        try:
+            asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
+        except:
+            print('websocket offline!')
+            pass
+        
+    
+    def prepareJson(self, wstype='lsys', payload=''):
+        return json.dumps({'type': wstype, 'payload': payload})
+            
+    
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
         """format and prepare a string for sending it over UDP socket
@@ -986,3 +1011,34 @@ class Mapping_Ckalculator:
             port = 4444
 
         return self.__socket.sendto(bytes('line:\n', 'utf-8'), ('localhost', port))
+
+
+class Mapping_CKAR:
+    """Mapping for the AR extension
+    """
+    def __init__(self, debug=True):
+        if debug:
+            print("## Using the AR mapping ##")
+
+        with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
+            self._wsUri = json.loads(u.read(100))
+            print(self._wsUri)
+
+    async def websocketConnect(self, json):
+        async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
+            await websocket.send(json)
+        
+    def websocketSend(self, json):
+        try:
+            asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
+        except:
+            print('websocket offline!')
+            pass
+        
+    def prepareJson(self, wstype='lsys', payload=''):
+        return json.dumps({'type': wstype, 'payload': payload})
+    
+    def prepareJsonTransform(self, tree='1', position=[]):
+        return json.dumps({'type': 'transform', 'tree': tree, 'position': position, 'scale': [1,1,1], 
+                          'rotation': [0,0,0]})
+    
