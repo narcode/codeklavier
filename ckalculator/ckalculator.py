@@ -69,7 +69,7 @@ def main(configfile='default_setup.ini'):
                 #print('delta per note:', per_note)
                 #print('delta ck:', ck_deltatime)
 
-                if message[0] != 254:
+                if message[0] != 248:
                     
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):        
