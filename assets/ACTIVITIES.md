@@ -13,7 +13,7 @@ March 2019: First residency with Patrick Borgeat working on the AR extension. Wa
 
 February 2019: Talk and performance with the Ckalcuλator at [Lambda Days](http://www.lambdadays.org/lambdadays2019) in Poland. Watch the video [here](https://youtu.be/0fL40oLU8C4)
 
-January 2019: Performance of new hybrid version for Disklavier at [Conlon X Gaudeamus](https://gaudeamus.nl/events/gaudeamus-x-conlon-disklavier-projection-works/) - Watch the [trailer](https://drive.google.com/file/d/1_IZ2OyttF5yVMxsXt9oTTatKtjRafIaY/view)!
+January 2019: Performance of new hybrid version for Disklavier at [Conlon X Gaudeamus](https://gaudeamus.nl/events/gaudeamus-x-conlon-disklavier-projection-works/) - Watch the [trailer](https://youtu.be/GHEOdT-t4Us)!
 We  also performed with the CKalculator at the [International Conference on Live Coding](http://iclc.livecodenetwork.org/2019/ingles.html)
 
 November 2018: Performance at Splendor
