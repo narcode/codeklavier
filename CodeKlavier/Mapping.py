@@ -14,7 +14,7 @@ from pythonosc import udp_client
 import configparser
 import re
 import asyncio
-import websockets
+from websockets import connect
 import json
 import urllib.request
 
@@ -945,27 +945,27 @@ class Mapping_Ckalculator:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57140, True)
-        #self._websocketUri = '192.168.178.235:8080/ckar_serve'
+        ##self._websocketUri = '192.168.178.235:8080/ckar_serve'
 
-        with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
-            self._wsUri = json.loads(u.read(100))
-            print(self._wsUri)
+        #with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
+            #self._wsUri = json.loads(u.read(100))
+            #print(self._wsUri)
 
-#### websockets for AR ####
-    async def websocketConnect(self, json):
-        async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
-            await websocket.send(json)
+##### websockets for AR ####
+    #async def websocketConnect(self, json):
+        #async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
+            #await websocket.send(json)
         
-    def websocketSend(self, json):
-        try:
-            asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
-        except:
-            print('websocket offline!')
-            pass
+    #def websocketSend(self, json):
+        #try:
+            #asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
+        #except:
+            #print('websocket offline!')
+            #pass
         
     
-    def prepareJson(self, wstype='lsys', payload=''):
-        return json.dumps({'type': wstype, 'payload': payload})
+    #def prepareJson(self, wstype='lsys', payload=''):
+        #return json.dumps({'type': wstype, 'payload': payload})
             
     
 
@@ -1017,23 +1017,69 @@ class Mapping_CKAR:
     """Mapping for the AR extension
     """
     def __init__(self, debug=True):
+        
         if debug:
             print("## Using the AR mapping ##")
 
         with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
             self._wsUri = json.loads(u.read(100))
-            print(self._wsUri)
-
-    async def websocketConnect(self, json):
-        async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
-            await websocket.send(json)
-        
-    def websocketSend(self, json):
+            print(self._wsUri)  
+            
+        self.wsConnect() 
+    
+    #async def __aenter__(self):
+        #self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve')
+        #self.websocket = await self._conn.__aenter__()
+        #print('start')
+        #return self
+    
+    async def connect(self):
         try:
-            asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
+            self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve')
+            self.websocket = await self._conn.__aenter__()
+            print('web socket connected!')
         except:
-            print('websocket offline!')
-            pass
+            print('connection error. Is the websocet server running?')
+        
+        return self
+    
+    def wsConnect(self):
+        """TODO: check reconnects"""
+        asyncio.get_event_loop().run_until_complete(self.connect())
+       
+
+    async def send(self, json):
+        try:
+            await self.websocket.send(json)    
+        except:
+            print('connection closed, trying to reconnect... ')
+            self.wsConnect()
+    
+    #async def websocketConnect(self, json):
+        #async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
+            #await self.sendWesocket(json)
+        
+    #def websocketSend(self, json):
+        #try:
+            #asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
+        #except:
+            #print('websocket offline!')
+        
+    #async def websocketHandler(self, websocket):
+        #while True:
+            #message = await self.produceMsg(json)
+            #await websocket.send(message)
+    
+    #def sendWebSocket(self, json):
+        #try:
+            #asyncio.get_event_loop().run_until_complete(self._ws.send(json))
+        #except:
+            #print('error send')
+    
+    #def produceMsg(self, json):
+        #print(json)
+        #return json
+    
         
     def prepareJson(self, wstype='lsys', payload=''):
         return json.dumps({'type': wstype, 'payload': payload})
@@ -1042,3 +1088,4 @@ class Mapping_CKAR:
         return json.dumps({'type': 'transform', 'tree': tree, 'position': position, 'scale': [1,1,1], 
                           'rotation': [0,0,0]})
     
+
