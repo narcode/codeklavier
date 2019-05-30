@@ -4,6 +4,7 @@ permalink: /augmentedreality
 # CodeKlavier meets Augmented Reality 📱 🌱 
 
 ![CKAR](https://github.com/narcode/codeklavier/blob/master/assets/images/CKAR.png)
+
 The CodeKlavier is a system which enables a pianist to code through playing the piano as a performative experience. The CK+AR (CodeKlavier + Augmented Reality)  is the next step in our artistic mission of combining classically inspired pianistic, new media, and live coding performance practises into an innovative, united genre. In the CK+AR, the piano playing becomes the interface for coding and the coding unfolds as piano playing and as a visual AR experience, making the three mediums indistinguishable from one another (AR visuals + piano playing + live programming). 
 
 The coding is done in the CodeKlavier language, which implements lambda calculus to create numbers and arithmetic operations that can be translated into symbols to specify Lindenmayer systems. L-systems are formal grammars that consist of a set of symbols (alphabet), a starting point (axiom) and a set of production rules which define symbol substitution. The production rules are applied recursively to successive generations, creating a tree-like structure. These structures, together with additional information extracted from the piano playing, is then used to construct the AR visuals as well as a sonic scape.
