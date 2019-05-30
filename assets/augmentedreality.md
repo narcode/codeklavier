@@ -9,7 +9,7 @@ The CodeKlavier is a system which enables a pianist to code through playing the 
 
 The coding is done in the CodeKlavier language, which implements lambda calculus to create numbers and arithmetic operations that can be translated into symbols to specify Lindenmayer systems. L-systems are formal grammars that consist of a set of symbols (alphabet), a starting point (axiom) and a set of production rules which define symbol substitution. The production rules are applied recursively to successive generations, creating a tree-like structure. These structures, together with additional information extracted from the piano playing, is then used to construct the AR visuals as well as a sonic scape.
 
-![Example of L-system tree](https://raw.githubusercontent.com/narcode/codeklavier/master/assets/images/CKAR.png)
+![Example of L-system tree](https://raw.githubusercontent.com/narcode/codeklavier/master/assets/images/L-system%20example.png)
 
 Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interessted in exploring how this fairly simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation.  Furthermore,  Lindenmayer’s work was done here at the University of Utrecht in 1968 and building upon it through artistic exploration makes  the Netherlands a particularly special location for the development of this project.
 
