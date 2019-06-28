@@ -11,11 +11,13 @@ For example:
     (5 > 4 [eval] + 3) essentialy this becomes (True + 3)
 This translates to the 'N' token which removes the symbol
 
-For tree operatons, the commands are as follows. Besides the dot, the other dunctions are only accesible in the context of a function (ostinato) figure.
+For tree operatons, the commands are as follows. Besides the dot, the other dunctions are only accesible in the context of a function (ostinato) figure. Please note the ostinato should have a change of 2 semitones.
 dot: lowest A
 create tree: C
-select tree: D, but short
-collect tree: D but long
+drop tree: D, but short (make number first include evaluate!)
+collect tree: D but long  (make number first include evaluate!)
 next: F, but short
 previous: F, but now tenuto
 Eventually these operations will only exist in the context of defining a new function (with ostinato and a note change of 2 semitones). More to follow
+transform: G
+Change shape: A
