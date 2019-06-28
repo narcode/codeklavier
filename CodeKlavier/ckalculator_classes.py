@@ -54,6 +54,7 @@ class Ckalculator(object):
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
         self._developedOstinato = False
+        self._numArgsForFunction = None
         self._functionBody = {}
         self._numForFunctionBody = None
         self._pool = ThreadPool(processes=1)
@@ -839,7 +840,7 @@ class Ckalculator(object):
                        
     def compare_ostinato(self, ostinato1, ostinato2, debug=False):
         """
-        Detect deviations of an ostinato.
+        Detect deviations of an ostinato (up to a tritone)
         param array ostinato: the base ostinato
         param int note: the ostinato to compare
         """
@@ -851,15 +852,36 @@ class Ckalculator(object):
         else:
             diff = np.subtract(ostinato1, ostinato2)
             
-            if np.array_equal(sorted(np.abs(diff)), [0,0,0,1]):
+            #v2 Define how many arguments will the function have:            
+            num_of_args = np.trim_zeros(sorted(np.abs(diff)))
+                        
+            if len(num_of_args) == 1 and num_of_args[0] <= 6:
+                
                 self._developedOstinato = True
                 
+                #seconds
+                if num_of_args in [[1],[2]]:
+                    self._numArgsForFunction = 1
+                #thirds
+                elif num_of_args in [[3],[4]]:
+                    self._numArgsForFunction = 2
+                #perfect fourth
+                elif num_of_args in [[5]]:
+                    self._numArgsForFunction = 3
+                #tritone
+                elif num_of_args in [[6]]:
+                    self._numArgsForFunction = 0
+                    
                 if debug:
-                    print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
-                self.mapscheme.formatAndSend('ostinato has 1 note difference! Well done', display=4,
-                                                 syntax_color='function:')
+                    print('function will have {} arguments. Well done 👸🏼 -> '.format(self._numArgsForFunction), diff)
+                    
+                self.mapscheme.formatAndSend('function will have {} argument(s)!'.format(self._numArgsForFunction), 
+                                                 display=4, syntax_color='function:')
+                    
             else:
-                print('😤 ostinato was not developed correctly. Please try again')
+                if debug:
+                    print('😤 ostinato was not developed correctly. Please try again')
+                    
                 self._developedOstinato = False
                 self.ostinato = {'first': [], 'compare': []}
                 
@@ -871,9 +893,11 @@ class Ckalculator(object):
         self._note_on_cue = []
         self._filtered_cue = []
         #self.ostinato = {'first': [], 'compare': []}
-
-        print('first:', midiToNotes(ostinato1),
-              'compare:', midiToNotes(ostinato2))      
+        
+        if debug:
+            print('first:', midiToNotes(ostinato1),
+                  'compare:', midiToNotes(ostinato2))      
+       
        
     def define_function_body(self, note, articulation, debug=True):
         """
