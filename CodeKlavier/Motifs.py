@@ -56,6 +56,8 @@ try:
     select = config['ar'].get('select').split(',')
     nextt = config['ar'].get('nextt').split(',')
     transform = config['ar'].get('transform').split(',')
+    shape = config['ar'].get('shape').split(',')
+    store_collection = config['ar'].get('store_collection').split(',')
 
 except KeyError:
     raise LookupError('Missing key information in the config file.')
@@ -106,3 +108,5 @@ motifs_ar['create'] = list(map(int, create))
 motifs_ar['select'] = list(map(int, select))
 motifs_ar['next'] = list(map(int, nextt))
 motifs_ar['transform'] = list(map(int, transform))
+motifs_ar['shape'] = list(map(int, shape))
+motifs_ar['store_collection'] = list(map(int, store_collection))

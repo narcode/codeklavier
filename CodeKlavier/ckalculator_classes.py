@@ -493,12 +493,26 @@ class Ckalculator(object):
                     
                 elif note in AR.get('select'):
                     if self._deltatime <= articulation['staccato']:
-                        self.ar.drop()
+                        if len(self._numberStack) > 0:
+                            tree = trampolineRecursiveCounter(self._numberStack[0])
+                            self.ar.drop(tree)
+                        else:
+                            self.ar.drop()
                     elif self._deltatime > articulation['staccato']:
-                        self.ar.collect()
+                        if len(self._numberStack) > 0:
+                            tree = trampolineRecursiveCounter(self._numberStack[0])                        
+                            self.ar.collect(tree)
+                        else:
+                            self.ar.collect()
                         
                 elif note in AR.get('transform'):
                     self.ar.transform()
+                    
+                elif note in AR.get('shape'):
+                    if len(self.ar._parallelTrees) > 0:
+                        self.ar.toggleShape(parallelTrees=True)
+                    else:
+                        self.ar.toggleShape()
    
     ######
                 
@@ -1178,6 +1192,19 @@ class Ckalculator(object):
                             
             if note in AR.get('create'):
                 self._functionBody['arg1'] = 'create'
+                
+            if note in AR.get('select'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'drop'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'collect'                        
+                
+            elif note in AR.get('shape'):
+                self._functionBody['arg1'] = 'toggleShape'
+            
+            elif note in AR.get('store_collection'):
+                self._functionBody['arg1'] = 'storeCollect'
+                self._arg2Counter += 1                            
                
             elif note in AR.get('next'):
                 if self._deltatime <= articulation['staccato']:
@@ -1186,7 +1213,8 @@ class Ckalculator(object):
                     self._functionBody['arg1'] = 'prev'                
             
             self._arg1Counter += 1
-            #self._arg2Counter += 1            
+            
+            
 
             
     def storeFunction(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
@@ -1270,8 +1298,17 @@ class Ckalculator(object):
         name2 = 'function' + repr(func_num+2) + ': '
         chord = ','.join(map(str, self.ostinato['first']))
         chord2 = ','.join(map(str, self.ostinato['compare']))
-        body = chord + ' -> (' + self._functionBody['arg1'] + ')\n'
-        body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ')\n'
+        
+        if self._functionBody['arg2'] == '':
+            
+            body = chord + ' -> (' + self._functionBody['arg1'] + ')\n'
+            body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ')\n'
+            
+        else:
+            
+            body = chord + ' -> (' + self._functionBody['arg1'] + self._functionBody['arg2'] + ')\n'
+            body2 = chord2 + ' -> (' + self._functionBody['arg1'] + self._functionBody['arg2'] + ')\n'            
+            
         
         with open(funcfile, 'a') as file:
             if self.ostinato['first'] not in existingfuncs:

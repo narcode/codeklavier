@@ -94,11 +94,16 @@ def main(configfile='default_setup.ini'):
                                     cKalc._functionBody = {}
                                     cKalc._numForFunctionBody = None                                
                             else:
-                                cKost._functionBody['arg2'] = ''
                                 print('function with no args complete...')
-                                if cKost._arg2Counter == 0:                                    
+                                if cKost._arg2Counter == 0:     
+                                    cKost._functionBody['arg2'] = ''                                    
                                     cKost.storeFunctionAR()
                                     cKalc._functionBody = {}
+                                else:
+                                    cKost._functionBody['arg2'] = str(cKalc.ar._parallelTrees)
+                                    cKost.storeFunctionAR()
+                                    cKalc._functionBody = {}
+                                    
                                 
 
                         

@@ -1055,6 +1055,11 @@ class Mapping_CKAR:
             print('connection closed, trying to reconnect... ')
             self.wsConnect()
     
+            
+    async def receive(self):
+        async for message in self.websocket:
+            return json.loads(message)
+    
     #async def websocketConnect(self, json):
         #async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
             #await self.sendWesocket(json)
@@ -1083,6 +1088,11 @@ class Mapping_CKAR:
         
     def prepareJson(self, wstype='lsys', payload=''):
         return json.dumps({'type': wstype, 'payload': payload})
+    
+    
+    def prepareJsonShape(self, tree='1', shape=''):
+        return json.dumps({'type': 'shape', 'tree': tree, 'shape': shape})    
+    
     
     def prepareJsonTransform(self, tree='1', position=[]):
         return json.dumps({'type': 'transform', 'tree': tree, 'position': position, 'scale': [1,1,1], 
