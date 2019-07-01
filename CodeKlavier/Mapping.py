@@ -1020,21 +1020,27 @@ class Mapping_CKAR:
         
         if debug:
             print("## Using the AR mapping ##")
-
-        with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
-            self._wsUri = json.loads(u.read(100))
-            print(self._wsUri)  
+            
+        self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        self._config.read('default_setup.ini', encoding='utf8')
+        
+        server = self._config['ar'].get('server')
+                
+        if server != 'local':
+            with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
+                self._wsUri = json.loads(u.read(100))
+                print(self._wsUri)  
+        else:
+            print('server:', server)    
+            host = socket.gethostbyname(socket.gethostname())
+            self._wsUri = {'host': host, 'port': '8081'}
             
         self.wsConnect() 
     
-    #async def __aenter__(self):
-        #self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve')
-        #self.websocket = await self._conn.__aenter__()
-        #print('start')
-        #return self
     
     async def connect(self):
         try:
+            
             self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve')
             self.websocket = await self._conn.__aenter__()
             print('web socket connected!')
@@ -1059,32 +1065,7 @@ class Mapping_CKAR:
     async def receive(self):
         async for message in self.websocket:
             return json.loads(message)
-    
-    #async def websocketConnect(self, json):
-        #async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
-            #await self.sendWesocket(json)
         
-    #def websocketSend(self, json):
-        #try:
-            #asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
-        #except:
-            #print('websocket offline!')
-        
-    #async def websocketHandler(self, websocket):
-        #while True:
-            #message = await self.produceMsg(json)
-            #await websocket.send(message)
-    
-    #def sendWebSocket(self, json):
-        #try:
-            #asyncio.get_event_loop().run_until_complete(self._ws.send(json))
-        #except:
-            #print('error send')
-    
-    #def produceMsg(self, json):
-        #print(json)
-        #return json
-    
         
     def prepareJson(self, wstype='lsys', payload=''):
         return json.dumps({'type': wstype, 'payload': payload})

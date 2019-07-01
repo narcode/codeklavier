@@ -125,9 +125,11 @@ class CkAR(object):
         if tree in self._parallelTrees:
             self._parallelTrees.remove(tree)
         else: 
-            print('\ntree not created yet or already collected, TREE:', tree, '\n')
+            #print('\ntree not created yet or already collected, TREE:', tree, '\n')
+            self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')            
 
         print('drop:', self._parallelTrees)
+        self.console('collected trees: ' + str(self._parallelTrees))
         
         
     def collect(self, tree=1):
@@ -135,9 +137,11 @@ class CkAR(object):
         if tree not in self._parallelTrees and tree <= self.trees:
             self._parallelTrees.append(tree)
         else: 
-            print('\ntree not created yet or already collected, TREE:', tree, '\n')
+            #print('\ntree not created yet or already collected, TREE:', tree, '\n')
+            self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')
             
         print('collected trees:', self._parallelTrees)
+        self.console('collected trees: ' + str(self._parallelTrees))
         
         
     def storeCollect(self, collection=[]):
@@ -150,11 +154,20 @@ class CkAR(object):
         
     def transform(self):
         "Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"
-        current = self.currentTree()
         x = random.uniform(-1, 1)
         y = random.uniform(-1, 1)
-        self.run_in_loop(self.makeJsonTransform(str(current), [x, 0, y]))
-        print('transform tree', current)
+        
+        if len(self._parallelTrees) == 0:
+            
+            current = self.currentTree()
+            self.run_in_loop(self.makeJsonTransform(str(current), [x, 0, y]))
+            print('transform tree', current)
+            
+        else:
+            
+            for t in self._parallelTrees:
+                self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y]))
+            
         
     def sendRule(self, string):
         """ send a LS rule via websocket"""

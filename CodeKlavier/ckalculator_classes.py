@@ -150,9 +150,19 @@ class Ckalculator(object):
                     self.ar.console(str(self._rule_dynamics))
                                             
                     if len(self._ckar) == 0:
-                        print('axiom: ', '*' + ('').join(map(str, self._ckar)))
-                        self.mapscheme._osc.send_message("/ckconsole", 'axiom: ' + '*' + ('').join(map(str, self._ckar)))
-                        self.ar.console('axiom: ' + '*' + ('').join(map(str, self._ckar)))
+
+                        if len(self._rule_dynamics) > 0:                            
+                            velocity = ('|').join(map(str, self._rule_dynamics))
+                            
+                        if velocity != '':
+                            rule_dynamics = 'd' + velocity
+                        else:
+                            rule_dynamics = ''
+                        
+                        axiom = 'axiom: ', '*' + ('').join(map(str, self._ckar)) + rule_dynamics 
+                        print(axiom)
+                        self.mapscheme._osc.send_message("/ckconsole", axiom)
+                        self.ar.console(axiom)
                     
                     self._numberStack.append(self._tempNumberStack.pop())                    
                 #self.evaluateTempStack(self._tempStack)
@@ -383,7 +393,7 @@ class Ckalculator(object):
                                 rule = '*.'+ ('').join(map(str, self._ckar)) + comma + rule
                                 self._ckar = []
                                     
-                            print("ckar rule :", rule + rule_dynamics)
+                            print("ckar rule :", rule)
                             print("current tree:", self.ar.currentTree())
 
                             if len(self.ar._parallelTrees) > 0:
