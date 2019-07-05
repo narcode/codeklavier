@@ -296,8 +296,7 @@ class Ckalculator(object):
                         ########################
                 ########### lambda calculus  ###########
                         ########################
-                                    
-                if note in LambdaMapping.get('successor'):
+                if note in self.ar.mappingTransposition(LambdaMapping.get('successor')):
 
                     if self._deltatime <= articulation['staccato']:
                         self.storeDynamics(note)
@@ -306,7 +305,7 @@ class Ckalculator(object):
                     
                     elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
                         
-                        if note in [LambdaMapping.get('successor')[0]]:
+                        if note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
                             self.storeDynamics(note)
                             
                             if len(self._numberStack) == 0:
@@ -319,7 +318,7 @@ class Ckalculator(object):
 
                         self._successorHead = []
                         
-                elif note in LambdaMapping.get('zero'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('zero')):
                     #self.storeDynamics(note)
                     
                     print('identity')
@@ -328,7 +327,7 @@ class Ckalculator(object):
                     self.makeLS(sendToDisplay)
                     self._successorHead = []
                                                                             
-                elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('eval')): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
                     self.mapscheme._osc.send_message("/ckconsole", 'evaluate')
                     self.ar.console('evaluate')
@@ -445,7 +444,7 @@ class Ckalculator(object):
                 elif note in LambdaMapping.get('predecessor'):
                     print('used via articulation under 1 successor')
                         
-                elif note in LambdaMapping.get('addition'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('addition')):
                     if self._deltatime <= articulation['staccato']:
                         if not self._temp:
                             self.add(False, sendToDisplay)
@@ -457,7 +456,7 @@ class Ckalculator(object):
                         else:
                             self.multiply(True, sendToDisplay)                    
                     
-                elif note in LambdaMapping.get('subtraction'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('subtraction')):
                     if self._deltatime <= articulation['staccato']:                
                         if not self._temp:
                             self.subtract(False, sendToDisplay)  
@@ -466,23 +465,23 @@ class Ckalculator(object):
                     elif self._deltatime > articulation['staccato']:
                         self.divide(self._temp, sendToDisplay) 
                     
-                elif note in LambdaMapping.get('multiplication'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('multiplication')):
                     print('used via articulation under addition')
                     
                 elif note in LambdaMapping.get('division'):
                     print('used via articulation under subtraction')
                                     
                 # number comparisons    
-                elif note in LambdaMapping.get('equal'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('equal')):
                     self.equal(sendToDisplay) 
                     
-                elif note in LambdaMapping.get('greater'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('greater')):
                     if self._deltatime <= articulation['staccato']:                                
                         self.greater_than(self._temp, sendToDisplay) 
                     elif self._deltatime > articulation['staccato']:
                         self.less_than(self._temp, sendToDisplay)  
                         
-                elif note in LambdaMapping.get('less'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('less')):
                     print('used via articulation under greater than')    
                     
                 #AR extension

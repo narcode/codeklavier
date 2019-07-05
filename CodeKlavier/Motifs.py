@@ -58,6 +58,8 @@ try:
     transform = config['ar'].get('transform').split(',')
     shape = config['ar'].get('shape').split(',')
     store_collection = config['ar'].get('store_collection').split(',')
+    transp_even = config['ar'].get('transpositon_even').split(',')
+    transp_odd = config['ar'].get('transposition_odd').split(',')
 
 except KeyError:
     raise LookupError('Missing key information in the config file.')
@@ -110,3 +112,6 @@ motifs_ar['next'] = list(map(int, nextt))
 motifs_ar['transform'] = list(map(int, transform))
 motifs_ar['shape'] = list(map(int, shape))
 motifs_ar['store_collection'] = list(map(int, store_collection))
+motifs_ar['transp_even'] = list(map(int, transp_even))
+motifs_ar['transp_odd'] = list(map(int, transp_odd))
+

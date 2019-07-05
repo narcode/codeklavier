@@ -168,7 +168,51 @@ class CkAR(object):
             
             for t in self._parallelTrees:
                 self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y]))
-            
+       
+       
+    def mappingTransposition(self, notes, debug=False):
+        """ apply a transpotion offset based on the current view """
+        if debug:
+            print('notes: ', notes)
+        if self.currentTree()%2 == 0:
+            if type(notes).__name__ == 'list':
+                notes_trans = []
+                for note in notes:
+                    tranposition = note + (self.mapping.even * self.viewToTransposition())
+                    notes_trans.append(tranposition)
+                if debug:
+                    print('mapping list even: ', notes_trans)
+                return notes_trans
+            else:
+                tranposition = note + (self.mapping.even * self.viewToTransposition())
+                if debug:
+                    print('mapping even: ', tranposition)
+                return tranposition                
+                
+        else:
+            if type(notes).__name__ == 'list':
+                notes_trans = []
+                for note in notes:
+                    tranposition = note + (self.mapping.odd * self.viewToTransposition())
+                    notes_trans.append(tranposition)
+                    if debug:
+                        print('mapping list odd: ', notes_trans)
+                return notes_trans
+            else:
+                tranposition = note + (self.mapping.odd * self.viewToTransposition())
+                if debug:
+                    print('mapping odd: ', tranposition)
+                return tranposition 
+     
+       
+    def viewToTransposition(self):
+        if self.currentTree() == 1:
+            return 0
+        else:
+            if self.currentTree()%2 == 0:
+                return self.currentTree()/2
+            else:
+                return round(self.currentTree()/2)
         
     def sendRule(self, string):
         """ send a LS rule via websocket"""

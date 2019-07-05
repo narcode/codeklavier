@@ -1025,6 +1025,8 @@ class Mapping_CKAR:
         self._config.read('default_setup.ini', encoding='utf8')
         
         server = self._config['ar'].get('server')
+        self.even = self._config['ar'].getint('transpositon_even')
+        self.odd = self._config['ar'].getint('transposition_odd')
                 
         if server != 'local':
             with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
