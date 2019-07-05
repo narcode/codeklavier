@@ -32,12 +32,13 @@ class CkAR(object):
         try:
             state = self.loop.run_until_complete(self.mapping.receive())
             print(state)
+            self.trees = state['numTrees']
+
+            for shape in range(0, state['numShapes']):
+                self.shapes.append(shape+1)
+                
         except:
             print('error receiving')
-        
-        self.trees = state['numTrees']
-        for shape in range(0, state['numShapes']):
-            self.shapes.append(shape+1)
             
         for tree in range(0, self.trees):
             self._shapes[str(tree+1)] = {}
