@@ -5,6 +5,7 @@ AR extension classes and helper functions
 from Mapping import Mapping_CKAR
 import random
 import asyncio
+import math
 
 class CkAR(object):
     """Main class for the AR extension"""
@@ -212,7 +213,7 @@ class CkAR(object):
             if self.currentTree()%2 == 0:
                 return self.currentTree()/2
             else:
-                return round(self.currentTree()/2)
+                return math.floor(self.currentTree()/2)
         
     def sendRule(self, string):
         """ send a LS rule via websocket"""
