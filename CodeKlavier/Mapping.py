@@ -1034,6 +1034,7 @@ class Mapping_CKAR:
             print('server:', server)    
             host = socket.gethostbyname(socket.gethostname())
             self._wsUri = {'host': host, 'port': '8081'}
+            print(self._wsUri)
             
         self.wsConnect() 
     
