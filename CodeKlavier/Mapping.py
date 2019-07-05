@@ -1045,7 +1045,7 @@ class Mapping_CKAR:
             self.websocket = await self._conn.__aenter__()
             print('web socket connected!')
         except:
-            print('connection error. Is the websocet server running?')
+            print('connection error. Is the websocket server running?')
         
         return self
     
