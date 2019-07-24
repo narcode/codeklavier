@@ -1,11 +1,13 @@
-#Instructions to boot
+## Instructions to boot
 
-1. Icd n folder codeklavier-extras/websocket-server
-    python3 server.py —local —reset (only use local if running both CKAR app AND CK from the same laptop)
+1. In folder codeklavier-extras/websocket-server
+    python3 server.py --local —-reset (only use local if running both CKAR app AND CK from the same laptop)
 2. In codeklavier folder: python3 codeklavier -p ckalculator
-3. Open app CodeklaviAR
+3. Open app CodeklaviAR (if using two laptops, make sure the app is configured to send to the local ip of SC computer. You can find this via the system pref or by <ifconfig> under the inet under en0 
 4. In folder codeklavier-supercollider/ck_ar: osc_defs.sc (evaluate everything)
 
+
+## How to use:
 To make an axiom, the values must be within brackets and without a rule)
 For example:
     (2 1 2)
