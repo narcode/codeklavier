@@ -185,7 +185,7 @@ class CkAR(object):
                     print('mapping list even: ', notes_trans)
                 return notes_trans
             else:
-                tranposition = note + (self.mapping.even * self.viewToTransposition())
+                tranposition = notes + (self.mapping.even * self.viewToTransposition())
                 if debug:
                     print('mapping even: ', tranposition)
                 return tranposition                
@@ -200,7 +200,7 @@ class CkAR(object):
                         print('mapping list odd: ', notes_trans)
                 return notes_trans
             else:
-                tranposition = note + (self.mapping.odd * self.viewToTransposition())
+                tranposition = notes + (self.mapping.odd * self.viewToTransposition())
                 if debug:
                     print('mapping odd: ', tranposition)
                 return tranposition 
