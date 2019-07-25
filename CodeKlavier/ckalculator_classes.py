@@ -138,9 +138,10 @@ class Ckalculator(object):
                         #print('eval stack: ', self._tempEvalStack)
                         if (type(self._tempEvalStack[-1]) == int):
                             self._rules.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
-                            
-                    velocity = int(numpy.average(self._tempdynamics).round())
-                    self._rule_dynamics.append(velocity)
+                    
+                    if len(self._tempdynamics) > 0:
+                        velocity = int(numpy.average(self._tempdynamics).round())
+                        self._rule_dynamics.append(velocity)
                         
                     print('rule till now: ', self._rules)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
