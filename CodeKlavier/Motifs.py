@@ -19,6 +19,7 @@ config.read(projectdir + '/default_setup.ini', encoding='utf8')
 try:
     motif_1 = config['snippets midi mapping'].get('motif_1').split(',')
     motif_2 = config['snippets midi mapping'].get('motif_2').split(',')
+    
     mini_motif_1_low = config['snippets midi mapping'].get('mini_motif_1_low').split(',')
     mini_motif_2_low = config['snippets midi mapping'].get('mini_motif_2_low').split(',')
     mini_motif_3_low = config['snippets midi mapping'].get('mini_motif_3_low').split(',')
@@ -27,9 +28,11 @@ try:
     mini_motif_3_mid = config['snippets midi mapping'].get('mini_motif_3_mid').split(',')    
     mini_motif_1_hi = config['snippets midi mapping'].get('mini_motif_1_hi').split(',')
     mini_motif_2_hi = config['snippets midi mapping'].get('mini_motif_2_hi').split(',')
+    
     conditional_1 = config['snippets midi mapping'].get('conditional_1').split(',')
     conditional_2 = config['snippets midi mapping'].get('conditional_2').split(',')
     conditional_3 = config['snippets midi mapping'].get('conditional_3').split(',')
+    
     conditional_result_1 = config['snippets midi mapping'].get('conditional_result_1').split(',')
     conditional_result_2 = config['snippets midi mapping'].get('conditional_result_2').split(',')
     conditional_result_3 = config['snippets midi mapping'].get('conditional_result_3').split(',')
