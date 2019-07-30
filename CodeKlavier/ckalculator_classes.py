@@ -523,6 +523,12 @@ class Ckalculator(object):
                         self.ar.toggleShape(parallelTrees=True)
                     else:
                         self.ar.toggleShape()
+                        
+                elif note in AR.get('prev_shape'):
+                    if len(self.ar._parallelTrees) > 0:
+                        self.ar.toggleShape(parallelTrees=True, direction='desc')
+                    else:
+                        self.ar.toggleShape(direction='desc')                
    
     ######
                 

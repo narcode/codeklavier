@@ -76,7 +76,7 @@ class CkAR(object):
         print('go to previous tree', prev+1)
     
     
-    def toggleShape(self, parallelTrees=False):
+    def toggleShape(self, parallelTrees=False, direction='asc'):
         """
         Traverse the possible rendering modes or "shapes" for the AR objects
         """
@@ -86,19 +86,27 @@ class CkAR(object):
             tree = self.currentTree()
             self.shape = self._shapes[str(tree)]['shape'] - 1
             
-            self.shape += 1
+            if direction == 'asc':
+                self.shape += 1
+            else:
+                self.shape -= 1
                 
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self._shapes[str(tree)]['shape'] = new_shape
+            self.console(str(new_shape))
             self.run_in_loop(self.makeJsonShape(str(tree), str(new_shape)))
 
         else:
             if self._parallelTrees == 1:
                 self.shape = self._shapes[str(self._parallelTrees[0])]['shape'] - 1
                 
-            self.shape += 1
+            if direction == 'asc':
+                self.shape += 1
+            else:
+                self.shape -= 1
             
             new_shape = self.shapes[self.shape%len(self.shapes)]
+            self.console(str(new_shape))
             for t in self._parallelTrees:
                 self._shapes[str(t)]['shape'] = new_shape
                 self.run_in_loop(self.makeJsonShape(str(t), str(new_shape)))
