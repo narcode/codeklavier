@@ -16,9 +16,16 @@ projectdir = os.path.abspath(os.path.join(currentpath, os.pardir))
 config = configparser.ConfigParser()
 config.read(projectdir + '/default_setup.ini', encoding='utf8')
 
+motifs = {}
+motifs_lambda = {}
+mottipets_motifs = {}
+
 try:
-    motif_1 = config['snippets midi mapping'].get('motif_1').split(',')
-    motif_2 = config['snippets midi mapping'].get('motif_2').split(',')
+    #for motif in config['motippets motifs']:
+        #mottipets_motifs[motif] = config['motippets motifs'].get(motif).split(',')
+    
+    motif_1 = config['motippets motifs'].get('motif_1').split(',')
+    motif_2 = config['motippets motifs'].get('motif_2').split(',')
     
     mini_motif_1_low = config['snippets midi mapping'].get('mini_motif_1_low').split(',')
     mini_motif_2_low = config['snippets midi mapping'].get('mini_motif_2_low').split(',')
@@ -57,12 +64,14 @@ try:
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
-motifs = {}
-motifs_lambda = {}
-
 # motippets
 motifs['motif_1'] = list(map(int, motif_1))
 motifs['motif_2'] = list(map(int, motif_2))
+
+#for motif in mottipets_motifs:
+    #print('parsed motifs:', motif, mottipets_motifs[motif])
+    #motifs[motif] = list(map(int, mottipets_motifs[motif]))
+
 motifs['mini_motif_1_low'] = list(map(int, mini_motif_1_low))
 motifs['mini_motif_2_low'] = list(map(int, mini_motif_2_low))
 motifs['mini_motif_3_low'] = list(map(int, mini_motif_3_low))
