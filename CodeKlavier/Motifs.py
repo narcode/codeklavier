@@ -17,33 +17,54 @@ config = configparser.ConfigParser()
 config.read(projectdir + '/default_setup.ini', encoding='utf8')
 
 motifs = {}
-motifs_lambda = {}
+motifs_mel = {} #TODO
+
+mini_motifs = {}
+mini_motifs_mel = {}
+
+conditional_motifs = {}
+conditional_motifs_mel = {}
+
+conditional_results_motifs = {}
+conditional_results_motifs_mel = {}
+
 mottipets_motifs = {}
+motifs_lambda = {}
+
 
 try:
-    #for motif in config['motippets motifs']:
-        #mottipets_motifs[motif] = config['motippets motifs'].get(motif).split(',')
+    #chordal:
+    for motif in config['chordal main motifs midi']:
+        mottipets_motifs[motif] = config['chordal main motifs midi'].get(motif).split(',')
     
-    motif_1 = config['motippets motifs'].get('motif_1').split(',')
-    motif_2 = config['motippets motifs'].get('motif_2').split(',')
+    for motif in config['chordal conditional motifs midi']:
+        conditional_motifs[motif] = config['chordal conditional motifs midi'].get(motif).split(',')
+
+    for motif in config['chordal conditional results motifs midi']:
+        conditional_motifs[motif] = config['chordal conditional results motifs midi'].get(motif).split(',')
+      
+    #melodic:  
+    for motif in config['melodic mini motifs']:
+        mini_motifs_mel[motif] = config['melodic mini motifs'].get(motif).split(',')
     
-    mini_motif_1_low = config['snippets midi mapping'].get('mini_motif_1_low').split(',')
-    mini_motif_2_low = config['snippets midi mapping'].get('mini_motif_2_low').split(',')
-    mini_motif_3_low = config['snippets midi mapping'].get('mini_motif_3_low').split(',')
+    #mini_motif_1_low = config['snippets midi mapping'].get('mini_motif_1_low').split(',')
+    #mini_motif_2_low = config['snippets midi mapping'].get('mini_motif_2_low').split(',')
+    #mini_motif_3_low = config['snippets midi mapping'].get('mini_motif_3_low').split(',')
+    
     mini_motif_1_mid = config['snippets midi mapping'].get('mini_motif_1_mid').split(',')
     mini_motif_2_mid = config['snippets midi mapping'].get('mini_motif_2_mid').split(',')
     mini_motif_3_mid = config['snippets midi mapping'].get('mini_motif_3_mid').split(',')    
     mini_motif_1_hi = config['snippets midi mapping'].get('mini_motif_1_hi').split(',')
     mini_motif_2_hi = config['snippets midi mapping'].get('mini_motif_2_hi').split(',')
     
-    conditional_1 = config['snippets midi mapping'].get('conditional_1').split(',')
+    #conditional_1 = config['snippets midi mapping'].get('conditional_1').split(',')
     conditional_2 = config['snippets midi mapping'].get('conditional_2').split(',')
     conditional_3 = config['snippets midi mapping'].get('conditional_3').split(',')
     
     conditional_result_1 = config['snippets midi mapping'].get('conditional_result_1').split(',')
     conditional_result_2 = config['snippets midi mapping'].get('conditional_result_2').split(',')
-    conditional_result_3 = config['snippets midi mapping'].get('conditional_result_3').split(',')
-    conditional_result_4 = config['snippets midi mapping'].get('conditional_result_4').split(',')
+    #conditional_result_3 = config['snippets midi mapping'].get('conditional_result_3').split(',')
+    #conditional_result_4 = config['snippets midi mapping'].get('conditional_result_4').split(',')
     conditional_result_5 = config['snippets midi mapping'].get('conditional_result_5').split(',')
 
     #all are lists
@@ -65,30 +86,42 @@ except KeyError:
     raise LookupError('Missing key information in the config file.')
 
 # motippets
-motifs['motif_1'] = list(map(int, motif_1))
-motifs['motif_2'] = list(map(int, motif_2))
+#motifs['motif_1'] = list(map(int, motif_1))
+#motifs['motif_2'] = list(map(int, motif_2))
 
-#for motif in mottipets_motifs:
-    #print('parsed motifs:', motif, mottipets_motifs[motif])
-    #motifs[motif] = list(map(int, mottipets_motifs[motif]))
+# chordal:
+for motif in mottipets_motifs:
+    motifs[motif] = list(map(int, mottipets_motifs[motif]))
+    
+for motif in conditional_motifs:
+    conditional_motifs[motif] = list(map(int, conditional_motifs[motif]))
+    
+for motif in conditional_results_motifs:
+    conditional_results_motifs[motif] = list(map(int, conditional_results_motifs[motif]))      
+    
+# melodic:  
+for motif in mini_motifs_mel:
+    print('parsed motifs:', motif, mini_motifs_mel[motif])
+    mini_motifs_mel[motif] = list(map(int, mini_motifs_mel[motif]))          
 
-motifs['mini_motif_1_low'] = list(map(int, mini_motif_1_low))
-motifs['mini_motif_2_low'] = list(map(int, mini_motif_2_low))
-motifs['mini_motif_3_low'] = list(map(int, mini_motif_3_low))
-motifs['mini_motif_1_mid'] = list(map(int, mini_motif_1_mid))
-motifs['mini_motif_2_mid'] = list(map(int, mini_motif_2_mid))
-motifs['mini_motif_3_mid'] = list(map(int, mini_motif_3_mid))
-motifs['mini_motif_1_hi'] = list(map(int, mini_motif_1_hi))
-motifs['mini_motif_2_hi'] = list(map(int, mini_motif_2_hi))
+#mini_motifs['mini_motif_1_low'] = list(map(int, mini_motif_1_low))
+#mini_motifs['mini_motif_2_low'] = list(map(int, mini_motif_2_low))
+#mini_motifs['mini_motif_3_low'] = list(map(int, mini_motif_3_low))
 
-motifs['conditional_1'] = list(map(int, conditional_1))
-motifs['conditional_2'] = list(map(int, conditional_2))
-motifs['conditional_3'] = list(map(int, conditional_3))
-motifs['conditional_result_1'] = list(map(int, conditional_result_1))
-motifs['conditional_result_2'] = list(map(int, conditional_result_2))
-motifs['conditional_result_3'] = list(map(int, conditional_result_3))
-motifs['conditional_result_4'] = list(map(int, conditional_result_4))
-motifs['conditional_result_5'] = list(map(int, conditional_result_5))
+mini_motifs['mini_motif_1_mid'] = list(map(int, mini_motif_1_mid))
+mini_motifs['mini_motif_2_mid'] = list(map(int, mini_motif_2_mid))
+mini_motifs['mini_motif_3_mid'] = list(map(int, mini_motif_3_mid))
+mini_motifs['mini_motif_1_hi'] = list(map(int, mini_motif_1_hi))
+mini_motifs['mini_motif_2_hi'] = list(map(int, mini_motif_2_hi))
+
+#conditional_motifs['conditional_1'] = list(map(int, conditional_1))
+conditional_motifs['conditional_2'] = list(map(int, conditional_2))
+conditional_motifs['conditional_3'] = list(map(int, conditional_3))
+conditional_motifs['conditional_result_1'] = list(map(int, conditional_result_1))
+conditional_motifs['conditional_result_2'] = list(map(int, conditional_result_2))
+#conditional_motifs['conditional_result_3'] = list(map(int, conditional_result_3))
+#conditional_motifs['conditional_result_4'] = list(map(int, conditional_result_4))
+conditional_motifs['conditional_result_5'] = list(map(int, conditional_result_5))
 
 # lambda calculus
 motifs_lambda['eval'] = list(map(int, evaluate_function))

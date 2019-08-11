@@ -5,6 +5,7 @@ import getopt
 import sys
 import time
 import random
+import numpy as np
 from threading import Thread, Event
 
 import CK_configWriter
@@ -22,6 +23,8 @@ try:
     noteon_id = config['midi'].getint('noteon_id')
     noteoff_id = config['midi'].getint('noteoff_id')
     toggle_note = config['Hello World'].getint('toggle')
+
+    #for motif in config['chordal main motifs midi']:
     
 except KeyError:
     raise LookupError('Missing key information in the config file.')
@@ -43,6 +46,9 @@ threads_are_perpetual = True
 motippets_is_listening = True
 hello_world_on = False
 keep_main_alive = True
+
+# motifs
+motifs_played = {}
 
 def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, debug=True, perpetual=True):
     """
@@ -295,25 +301,25 @@ def main():
     mapping = Mapping_Motippets(False)
     
     # main memory (i.e. listen to the whole register)
-    mainMem = Motippets(mapping, noteon_id)
+    mainMem = Motippets(mapping, noteon_id, noteoff_id)
     
     # midi listening per register
-    memLow = Motippets(mapping, noteon_id)
-    memMid = Motippets(mapping, noteon_id)
-    memHi = Motippets(mapping, noteon_id)
+    memLow = Motippets(mapping, noteon_id, noteoff_id)
+    memMid = Motippets(mapping, noteon_id, noteoff_id)
+    memHi = Motippets(mapping, noteon_id, noteoff_id)
     
     #midi listening for tremolos
-    tremoloHi = Motippets(mapping, noteon_id)
-    tremoloMid = Motippets(mapping, noteon_id)
-    tremoloLow = Motippets(mapping, noteon_id)
+    tremoloHi = Motippets(mapping, noteon_id, noteoff_id)
+    tremoloMid = Motippets(mapping, noteon_id, noteoff_id)
+    tremoloLow = Motippets(mapping, noteon_id, noteoff_id)
     
     #midi listening for conditionals
-    conditionals = {1: Motippets(mapping, noteon_id),
-                    2: Motippets(mapping, noteon_id),
-                    3: Motippets(mapping, noteon_id)}
+    conditionals = {1: Motippets(mapping, noteon_id, noteoff_id),
+                    2: Motippets(mapping, noteon_id, noteoff_id),
+                    3: Motippets(mapping, noteon_id, noteoff_id)}
     
-    conditionalsRange = Motippets(mapping, noteon_id)
-    parameters = Motippets(mapping, noteon_id)
+    conditionalsRange = Motippets(mapping, noteon_id, noteoff_id)
+    parameters = Motippets(mapping, noteon_id, noteoff_id)
     
     try:
         while keep_main_alive:
@@ -370,8 +376,12 @@ def main():
                                 memMid.parse_midi(msg, 'mid', ck_deltadif)
                                 memHi.parse_midi(msg, 'hi', ck_deltadif)
     
-                                motif1_played = memMid._motif1_counter
-                                motif2_played = mainMem._motif2_counter
+                                for motif in config['chordal main motifs midi']:
+                                    motifs_played[motif] = mainMem._motifsCount[motif]['count']
+                                
+                                played = np.array(list(motifs_played.values()))
+                                #motif1_played = memMid._motif1_counter
+                                #motif2_played = mainMem._motif2_counter
     
                                 minimotif1_low_mapped = memLow._unmapCounter1
                                 minimotif2_low_mapped = memLow._unmapCounter2
@@ -388,7 +398,7 @@ def main():
                                 if minimotif1_mid_mapped > 0:
                                     tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
                                     
-                                if motif1_played > 0 or motif2_played > 0:
+                                if played.any() > 0:
                                     if minimotif1_low_mapped > 0:
                                         tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 1)
                                     elif minimotif2_low_mapped > 0:
@@ -589,8 +599,10 @@ def ck_loop(prototype='hello world'):
                             memMid.parse_midi(msg, 'mid', ck_deltadif)
                             memHi.parse_midi(msg, 'hi', ck_deltadif)
 
-                            motif1_played = memMid._motif1_counter
-                            motif2_played = mainMem._motif2_counter
+                            for motif in config['chordal main motifs midi']:
+                                motifs_played[motif] = memMid._motifsCount[motif]['count']                        
+                            #motif1_played = memMid._motif1_counter
+                            #motif2_played = mainMem._motif2_counter
 
                             minimotif1_low_mapped = memLow._unmapCounter1
                             minimotif2_low_mapped = memLow._unmapCounter2
