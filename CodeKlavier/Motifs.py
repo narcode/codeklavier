@@ -41,28 +41,25 @@ try:
         conditional_motifs[motif] = config['chordal conditional motifs midi'].get(motif).split(',')
 
     for motif in config['chordal conditional results motifs midi']:
-        conditional_motifs[motif] = config['chordal conditional results motifs midi'].get(motif).split(',')
+        conditional_results_motifs[motif] = config['chordal conditional results motifs midi'].get(motif).split(',')
       
     #melodic:  
     for motif in config['melodic mini motifs']:
         mini_motifs_mel[motif] = config['melodic mini motifs'].get(motif).split(',')
+        
+    for motif in config['melodic conditional results motifs midi']:
+        conditional_results_motifs_mel[motif] = config['melodic conditional results motifs midi'].get(motif).split(',')
     
-    #mini_motif_1_low = config['snippets midi mapping'].get('mini_motif_1_low').split(',')
-    #mini_motif_2_low = config['snippets midi mapping'].get('mini_motif_2_low').split(',')
-    #mini_motif_3_low = config['snippets midi mapping'].get('mini_motif_3_low').split(',')
-    
-    mini_motif_1_mid = config['snippets midi mapping'].get('mini_motif_1_mid').split(',')
-    mini_motif_2_mid = config['snippets midi mapping'].get('mini_motif_2_mid').split(',')
-    mini_motif_3_mid = config['snippets midi mapping'].get('mini_motif_3_mid').split(',')    
-    mini_motif_1_hi = config['snippets midi mapping'].get('mini_motif_1_hi').split(',')
-    mini_motif_2_hi = config['snippets midi mapping'].get('mini_motif_2_hi').split(',')
+    #mini_motif_1_mid = config['snippets midi mapping'].get('mini_motif_1_mid').split(',')
+    #mini_motif_2_mid = config['snippets midi mapping'].get('mini_motif_2_mid').split(',')
+    #mini_motif_3_mid = config['snippets midi mapping'].get('mini_motif_3_mid').split(',')    
     
     #conditional_1 = config['snippets midi mapping'].get('conditional_1').split(',')
     conditional_2 = config['snippets midi mapping'].get('conditional_2').split(',')
     conditional_3 = config['snippets midi mapping'].get('conditional_3').split(',')
     
-    conditional_result_1 = config['snippets midi mapping'].get('conditional_result_1').split(',')
-    conditional_result_2 = config['snippets midi mapping'].get('conditional_result_2').split(',')
+    #conditional_result_1 = config['snippets midi mapping'].get('conditional_result_1').split(',')
+    #conditional_result_2 = config['snippets midi mapping'].get('conditional_result_2').split(',')
     #conditional_result_3 = config['snippets midi mapping'].get('conditional_result_3').split(',')
     #conditional_result_4 = config['snippets midi mapping'].get('conditional_result_4').split(',')
     conditional_result_5 = config['snippets midi mapping'].get('conditional_result_5').split(',')
@@ -101,24 +98,22 @@ for motif in conditional_results_motifs:
     
 # melodic:  
 for motif in mini_motifs_mel:
-    print('parsed motifs:', motif, mini_motifs_mel[motif])
-    mini_motifs_mel[motif] = list(map(int, mini_motifs_mel[motif]))          
+    mini_motifs_mel[motif] = list(map(int, mini_motifs_mel[motif]))     
+    
+for motif in conditional_results_motifs_mel:
+    #print('parsed motifs:', motif, mini_motifs_mel[motif])
+    conditional_results_motifs_mel[motif] = list(map(int, conditional_results_motifs_mel[motif]))      
 
-#mini_motifs['mini_motif_1_low'] = list(map(int, mini_motif_1_low))
-#mini_motifs['mini_motif_2_low'] = list(map(int, mini_motif_2_low))
-#mini_motifs['mini_motif_3_low'] = list(map(int, mini_motif_3_low))
+#mini_motifs['mini_motif_1_mid'] = list(map(int, mini_motif_1_mid))
+#mini_motifs['mini_motif_2_mid'] = list(map(int, mini_motif_2_mid))
+#mini_motifs['mini_motif_3_mid'] = list(map(int, mini_motif_3_mid))
 
-mini_motifs['mini_motif_1_mid'] = list(map(int, mini_motif_1_mid))
-mini_motifs['mini_motif_2_mid'] = list(map(int, mini_motif_2_mid))
-mini_motifs['mini_motif_3_mid'] = list(map(int, mini_motif_3_mid))
-mini_motifs['mini_motif_1_hi'] = list(map(int, mini_motif_1_hi))
-mini_motifs['mini_motif_2_hi'] = list(map(int, mini_motif_2_hi))
 
 #conditional_motifs['conditional_1'] = list(map(int, conditional_1))
 conditional_motifs['conditional_2'] = list(map(int, conditional_2))
 conditional_motifs['conditional_3'] = list(map(int, conditional_3))
-conditional_motifs['conditional_result_1'] = list(map(int, conditional_result_1))
-conditional_motifs['conditional_result_2'] = list(map(int, conditional_result_2))
+#conditional_motifs['conditional_result_1'] = list(map(int, conditional_result_1))
+#conditional_motifs['conditional_result_2'] = list(map(int, conditional_result_2))
 #conditional_motifs['conditional_result_3'] = list(map(int, conditional_result_3))
 #conditional_motifs['conditional_result_4'] = list(map(int, conditional_result_4))
 conditional_motifs['conditional_result_5'] = list(map(int, conditional_result_5))

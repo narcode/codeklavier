@@ -479,6 +479,8 @@ class Mapping_Motippets:
             port = 4444
         elif display == 5:
             port = 5555
+        else:
+            port = 1111
 
         if spacing:
             newline = '\n'
@@ -503,227 +505,107 @@ class Mapping_Motippets:
         self.formatAndSend(snippet, display=display, syntax_color='snippet:')
         self.evaluateSC('eval', flash=False)
 
-        #if num == 1:
-            #self.__keyboard.type(self.__snippet1)
-            #self.formatAndSend(self.__snippet1, display=1, syntax_color='snippet:')
-            #self.evaluateSC('eval', flash=False)
-        #elif num == 2:
-            #self.__keyboard.type(self.__snippet2)
-            #self.formatAndSend(self.__snippet2, display=2, syntax_color='snippet:')
-            #self.evaluateSC('eval', flash=False)
-
-    def miniSnippets(self, motif, pianosection, unmap=None):
+    def miniSnippets(self, motif, pianosection, callback=None):
         """Type a mini snippet for specific pianosections'utf-8'
 
         :param str motif: the name of the motif mapped to the desired snippet
         :param str pianosections: the pianosection that is used ('hi', 'mid', 'low')
         :param str motif: the name of the motif to unmap 
         """
-        displays = [1,2]
-        num = re.search(r"\d", motif).group()
-            
-        display = displays[int(num)%len(displays)]
-        
-        if motif == 1 and pianosection == 'hi':
-            self.__keyboard.type(self.__mini_snippet_hi_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num, syntax_color='snippet:')
-        if motif == 1 and pianosection == 'hi with unmap':
-            self.__keyboard.type(self.__mini_snippet_hi_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num, syntax_color='snippet:')
-            #unmap other motif
-            self.__keyboard.type(self.__mini_unmap_hi_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_hi_2, display=snippet_num, syntax_color='snippet:')
-        if motif == 1 and pianosection == 'mid':
-            self.__keyboard.type(self.__mini_snippet_mid_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_mid_1, display=5, syntax_color='mid:')
-        if motif == 1 and pianosection == 'mid with unmap':
-            self.__keyboard.type(self.__mini_snippet_mid_1)
-            self.evaluateSC('eval', flash=False)
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num, syntax_color='snippet:')
 
-        if motif == 3 and pianosection == 'mid':
-            self.__keyboard.type(self.__mini_snippet_mid_3)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_mid_3, display=5, syntax_color='snippet:')
-        if motif == 3 and pianosection == 'mid with unmap 1':
-            self.__keyboard.type(self.__mini_snippet_mid_3)
-            self.evaluateSC('eval', flash=False)
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num, syntax_color='snippet:')
-        if motif == 3 and pianosection == 'mid with unmap 2':
-            self.__keyboard.type(self.__mini_snippet_mid_3)
-            self.evaluateSC('eval', flash=False)
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num, syntax_color='snippet:')
+        display = self._config['motippets display settings'].getint(motif)             
+        snippet = self._config['snippets code output'].get(motif)
         
-        ## LOW SECTION
-        if unmap == None:
-            snippet = self._config['snippets code output'].get(motif)
+        if display == None:
+            display = '### no display setting for ' + motif + ' in .ini ###'
+        if snippet == None:
+            snippet = '### code output error with ' + motif + ' (check .ini) ###'
+        
+        if callback == None:
             self.__keyboard.type(snippet)
             self.evaluateSC('eval', flash=False)
             self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
-        else:
-            self.__keyboard.type(self._config['snippets code output'].get(motif))
+        else:           
+            self.__keyboard.type(snippet)
             self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num, syntax_color='low:')
+            self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')
+
+            callback_snippet = self._config['snippets code output callback'].get(callback)            
+            if callback_snippet == None:
+                callback = '### callback error with ' + callback + ' (check .ini) ###'
+                
+            self.__keyboard.type(callback_snippet)
+            self.evaluateSC('eval', flash=False)
+            self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
             
-            
-            
-        if motif == 1 and pianosection == 'low amp':
-            self.__keyboard.type(self.__mini_snippet_low_1_amp)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num, syntax_color='low:')
-        if motif == 1 and pianosection == 'low with unmap 2':
-            self.__keyboard.type(self.__mini_snippet_low_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num, syntax_color='low:')
-            #unmap 2:
-            self.__keyboard.type(self.__mini_unmap_low_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num, syntax_color='low:')
-        if motif == 1 and pianosection == 'low with unmap 3':
-            self.__keyboard.type(self.__mini_snippet_low_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num, syntax_color='low:')
-            #unmap 3:
-            self.__keyboard.type(self.__mini_unmap_low_3)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num, syntax_color='low:')
-        if motif == 1 and pianosection == 'low amp with unmap 1':
-            self.__keyboard.type(self.__mini_snippet_low_1_amp)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num, syntax_color='low:')
-            #unmap 1:
-            self.__keyboard.type(self.__mini_unmap_low_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num, syntax_color='low:')
-        if motif == 1 and pianosection == 'low amp with unmap 2':
-            self.__keyboard.type(self.__mini_snippet_low_1_amp)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num, syntax_color='low:')
-            #unmap 2:
-            self.__keyboard.type(self.__mini_unmap_low_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num, syntax_color='low:')
-
-
-        # for snippet 2:
-        if motif == 2 and pianosection == 'hi':
-            self.__keyboard.type(self.__mini_snippet_hi_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num, syntax_color='hi:')
-        if motif == 2 and pianosection == 'hi with unmap':
-            self.__keyboard.type(self.__mini_snippet_hi_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num, syntax_color='hi:')
-            #unmap other motif
-            self.__keyboard.type(self.__mini_unmap_hi_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_hi_1, display=snippet_num, syntax_color='hi:')
-        if motif == 2 and pianosection == 'mid':
-            self.__keyboard.type(self.__mini_snippet_mid_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_mid_2, display=snippet_num, syntax_color='mid:')
-        if motif == 2 and pianosection == 'mid with unmap':
-            self.__keyboard.type(self.__mini_snippet_mid_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_mid_2, display=snippet_num, syntax_color='mid:')
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num, syntax_color='mid:')
-
-            ## LOW SECTION
-        if motif == 2 and pianosection == 'low':
-            self.__keyboard.type(self.__mini_snippet_low_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num, syntax_color='low:')
-        if motif == 2 and pianosection == 'low with unmap 1':
-            self.__keyboard.type(self.__mini_snippet_low_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num, syntax_color='low:')
-            #unmap 1:
-            self.__keyboard.type(self.__mini_unmap_low_1)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num, syntax_color='low:')
-        if motif == 2 and pianosection == 'low with unmap 3':
-            self.__keyboard.type(self.__mini_snippet_low_2)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num, syntax_color='low:')
-            #unmap 3:
-            self.__keyboard.type(self.__mini_unmap_low_3)
-            self.evaluateSC('eval', flash=False)
-            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num, syntax_color='low:')
-
-    def tremolo(self, pianoregister, value):
+    def tremolo(self, motif, value, syntax_color):
         """Type the tremolo command + the tremolo-value
 
-        :param string pianoregister: the pianoregister the tremolo is played in. Values are: 'hi_1', 'hi_2', 'mid_1',
-        'mid_2', 'mid_3', 'low_1', 'low_2', 'low_3'.
+        :param string motif: the motif name to be mapped and prependend to the tremolo value.
         :param int value: the tremolo value as distance between the notes
         """
-        if pianoregister == 'hi_1':
-            self.__keyboard.type('~tremoloH1 = ' + str(value))
-            self.formatAndSend('~tremoloH1 = ' + str(value), display=1, syntax_color='hi:')
-        elif pianoregister == 'hi_2':
-            self.__keyboard.type('~tremoloH2 = ' + str(value))
-            self.formatAndSend('~tremoloH2 = ' + str(value), display=2, syntax_color='hi:')
-        elif pianoregister == 'mid_1':
-            self.__keyboard.type('~tremoloM1 = ' + str(value))
-            self.formatAndSend('~tremoloM1 = ' + str(value), display=5, syntax_color='mid:')
-        elif pianoregister == 'mid_2':
-            self.__keyboard.type('~tremoloM2 = ' + str(value))
-            self.formatAndSend('~tremoloM2 = ' + str(value), display=2, syntax_color='mid:')
-        elif pianoregister == 'mid_3':
-            self.__keyboard.type('~tremoloM3 = ' + str(value))
-            self.formatAndSend('~tremoloM3 = ' + str(value), display=5, syntax_color='mid:')
-        elif pianoregister == 'low_1':
-            self.__keyboard.type('~tremoloL1 = ' + str(value))
-            self.formatAndSend('~tremoloL1 = ' + str(value), display=1, syntax_color='low:')
-        elif pianoregister == 'low_2':
-            self.__keyboard.type('~tremoloL2 = ' + str(value))
-            self.formatAndSend('~tremoloL2 = ' + str(value), display=2, syntax_color='low:')
-        elif pianoregister == 'low_3':
-            self.__keyboard.type('~tremoloL1amp = ' + str(value))
-            self.formatAndSend('~tremoloL1amp = ' + str(value), display=1, syntax_color='low:')
-        flash = pianoregister in ('mid_1', 'mid_3', )
+            
+        code = self._config['snippets for tremolos'].get(motif)
+        display = self._config['motippets display settings'].getint(motif)
+        
+        if display == None:
+            display = '### no display setting for ' + motif + ' in .ini ###'
+        if code == None:
+            code = '### tremolo error with ' + motif + ' (check .ini) ###' 
+        
+        self.__keyboard.type(code + ' ' + str(value))
+        self.formatAndSend(code + ' ' + str(value), display=display, syntax_color=syntax_color+':')
+        
+        flash = display == 5
         self.evaluateSC('eval', flash=flash)
 
-    def conditional(self, conditional_num):
+    def conditional(self, motif):
         """Setup a conditional
+        
+        :param str motif: the motif name that corresponds to the code output in the .ini file
 
-        There are three options: settimg up a conditional if number of notes
-        played is more than 100 in ... (option 1), setting up a conditional if
-        range is more than ... (option 2), and setting up a conditional if range
-        is less than ... (option 3).
-
-        :param int conditional_num: the selection for the type of conditional
+        There are three options:
+        
+        1. settimg up a conditional if number of notes
+        played is more than 100 in ...
+        
+        2. setting up a conditional if
+        range is more than ... 
+        
+        3.setting up a conditional if range
+        is less than ...
+        
         """
-        if conditional_num == 1:
-            self.__keyboard.type('// setting up a conditional: IF number of\
-            notes played is more than 100 in...')
-            self.enter()
-            self.formatAndSend('setting up a conditional: \nIF number of notes played is more than 100 in...', display=3, syntax_color='primitive:')
-        elif conditional_num == 2:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
-            self.enter()
-            self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3, syntax_color='primitive:')
-        elif conditional_num == 3:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
-            self.enter()
-            self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3, syntax_color='primitive:')
+        
+        code = self._config['snippets code output'].get(motif)
+        
+        if code == None:
+            code = '### code output error with ' + motif + ' (check .ini) ###'        
+        
+        self.__keyboard.type(code)
+        self.enter()
+        self.formatAndSend(code, display=3, syntax_color='primitive:')        
+        
+        #elif conditional_num == 2:
+            #self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
+            #self.enter()
+            #self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3, syntax_color='primitive:')
+        #elif conditional_num == 3:
+            #self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
+            #self.enter()
+            #self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3, syntax_color='primitive:')
 
+    def result_new(self, motif_name, text, mod=0):
+        """TOOD: document function
+
+        :param str motif_name: motif name coresponding to the desired result
+        :param string text: indication of the type of message
+        :param int mod: some function
+        """
+        
+        print('result_new:', motif_name)
+                       
+                
     def result(self, result_num, text, mod=0): #how to make optional params?
         """TOOD: document function
 
