@@ -88,7 +88,7 @@ class Motippets(object):
         self._unmapCounter3 = 0 #
         self._unmapCounter3_m = 0 #
         
-        self._conditionalCounter = 0 #
+        self._conditionalCounter = 0
         self._conditionalsBuffer = []
         self._resultCounter = 0
         self._conditionalStatus = None
@@ -308,11 +308,11 @@ class Motippets(object):
             #### CONDITIONAL 1
             elif section == 'conditional 1':
 
-                if note <= self._pianosections[0]: ### LOW SECTION
+                if note <= self._pianosections[0]: # LOW
                     self.memorize(note, 12, False, 'Conditional Memory: ')
                     
                     for motif in conditional_motifs:
-                        if self._conditionalCounter[motif]['count'] == 0:
+                        if self._conditionalCounter == 0:
                             self._conditionalCount[motif]['played'] = self.compare_chordal_motif(
                             self._memory, motif, conditional_motifs.get(motif),
                             note, deltatime=self._deltatime, debug=False)
@@ -320,18 +320,16 @@ class Motippets(object):
                         if self._conditionalCount[motif]['played']:
                             self.mapscheme.conditional(motif)
                             self._memory = []
-                            self._conditionalCount[motif]['count'] += 1
+                            self._conditionalCounter += 1
 
 
-                        if self._conditionalCount[motif]['count'] > 0:
-                        
+                        if self._conditionalCounter > 0:
                             for result in conditional_results_motifs:
                                 if self._conditionalCount[result]['type'] == 'mel':
                                     self._conditionalCount[result]['played'] = self.compare_motif_new(
-                                self._memory, result,
-                                conditional_results_motifs_mel.get(result),
-                                note, section)
-                                    print('mel conditional... result3 (was 5)')
+                                        self._memory, result,
+                                        conditional_results_motifs_mel.get(result),
+                                        note)
                                 else:
                                     self._conditionalCount[result]['played'] = self.compare_chordal_motif(
                                         self._memory, result, conditional_results_motifs.get(result),
@@ -349,8 +347,7 @@ class Motippets(object):
                                                             ##conditional_motifs.get('conditional_result_5'),
                                                             ##note, False)
 
-                                if self._conditionalCount[result]['played'] and \
-                                   self._resultCounter == 0:
+                                if self._conditionalCount[result]['played'] and self._resultCounter == 0:
                                     self.mapscheme.result_new(result, 'comment')
                                     self._conditionalsBuffer = []
                                     self._resultCounter += 1
@@ -366,91 +363,118 @@ class Motippets(object):
                                     #self._resultCounter += 1
                                     #self._conditionalStatus = 5
         
-                                return self._conditionalStatus
+                                    return self._conditionalStatus
 
 
-                if note > self._pianosections[1]: ### hi register
-                    self.memorize(note, 20, False, 'Conditional Memory High: ')
+                if note > self._pianosections[1]: ### Hi
+                    self.memorize(note, 20, False, 'Conditional Memory Hi: ')
+                    
+                    if self._conditionalCounter > 0:
+                        for result in conditional_results_motifs:
+                            if self._conditionalCount[result]['type'] == 'mel':
+                                self._conditionalCount[result]['played'] = self.compare_motif_new(
+                                    self._memory, result,
+                                    conditional_results_motifs_mel.get(result),
+                                    note)
+                            else:
+                                self._conditionalCount[result]['played'] = self.compare_chordal_motif(
+                                    self._memory, result, conditional_results_motifs.get(result),
+                                    note, deltatime=self._deltatime, debug=False)
+                                
+                            if self._conditionalCount[result]['played'] and self._resultCounter == 0:
+                                self.mapscheme.result_new(result, 'comment')
+                                self._conditionalsBuffer = []
+                                self._resultCounter += 1
+                                self._conditionalStatus = result                                
+                                                               
 
-                    result2_played = self.compare_motif(self._memory, 'result 2',
-                                                        conditional_motifs.get('conditional_result_2'),
-                                                        note, False)
-
-                    if result2_played and self._resultCounter == 0:
-                        if self._conditionalCounter > 0:
-                            self.mapscheme.result(2, 'comment')
-                            self._conditionalsBuffer = []
-                            self._resultCounter += 1
-                            self._conditionalStatus = 2
+                    #if result2_played and self._resultCounter == 0:
+                        #if self._conditionalCounter > 0:
+                            #self.mapscheme.result(2, 'comment')
+                            #self._conditionalsBuffer = []
+                            #self._resultCounter += 1
+                            #self._conditionalStatus = 2
 
                         return self._conditionalStatus
 
-                if (note > self._pianosections[0] and note <= self._pianosections[1]):
-
+                if (note > self._pianosections[0] and note <= self._pianosections[1]): # Mid
                     self.memorize(note, 20, False, 'Conditional Memory Mid: ')
+                    
+                    if self._conditionalCounter > 0:
+                        for result in conditional_results_motifs:
+                            if self._conditionalCount[result]['type'] == 'mel':
+                                self._conditionalCount[result]['played'] = self.compare_motif_new(
+                                    self._memory, result,
+                                    conditional_results_motifs_mel.get(result),
+                                    note)
+                            else:
+                                self._conditionalCount[result]['played'] = self.compare_chordal_motif(
+                                    self._memory, result, conditional_results_motifs.get(result),
+                                    note, deltatime=self._deltatime, debug=False)
+                                
+                            if self._conditionalCount[result]['played'] and self._resultCounter == 0:
+                                self.mapscheme.result_new(result, 'comment')
+                                self._conditionalsBuffer = []
+                                self._resultCounter += 1
+                                self._conditionalStatus = result                    
+                    
 
-                    result1_played = self.compare_motif(self._memory, 'result 1',
-                                                        conditional_motifs.get('conditional_result_1'),
-                                                        note, False)
+                    #result1_played = self.compare_motif(self._memory, 'result 1',
+                                                        #conditional_motifs.get('conditional_result_1'),
+                                                        #note, False)
 
-                    if result1_played and self._resultCounter == 0:
-                        if self._conditionalCounter > 0:
-                            self.mapscheme.result(1, 'comment')
-                            self._conditionalsBuffer = []
-                            self._resultCounter += 1
-                            self._conditionalStatus = 1
+                    #if result1_played and self._resultCounter == 0:
+                        #if self._conditionalCounter > 0:
+                            #self.mapscheme.result(1, 'comment')
+                            #self._conditionalsBuffer = []
+                            #self._resultCounter += 1
+                            #self._conditionalStatus = 1
 
                         return self._conditionalStatus
 
-                return self._conditionalStatus # is this needed with the isinstance check in the main loop?
+                #return self._conditionalStatus # is this needed with the isinstance check in the main loop?
 
             ### CONDITONAL 2
             elif section == 'conditional 2':
 
                 if note <= self._pianosections[0]:
-                    self.memorize(note, 20, False, 'Conditional 2 Memory: ') ## or 999 mem length?
+                    self.memorize(note, 20, False, 'Conditional 2 Memory: ')
 
-                    if self._conditionalCounter == 0:
-                        conditional_played = self.compare_motif(
-                            self._memory,'conditional 2',
-                            conditional_motifs.get('conditional_2'),
-                            note, False)
+                    for motif in conditional_motifs:
+                        if self._conditionalCounter == 0:
+                            if self._conditionalCount[motif]['type'] == 'chord':
+                                self._conditionalCount[motif]['played'] = self.compare_chordal_motif(
+                                    self._memory, motif, conditional_motifs.get(motif),
+                                    note, deltatime=self._deltatime, debug=False)
+                            else:
+                                self._conditionalCount[motif]['played'] == self.compare_motif_new(
+                                    self._memory, motif, conditional_motifs_mel.get(motif), 
+                                    note)
 
-                        if conditional_played:
-                            self.mapscheme.conditional(2)
+                        if self._conditionalCount[motif]['played']:
+                            self.mapscheme.conditional(motif)
                             self._memory = []
                             self._conditionalCounter += 1
 
-                    if self._conditionalCounter > 0:
-                        result3_played = self.compare_chordal_motif(self._memory,
-                                                                    conditional_motifs.get('conditional_result_3'),
-                                                                    note, 1, self._deltatime, debug=False)
-
-                        result4_played = self.compare_chordal_motif(self._memory,
-                                                                    conditional_motifs.get('conditional_result_4'),
-                                                                    note, 2, self._deltatime, debug=False)
-
-                        result5_played = self.compare_motif(self._memory, 'result 5',
-                                                            conditional_motifs.get('conditional_result_5'),
-                                                            note, False)
-
-                        if result3_played and self._resultCounter == 0:
-                            self.mapscheme.result(3, 'comment')
-                            self._conditionalsBuffer = []
-                            self._resultCounter += 1
-                            self._conditionalStatus = 3
-                        elif result4_played and self._resultCounter == 0:
-                            self.mapscheme.result(4, 'comment')
-                            self._conditionalsBuffer = []
-                            self._resultCounter += 1
-                            self._conditionalStatus = 4
-                        elif result5_played and self._resultCounter == 0:
-                            self.mapscheme.result(5, 'comment')
-                            self._conditionalsBuffer = []
-                            self._resultCounter += 1
-                            self._conditionalStatus = 5
-
-                    return self._conditionalStatus
+                        if self._conditionalCounter > 0:
+                            for result in conditional_results_motifs:
+                                if self._conditionalCount[result]['type'] == 'mel':
+                                    self._conditionalCount[result]['played'] = self.compare_motif_new(
+                                        self._memory, result,
+                                        conditional_results_motifs_mel.get(result),
+                                        note)
+                                else:
+                                    self._conditionalCount[result]['played'] = self.compare_chordal_motif(
+                                        self._memory, result, conditional_results_motifs.get(result),
+                                        note, deltatime=self._deltatime, debug=False)
+                            
+                                    if self._conditionalCount[result]['played'] and self._resultCounter == 0:
+                                    self.mapscheme.result_new(result, 'comment')
+                                    self._conditionalsBuffer = []
+                                    self._resultCounter += 1
+                                    self._conditionalStatus = result
+                                    
+                                    return self._conditionalStatus
 
                 if note > self._pianosections[1]:
                     self.memorize(note, 20, False, 'Conditional Memory High: ')
