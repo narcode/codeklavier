@@ -239,8 +239,8 @@ def gong_bomb(countdown, debug=False):
         if countdown == 0: #boom ASCII idea by @borrob!
             threads_are_perpetual = False #stop all perpetual threads
             #stop all snippets
-            mapping.result(1, 'code')
-            mapping.result(2, 'code')
+            mapping.result(1, 'true')
+            mapping.result(2, 'true')
             print("")
             print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
             print(" |  _ \ / __ \ / __ \|  \/  | |")
@@ -249,7 +249,7 @@ def gong_bomb(countdown, debug=False):
             print(" | |_) | |__| | |__| | |  | |_|")
             print(" |____/ \____/ \____/|_|  |_(_)      THE END ¯\('…')/¯" + BColors.ENDC)
             print("")
-            mapping.result(4, 'code')
+            mapping.result(4, 'true')
 
         time.sleep(1)
 
@@ -294,7 +294,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
             if operator == 'more than':
                 if conditionalsRange._range >= piano_range:
                     if result_num == 1:
-                        mapping.result(result_num,'code')
+                        mapping.result(result_num,'true')
                         mainMem._motif2_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -302,7 +302,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         break; #stop thread if condition met
                     elif result_num == 2:
-                        mapping.result(result_num, 'code')
+                        mapping.result(result_num, 'true')
                         memMid._motif1_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -310,20 +310,20 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         break;
                     elif result_num == 3:
-                        mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
+                        mapping.result(result_num, 'true', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
                     elif result_num == 4:
                         mapping.result(4, 'start')
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                     elif result_num == 5:
-                        mapping.result(result_num, 'code', piano_range)
+                        mapping.result(result_num, 'true', piano_range)
                 #else:
                     #mapping.customPass('condition not met', ':(')
 
             elif operator == 'less than':
                 if conditionalsRange._range <= piano_range:
                     if result_num == 1:
-                        mapping.result(result_num,'code')
+                        mapping.result(result_num,'true')
                         mainMem._motif2_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -331,7 +331,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         break
                     elif result_num == 2:
-                        mapping.result(result_num, 'code')
+                        mapping.result(result_num, 'true')
                         memMid._motif1_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -339,13 +339,13 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         break;
                     elif result_num == 3:
-                        mapping.result(result_num, 'code', piano_range)
+                        mapping.result(result_num, 'true', piano_range)
                     elif result_num == 4:
                         mapping.result(4, 'start')
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                     elif result_num == 5:
-                        mapping.result(result_num, 'code', piano_range)
+                        mapping.result(result_num, 'true', piano_range)
                 #else:
                     #mapping.customPass('condition not met', ':(')
 
@@ -408,15 +408,15 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
             mapping.customPass('//WOW! I played: ', str(notecounter)+'!!!')
 
             if result_num == 1:
-                mapping.result(result_num, 'code')
+                mapping.result(result_num, 'true')
                 mainMem._motif2_counter = 0 #reset the motif counter so it can be played again...
 
             elif result_num == 2: #this is for snippet 1 - change the names accordingly
-                mapping.result(result_num, 'code')
+                mapping.result(result_num, 'true')
                 memMid._motif1_counter = 0
 
             elif result_num == 3:
-                mapping.result(result_num, 'code')
+                mapping.result(result_num, 'true')
 
             elif result_num == 4:
                 mapping.result(4, 'start')
@@ -424,7 +424,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
                 gomb.start()
 
             elif result_num == 5:
-                mapping.result(result_num, 'code', piano_range)
+                mapping.result(result_num, 'true', piano_range)
 
             break
         else:

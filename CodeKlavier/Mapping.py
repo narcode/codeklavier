@@ -585,15 +585,6 @@ class Mapping_Motippets:
         self.__keyboard.type(code)
         self.enter()
         self.formatAndSend(code, display=3, syntax_color='primitive:')        
-        
-        #elif conditional_num == 2:
-            #self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
-            #self.enter()
-            #self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3, syntax_color='primitive:')
-        #elif conditional_num == 3:
-            #self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
-            #self.enter()
-            #self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3, syntax_color='primitive:')
 
     def result_new(self, motif_name, text, mod=0):
         """TOOD: document function
@@ -602,10 +593,32 @@ class Mapping_Motippets:
         :param string text: indication of the type of message
         :param int mod: some function
         """
-        
-        print('result_new:', motif_name)
-                       
-                
+        display = 3
+        syntax_color = self._config['motippets display settings'].get(motif_name)
+        if text == 'comment':
+            output = self._config['snippets code output'].get(motif_name+'_comment')
+            self.__keyboard.type(output)
+            self.enter()
+            self.formatAndSend(output, display=display, syntax_color='primitive:')
+        elif text in ('true', 'false'):
+            output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]
+            self.__keyboard.type(output[0])
+            self.evaluateSC('eval', flash=False)
+            self.formatAndSend(output[0], display=display, syntax_color='snippet:')
+            if 'osc' in output:
+                if 'grab_value' in output:
+                    self._osc.send_message("/" + output[2], str(mod)) 
+                else:
+                    self._osc.send_message("/" + output[2], output[3])
+        elif text in ('start', ):
+            output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]            
+            self.__keyboard.type('GOMB countdown started!')
+            self.evaluateSC('eval', flash=False)
+            self.formatAndSend('boom:GOMB', display=1)
+            self.formatAndSend('boom:COUNTDOWN', display=2)
+            self.formatAndSend('boom:STARTED!', display=3)            
+            
+                        
     def result(self, result_num, text, mod=0): #how to make optional params?
         """TOOD: document function
 

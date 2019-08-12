@@ -13,9 +13,15 @@ from CK_Setup import Setup, BColors
 from Mapping import *
 from motippets_classes import Motippets
 from hello_classes import HelloWorld
-from Motifs import mini_motifs, mini_motifs_mel, conditional_motifs, conditional_motifs_mel
+from Motifs import mini_motifs, mini_motifs_mel, conditional_motifs, conditional_motifs_mel, \
+     conditional_results_motifs, conditional_results_motifs_mel
 
 #globals
+#conditional_results_all = conditional_results_motifs.copy()
+#conditional_results_all.update(conditional_results_motifs_mel)
+#conditional_motifs_all = conditional_motifs.copy()
+#conditional_motifs_all.update(conditional_motifs_mel)
+
 config = configparser.ConfigParser()
 config.read('default_setup.ini',encoding='utf8')
 
@@ -99,7 +105,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
             if operator == 'more than':
                 if conditionalsRange._range >= piano_range:
                     if result_num == 1:
-                        mapping.result(result_num,'code')
+                        mapping.result(result_num,'true')
                         mainMem._motif2_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -107,7 +113,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         #break; #stop thread if condition met
                     elif result_num == 2:
-                        mapping.result(result_num, 'code')
+                        mapping.result(result_num, 'true')
                         memMid._motif1_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -115,20 +121,20 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         #break;
                     elif result_num == 3:
-                        mapping.result(result_num, 'code', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
+                        mapping.result(result_num, 'true', piano_range) #pass the piano range int as a modulation parameter for the sound synthesis
                     elif result_num == 4:
                         mapping.result(4, 'start')
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                     elif result_num == 5:
-                        mapping.result(result_num, 'code', piano_range)
+                        mapping.result(result_num, 'true', piano_range)
                 #else:
                     #mapping.customPass('condition not met', ':(')
 
             elif operator == 'less than':
                 if conditionalsRange._range <= piano_range:
                     if result_num == 1:
-                        mapping.result(result_num,'code')
+                        mapping.result(result_num,'true')
                         mainMem._motif2_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -136,7 +142,7 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         #break
                     elif result_num == 2:
-                        mapping.result(result_num, 'code')
+                        mapping.result(result_num, 'true')
                         memMid._motif1_counter = 0
                         conditionalsRange._memory = []
                         conditionals[num]._conditionalCounter = 0
@@ -144,13 +150,13 @@ def rangeCounter(timer='', operator='', num=1, result_num=1, piano_range=72, deb
                         conditionalsRange._timer = 0
                         #break;
                     elif result_num == 3:
-                        mapping.result(result_num, 'code', piano_range)
+                        mapping.result(result_num, 'true', piano_range)
                     elif result_num == 4:
                         mapping.result(4, 'start')
                         gomb = Thread(target=gong_bomb, name='gomb', args=(piano_range, True))
                         gomb.start()
                     elif result_num == 5:
-                        mapping.result(result_num, 'code', piano_range)
+                        mapping.result(result_num, 'true', piano_range)
                 #else:
                     #mapping.customPass('condition not met', ':(')
 
@@ -170,15 +176,15 @@ def set_parameters(value, conditional_func, debug=False):
     other functions.
 
     :param int value: the interval of the plated tremolo
-    :param conditional_func: todo
+    :param conditional_func: the name of the conditional snippet
     :param bool debug: run in debug mode
     """
     global param_interval, range_trigger, mapping
-    print('thread started for parameter set')
+    print('thread started for parameter set', 'func:', conditional_func)
 
-    if conditional_func == 'amount':
+    if conditional_func == 'conditional_1':
         mapping.customPass('more than 100 notes played in the next ', str(value) + ' seconds?', flash=True)
-    elif conditional_func == 'range':
+    elif conditional_func in ('conditional_2', 'conditional_3'):
         mapping.customPass('range set to: ', str(value) + ' semitones...', flash=True)
     elif conditional_func == 'gomb':
         mapping.customPass('GOMB countdown set to: ', str(value), flash=True)
@@ -191,54 +197,77 @@ def set_parameters(value, conditional_func, debug=False):
     time.sleep(1) # check if the sleep is needed...
     range_trigger = 1
 
-def noteCounter(timer=10, numberOfnotes=100, result_num=1, debug=True):
+def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True):
     """
-    TODO: define func
+    Fucntion that counts the numberOfNotes within the timer window
 
-    :param int timer: todo
-    :param int numberOfnotes: todo
-    :param int result_num: todo
-    :param bool debug: run in debug mode
+    :param int timer: Total seconds for countdown timer
+    :param int numberOfnotes: Minimum nomber of notes to pass the conditional
+    :param int result_name: corresponding result_name motif
+    :param bool debug: print debug messages
     """
-    print('thread started for result ', result_num, 'number of notes: ', numberOfnotes)
+    print('thread started for result', result_name, 'number of notes:', numberOfnotes)
 
     #reset parameter global once it has passed effectively:
-    global param_interval, mapping, notecounter
+    global param_interval, mapping, notecounter, conditionals
+    
     param_interval= 0
-
+    
     for s in range(0, timer):
         if notecounter > numberOfnotes:
             mapping.customPass('Total notes played: ', str(notecounter)+'!!!')
-
-            if result_num == 1:
-                mapping.result(result_num, 'code')
-                mainMem._motif2_counter = 0 #reset the motif counter so it can be played again...
-
-            elif result_num == 2: #this is for snippet 1 - change the names accordingly
-                mapping.result(result_num, 'code')
-                memMid._motif1_counter = 0
-
-            elif result_num == 3:
-                mapping.result(result_num, 'code', round(notecounter*random.uniform(-2, 10)))
-
-            elif result_num == 4:
-                mapping.result(4, 'start')
+            
+            flags = [r.strip() for r in config['snippets code output'].get(result_name+'_true').split(',')]
+            
+            if 'reset' in flags:
+                mainMem._motifsCount[flags[2]]['count'] = 0
+                    
+            if 'gomb' in flags:
+                mapping.result_new(result_name, 'start')
                 gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
-                gomb.start()
-
-            elif result_num == 5:
-                mapping.result(result_num, 'code', random.randint(1, 80))
-
+                gomb.start()                
+                    
+            if 'grab_value' in flags:
+                for ra in ['random1', 'random2']:
+                    if ra in flags:
+                        rand_limits = [int(l) for l in config['motippets random limits'].get(ra).split(',')]
+                        mapping.result_new(result_name, 'true', random.randint(rand_limits[0], rand_limits[1]))
+                    else:
+                        mapping.result_new(result_name, 'true', flags[3])
+            else:
+                mapping.result_new(result_name, 'true')
             break
-        else:
+        else:                
             mapping.customPass('notes played: ', str(notecounter), True)
-            conditionals[1]._conditionalStatus = 0
-            conditionals[1]._resultCounter = 0
-            conditionals[1]._conditionalCounter = 0
-
+            
         if debug:
             print(notecounter)
         time.sleep(1)
+
+    if notecounter < numberOfnotes:
+        flags = [r.strip() for r in config['snippets code output'].get(result_name+'_false').split(',')]
+    
+        if 'reset' in flags:
+            mainMem._motifsCount[flags[2]]['count'] = 0
+        
+        if 'gomb' in flags:
+            mapping.result_new(result_name, 'start')
+            gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
+            gomb.start()                
+            
+        if 'grab_value' in flags:
+            for ra in ['random1', 'random2']:
+                if ra in flags:
+                    rand_limits = [int(l) for l in config['motippets random limits'].get(ra).split(',')]
+                    mapping.result_new(result_name, 'false', random.randint(rand_limits[0], rand_limits[1]))
+                else:
+                    mapping.result_new(result_name, 'false', flags[3])
+        else:
+            mapping.result_new(result_name, 'false')       
+    
+    conditionals['conditional_1']._conditionalCounter = 0 
+    conditionals['conditional_1']._resultCounter = 0
+    conditionals['conditional_1']._conditionalStatus = None  
 
 def gong_bomb(countdown, debug=False):
     """
@@ -249,9 +278,9 @@ def gong_bomb(countdown, debug=False):
     #reset parameter global once it has passed effectively:
     global param_interval, threads_are_perpetual, mapping
     param_interval= 0
-    conditionals[1]._conditionalStatus = 0
-    conditionals[1]._resultCounter = 0
-    conditionals[1]._conditionalCounter = 0
+    conditionals['conditional_1']._conditionalStatus = 0
+    conditionals['conditional_1']._resultCounter = 0
+    conditionals['conditional_1']._conditionalCounter = 0
 
     if debug:
         print('gong bomb thread started', 'countdown: ', countdown)
@@ -266,8 +295,8 @@ def gong_bomb(countdown, debug=False):
             motippets_is_listening = False #stop listening for input
             #stop all snippets
             mapping.result(4, 'huygens')
-            mapping.result(1, 'code')
-            mapping.result(2, 'code')
+            mapping.result(1, 'true')
+            mapping.result(2, 'true')
             print("")
             print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
             print(" |  _ \ / __ \ / __ \|  \/  | |")
@@ -276,7 +305,7 @@ def gong_bomb(countdown, debug=False):
             print(" | |_) | |__| | |__| | |  | |_|")
             print(" |____/ \____/ \____/|_|  |_(_)" + BColors.ENDC)
             print("")
-            mapping.result(4, 'code')
+            mapping.result(4, 'true')
 
         time.sleep(1)
 
@@ -296,7 +325,7 @@ def main():
     codeK.open_port(myPort)    
 
     codeK.print_lines(20, 1)
-    print("Prototype loaded: Hybrid 0.3")
+    print("Version loaded: Hybrid 0.9")
     print("CodeKlavier is ready and LISTENING.")
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")
@@ -318,9 +347,9 @@ def main():
     tremoloLow = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     
     #midi listening for conditionals
-    conditionals = {1: Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi),
-                    2: Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi),
-                    3: Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)}
+    conditionals = {'conditional_1': Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi),
+                    'conditional_2': Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi),
+                    'conditional_3': Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)}
     
     conditionalsRange = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     parameters = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
@@ -415,85 +444,96 @@ def main():
                                             tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, m)
     
                                 ##conditionals
-                                conditional_value = conditionals[1].parse_midi(msg, 'conditional 1', ck_deltadif)
-                                conditional2_value = conditionals[2].parse_midi(msg, 'conditional 2', ck_deltadif)
-                                conditional3_value = conditionals[3].parse_midi(msg, 'conditional 3', ck_deltadif)
-                                
-                                for c in conditional_motifs:
-                                    if conditional_value == c:
-                                        conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
-                                        
-                                        #set the parameter for the timer:
-                                        if isinstance(conditional_params, int) and conditional_params > 0:
-                                            if conditional_value == 'gomb':
-                                                threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                                threads['set_param'].start()
-                                            else:
-                                                threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'amount'))
-                                                threads['set_param'].start()
-        
-                                        if param_interval > 0:
-                                            notecounter = 0 # reset the counter
-                                            threads[conditional_value] = Thread(target=noteCounter, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
-                                            threads[conditional_value].start()                                
+                                conditional_value = {}
+                                conditional_params = None
+                                for cond in conditionals['conditional_1']._allConditional_motifs:
+                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)
+                                                               
+                                    for r in conditionals['conditional_1']._conditional_results_all:
+                                        if conditional_value[cond] == r:
+                                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                                            
+                                            #set the parameter for the timer:
+                                if isinstance(conditional_params, int) and conditional_params > 0:
+                                    if conditional_value[cond] == 'gomb':
+                                        threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                                        threads['set_param'].start()
+                                    else:
+                                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, cond))
+                                        threads['set_param'].start()
+
+                                if param_interval > 0:
+                                    if conditional_value['conditional_1'] != None:
+                                        notecounter = 0 # reset the counter
+                                        threads[conditional_value['conditional_1']] = Thread(target=noteCounter, name='conditional note counter thread', args=(param_interval, 100, conditional_value['conditional_1'], True))
+                                        threads[conditional_value['conditional_1']].start()
+                                    elif conditional_value['conditional_2'] != None:
+                                        threads[conditional_value['conditional_2']] = Thread(target=rangeCounter, name='conditional range thread',
+                                                                                 args=('random', 'more than', 2, conditional_value['conditional_2'], param_interval))                                                    
+                                        threads[conditional_value[cond]].start()
+                                    elif conditional_value['conditional_3'] != None:
+                                        threads[conditional_value['conditional_3']] = Thread(target=rangeCounter, name='conditional range thread',
+                                                                             args=('random', 'less than', 3, conditional_value['conditional_3'], param_interval))                                                    
+                                        threads[conditional_value['conditional_3']].start()
+                                                   
+                                                    
+                                ###if isinstance(conditional_value, int) and conditional_value > 0:
+                                    ###conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
     
-                                ##if isinstance(conditional_value, int) and conditional_value > 0:
-                                    ##conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                                    ###set the parameter for the timer:
+                                    ###if isinstance(conditional_params, int) and conditional_params > 0:
+                                        ###if conditional_value != 4:
+                                            ###threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'amount'))
+                                            ###threads['set_param'].start()
+                                        ###elif conditional_value == 4: #gong bomb
+                                            ###threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                                            ###threads['set_param'].start()
     
-                                    ##set the parameter for the timer:
-                                    ##if isinstance(conditional_params, int) and conditional_params > 0:
-                                        ##if conditional_value != 4:
-                                            ##threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'amount'))
-                                            ##threads['set_param'].start()
-                                        ##elif conditional_value == 4: #gong bomb
-                                            ##threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                            ##threads['set_param'].start()
+                                    ###if param_interval > 0:
+                                        ###if conditional_value != 4:
+                                        ###notecounter = 0 # reset the counter
+                                        ###threads[conditional_value] = Thread(target=noteCounter, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
+                                        ###threads[conditional_value].start()
+                                        ###elif conditional_value == 4:
+                                        ###start the countdown
+                                        ###gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
+                                        ###gomb.start()
     
-                                    ##if param_interval > 0:
-                                        ##if conditional_value != 4:
-                                        ##notecounter = 0 # reset the counter
-                                        ##threads[conditional_value] = Thread(target=noteCounter, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
-                                        ##threads[conditional_value].start()
-                                        ##elif conditional_value == 4:
-                                        ##start the countdown
-                                        ##gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
-                                        ##gomb.start()
+                                #if isinstance(conditional2_value, int) and conditional2_value > 0:
+                                    #conditionalsRange._conditionalStatus = conditional2_value
+                                    #conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
     
-                                if isinstance(conditional2_value, int) and conditional2_value > 0:
-                                    conditionalsRange._conditionalStatus = conditional2_value
-                                    conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                                    ## set range parameter:
+                                    #if isinstance(conditional_params, int) and conditional_params > 0:
+                                        #if conditional_value != 4:
+                                            #threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
+                                            #threads['set_param'].start()
+                                        #elif conditional_value == 4: #gong bomb
+                                            #threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                                            #threads['set_param'].start()
     
-                                    # set range parameter:
-                                    if isinstance(conditional_params, int) and conditional_params > 0:
-                                        if conditional_value != 4:
-                                            threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
-                                            threads['set_param'].start()
-                                        elif conditional_value == 4: #gong bomb
-                                            threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                            threads['set_param'].start()
+                                    #if param_interval > 0:
+                                        #threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread',
+                                                                                 #args=('random', 'more than', 2, conditional2_value, param_interval))
+                                        #threads[conditional2_value].start()
     
-                                    if param_interval > 0:
-                                        threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread',
-                                                                                 args=('random', 'more than', 2, conditional2_value, param_interval))
-                                        threads[conditional2_value].start()
+                                #if isinstance(conditional3_value, int) and conditional3_value > 0:
+                                    #conditionalsRange._conditionalStatus = conditional3_value
+                                    #conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
     
-                                if isinstance(conditional3_value, int) and conditional3_value > 0:
-                                    conditionalsRange._conditionalStatus = conditional3_value
-                                    conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                                        ## set range parameter:
+                                    #if isinstance(conditional_params, int) and conditional_params > 0:
+                                        #if conditional_value != 4:
+                                            #threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
+                                            #threads['set_param'].start()
+                                        #elif conditional_value == 4: #gong bomb
+                                            #threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
+                                            #threads['set_param'].start()
     
-                                        # set range parameter:
-                                    if isinstance(conditional_params, int) and conditional_params > 0:
-                                        if conditional_value != 4:
-                                            threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
-                                            threads['set_param'].start()
-                                        elif conditional_value == 4: #gong bomb
-                                            threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                            threads['set_param'].start()
-    
-                                    if param_interval > 0:
-                                        threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
-                                                                             args=('random', 'less than', 3, conditional3_value, param_interval))
-                                        threads[conditional3_value].start()
+                                    #if param_interval > 0:
+                                        #threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
+                                                                             #args=('random', 'less than', 3, conditional3_value, param_interval))
+                                        #threads[conditional3_value].start()
     
                                 #range parser
                                 if range_trigger == 1:

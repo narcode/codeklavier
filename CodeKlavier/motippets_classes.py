@@ -18,6 +18,7 @@ class Motippets(object):
         self.noteonid = noteonid
         self.noteoffid = noteoffid
         self._memory = []
+        self._memoryCond = {'Low': [], 'Hi': [], 'Mid': []}
 
         self._mainMotifs = [] #DEP
         self._mainMotifs2 = [] #
@@ -51,6 +52,11 @@ class Motippets(object):
             self._allMotifs[motif] = []
             self._deltaHelper[motif] = []
             self._conditionalCount[motif] = {'played': False, 'count': 0, 'type': 'chord'}
+            
+        for motif in conditional_motifs_mel:
+            self._allMotifs[motif] = []
+            self._deltaHelper[motif] = []
+            self._conditionalCount[motif] = {'played': False, 'count': 0, 'type': 'mel'}
         
         for motif in conditional_results_motifs:
             self._allMotifs[motif] = []
@@ -61,6 +67,11 @@ class Motippets(object):
             self._allMotifs[motif] = []
             self._deltaHelper[motif] = []
             self._conditionalCount[motif] = {'played': False, 'count': 0, 'type': 'mel'}            
+        
+        self._allConditional_motifs = conditional_motifs.copy()
+        self._allConditional_motifs.update(conditional_motifs_mel)
+        self._conditional_results_all = conditional_results_motifs.copy()
+        self._conditional_results_all.update(conditional_results_motifs_mel)
         
         self._miniMotifsLow = {}
         self._miniMotifsMid = {}
@@ -124,7 +135,7 @@ class Motippets(object):
                         if self._miniMotifsLow[motif]['type'] == 'mel':
                             
                             self._miniMotifsLow[motif]['played'] = self.compare_motif_new(
-                                self._memory, motif,
+                                None, motif,
                                 mini_motifs_mel.get(motif),
                                 note, section, False)
                             
@@ -155,7 +166,7 @@ class Motippets(object):
                         if self._miniMotifsMid[motif]['type'] == 'mel':
                             
                             self._miniMotifsMid[motif]['played'] = self.compare_motif_new(
-                                self._memory, motif,
+                                None, motif,
                                 mini_motifs_mel.get(motif),
                                 note, section)
                         
@@ -221,7 +232,7 @@ class Motippets(object):
                         if self._miniMotifsHi[motif]['type'] == 'mel':
                             
                             self._miniMotifsHi[motif]['played'] = self.compare_motif_new(
-                                self._memory, motif,
+                                None, motif,
                                 mini_motifs_mel.get(motif),
                                 note, section)
                             
@@ -295,7 +306,7 @@ class Motippets(object):
                 
                 for motif in motifs:
                     self._motifsCount[motif]['played'] = self.compare_chordal_motif(
-                        self._memory, motif, motifs.get(motif),
+                        None, motif, motifs.get(motif),
                         note, deltatime=self._deltatime, debug=False)
     
                     if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
@@ -304,93 +315,56 @@ class Motippets(object):
                     
                     
             ### CONDITIONALS SECTION
-            elif section in ('conditional 1', 'conditional 2', 'conditional 3'): #expandable?
+            elif section in ('conditional_1', 'conditional_2', 'conditional_3'): #expandable...
 
-                if note <= self._pianosections[0]: # LOW
-                    self.memorize(note, 12, False, 'Conditional Memory: ')
+                if note <= self._pianosections[0]:
+                    self.memorizeCond(note, 20, False, 'Low')
                     
-                    for motif in conditional_motifs:
+                if note > self._pianosections[1]:
+                    self.memorizeCond(note, 20, False, 'Hi')        
+                
+                if (note > self._pianosections[0] and note <= self._pianosections[1]):
+                    self.memorizeCond(note, 20, False, 'Mid')
+                    
+                for motif in self._allConditional_motifs:
+                    if motif == section:
                         if self._conditionalCounter == 0:
-                            if self._conditionalCount[motif]['type'] == 'chord':
-                                self._conditionalCount[motif]['played'] = self.compare_chordal_motif(
-                                    self._memory, motif, conditional_motifs.get(motif),
-                                    note, deltatime=self._deltatime, debug=False)
-                            else:
-                                self._conditionalCount[motif]['played'] == self.compare_motif_new(
-                                    self._memory, motif, conditional_motifs_mel.get(motif), 
-                                    note)
-
-                        if self._conditionalCount[motif]['played']:
-                            self.mapscheme.conditional(motif)
-                            self._memory = []
-                            self._conditionalCounter += 1
-
-                        if self._conditionalCounter > 0:
-                            for result in conditional_results_motifs:
-                                if self._conditionalCount[result]['type'] == 'mel':
-                                    self._conditionalCount[result]['played'] = self.compare_motif_new(
-                                        self._memory, result,
-                                        conditional_results_motifs_mel.get(result),
-                                        note)
-                                else:
-                                    self._conditionalCount[result]['played'] = self.compare_chordal_motif(
-                                        self._memory, result, conditional_results_motifs.get(result),
+                            for register in self._memoryCond:
+                                if self._conditionalCount[motif]['type'] == 'chord':
+                                    self._conditionalCount[motif]['played'] = self.compare_chordal_motif(
+                                        self._memoryCond[register], motif, conditional_motifs.get(motif),
                                         note, deltatime=self._deltatime, debug=False)
+                                else:
+                                    self._conditionalCount[motif]['played'] = self.compare_motif_new(
+                                        self._memoryCond[register], motif, conditional_motifs_mel.get(motif), 
+                                        note, debug=False)
                             
-                                if self._conditionalCount[result]['played'] and self._resultCounter == 0:
-                                    self.mapscheme.result_new(result, 'comment')
-                                    self._conditionalsBuffer = []
-                                    self._resultCounter += 1
-                                    self._conditionalStatus = result
-  
-                                    return self._conditionalStatus
+                            if self._conditionalCount[motif]['played']:
+                                self.mapscheme.conditional(motif)
+                                self._conditionalCounter += 1
 
-                if note > self._pianosections[1]: ### Hi
-                    self.memorize(note, 20, False, 'Conditional Memory Hi: ')
-                    
-                    if self._conditionalCounter > 0:
-                        for result in conditional_results_motifs:
+                if self._conditionalCounter > 0:
+                    for result in self._conditional_results_all:
+                        for register in self._memoryCond:
                             if self._conditionalCount[result]['type'] == 'mel':
-                                self._conditionalCount[result]['played'] = self.compare_motif_new(
-                                    self._memory, result,
-                                    conditional_results_motifs_mel.get(result),
-                                    note)
+                                if result in conditional_results_motifs_mel:
+                                    self._conditionalCount[result]['played'] = self.compare_motif_new(
+                                        self._memoryCond[register], result, conditional_results_motifs_mel.get(result),
+                                        note, register, debug=False)
                             else:
                                 self._conditionalCount[result]['played'] = self.compare_chordal_motif(
-                                    self._memory, result, conditional_results_motifs.get(result),
+                                    self._memoryCond[register], result, conditional_results_motifs.get(result),
                                     note, deltatime=self._deltatime, debug=False)
-                                
+                    
                             if self._conditionalCount[result]['played'] and self._resultCounter == 0:
                                 self.mapscheme.result_new(result, 'comment')
                                 self._conditionalsBuffer = []
                                 self._resultCounter += 1
-                                self._conditionalStatus = result                                
-   
-                                return self._conditionalStatus
+                                self._conditionalStatus = result
 
-                if (note > self._pianosections[0] and note <= self._pianosections[1]): # Mid
-                    self.memorize(note, 20, False, 'Conditional Memory Mid: ')
+                return self._conditionalStatus
                     
-                    if self._conditionalCounter > 0:
-                        for result in conditional_results_motifs:
-                            if self._conditionalCount[result]['type'] == 'mel':
-                                self._conditionalCount[result]['played'] = self.compare_motif_new(
-                                    self._memory, result,
-                                    conditional_results_motifs_mel.get(result),
-                                    note)
-                            else:
-                                self._conditionalCount[result]['played'] = self.compare_chordal_motif(
-                                    self._memory, result, conditional_results_motifs.get(result),
-                                    note, deltatime=self._deltatime, debug=False)
-                                
-                            if self._conditionalCount[result]['played'] and self._resultCounter == 0:
-                                self.mapscheme.result_new(result, 'comment')
-                                self._conditionalsBuffer = []
-                                self._resultCounter += 1
-                                self._conditionalStatus = result                    
-                                
-                                return self._conditionalStatus
-
+                
             ### CONDITIONAL RANGE
             elif section == 'conditional_range': # parses only MIDI for the conditional which looks at the range being played
                 self.memorize(note, 999,
@@ -422,6 +396,22 @@ class Motippets(object):
             if len(self._conditionalsBuffer) > length:
                 self._conditionalsBuffer = self._conditionalsBuffer[-length:]
 
+    def memorizeCond(self, midinote, length, debug=False, register=None):
+        """Store the incoming midi notes by appending to the memory array.
+
+        :param midinote: the incoming MIDI note message\n
+        :param int length: the size of the array to store the midinotes\n
+        :param boolean debug: flag to print console debug messages\n
+        :param string register: register name ('Low', 'Hi', 'Mid')
+        """
+        self._memoryCond[register].append(midinote)
+
+        if len(self._memoryCond[register]) > length:
+            self._memoryCond[register] = self._memoryCond[register][-length:]
+
+        if debug == True:
+            print(register, ','.join(map(str, self._memoryCond[register])))
+            
 
     def count_notes(self, array, debug=False):
         """See if notes are repeated in the passed array so as to be considered
@@ -656,15 +646,30 @@ class Motippets(object):
     def compare_motif_new(self, array, motif_name, motif, note, pianosection=None, debug=False):
         """Compare the passed array to a given array
 
-        i.e. detect if a motif is played
+        i.e. detect if a melodic motif is played
 
         TODO: describe input params
         """
-        if note in motif:
-            self._allMotifs[motif_name].append(note)
+        if debug:
+            print(array, motif_name, motif, note, pianosection)
+        compare = False
+        if array == None:
+            if note in motif:
+                self._allMotifs[motif_name].append(note)
+            else:
+                self._allMotifs[motif_name] = []
         else:
-            self._allMotifs[motif_name] = []
-            return False
+            if len(array) > 0:
+                copy_array = array.copy()
+                last =  copy_array.pop()
+                if last in motif:
+                    self._allMotifs[motif_name].append(note)
+                #else:
+                    #self._allMotifs[motif_name] = []
+                    #self._deltaHelper[motif_name] = []                
+                
+        if debug:
+            print(array, motif_name, motif, 'played ->' + str(self._allMotifs[motif_name]))
 
         if len(self._allMotifs[motif_name]) >= len(motif):
             self._allMotifs[motif_name] = self._allMotifs[motif_name][-len(motif):]
@@ -685,17 +690,15 @@ class Motippets(object):
                     for m in self._miniMotifsHi:
                         if m != motif_name:
                             self._miniMotifsHi[m]['count'] = 0
-            else:
-                compare = False
 
             if debug:
                 print('played -> ', self._allMotifs[motif_name], '\nmotif ->' + \
                     str(motif), '\ncomparison: ' + str(compare))
 
-            return compare
+        return compare
             
             
-    def compare_chordal_motif(self, array, motif_name, motif, note, num=0, deltatime=0, deltatolerance=0.005, debug=False):
+    def compare_chordal_motif(self, array, motif_name, motif, note, deltatime=0, deltatolerance=0.005, debug=False):
         """Compare chordal motifs
 
         i.e. MIDI note order doesn't matter
@@ -703,105 +706,53 @@ class Motippets(object):
         TODO: describe input/output params
         TODO 2: make sub arrays if function is used again...
         """
+        if debug:
+            print(array, motif_name, motif, note)        
         compare = False
-        if num == 0:
+        if array == None:
             if note in motif:
                 self._allMotifs[motif_name].append(note)
                 self._deltaHelper[motif_name].append(deltatime)
             else:
                 self._allMotifs[motif_name] = []
                 self._deltaHelper[motif_name] = []
-
-            if debug:
-                print('played ->' + str(self._allMotifs[motif_name]))
-                      
-            if len(self._allMotifs[motif_name]) >= len(motif):
-                self._allMotifs[motif_name] = self._allMotifs[motif_name][-len(motif):]
-                self._deltaHelper[motif_name] = self._deltaHelper[motif_name][-(len(motif)-1):]
-
-                sum_motif = reduce(
-                    (lambda total, sumnotes: total + sumnotes),
-                    motif)
-                sum_played = reduce(
-                    (lambda total, sumnotes: total + sumnotes),
-                    self._allMotifs[motif_name])
-                dif_delta = reduce( (lambda total, sumtimes: (total +
-                                                              sumtimes) / len( self._deltaHelper[motif_name]) ),
-                                    self._deltaHelper[motif_name])
-                #print('average: ', dif_delta)
-
-                if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
-                    compare = True
-
-                    if debug:
-                        print('played ->' + str(self._allMotifs[motif_name]),
-                              '\nmotif ->' + str(motif),
-                              '\ncomparison: ' + str(compare),
-                              '\nsum played: ' + str(sum_played),
-                              '\nsum motif: ' + str(sum_motif),
-                              '\ndelta average: ', dif_delta)
-        elif num == 1: #DEP ...
-            if note in motif:
-                self._mainMotifs1.append(note)
-                self._deltaHelper1.append(deltatime)
-            else:
-                self._mainMotifs1 = []
-                self._deltaHelper1 = []
-
-            if len(self._mainMotifs1) >= len(motif):
-                self._mainMotifs1 = self._mainMotifs1[-len(motif):]
-                self._deltaHelper1 = self._deltaHelper1[-(len(motif)-1):]
-
-                sum_motif = reduce(
-                    (lambda total, sumnotes: total + sumnotes),
-                    motif)
-                sum_played = reduce(
-                    (lambda total, sumnotes: total + sumnotes),
-                    self._mainMotifs1)
-                dif_delta = reduce(
-                     (lambda total, sumtimes: (total + sumtimes) / len(self._deltaHelper1)), self._deltaHelper1)
-                if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
-                    compare = True
-
-                    if debug:
-                        print('played ->' + str(self._mainMotifs1),
-                              '\nmotif ->' + str(motif),
-                              '\ncomparison: ' + str(compare),
-                              '\nsum played: ' + str(sum_played),
-                              '\nsum motif: ' + str(sum_motif),
-                              '\ndelta average: ', dif_delta)
-
         else:
-            if note in motif:
-                self._mainMotifs2.append(note)
-                self._deltaHelper2.append(deltatime)
-            else:
-                self._mainMotifs2 = []
-                self._deltaHelper2 = []
+            if len(array) > 0:
+                if array.pop() in motif:
+                    self._allMotifs[motif_name].append(note)
+                    self._deltaHelper[motif_name].append(deltatime)
+                else:
+                    self._allMotifs[motif_name] = []
+                    self._deltaHelper[motif_name] = []
 
-            if len(self._mainMotifs2) >= len(motif):
-                self._mainMotifs2 = self._mainMotifs2[-len(motif):]
-                self._deltaHelper2 = self._deltaHelper2[-(len(motif)-1):]
+        if debug:
+            print('played ->' + str(self._allMotifs[motif_name]))
+                      
+        if len(self._allMotifs[motif_name]) >= len(motif):
+            self._allMotifs[motif_name] = self._allMotifs[motif_name][-len(motif):]
+            self._deltaHelper[motif_name] = self._deltaHelper[motif_name][-(len(motif)-1):]
 
-                sum_motif = reduce(
-                    (lambda total, sumnotes: total + sumnotes),
-                    motif)
-                sum_played = reduce(
-                    (lambda total, sumnotes: total + sumnotes),
-                    self._mainMotifs2)
-                dif_delta = reduce( (lambda total, sumtimes: (total +
-                                                              sumtimes) / len( self._deltaHelper2)), self._deltaHelper2)
+            sum_motif = reduce(
+                (lambda total, sumnotes: total + sumnotes),
+                motif)
+            sum_played = reduce(
+                (lambda total, sumnotes: total + sumnotes),
+                self._allMotifs[motif_name])
+            dif_delta = reduce( (lambda total, sumtimes: (total +
+                                                          sumtimes) / len( self._deltaHelper[motif_name]) ),
+                                self._deltaHelper[motif_name])
+            #print('average: ', dif_delta)
 
-                if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
-                    compare = True
+            if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
+                compare = True
 
-                    if debug:
-                        print('played_1 ->' + str(self._mainMotifs2),
-                              '\nmotif ->' + str(motif),
-                              '\ncomparison: ' + str(compare),
-                              '\nsum played: ' + str(sum_played),
-                              '\nsum motif: ' + str(sum_motif),
-                              '\ndelta average: ', dif_delta)
+                if debug:
+                    print('played ->' + str(self._allMotifs[motif_name]),
+                          '\nmotif ->' + str(motif),
+                          '\ncomparison: ' + str(compare),
+                          '\nsum played: ' + str(sum_played),
+                          '\nsum motif: ' + str(sum_motif),
+                          '\ndelta average: ', dif_delta)
 
         return compare
 
