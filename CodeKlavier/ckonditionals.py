@@ -1,0 +1,236 @@
+"""
+Functions that handle CK conditional constructs. 
+"""
+import time
+import random
+import configparser
+from threading import Thread, Event
+
+threads_are_perpetual = True
+param_interval = 0
+range_trigger = 0
+notecounter = 0
+
+config = configparser.ConfigParser()
+config.read('default_setup.ini',encoding='utf8')
+
+def rangeCounter(timer=None, operator='', motif_name=None, result_name=None, 
+                 piano_range=72, debug=False, perpetual=True, mapping=None, 
+                 conditional=None, rangeParser=None, mainmotifs=None):
+    """
+    Calculate the played range within a time window. Perpetual flag makes it run it's loop forever, unless range_trigger is != 1
+
+    :param timer: time window loop or 'random'
+    :param operator: 'more than' or 'less than'
+    :param str num: the name of the conditional motif
+    :param str result_num: the name of the result motif
+    :param int piano_range: total range for evvaluation in semitones
+    :param bool debug: booelan flag to post debug messages
+    :param bool perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
+    :param obj mapping: an instance of a Mapping class
+    :param obj mapping: an instance of a Motippets class
+    :param obj mapping: an instance of a Motippets class dealing with the piano range
+    :param obj mainmotifs: an instance of a Motippets class dealing witht he main motifs
+    """
+
+    global range_trigger, threads_are_perpetual, param_interval
+    conditional._conditionalStatus = None #reset trigger
+    
+    t = 1
+    param_interval = 0
+    rangeParser_memory = []
+    syntax_colors = {'conditional_1': 'loop', 'conditional_2': 'loop2', 'conditional_3': 'loop3', }
+    if timer in config['motippets random limits']:
+        rand_limits = [int(l) for l in config['motippets random limits'].get(timer).split(',')]  
+
+    if timer == 'random':
+        timer = random.randrange(rand_limits[0],rand_limits[1])
+            
+    if debug:
+        print('thread for range started')
+        print("range trig -> ", range_trigger, "result num: ", result_name, "range set to: ", piano_range)
+        
+    while threads_are_perpetual:           
+        if debug:
+            print('cond', motif_name, 'res', result_name, 'timer: ', timer - t, 'loop time: ', timer)
+            if timer == t+1:
+                mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name], 
+                                   display_only=True, flash=True)
+            else:
+                mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name], display_only=True)
+        
+        rangeParser._timer += 1
+        t += 1
+
+        if t % timer == 0: 
+            if debug:
+                print("Range conditional thread finished")
+                print("range was: ", rangeParser._range)
+            if operator == 'more than':
+                if rangeParser._range >= piano_range:
+                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs)               
+                else:
+                    mapping.customPass('condition not met :(')
+                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs)                    
+                #else:
+                    #mapping.customPass('condition not met', ':(')
+
+            elif operator == 'less than':
+                if rangeParser._range <= piano_range:
+                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs)               
+                else:
+                    mapping.customPass('condition not met :(')
+                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs)
+                    
+            # reset states:
+            rangeParser._memory = []
+            conditional._conditionalCounter = 0
+            conditional._resultCounter = 0            
+            #conditionals[motif_name]._conditionalCounter = 0
+            #conditionals[motif_name]._resultCounter = 0
+            rangeParser._timer = 0
+            t = 0
+
+        time.sleep(1)
+
+def parseFlags(snippet_name, boolean, value, mapping, mainmotifs):
+    """
+    function to parse any optional flags set in the .ini file for the passed motif-snippet
+    
+    :param str snippet_name: the motif name corresponding to the snippet
+    :param str boolean: true or false
+    :param any value: pipped value from the parent function
+    :param obj mapping: an instance of a Motippets class
+    :param obj mainmotifs: an instance of a Motippets class dealing witht he main motifs
+    """
+    flags = [r.strip() for r in config['snippets code output'].get(snippet_name+'_'+boolean).split(',')]
+    
+    if 'reset' in flags:
+        mainmotifs._motifsCount[flags[2]]['count'] = 0
+            
+    if 'gomb' in flags:
+        mapping.result_new(snippet_name, 'start')
+        gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
+        gomb.start()                
+            
+    if 'grab_value' in flags:
+        if len(flags) > 3:
+            if flags[4] in config['motippets random limits']:
+                rand_limits = [int(l) for l in config['motippets random limits'].get(flags[4]).split(',')]
+                mapping.result_new(snippet_name, boolean, random.randint(rand_limits[0], rand_limits[1]))
+            else:
+                mapping.result_new(snippet_name, boolean, value)
+    else:
+        mapping.result_new(snippet_name, boolean)    
+    
+
+def set_parameters(value, conditional_func, mapping=None, parameters=None, debug=False):
+    """
+    function to parse a full range tremolo. This value can be used as a param for the
+    other functions.
+
+    :param int value: the interval of the plated tremolo
+    :param conditional_func: the type of conditional (from built-in types)
+    :param obj mapping: an instance of a Mapping class
+    :param obj mapping: an instance of a Motippets class dealing with parameters parsing
+    :param bool debug: run in debug mode
+    """
+    global param_interval, range_trigger
+    #mapping
+    print('thread started for parameter set', 'func:', conditional_func)
+    
+    if conditional_func == 'note_count':
+        mapping.customPass('more than 100 notes played in the next ' + str(value) + ' seconds?', flash=True)
+    elif conditional_func in ('range_more_than', 'range_less_than'):
+        mapping.customPass('range set to: ' + str(value) + ' semitones...', flash=True)
+    elif conditional_func == 'gomb':
+        mapping.customPass('GOMB countdown set to: ' + str(value), flash=True)
+
+    if debug:
+        print('value parameter is ', str(value))
+
+    param_interval = value
+    parameters._interval = 0
+    #time.sleep(1) # check if the sleep is needed...
+    range_trigger = 1
+
+def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mapping=None, 
+                conditional=None, mainmotifs=None):
+    """
+    Fucntion that counts the numberOfNotes within the timer window
+
+    :param int timer: Total seconds for countdown timer
+    :param int numberOfnotes: Minimum nomber of notes to pass the conditional
+    :param int result_name: corresponding result_name motif
+    :param bool debug: print debug messages
+    :param obj mapping: an instance of a Mapping class
+    :param obj mapping: an instance of a Motippets class
+    :param obj mainmotifs: an instance of a Motippets class dealing witht he main motifs
+    """
+    print('thread started for result', result_name, 'number of notes:', numberOfnotes)
+
+    #reset parameter global once it has passed effectively:
+    global param_interval
+    #mapping, notecounter, conditionals
+
+    param_interval= 0
+    
+    for s in range(0, timer):
+        if notecounter > numberOfnotes:
+            mapping.customPass('Total notes played: ' + str(notecounter)+'!!!')
+            
+            parseFlags(result_name, 'true', notecounter, mapping, mainmotifs)
+            break
+        else:                
+            mapping.customPass('notes played: ' + str(notecounter), display_only=True)
+            
+        if debug:
+            print(notecounter)
+        time.sleep(1)
+
+    if notecounter < numberOfnotes:
+        parseFlags(result_name, 'false', notecounter, mapping, mainmotifs) 
+    
+    conditional._conditionalCounter = 0 
+    conditional._resultCounter = 0
+    conditional._conditionalStatus = None  
+
+def gong_bomb(countdown, debug=False):
+    """
+    function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
+
+    countdown: the countdown time in seconds
+    """
+    #reset parameter global once it has passed effectively:
+    global param_interval, threads_are_perpetual, mapping
+    param_interval= 0
+    conditionals['conditional_1']._conditionalStatus = 0
+    conditionals['conditional_1']._resultCounter = 0
+    conditionals['conditional_1']._conditionalCounter = 0
+
+    if debug:
+        print('gong bomb thread started', 'countdown: ', countdown)
+
+    for g in range(0, countdown):
+        countdown -= 1
+        print(BColors.FAIL + str(countdown) + BColors.ENDC)
+        mapping.onlyDisplay(str(countdown), warning=True)
+
+        if countdown == 0: #boom ASCII idea by @borrob!
+            threads_are_perpetual = False #stop all perpetual threads
+            motippets_is_listening = False #stop listening for input
+            #stop all snippets
+            mapping.result(4, 'huygens')
+            mapping.result(1, 'true')
+            mapping.result(2, 'true')
+            print("")
+            print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
+            print(" |  _ \ / __ \ / __ \|  \/  | |")
+            print(" | |_) | |  | | |  | | \  / | |")
+            print(" |  _ <| |  | | |  | | |\/| | |")
+            print(" | |_) | |__| | |__| | |  | |_|")
+            print(" |____/ \____/ \____/|_|  |_(_)" + BColors.ENDC)
+            print("")
+            mapping.result(4, 'true')
+
+        time.sleep(1)

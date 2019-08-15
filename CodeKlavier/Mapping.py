@@ -566,7 +566,7 @@ class Mapping_Motippets:
 
         There are three options:
         
-        1. settimg up a conditional if number of notes
+        1. setting up a conditional if number of notes
         played is more than 100 in ...
         
         2. setting up a conditional if
@@ -822,40 +822,44 @@ class Mapping_Motippets:
                 self._osc.send_message("/pianotake", str(mod))
                 self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
 
-    def customPass(self, name, content, osc_only=False, flash=False):
+    def customPass(self, content, syntax_color=None, display_only=False, flash=False):
         """
         post custom string message on codespace and display
 
-        :param string name: a label to print in front of the string
         :param string content: the message or content
+        :param str syntax_color: the reference name for a display color        
+        :param bool display_only: flag to only send content to display and ignore normal typing
+        :param bool falsh: execute a brief flashing in the display
         """
 
-        if not osc_only:
-            self.__keyboard.type(name + " " + content)
+        if not display_only:
+            self.__keyboard.type(content)
             self.enter()
 
         if flash:
-            name = 'flash:' + name
-        self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
+            content = 'flash:' + content
+            
+        if syntax_color == None:
+            syntax_color = 'comment'
+            
+        self.formatAndSend(content, display=3, syntax_color=syntax_color+':')
 
-    def onlyDisplay(self, content, tag=1, warning=False, flash=False):
+    def onlyDisplay(self, content, syntax_color=None):
         """
         print a custom string on the UDP display only!
 
         :param string content: the message or content
-        :param int tag: the reference to a color tag
-        :param warning: wether to print the message with the warning color tag (i.e. red)
-
+        :param str syntax_color: the reference name for a display color
         """
-        if warning:
-            self.formatAndSend(content, display=4, syntax_color='warning:')
-        else:
-            if tag == 2:
-                self.formatAndSend(content, display=4, syntax_color='loop2:')
-            elif tag == 3:
-                self.formatAndSend(content, display=4, syntax_color='loop3:')
-            else:
-                self.formatAndSend(content, display=4, syntax_color='loop:')
+        self.formatAndSend(content, display=4, syntax_color=syntax_color+':')
+
+        #else:
+            #if tag == 2:
+                #self.formatAndSend(content, display=4, syntax_color='loop2:')
+            #elif tag == 3:
+                #self.formatAndSend(content, display=4, syntax_color='loop3:')
+            #else:
+                #self.formatAndSend(content, display=4, syntax_color='loop:')
 
 class Mapping_Ckalculator:
     """Mapping for the Ckalculator prototype.
