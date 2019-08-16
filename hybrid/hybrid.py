@@ -6,7 +6,7 @@ import numpy as np
 import ckonditionals
 
 from threading import Thread, Event
-from CK_Setup import Setup, BColors
+from CK_Setup import Setup
 from Mapping import *
 from motippets_classes import Motippets
 from hello_classes import HelloWorld
@@ -208,7 +208,9 @@ def main():
                                                 if cond in config['snippets code output']:
                                                     conditional_settings = config['conditionals settings'].get(cond).split(',')
                                                     cond_type = conditional_settings[0]
-                                                    perpetual = bool(conditional_settings[1])  
+                                                    perpetual = bool(conditional_settings[1])
+                                                    if len(conditional_settings) > 2:
+                                                        totalNotes = int(conditional_settings[2])
                                                     
                                                 threads['set_param'] = Thread(target=ckonditionals.set_parameters, 
                                                                               name='set timer value', 
@@ -222,7 +224,7 @@ def main():
                                                 ckonditionals.notecounter = 0
                                                 threads[conditional_value[cond]] = Thread(target=ckonditionals.noteCounter, 
                                                                                              name='conditional note counter thread', 
-                                                                                             args=(ckonditionals.param_interval, 100, 
+                                                                                             args=(ckonditionals.param_interval, totalNotes, 
                                                                                                    conditional_value[cond], 
                                                                                                    True, mapping, 
                                                                                                    conditionals[cond], mainMem) )

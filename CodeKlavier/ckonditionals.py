@@ -4,12 +4,14 @@ Functions that handle CK conditional constructs.
 import time
 import random
 import configparser
+from CK_Setup import BColors
 from threading import Thread, Event
 
 threads_are_perpetual = True
 param_interval = 0
 range_trigger = 0
 notecounter = 0
+stop_midi = False
 
 config = configparser.ConfigParser()
 config.read('default_setup.ini',encoding='utf8')
@@ -68,19 +70,19 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
                 print("range was: ", rangeParser._range)
             if operator == 'more than':
                 if rangeParser._range >= piano_range:
-                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs)               
+                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)               
                 else:
                     mapping.customPass('condition not met :(')
-                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs)                    
+                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)                    
                 #else:
                     #mapping.customPass('condition not met', ':(')
 
             elif operator == 'less than':
                 if rangeParser._range <= piano_range:
-                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs)               
+                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)               
                 else:
                     mapping.customPass('condition not met :(')
-                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs)
+                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)
                     
             # reset states:
             rangeParser._memory = []
@@ -93,7 +95,7 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
 
         time.sleep(1)
 
-def parseFlags(snippet_name, boolean, value, mapping, mainmotifs):
+def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
     """
     function to parse any optional flags set in the .ini file for the passed motif-snippet
     
@@ -101,7 +103,8 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs):
     :param str boolean: true or false
     :param any value: pipped value from the parent function
     :param obj mapping: an instance of a Motippets class
-    :param obj mainmotifs: an instance of a Motippets class dealing witht he main motifs
+    :param obj mainmotifs: an instance of a Motippets class dealing witht the main motifs
+    :param obj conditional: an instance of a Motippets class dealing witht the conditional motifs
     """
     flags = [r.strip() for r in config['snippets code output'].get(snippet_name+'_'+boolean).split(',')]
     
@@ -109,19 +112,20 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs):
         mainmotifs._motifsCount[flags[2]]['count'] = 0
             
     if 'gomb' in flags:
-        mapping.result_new(snippet_name, 'start')
-        gomb = Thread(target=gong_bomb, name='gomb', args=(timer, True))
-        gomb.start()                
-            
-    if 'grab_value' in flags:
-        if len(flags) > 3:
-            if flags[4] in config['motippets random limits']:
-                rand_limits = [int(l) for l in config['motippets random limits'].get(flags[4]).split(',')]
-                mapping.result_new(snippet_name, boolean, random.randint(rand_limits[0], rand_limits[1]))
-            else:
-                mapping.result_new(snippet_name, boolean, value)
-    else:
-        mapping.result_new(snippet_name, boolean)    
+        mapping.result(snippet_name, boolean, flags='gomb')
+        gomb = Thread(target=gong_bomb, name='gomb', args=(value, snippet_name, conditional, mapping, True))
+        gomb.start()   
+    
+    else: 
+        if 'grab_value' in flags:
+            if len(flags) > 3:
+                if flags[4] in config['motippets random limits']:
+                    rand_limits = [int(l) for l in config['motippets random limits'].get(flags[4]).split(',')]
+                    mapping.result(snippet_name, boolean, random.randint(rand_limits[0], rand_limits[1]))
+                else:
+                    mapping.result(snippet_name, boolean, value)
+        else:
+            mapping.result(snippet_name, boolean)    
     
 
 def set_parameters(value, conditional_func, mapping=None, parameters=None, debug=False):
@@ -164,7 +168,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
     :param int result_name: corresponding result_name motif
     :param bool debug: print debug messages
     :param obj mapping: an instance of a Mapping class
-    :param obj mapping: an instance of a Motippets class
+    :param obj conditional: an instance of a Motippets class
     :param obj mainmotifs: an instance of a Motippets class dealing witht he main motifs
     """
     print('thread started for result', result_name, 'number of notes:', numberOfnotes)
@@ -179,7 +183,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
         if notecounter > numberOfnotes:
             mapping.customPass('Total notes played: ' + str(notecounter)+'!!!')
             
-            parseFlags(result_name, 'true', notecounter, mapping, mainmotifs)
+            parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
             break
         else:                
             mapping.customPass('notes played: ' + str(notecounter), display_only=True)
@@ -189,24 +193,27 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
         time.sleep(1)
 
     if notecounter < numberOfnotes:
-        parseFlags(result_name, 'false', notecounter, mapping, mainmotifs) 
+        parseFlags(result_name, 'false', timer, mapping, mainmotifs, conditional) 
     
     conditional._conditionalCounter = 0 
     conditional._resultCounter = 0
     conditional._conditionalStatus = None  
 
-def gong_bomb(countdown, debug=False):
+def gong_bomb(countdown, result_name, conditional, mapping, debug=False):
     """
     function to kill all running processes and finish the piece with a gong bomb. i.e. a GOMB!
 
-    countdown: the countdown time in seconds
+    :param int countdown: Total seconds for countdown timer
+    :param int result_name: corresponding result_name motif
+    :param bool debug: print debug messages
+    :param obj conditional: an instance of a Mapping class
+    :param obj conditional: an instance of a Motippets class
     """
-    #reset parameter global once it has passed effectively:
-    global param_interval, threads_are_perpetual, mapping
+    global param_interval, threads_are_perpetual
     param_interval= 0
-    conditionals['conditional_1']._conditionalStatus = 0
-    conditionals['conditional_1']._resultCounter = 0
-    conditionals['conditional_1']._conditionalCounter = 0
+    conditional._conditionalStatus = 0
+    conditional._resultCounter = 0
+    conditional._conditionalCounter = 0
 
     if debug:
         print('gong bomb thread started', 'countdown: ', countdown)
@@ -214,15 +221,15 @@ def gong_bomb(countdown, debug=False):
     for g in range(0, countdown):
         countdown -= 1
         print(BColors.FAIL + str(countdown) + BColors.ENDC)
-        mapping.onlyDisplay(str(countdown), warning=True)
+        mapping.customPass(str(countdown), 'warning')
 
-        if countdown == 0: #boom ASCII idea by @borrob!
+        if countdown == 0:
             threads_are_perpetual = False #stop all perpetual threads
-            motippets_is_listening = False #stop listening for input
+            stop_midi = True #stop listening for MIDI input
+            
             #stop all snippets
-            mapping.result(4, 'huygens')
-            mapping.result(1, 'true')
-            mapping.result(2, 'true')
+            mapping.result(result_name, 'true')
+            time.sleep(0.2)
             print("")
             print(BColors.WARNING + "  ____   ____   ____  __  __ _ ")
             print(" |  _ \ / __ \ / __ \|  \/  | |")
@@ -231,6 +238,6 @@ def gong_bomb(countdown, debug=False):
             print(" | |_) | |__| | |__| | |  | |_|")
             print(" |____/ \____/ \____/|_|  |_(_)" + BColors.ENDC)
             print("")
-            mapping.result(4, 'true')
+            mapping.gomb()            
 
         time.sleep(1)
