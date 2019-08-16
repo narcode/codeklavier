@@ -209,7 +209,7 @@ def gong_bomb(countdown, result_name, conditional, mapping, debug=False):
     :param obj conditional: an instance of a Mapping class
     :param obj conditional: an instance of a Motippets class
     """
-    global param_interval, threads_are_perpetual
+    global param_interval, threads_are_perpetual, stop_midi
     param_interval= 0
     conditional._conditionalStatus = 0
     conditional._resultCounter = 0
@@ -225,7 +225,7 @@ def gong_bomb(countdown, result_name, conditional, mapping, debug=False):
 
         if countdown == 0:
             threads_are_perpetual = False #stop all perpetual threads
-            stop_midi = True #stop listening for MIDI input
+            stop_midi = False #stop listening for MIDI input
             
             #stop all snippets
             mapping.result(result_name, 'true')

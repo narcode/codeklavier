@@ -43,7 +43,7 @@ threads = {}
 #range_trigger = 0
 #param_interval = 0
 #threads_are_perpetual = True
-motippets_is_listening = True
+#motippets_is_listening = True
 hello_world_on = False
 keep_main_alive = True
 
@@ -53,14 +53,14 @@ motifs_played = {}
 mini_motifs_played = {'low': {}, 'mid': {}, 'hi': {}}
 
 def main():
-    """Start the Hybrid prototype
+    """Start the Hybrid version
 
     :param string configfile: The configurationfile to use. Defaults to default_setup.ini
     """
     global mapping, parameters, conditionalsRange, conditionals, \
            hello_world_on, ck_deltatime, \
            ck_deltatime_mem, codeK, mainMem, memLow, memMid, memHi, \
-           tremoloHi, tremoloLow, tremoloMid, motippets_is_listening
+           tremoloHi, tremoloLow, tremoloMid
     
     codeK = Setup()
     codeK.print_welcome(27)
@@ -101,7 +101,7 @@ def main():
             while hello_world_on:
                 time.sleep(0.01)
                 
-            while motippets_is_listening:
+            while (not ckonditionals.stop_midi):
                 msg = codeK.get_message()
     
                 if msg:
@@ -132,14 +132,14 @@ def main():
                                     ck_deltadif = 0
     
                                 if message[1] == toggle_note:
-                                    print('toggle prototype -> Hello World')
+                                    print('toggle version -> Hello World')
     
                                     codeK.close_port()
     
                                     #mapping = Mapping_HelloWorld()
     
                                     hello_world_on = True
-                                    motippets_is_listening = False
+                                    ckonditionals.stop_midi = True
                                     #notecounter = 0
     
                                     threads['toggle_h'] = Thread(target=ck_loop, name='ck loop thread', args=('hello world',))
@@ -165,13 +165,8 @@ def main():
                                         mini_motifs_played['mid'][mini] = memMid._miniMotifsMid[mini]['count']
                                     elif bottom_note > mid_hi:
                                         mini_motifs_played['hi'][mini] = memHi._miniMotifsHi[mini]['count']
-    
-                                minimotif1_mid_mapped = memMid._unmapCounter1                             
-    
+        
                                 ##tremolos:
-                                #if minimotif1_mid_mapped > 0:
-                                    #tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
-                                    
                                 if played.any() > 0:
                                     for m in mini_motifs_played['low']:
                                         if mini_motifs_played['low'][m] > 0:
@@ -253,65 +248,34 @@ def main():
                                                 threads[conditional_value[cond]].start()
                                                 break
                                                                                        
-                                    #if conditional_value['conditional_1'] != None:
-                                        #ckonditionals.notecounter = 0 # reset the counter
-                                        #threads[conditional_value['conditional_1']] = Thread(target=ckonditionals.noteCounter, 
-                                                                                             #name='conditional note counter thread', 
-                                                                                             #args=(ckonditionals.param_interval, 100, 
-                                                                                                   #conditional_value['conditional_1'], 
-                                                                                                   #True, mapping, 
-                                                                                                   #conditionals['conditional_1'], mainMem) )
-                                        #threads[conditional_value['conditional_1']].start()
-                                    #elif conditional_value['conditional_2'] != None:
-                                        #threads[conditional_value['conditional_2']] = Thread(target=ckonditionals.rangeCounter, 
-                                                                                             #name='conditional range thread',
-                                                                                             #args=('random', 'more than', 'conditional_2', 
-                                                                                                   #conditional_value['conditional_2'], 
-                                                                                                   #ckonditionals.param_interval, True, True, 
-                                                                                                   #mapping, conditionals['conditional_2'], 
-                                                                                                   #conditionalsRange, mainMem) )                                                    
-                                        #threads[conditional_value[cond]].start()
-                                    #elif conditional_value['conditional_3'] != None:
-                                        #threads[conditional_value['conditional_3']] = Thread(target=ckonditionals.rangeCounter, 
-                                                                                             #name='conditional range thread',
-                                                                                             #args=('random', 'less than', 'conditional_3', 
-                                                                                                   #conditional_value['conditional_3'], 
-                                                                                                   #ckonditionals.param_interval, True, True,
-                                                                                                   #mapping, conditionals['conditional_3'], 
-                                                                                                   #conditionalsRange, mainMem) )                                                    
-                                        #threads[conditional_value['conditional_3']].start()
-
                                 #range parser
                                 if ckonditionals.range_trigger == 1:
                                     conditionalsRange.parse_midi(msg, 'conditional_range')
     
-                time.sleep(0.01) #check
-
+                time.sleep(0.01)
     except KeyboardInterrupt:
-        print('')
+        pass
     finally:
         codeK.end()
 
-def ck_loop(prototype='hello world'):
+def ck_loop(version='hello world'):
     """
     the main loop thread for the Codeklavier to listen to incoming midi messages
 
-    :param string prototype: The name of the prototype to process
+    :param string version: The name of the version to process
     """
     global mapping, parameters, conditionalsRange, conditionals, \
-           param_interval, threads_are_perpetual, range_trigger, \
-           notecounter, hello_world_on, noteCounter, motippets_is_listening, \
-           ck_deltatime, ck_deltatime_mem
+           hello_world_on, ck_deltatime, ck_deltatime_mem, \
+           ck_deltatime_mem, codeK, mainMem, memLow, memMid, memHi, \
+           tremoloHi, tremoloLow, tremoloMid           
 
     codeK_thread = Setup()
     codeK_thread.open_port(myPort)
 
-    print('port', myPort)
-
     #go to the end of the codespace screen
     mapping.goDown()
     
-    if prototype == 'hello world':
+    if version == 'hello world':
         try:
             while hello_world_on:
                 msg = codeK_thread.get_message()
@@ -325,14 +289,14 @@ def ck_loop(prototype='hello world'):
                                 ckonditionals.notecounter += 1
 
                                 if message[1] == toggle_note:
-                                    print('toggle prototype -> Motippets')
+                                    print('toggle version -> Motippets')
 
                                     codeK_thread.close_port()
 
                                     #mapping = Mapping_Motippets()
 
                                     hello_world_on = False
-                                    motippets_is_listening = True
+                                    ckonditionals.stop_midi = True
                                     #notecounter = 0
 
                                     threads['toggle_m'] = Thread(target=ck_loop, name='ck loop thread', args=('motippets',))
@@ -341,7 +305,7 @@ def ck_loop(prototype='hello world'):
                                 mapping.mapping(message[1])
                                 
                                 #range parser
-                                if range_trigger == 1:
+                                if ckonditionals.range_trigger == 1:
                                     conditionalsRange.parse_midi(msg, 'conditional_range')
 
                 time.sleep(0.01)
@@ -352,13 +316,13 @@ def ck_loop(prototype='hello world'):
             #print('hybrid thread stopped')
             codeK_thread.end()
 
-    elif prototype == 'motippets':
+    elif version == 'motippets':
         # reset deltatimes
         ck_deltatime = 0
         ck_deltatime_mem = []
 
         try:
-            while motippets_is_listening:
+            while (not ckonditionals.stop_midi):
                 msg = codeK_thread.get_message()
 
                 if msg:
@@ -382,13 +346,13 @@ def ck_loop(prototype='hello world'):
                                 ck_deltadif = 0
 
                             if message[1] == toggle_note:
-                                print('toggle prototype -> Hello World')
+                                print('toggle version -> Hello World')
 
                                 codeK_thread.close_port()
 
                                 #mapping = Mapping_HelloWorld()
 
-                                motippets_is_listening = False
+                                ckonditionals.stop_midi = True
                                 hello_world_on = True
                                 #notecounter = 0
 
@@ -402,114 +366,110 @@ def ck_loop(prototype='hello world'):
                             memHi.parse_midi(msg, 'hi', ck_deltadif)
 
                             for motif in config['chordal main motifs midi']:
-                                motifs_played[motif] = memMid._motifsCount[motif]['count']                        
-                            #motif1_played = memMid._motif1_counter
-                            #motif2_played = mainMem._motif2_counter
-
-                            minimotif1_low_mapped = memLow._unmapCounter1
-                            minimotif2_low_mapped = memLow._unmapCounter2
-                            minimotif3_low_mapped = memLow._unmapCounter3
-
-                            minimotif1_mid_mapped = memMid._unmapCounter1
-                            minimotif2_mid_mapped = memMid._unmapCounter2
-                            minimotif3_mid_mapped = memMid._unmapCounter3_m                                
-
-                            minimotif1_hi_mapped = memHi._unmapCounter1
-                            minimotif2_hi_mapped = memHi._unmapCounter2
-
+                                motifs_played[motif] = mainMem._motifsCount[motif]['count']
+                                
+                            played = np.array(list(motifs_played.values()))
+                                
+                            for mini in mini_motifs_mel:
+                                top_note = np.array(mini_motifs_mel[mini]).max()
+                                bottom_note = np.array(mini_motifs_mel[mini]).min()
+                                if top_note <= mid_low:
+                                    mini_motifs_played['low'][mini] = memLow._miniMotifsLow[mini]['count']
+                                elif bottom_note > mid_low and top_note <= mid_hi:
+                                    mini_motifs_played['mid'][mini] = memMid._miniMotifsMid[mini]['count']
+                                elif bottom_note > mid_hi:
+                                    mini_motifs_played['hi'][mini] = memHi._miniMotifsHi[mini]['count']
+        
                             ##tremolos:
-                            if minimotif1_mid_mapped > 0:
-                                tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 1)
-                            elif minimotif3_mid_mapped > 0:
-                                tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 3)                                
-                       
-                            if motif1_played > 0 or motif2_played > 0:
-                                if minimotif1_low_mapped > 0:
-                                    tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 1)
-                                elif minimotif2_low_mapped > 0:
-                                    tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 2)
-                                elif minimotif3_low_mapped > 0:
-                                    tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, 3)
-
-                                if minimotif2_mid_mapped > 0:
-                                    tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, 2)                                
-
-                                if minimotif1_hi_mapped > 0:
-                                    tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, 1)
-                                elif minimotif2_hi_mapped > 0:
-                                    tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, 2)
-
+                            if played.any() > 0:
+                                for m in mini_motifs_played['low']:
+                                    if mini_motifs_played['low'][m] > 0:
+                                        tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, m)
+                                
+                                for m in mini_motifs_played['mid']:
+                                    if mini_motifs_played['mid'][m] > 0:
+                                        tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, m)
+                                        
+                                for m in mini_motifs_played['hi']:  
+                                    if mini_motifs_played['hi'][m] > 0:
+                                        tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, m)
+    
                             ##conditionals
-                            conditional_value = conditionals[1].parse_midi(msg, 'conditional 1', ck_deltadif)
-                            conditional2_value = conditionals[2].parse_midi(msg, 'conditional 2', ck_deltadif)
-                            conditional3_value = conditionals[3].parse_midi(msg, 'conditional 3', ck_deltadif)
-
-                            if isinstance(conditional_value, int) and conditional_value > 0:
-                                conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
-
+                            conditional_value = {}
+                            conditional_params = None
+                            for cond in conditionals['conditional_1']._allConditional_motifs:
+                                conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)                             
+                                                              
+                                for r in conditionals['conditional_1']._conditional_results_all:
+                                    if conditional_value[cond] == r:
+                                        conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                                            
                                 #set the parameter for the timer:
-                                if isinstance(conditional_params, int) and conditional_params > 0:
-                                    if conditional_value != 4:
-                                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'amount'))
+                                if isinstance(conditional_params, int) and conditional_params > 0: 
+                                    if conditional_value[cond] == 'gomb':
+                                        threads['set_param'] = Thread(target=ckonditionals.set_parameters, 
+                                                                          name='set countdown value', 
+                                                                          args=(conditional_params, 'gomb', 
+                                                                                mapping, parameters) )
                                         threads['set_param'].start()
-                                    elif conditional_value == 4: #gong bomb
-                                        threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                        threads['set_param'].start()
+                                    else:
+                                        if conditional_value[cond] != None:
+                                            if cond in config['snippets code output']:
+                                                conditional_settings = config['conditionals settings'].get(cond).split(',')
+                                                cond_type = conditional_settings[0]
+                                                perpetual = bool(conditional_settings[1])
+                                                if len(conditional_settings) > 2:
+                                                    totalNotes = int(conditional_settings[2])
+                                                
+                                            threads['set_param'] = Thread(target=ckonditionals.set_parameters, 
+                                                                              name='set timer value', 
+                                                                              args=(conditional_params, cond_type, 
+                                                                                    mapping, parameters) )
+                                            threads['set_param'].start()
 
-                                if param_interval > 0:
-                                    #if conditional_value != 4:
-                                    ckonditionals.notecounter = 0 # reset the counter
-                                    threads[conditional_value] = Thread(target=noteCounter, name='conditional note counter thread', args=(param_interval, 100, conditional_value, True))
-                                    threads[conditional_value].start()
-                                    #elif conditional_value == 4:
-                                    #start the countdown
-                                    #gomb = Thread(target=gong_bomb, name='gomb', args=(param_interval, True))
-                                    #gomb.start()
-
-                            if isinstance(conditional2_value, int) and conditional2_value > 0:
-                                conditionalsRange._conditionalStatus = conditional2_value
-                                conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
-
-                                # set range parameter:
-                                if isinstance(conditional_params, int) and conditional_params > 0:
-                                    if conditional_value != 4:
-                                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
-                                        threads['set_param'].start()
-                                    elif conditional_value == 4: #gong bomb
-                                        threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                        threads['set_param'].start()
-
-                                if param_interval > 0:
-                                    threads[conditional2_value] = Thread(target=rangeCounter, name='conditional range thread',
-                                                                         args=('random', 'more than', 2, conditional2_value, param_interval))
-                                    threads[conditional2_value].start()
-
-                            if isinstance(conditional3_value, int) and conditional3_value > 0:
-                                conditionalsRange._conditionalStatus = conditional3_value
-                                conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
-
-                                # set range parameter:
-                                if isinstance(conditional_params, int) and conditional_params > 0:
-                                    if conditional_value != 4:
-                                        threads['set_param'] = Thread(target=set_parameters, name='set timer value', args=(conditional_params, 'range'))
-                                        threads['set_param'].start()
-                                    elif conditional_value == 4: #gong bomb
-                                        threads['set_param'] = Thread(target=set_parameters, name='set countdown value', args=(conditional_params, 'gomb'))
-                                        threads['set_param'].start()
-
-                                if param_interval > 0:
-                                    threads[conditional3_value] = Thread(target=rangeCounter, name='conditional range thread',
-                                                                         args=('random', 'less than', 3, conditional3_value, param_interval))
-                                    threads[conditional3_value].start()
-
+                                if ckonditionals.param_interval > 0:
+                                    if conditional_value[cond] != None:                                         
+                                        if cond_type == 'note_count':
+                                            ckonditionals.notecounter = 0
+                                            threads[conditional_value[cond]] = Thread(target=ckonditionals.noteCounter, 
+                                                                                             name='conditional note counter thread', 
+                                                                                             args=(ckonditionals.param_interval, totalNotes, 
+                                                                                                   conditional_value[cond], 
+                                                                                                   True, mapping, 
+                                                                                                   conditionals[cond], mainMem) )
+                                            threads[conditional_value[cond]].start()
+                                            break
+                                            
+                                        elif cond_type == 'range_more_than':
+                                            threads[conditional_value[cond]] = Thread(target=ckonditionals.rangeCounter, 
+                                                                                             name='conditional range thread',
+                                                                                             args=('random', 'more than', cond, 
+                                                                                                   conditional_value[cond], 
+                                                                                                   ckonditionals.param_interval, True, perpetual, 
+                                                                                                   mapping, conditionals[cond], 
+                                                                                                   conditionalsRange, mainMem) )
+                                            threads[conditional_value[cond]].start()
+                                            break 
+                                        
+                                        elif cond_type == 'range_less_than':
+                                            threads[conditional_value[cond]] = Thread(target=ckonditionals.rangeCounter, 
+                                                                                      name='conditional range thread',
+                                                                                      args=('random', 'less than', cond, 
+                                                                                            conditional_value[cond], 
+                                                                                            ckonditionals.param_interval, True, perpetual, 
+                                                                                            mapping, conditionals[cond], 
+                                                                                            conditionalsRange, mainMem) )                                                
+                                            threads[conditional_value[cond]].start()
+                                            break
+                                                                                       
                             #range parser
-                            if range_trigger == 1:
+                            if ckonditionals.range_trigger == 1:
                                 conditionalsRange.parse_midi(msg, 'conditional_range')
-
-                time.sleep(0.01) #check
+    
+                time.sleep(0.01)
 
         except KeyboardInterrupt:
-            print('')
+            pass
         finally:
             #print('hybrid thread stopped')
             codeK_thread.end()

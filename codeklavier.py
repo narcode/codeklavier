@@ -32,7 +32,7 @@ def doHelp():
     print(BColors.BOLD + '-h | --help' + BColors.ENDC)
     print('Show this help text.')
     print('')
-    print(BColors.BOLD + '-p | --version' + BColors.WARNING + ' <<name>>' + BColors.ENDC)
+    print(BColors.BOLD + '-p | --play' + BColors.WARNING + ' <<name>>' + BColors.ENDC)
     print('Boot CodeKlavier with version <<name>>')
     print('These versions are available: ' + (', ').join(VERSIONS))   
     print('')    
