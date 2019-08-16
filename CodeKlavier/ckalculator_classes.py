@@ -1474,8 +1474,9 @@ class Ckalculator(object):
             if self._temp is False:
 
                 if '.' in self._rules:
-                    velocity = int(numpy.average(self._dynamics).round())                                    
-                    self._rule_dynamics.append(velocity) 
+                    if len(self._dynamics) > 0:
+                        velocity = int(numpy.average(self._dynamics).round())                                    
+                        self._rule_dynamics.append(velocity) 
                     
                 self._numberStack = []                                
                 #print result:
