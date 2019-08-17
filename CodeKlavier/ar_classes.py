@@ -6,6 +6,7 @@ from Mapping import Mapping_CKAR
 import random
 import asyncio
 import math
+import numpy as np
 
 class CkAR(object):
     """Main class for the AR extension"""
@@ -19,6 +20,7 @@ class CkAR(object):
         self.shapes = []
         self._shapes = {}
         self.shape = 0;
+        self._memory = []
         
         self.receiveState()
         
@@ -57,9 +59,12 @@ class CkAR(object):
             self.navigate = 0
         nextt = (self.navigate+self.trees)%self.trees
         print('go to next tree', nextt+1)
+        tree = str(nextt+1)
+        console_out = 'tree->' + tree + '...shaip->' + str(self._shapes[tree]['shape'])
+        self.console(console_out)
         self.run_in_loop(self.makeJson('view', str(nextt+1)))
-
-    
+        
+        
     def currentTree(self):
         tree = (self.navigate+self.trees)%self.trees
         return (tree + 1)
@@ -72,13 +77,18 @@ class CkAR(object):
         if self.navigate > self.trees:
             self.navigate = 0
         prev = (self.trees + self.navigate)%self.trees
+        tree = str(prev+1)
+        console_out = 'tree->' + tree + '...shaip->' + str(self._shapes[tree]['shape'])
+        self.console(console_out)
         self.run_in_loop(self.makeJson('view', str(prev+1)))
         print('go to previous tree', prev+1)
     
     
-    def toggleShape(self, parallelTrees=False, direction='asc'):
+    def toggleShapePrev(self, parallelTrees=False):
         """
         Traverse the possible rendering modes or "shapes" for the AR objects
+        
+        :param bool parallelTrees: 
         """
         
         if not parallelTrees:
@@ -86,10 +96,7 @@ class CkAR(object):
             tree = self.currentTree()
             self.shape = self._shapes[str(tree)]['shape'] - 1
             
-            if direction == 'asc':
-                self.shape += 1
-            else:
-                self.shape -= 1
+            self.shape -= 1
                 
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self._shapes[str(tree)]['shape'] = new_shape
@@ -100,16 +107,44 @@ class CkAR(object):
             if self._parallelTrees == 1:
                 self.shape = self._shapes[str(self._parallelTrees[0])]['shape'] - 1
                 
-            if direction == 'asc':
-                self.shape += 1
-            else:
-                self.shape -= 1
+            self.shape -= 1
             
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self.console(str(new_shape))
             for t in self._parallelTrees:
                 self._shapes[str(t)]['shape'] = new_shape
                 self.run_in_loop(self.makeJsonShape(str(t), str(new_shape)))
+                
+    def toggleShapeNext(self, parallelTrees=False):
+        """
+        Traverse the possible rendering modes or "shapes" for the AR objects
+        
+        :param bool parallelTrees: 
+        """
+        
+        if not parallelTrees:
+            
+            tree = self.currentTree()
+            self.shape = self._shapes[str(tree)]['shape'] - 1
+            
+            self.shape += 1
+            
+            new_shape = self.shapes[self.shape%len(self.shapes)]
+            self._shapes[str(tree)]['shape'] = new_shape
+            self.console(str(new_shape))
+            self.run_in_loop(self.makeJsonShape(str(tree), str(new_shape)))
+
+        else:
+            if self._parallelTrees == 1:
+                self.shape = self._shapes[str(self._parallelTrees[0])]['shape'] - 1
+                
+            self.shape += 1
+            
+            new_shape = self.shapes[self.shape%len(self.shapes)]
+            self.console(str(new_shape))
+            for t in self._parallelTrees:
+                self._shapes[str(t)]['shape'] = new_shape
+                self.run_in_loop(self.makeJsonShape(str(t), str(new_shape)))                
                 
 
     def create(self):
@@ -222,25 +257,47 @@ class CkAR(object):
                 return self.currentTree()/2
             else:
                 return math.floor(self.currentTree()/2)
+            
+    def averageVelocity(self):
+        """ calculate an average of velocities and return a normalized value between 0-1"""
+        a = np.average(self._memory)
+        norm = (a-1)/(100/1)
+        
+        if len(self._parallelTrees) == 0:
+            self.run_in_loop(self.makeJsonValue(self.currentTree(), norm))
+        else:
+            for t in self._parallelTrees:
+                self.run_in_loop(self.makeJsonValue(t, norm))
         
     def sendRule(self, string):
         """ send a LS rule via websocket"""
-        self.run_in_loop(self.makeJson('lsys', string))        
+        self.run_in_loop(self.makeJson('lsys', string)) 
+        
+    def clearRule(self):
+        """ clear the active L-sys rule gmemory"""
+        print('clear')
+        return []
     
       
-    def console(self, string):
+    def console(self, string, permanent=False):
         """ send a string to the LS console via websocket"""
-        self.run_in_loop(self.makeJson('console', string))        
+        if not permanent:
+            self.run_in_loop(self.makeJson('console', string))        
+        else:
+            self.run_in_loop(self.makeJson('consoleStatus', string))             
     
     #TODO: merge these 3 into 1 func:
     def makeJsonTransform(self, tree, position):
         """ make a Json object for spatial Transform"""
         return self.mapping.prepareJsonTransform(tree, position)
     
-    
     def makeJsonShape(self, tree, shape):
         """ make a Json object for Shape shift"""   
         return self.mapping.prepareJsonShape(tree, shape)
+    
+    def makeJsonValue(self, tree, value):
+        """ make a Json object for sending a Value"""   
+        return self.mapping.prepareJsonValue(wstype='-vel', tree=str(tree), payload=value)    
         
     def makeJson(self, lstype='lsys', payload=''):
         """ make a Json object for L-system rule"""        

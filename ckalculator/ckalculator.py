@@ -46,13 +46,13 @@ def main(configfile='default_setup.ini'):
     codeK.open_port(myPort)
     
     codeK.print_lines(20, 1)
-    print("Prototype loaded: Ckalculator AR extension 0.1")
+    print("Prototype loaded: Ckalculator AR extension 0.3")
     print("CodeKlavier is ready and LISTENING.")
     codeK.print_lines(20, 1)
     print("\nPress Control-C to exit.\n")       
     
     cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=True)
-    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id)
+    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=True)
     per_note = 0
     ck_deltatime = 0
     articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}

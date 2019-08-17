@@ -1044,7 +1044,8 @@ class Mapping_CKAR:
     async def connect(self):
         try:
             
-            self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve')
+            self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=None)
             self.websocket = await self._conn.__aenter__()
             print('web socket connected!')
         except:
@@ -1082,4 +1083,9 @@ class Mapping_CKAR:
         return json.dumps({'type': 'transform', 'tree': tree, 'position': position, 'scale': [1,1,1], 
                           'rotation': [0,0,0]})
     
+    def prepareJsonValue(self, wstype='-val', tree='1', payload=''):
+        return json.dumps({'type': 'value','key': tree+wstype, 'payload':payload})    
+    
 
+    # type: value, key: string, payload: normalized float
+    # key: treeId-vel, density, range, register, 

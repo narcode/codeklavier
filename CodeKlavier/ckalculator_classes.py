@@ -72,6 +72,7 @@ class Ckalculator(object):
         self._defineCounter = 0
         self._arg1Counter = 0
         self._arg2Counter = 0 
+        self._successorCounter = 0
         self._ckar = [] 
         self._rules = []
         self._operand = []
@@ -92,14 +93,27 @@ class Ckalculator(object):
             print('valid notes:', self._notesList)
         
         if print_functions:
+            console_output = ''
+            count = 0
             for f in self.ckFunc():
+                count +=1 
+                if count%2 == 0:
+                    newLine = '\n'
+                    function_printAR = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
+                else:
+                    newLine = ' | '
+                    function_printAR = (',').join(midiToNotes(f['name']))
+                    
                 if len(f['body']) > 1:
                     function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                         f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                    console_output += function_printAR + newLine
                 else:
                     function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                    console_output += function_printAR + newLine
+            self.ar.console(console_output, True)
                 
 
     def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
@@ -195,7 +209,8 @@ class Ckalculator(object):
 
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
-            self._deltatime = ck_deltatime_per_note 
+            self._deltatime = ck_deltatime_per_note
+                            
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
 
             
@@ -213,6 +228,7 @@ class Ckalculator(object):
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
+                        self.ar.console('define func body...')
                         if self._defineCounter == 0:
                             self.mapscheme.formatAndSend('define func body...', display=4, syntax_color='function:')
                             self._defineCounter += 1
@@ -222,10 +238,16 @@ class Ckalculator(object):
                             self.define_function_bodyAR(note, articulation)
                     
                              
-            if section == 'full':        
+            if section == 'full':     
+                
+                note_on_vel = self._noteon_velocity[note]
+                self.ar._memory.append(note_on_vel)
+                max_notes = 20
+                if len(self.ar._memory) > max_notes:
+                    self.ar._memory = self.ar._memory[-max_notes:]
+                    self.ar.averageVelocity()                
                 
         ########### CK function definition ############
-                #print('incoming:', note)
                 self._lastnotes.append(note) # coming from note on messages in main()
                 self._lastdeltas.append(self._noteon_delta[note])
                 if len(self._lastnotes) > 2:
@@ -242,15 +264,8 @@ class Ckalculator(object):
                                                                                 self._lastdeltas, 
                                                                                 0.03, True)) 
                 
-                #if last_events[-1] - last_events[0] < 0.03:                    
-                    ##spawn thread for detecting chords:
-                    #chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
-                                                                                #self._noteon_delta[note], 
-                                                                                #0.03, True))
                     chordfound, chord = chordparse.get()
                     
-                    #print('chord:', chord, '\nfound:', chordfound)
-
                     if chordfound:
                         for f in self.ckFunc():
                             with Pool(len(self.ckFunc())) as pool:
@@ -327,6 +342,7 @@ class Ckalculator(object):
                     self.ar.console('identity')
                     self.makeLS(sendToDisplay)
                     self._successorHead = []
+                    self._successorCounter = 0
                                                                             
                 elif note in self.ar.mappingTransposition(LambdaMapping.get('eval')): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
@@ -355,7 +371,6 @@ class Ckalculator(object):
                                         self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))  
 
                                         self._rules.append('N')
-                                        #self._rule_dynamics.append('0')
 
                             self._tempFunctionStack = []                        
                         
@@ -519,16 +534,21 @@ class Ckalculator(object):
                     self.ar.transform()
                     
                 elif note in AR.get('shape'):
-                    if len(self.ar._parallelTrees) > 0:
-                        self.ar.toggleShape(parallelTrees=True)
+                    if self._deltatime <= articulation['staccato']:
+                        if len(self.ar._parallelTrees) > 0:
+                            self.ar.toggleShapeNext(parallelTrees=True)
+                        else:
+                            self.ar.toggleShapeNext()
                     else:
-                        self.ar.toggleShape()
-                        
-                elif note in AR.get('prev_shape'):
-                    if len(self.ar._parallelTrees) > 0:
-                        self.ar.toggleShape(parallelTrees=True, direction='desc')
-                    else:
-                        self.ar.toggleShape(direction='desc')                
+                        if len(self.ar._parallelTrees) > 0:
+                            self.ar.toggleShapePrev(parallelTrees=True)
+                        else:
+                            self.ar.toggleShapePrev() 
+                            
+                elif note in AR.get('clear_rule'):
+                    self._rules = self.ar.clearRule()
+                    self._ckar = self.ar.clearRule()
+                    self._rule_dynamics = self.ar.clearRule()
    
     ######
                 
@@ -542,7 +562,9 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
         print(function.__name__)
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
-        self.ar.console(function.__name__)
+        #self.ar.console(function.__name__)
+        self._successorCounter += 1
+        self.ar.console(self._successorCounter)
                 
         def nestFunc(function1):
             if len(self._successorHead) == 0:
@@ -567,8 +589,7 @@ class Ckalculator(object):
                 self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
         print(function.__name__) 
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
-        self.ar.console(function.__name__)
-        
+        self.ar.console(function.__name__)        
                 
         self._successorHead.append(function)
                                     
@@ -1026,6 +1047,7 @@ class Ckalculator(object):
                                     if debug:
                                         print('i -> ', i)
                                     print('found ostinato!', midiToNotes(self.ostinato['first']))
+                                    self.ar.console('found ostinato!')
                                     msg_notes = (',').join(midiToNotes(self.ostinato['first']))
                                     self.mapscheme.formatAndSend('found ostinato ' + msg_notes, 
                                                                  display=4, syntax_color='function:')
@@ -1101,9 +1123,9 @@ class Ckalculator(object):
                 self._developedOstinato = (True, 2)
                 if debug:
                     print('ostinato has 2 note difference! well done')
-                
             else:
                 print('😤 ostinato was not developed correctly. Please try again')
+                self.ar.console('try again')
                 self._developedOstinato = (False, 0)
                 self.ostinato = {'first': [], 'compare': []}
                 
@@ -1216,8 +1238,14 @@ class Ckalculator(object):
                     self._functionBody['arg1'] = 'collect'                        
                 
             elif note in AR.get('shape'):
-                self._functionBody['arg1'] = 'toggleShape'
-            
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'toggleShapeNext'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'toggleShapePrev'
+                    
+            elif note in AR.get('clear_rule'):
+                self._functionBody['arg1'] = 'clearRule'             
+        
             elif note in AR.get('store_collection'):
                 self._functionBody['arg1'] = 'storeCollect'
                 self._arg2Counter += 1                            
@@ -1341,9 +1369,12 @@ class Ckalculator(object):
                 
             file.close()
             
+            self.ar.console('function saved: ' + self._functionBody['arg1'])
+            
         if sendToDisplay:
             total = len(self.ckFunc())
             count = 0
+            console_output = ''
             for f in self.ckFunc():
                 count += 1
                 function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func']  + ')'
@@ -1351,6 +1382,18 @@ class Ckalculator(object):
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
                 else:
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='saved:')
+                
+                if count%2 == 0:
+                    newLine = '\n'
+                    function_printAR = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func']  + ')'
+                else:
+                    newLine = ' | '
+                    function_printAR = (',').join(midiToNotes(f['name']))
+                    
+                console_output += function_printAR + newLine  
+            
+            self.ar.console(console_output, True)
+
             
         #reset the ostinato analysis
         self.ostinato = {'first': [], 'compare': []}
@@ -1416,8 +1459,7 @@ class Ckalculator(object):
             num = trampolineRecursiveCounter(self._successorHead[0])
             print('succ head: ', num)
             self.mapscheme._osc.send_message("/ckconsole", str(num))
-            self.ar.console(str(num))
-            
+            self.ar.console(str(num))            
             
             if len(self._functionBody) > 0:
                 self._numForFunctionBody = num 
