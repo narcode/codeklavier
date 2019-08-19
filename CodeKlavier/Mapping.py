@@ -1038,14 +1038,26 @@ class Mapping_CKAR:
             self._wsUri = {'host': host, 'port': '8081'}
             print(self._wsUri)
             
-        self.wsConnect() 
+        #self.wsConnect()
+        #asyncio.run(self.cue())
+        
+    async def cue(self):
+        self._cue = asyncio.Queue()
+        await asyncio.create_task(self.websocketloop())
+        
     
-    
+    async def websocketloop(self, json):
+        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=None) as websocket:
+            #while True:
+            await websocket.send(json)
+            
+        
     async def connect(self):
         try:
             
             self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
-                                 ping_interval=3, ping_timeout=None)
+                                 ping_interval=3, ping_timeout=10)
             self.websocket = await self._conn.__aenter__()
             print('web socket connected!')
         except:
@@ -1054,7 +1066,6 @@ class Mapping_CKAR:
         return self
     
     def wsConnect(self):
-        """TODO: check reconnects"""
         asyncio.get_event_loop().run_until_complete(self.connect())
        
 
@@ -1064,7 +1075,18 @@ class Mapping_CKAR:
         except:
             print('connection closed, trying to reconnect... ')
             self.wsConnect()
+
+            
+    async def sendToCue(self, json):
+        print("send to cue")
+        await self._cue.put(json)   
     
+    
+    async def receive_new(self):
+        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=None) as websocket:
+            async for msg in websocket:
+                return json.loads(msg)
             
     async def receive(self):
         async for message in self.websocket:

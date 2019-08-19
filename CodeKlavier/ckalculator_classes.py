@@ -241,11 +241,17 @@ class Ckalculator(object):
             if section == 'full':     
                 
                 note_on_vel = self._noteon_velocity[note]
-                self.ar._memory.append(note_on_vel)
+                self.ar._deltaMemory.append(note_on_vel)
+                
                 max_notes = 20
-                if len(self.ar._memory) > max_notes:
-                    self.ar._memory = self.ar._memory[-max_notes:]
-                    self.ar.averageVelocity()                
+                if len(self.ar._deltaMemory) > max_notes:
+                    self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
+                    self.ar.averageVelocity()
+                    
+                if self.ar._memorize:
+                    self.ar._memory.append(note)
+                    if len(self.ar._memory) > 10:
+                        self.ar._memory = self.ar._memory[-10:] 
                 
         ########### CK function definition ############
                 self._lastnotes.append(note) # coming from note on messages in main()
@@ -379,8 +385,9 @@ class Ckalculator(object):
                         self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
                         self.ar.console(str(self._rules))
                         
-                        if len(self._rules) > 1 or len(self._ckar) > 0:
+                        if len(self._rules) > 1 or len(self._ckar) > 0 or len(self.ar._memory) > 0:
                             
+                            comma = ''
                             rule = ('').join(map(str, self._rules))
 
                             velocity = ('|').join(map(str, self._rule_dynamics))
@@ -403,23 +410,35 @@ class Ckalculator(object):
                             if len(self._ckar) > 0:
                                 if rule != '':
                                     comma = ','
-                                else:
-                                    comma = ''
                                 rule = '*.'+ ('').join(map(str, self._ckar)) + comma + rule
                                 self._ckar = []
+                                
+                            
+                            if len(self.ar._memory) > 0:
+                                if rule != '':
+                                    comma = ','                                
+                                generation = comma + 'g.' + str(self.ar.meanRegister())
+                            else:
+                                generation = ''
                                     
                             print("ckar rule :", rule)
+                            print("mean register :", generation)
                             print("current tree:", self.ar.currentTree())
 
                             if len(self.ar._parallelTrees) > 0:
                                 trees = []
                                 for t in self.ar._parallelTrees:
-                                    trees.append(str(t) + '@' + rule + rule_dynamics)
+                                    trees.append(str(t) + '@' + rule + rule_dynamics + generation)
                                 tree = ('#').join(trees)
                             else:
-                                tree = str(self.ar.currentTree()) + '@' + rule + rule_dynamics 
-                            self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
+                                tree = str(self.ar.currentTree()) + '@' + rule + rule_dynamics + generation 
+                            #self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
                             self.ar.sendRule(tree)
+                            if self.ar._memorize:
+                                self.ar.memoryToggle()
+                                self.ar._memory = []
+                                
+                            self._memory = []
                             self._rules = []
                             self._dynamics = []
                             self._rule_dynamics = []
@@ -515,6 +534,9 @@ class Ckalculator(object):
                         
                 elif note in AR.get('create'):
                     self.ar.create()
+                    
+                elif note in AR.get('generation'):
+                    self.ar.memoryToggle()
                     
                 elif note in AR.get('select'):
                     if self._deltatime <= articulation['staccato']:

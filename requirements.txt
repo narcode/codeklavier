@@ -4,3 +4,4 @@ python-osc==1.6.6
 fn==0.4.3
 numpy==1.15.4
 sphinx
+websockets

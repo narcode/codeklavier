@@ -20,20 +20,22 @@ class CkAR(object):
         self.shapes = []
         self._shapes = {}
         self.shape = 0;
+        self._deltaMemory = []
         self._memory = []
+        self._memorize = False
         
         self.receiveState()
         
         
     def run_in_loop(self, json):
         try:
-            self.loop.run_until_complete(self.mapping.send(json))
+            self.loop.run_until_complete(self.mapping.websocketloop(json))
         except:
             print('error sending')
     
     def receiveState(self):
         try:
-            state = self.loop.run_until_complete(self.mapping.receive())
+            state = self.loop.run_until_complete(self.mapping.receive_new())
             print(state)
             self.trees = state['numTrees']
 
@@ -60,7 +62,7 @@ class CkAR(object):
         nextt = (self.navigate+self.trees)%self.trees
         print('go to next tree', nextt+1)
         tree = str(nextt+1)
-        console_out = 'tree->' + tree + '...shaip->' + str(self._shapes[tree]['shape'])
+        console_out = 'tree:' + tree + '& shape: ' + str(self._shapes[tree]['shape'])
         self.console(console_out)
         self.run_in_loop(self.makeJson('view', str(nextt+1)))
         
@@ -78,7 +80,7 @@ class CkAR(object):
             self.navigate = 0
         prev = (self.trees + self.navigate)%self.trees
         tree = str(prev+1)
-        console_out = 'tree->' + tree + '...shaip->' + str(self._shapes[tree]['shape'])
+        console_out = 'tree: ' + tree + '& shape: ' + str(self._shapes[tree]['shape'])
         self.console(console_out)
         self.run_in_loop(self.makeJson('view', str(prev+1)))
         print('go to previous tree', prev+1)
@@ -100,7 +102,7 @@ class CkAR(object):
                 
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self._shapes[str(tree)]['shape'] = new_shape
-            self.console(str(new_shape))
+            self.console('shape: ' + str(new_shape))
             self.run_in_loop(self.makeJsonShape(str(tree), str(new_shape)))
 
         else:
@@ -110,7 +112,7 @@ class CkAR(object):
             self.shape -= 1
             
             new_shape = self.shapes[self.shape%len(self.shapes)]
-            self.console(str(new_shape))
+            self.console('shape: ' + str(new_shape))
             for t in self._parallelTrees:
                 self._shapes[str(t)]['shape'] = new_shape
                 self.run_in_loop(self.makeJsonShape(str(t), str(new_shape)))
@@ -131,7 +133,7 @@ class CkAR(object):
             
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self._shapes[str(tree)]['shape'] = new_shape
-            self.console(str(new_shape))
+            self.console('shape: ' + str(new_shape))
             self.run_in_loop(self.makeJsonShape(str(tree), str(new_shape)))
 
         else:
@@ -141,7 +143,7 @@ class CkAR(object):
             self.shape += 1
             
             new_shape = self.shapes[self.shape%len(self.shapes)]
-            self.console(str(new_shape))
+            self.console('shape: ' + str(new_shape))
             for t in self._parallelTrees:
                 self._shapes[str(t)]['shape'] = new_shape
                 self.run_in_loop(self.makeJsonShape(str(t), str(new_shape)))                
@@ -176,6 +178,12 @@ class CkAR(object):
         print('drop:', self._parallelTrees)
         self.console('collected trees: ' + str(self._parallelTrees))
         
+    def memoryToggle(self, debug=True):
+        """ store the notes into the memory bank"""
+        self._memorize = not self._memorize        
+        
+        if debug:
+            self.console('register listen ' + str(self._memorize))        
         
     def collect(self, tree=1):
         """Collect a LS-tree for parallel processing"""
@@ -260,14 +268,26 @@ class CkAR(object):
             
     def averageVelocity(self):
         """ calculate an average of velocities and return a normalized value between 0-1"""
-        a = np.average(self._memory)
-        norm = (a-1)/(100/1)
+        a = np.average(self._deltaMemory)
+        norm = (a-1)/(127-1)
         
         if len(self._parallelTrees) == 0:
             self.run_in_loop(self.makeJsonValue(self.currentTree(), norm))
         else:
+            string = ''
+            comma = ','
             for t in self._parallelTrees:
-                self.run_in_loop(self.makeJsonValue(t, norm))
+                if t == len(self._parallelTrees):
+                    comma = ''
+                string += str(t) + '-vel' + comma
+            self.run_in_loop(self.makeJsonValue(string, norm, ''))
+                
+    def meanRegister(self, minval=37, maxval=108, maxscale=10):
+        """ calculate the mean register of the played notesn a normalized value between minval-maxval"""
+        a = np.average(self._memory)
+        norm = (a-minval)/(maxval-minval) * maxscale
+                
+        return int(round(norm))
         
     def sendRule(self, string):
         """ send a LS rule via websocket"""
@@ -295,9 +315,9 @@ class CkAR(object):
         """ make a Json object for Shape shift"""   
         return self.mapping.prepareJsonShape(tree, shape)
     
-    def makeJsonValue(self, tree, value):
+    def makeJsonValue(self, tree, value, wstype='-vel'):
         """ make a Json object for sending a Value"""   
-        return self.mapping.prepareJsonValue(wstype='-vel', tree=str(tree), payload=value)    
+        return self.mapping.prepareJsonValue(wstype=wstype, tree=str(tree), payload=value)    
         
     def makeJson(self, lstype='lsys', payload=''):
         """ make a Json object for L-system rule"""        
