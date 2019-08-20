@@ -208,12 +208,13 @@ class CkAR(object):
     def transform(self):
         "Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"
         x = random.uniform(-1, 1)
-        y = random.uniform(-1, 1)
+        y = random.uniform(0, 1)
+        z = random.uniform(-1, 1)
         
         if len(self._parallelTrees) == 0:
             
             current = self.currentTree()
-            self.run_in_loop(self.makeJsonTransform(str(current), [x, 0, y]))
+            self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y]))
             print('transform tree', current)
             
         else:
