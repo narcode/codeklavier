@@ -5,8 +5,10 @@ AR extension classes and helper functions
 from Mapping import Mapping_CKAR
 import random
 import asyncio
+from threading import Thread, Event
 import math
 import numpy as np
+import time
 
 class CkAR(object):
     """Main class for the AR extension"""
@@ -21,11 +23,12 @@ class CkAR(object):
         self._shapes = {}
         self.shape = 0;
         self._deltaMemory = []
+        self._velocityMemory = []
         self._memory = []
         self._memorize = False
+        self._delayerRunning = False
         
-        self.receiveState()
-        
+        self.receiveState()        
         
     def run_in_loop(self, json):
         try:
@@ -92,18 +95,16 @@ class CkAR(object):
         
         :param bool parallelTrees: 
         """
+        tree = self.currentTree()
         
         if not parallelTrees:
-            
-            tree = self.currentTree()
             self.shape = self._shapes[str(tree)]['shape'] - 1
             
             self.shape -= 1
-                
+            
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self._shapes[str(tree)]['shape'] = new_shape
-            self.console('shape: ' + str(new_shape))
-            self.run_in_loop(self.makeJsonShape(str(tree), str(new_shape)))
+            self.console('shape: ' + str(new_shape))          
 
         else:
             if self._parallelTrees == 1:
@@ -114,8 +115,12 @@ class CkAR(object):
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self.console('shape: ' + str(new_shape))
             for t in self._parallelTrees:
-                self._shapes[str(t)]['shape'] = new_shape
-                self.run_in_loop(self.makeJsonShape(str(t), str(new_shape)))
+                self._shapes[str(t)]['shape'] = new_shape        
+                
+        if not self._delayerRunning:
+            self._delayerRunning = True
+            delayer = Thread(target=self.delayToggle, name='delayer', args=(tree,1, parallelTrees))
+            delayer.start()        
                 
     def toggleShapeNext(self, parallelTrees=False):
         """
@@ -123,18 +128,16 @@ class CkAR(object):
         
         :param bool parallelTrees: 
         """
+        tree = self.currentTree()
         
         if not parallelTrees:
-            
-            tree = self.currentTree()
             self.shape = self._shapes[str(tree)]['shape'] - 1
             
             self.shape += 1
             
             new_shape = self.shapes[self.shape%len(self.shapes)]
             self._shapes[str(tree)]['shape'] = new_shape
-            self.console('shape: ' + str(new_shape))
-            self.run_in_loop(self.makeJsonShape(str(tree), str(new_shape)))
+            self.console('shape: ' + str(new_shape))          
 
         else:
             if self._parallelTrees == 1:
@@ -146,9 +149,29 @@ class CkAR(object):
             self.console('shape: ' + str(new_shape))
             for t in self._parallelTrees:
                 self._shapes[str(t)]['shape'] = new_shape
-                self.run_in_loop(self.makeJsonShape(str(t), str(new_shape)))                
+        
+        if not self._delayerRunning:
+            self._delayerRunning = True
+            delayer = Thread(target=self.delayToggle, name='delayer', args=(tree,1, parallelTrees))
+            delayer.start()        
                 
+    def delayToggle(self, tree, delay=1, parallelTrees=False):
+        """ delay the sending of the shape to the server"""
+        print("thread started")
+        while self._delayerRunning:
+            last_shape = self._shapes[str(tree)]['shape']
+            time.sleep(delay)
 
+            if self._shapes[str(tree)]['shape'] == last_shape:
+                self._delayerRunning = False
+                if parallelTrees:
+                    for t in self._parallelTrees:
+                        self.run_in_loop(self.makeJsonShape(str(t), str(last_shape)))
+                else:
+                    self.run_in_loop(self.makeJsonShape(str(tree), str(last_shape)))
+                print('stopping and sending shape', last_shape)
+            
+                
     def create(self):
         """ 
         Create a new LS tree
@@ -269,7 +292,7 @@ class CkAR(object):
             
     def averageVelocity(self):
         """ calculate an average of velocities and return a normalized value between 0-1"""
-        a = np.average(self._deltaMemory)
+        a = np.average(self._velocityMemory)
         norm = (a-1)/(127-1)
         
         if len(self._parallelTrees) == 0:
@@ -282,6 +305,26 @@ class CkAR(object):
                     comma = ''
                 string += str(t) + '-vel' + comma
             self.run_in_loop(self.makeJsonValue(string, norm, ''))
+            
+    def averageSpeed(self, debug=False):
+        """ calculate the average speed of the notes played 
+        
+        """
+        value = np.average(np.diff(self._deltaMemory))
+        
+        if debug:
+            print('averge speed:', value, 'mem:', self._deltaMemory);
+
+        if len(self._parallelTrees) == 0:
+            self.run_in_loop(self.makeJsonValue(self.currentTree(), value, '-speed'))
+        else:
+            string = ''
+            comma = ','
+            for t in self._parallelTrees:
+                if t == len(self._parallelTrees):
+                    comma = ''
+                string += str(t) + '-speed' + comma
+            self.run_in_loop(self.makeJsonValue(string, value, ''))
                 
     def meanRegister(self, minval=37, maxval=108, maxscale=10):
         """ calculate the mean register of the played notesn a normalized value between minval-maxval"""

@@ -69,6 +69,7 @@ class Ckalculator(object):
         self._noteon_velocity = {}
         self._lastnotes = []
         self._lastdeltas = []
+        self._lastioi = []
         self._defineCounter = 0
         self._arg1Counter = 0
         self._arg2Counter = 0 
@@ -123,7 +124,7 @@ class Ckalculator(object):
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
         :param float ck_deltatime_per_note: the note durations
-        :param int target: target the parsing for a specific snippet. 0 is no target
+        param float ck_deltatime: the duration between notes
         :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
         """   
         
@@ -241,17 +242,28 @@ class Ckalculator(object):
             if section == 'full':     
                 
                 note_on_vel = self._noteon_velocity[note]
-                self.ar._deltaMemory.append(note_on_vel)
+                self.ar._velocityMemory.append(note_on_vel)
                 
-                max_notes = 20
+                self._lastioi.append(ck_deltatime)
+                if len(self._lastioi) > 2:
+                    self._lastioi = self._lastioi[-2:]
+                
+                if np.diff(self._lastioi) > 0.03:    
+                    self.ar._deltaMemory.append(ck_deltatime)
+                
+                max_notes = 10 #send to ini
+                if len(self.ar._velocityMemory) > max_notes:
+                    self.ar._velocityMemory = self.ar._velocityMemory[-max_notes:]
+                    self.ar.averageVelocity()
+                    
                 if len(self.ar._deltaMemory) > max_notes:
                     self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
-                    self.ar.averageVelocity()
+                    self.ar.averageSpeed(True)
                     
                 if self.ar._memorize:
                     self.ar._memory.append(note)
-                    if len(self.ar._memory) > 10:
-                        self.ar._memory = self.ar._memory[-10:] 
+                    if len(self.ar._memory) > max_notes:
+                        self.ar._memory = self.ar._memory[-max_notes:] 
                 
         ########### CK function definition ############
                 self._lastnotes.append(note) # coming from note on messages in main()
@@ -265,7 +277,7 @@ class Ckalculator(object):
                 last_events_new = np.diff(sorted(self._lastdeltas))
 
                 
-                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
+                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord ### send to .ini
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
                                                                                 self._lastdeltas, 
                                                                                 0.03, True)) 
@@ -560,6 +572,7 @@ class Ckalculator(object):
                         if len(self.ar._parallelTrees) > 0:
                             self.ar.toggleShapeNext(parallelTrees=True)
                         else:
+                            print(self._deltatime)
                             self.ar.toggleShapeNext()
                     else:
                         if len(self.ar._parallelTrees) > 0:
@@ -576,8 +589,8 @@ class Ckalculator(object):
                 
     def successor(self, function, sendToDisplay=True):
         """
-        builds a successor functions chain.\n
-        \n
+        builds a successor functions chain.
+        
         :param function function: the function to apply the successor function to
         """
         if sendToDisplay:
@@ -601,22 +614,53 @@ class Ckalculator(object):
     
     def append_successor(self, function, sendToDisplay=True):
         """
-        Append a successor function to the successorHead stack\n
-        \n
+        Append a successor function to the successorHead stack
+        
         :param function function: the function to apply the successor function to
         """
         if sendToDisplay:
             succesors = trampolineRecursiveCounter(function)
             for s in range(succesors):
                 self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
-        print(function.__name__) 
+        print(function.__name__)
         self.mapscheme._osc.send_message("/ckconsole", function.__name__)
         self.ar.console(function.__name__)        
                 
         self._successorHead.append(function)
                                     
         if len(self._successorHead) > 1:
-            self._successorHead = self._successorHead[-1:]      
+            self._successorHead = self._successorHead[-1:]    
+            
+    
+    #def predecessor(self, function, sendToDisplay=True):
+        #""" normal predecessor funtion"""
+        #if sendToDisplay: 
+                    #self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
+                #print(function.__name__)
+                #self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+                #self.ar.console(function.__name__)
+        
+        #def nestFunc(function1):
+            #if len(self._numberStack) == 0:
+                #return function(zero)
+            #else:
+                #return function(self._numberStack[0])
+    
+        #self._numberStack.append(nestFunc(function))
+        #self._fullStack.append(nestFunc(function))
+        
+        #if len(self._tempStack) > 0:
+            #if self._tempStack[0] == '(':
+                #self._tempStack.append(nestFunc(function))        
+                                    
+        #if len(self._numberStack) > 1:
+            #if self._numberStack[0].__name__ is 'zero':
+                #self._numberStack = []
+                #return zero
+            #else:
+                #self._numberStack = self._numberStack[-1:]
+                #if self._numberStack[0].__name__ is 'succ1':        
+                
             
     def predecessor(self, function, sendToDisplay=True):
         """
@@ -1276,7 +1320,10 @@ class Ckalculator(object):
                 if self._deltatime <= articulation['staccato']:
                     self._functionBody['arg1'] = 'nextT'
                 elif self._deltatime > articulation['staccato']:
-                    self._functionBody['arg1'] = 'prev'                
+                    self._functionBody['arg1'] = 'prev'  
+                    
+            elif note in AR.get('generation'):
+                self._functionBody['arg1'] = 'memoryToggle'
             
             self._arg1Counter += 1
             
