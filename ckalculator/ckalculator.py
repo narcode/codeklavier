@@ -69,7 +69,7 @@ def main(configfile='default_setup.ini'):
                 #print('delta per note:', per_note)
                 #print('delta ck:', ck_deltatime)
 
-                if message[0] != 248:
+                if message[0] in (noteoff_id, noteon_id, pedal_id):
                     
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):        
@@ -109,6 +109,8 @@ def main(configfile='default_setup.ini'):
                                              ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
                             
                             cKalc._noteon_delta[message[1]] = per_note
+                        else:
+                            print(message)
                             
             time.sleep(0.01)
                             
