@@ -234,16 +234,20 @@ class CkAR(object):
         y = random.uniform(0, 1)
         z = random.uniform(-1, 1)
         
+        r1 = random.uniform(0, 360)
+        r2 = random.uniform(0, 360)
+        r3 = random.uniform(0, 360)
+        
         if len(self._parallelTrees) == 0:
             
             current = self.currentTree()
-            self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y]))
+            self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
             print('transform tree', current)
             
         else:
             
             for t in self._parallelTrees:
-                self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y]))
+                self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y], [r1,r2,r3]))
        
        
     def mappingTransposition(self, notes, debug=False):
@@ -351,9 +355,9 @@ class CkAR(object):
             self.run_in_loop(self.makeJson('consoleStatus', string))             
     
     #TODO: merge these 3 into 1 func:
-    def makeJsonTransform(self, tree, position):
-        """ make a Json object for spatial Transform"""
-        return self.mapping.prepareJsonTransform(tree, position)
+    def makeJsonTransform(self, tree, position, rotation):
+        """ make a Json object for spatial and object rotarion Transform"""
+        return self.mapping.prepareJsonTransform(tree, position, rotation)
     
     def makeJsonShape(self, tree, shape):
         """ make a Json object for Shape shift"""   

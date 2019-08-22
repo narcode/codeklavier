@@ -1101,9 +1101,9 @@ class Mapping_CKAR:
         return json.dumps({'type': 'shape', 'tree': tree, 'shape': shape})    
     
     
-    def prepareJsonTransform(self, tree='1', position=[]):
+    def prepareJsonTransform(self, tree='1', position=[], rotation=[]):
         return json.dumps({'type': 'transform', 'tree': tree, 'position': position, 'scale': [1,1,1], 
-                          'rotation': [0,0,0]})
+                          'rotation': rotation})
     
     def prepareJsonValue(self, wstype='-val', tree='1', payload=''):
         return json.dumps({'type': 'value','key': tree+wstype, 'payload':payload})    
