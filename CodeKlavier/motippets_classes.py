@@ -1,7 +1,7 @@
 import rtmidi
 import numpy as np
 from functools import reduce
-from Motifs import motifs, conditional_motifs, conditional_motifs_mel, mini_motifs, \
+from Motifs import motifs, motifs_mel, conditional_motifs, conditional_motifs_mel, mini_motifs, \
      mini_motifs_mel, conditional_results_motifs, conditional_results_motifs_mel
 
 class Motippets(object):
@@ -26,10 +26,19 @@ class Motippets(object):
         self._allMotifs = {}
         self._deltaHelper = {}
         self._motifsCount = {}
+        
         for motif in motifs:
-            self._motifsCount[motif] = {'played': False, 'count': 0}
+            self._motifsCount[motif] = {'played': False, 'count': 0, 'type': 'chord'}
             self._allMotifs[motif] = []
             self._deltaHelper[motif] = []
+            
+        for motif in motifs_mel:
+            self._motifsCount[motif] = {'played': False, 'count': 0, 'type': 'mel'}
+            self._allMotifs[motif] = []
+            self._deltaHelper[motif] = [] 
+            
+        self._allMainMotifs = motifs.copy()
+        self._allMainMotifs.update(motifs_mel)
         
         self._conditionalCount = {}
         for motif in conditional_motifs:
@@ -70,6 +79,7 @@ class Motippets(object):
         self._miniMotifsLow = {}
         self._miniMotifsMid = {}
         self._miniMotifsHi = {}
+        
         for motif in mini_motifs_mel:
             self._allMotifs[motif] = []
             self._deltaHelper[motif] = []
@@ -82,6 +92,21 @@ class Motippets(object):
                 self._miniMotifsMid[motif] = {'played': False, 'count': 0, 'type': 'mel'}
             elif bottom_note > self._pianosections[1]:
                 self._miniMotifsHi[motif] = {'played': False, 'count': 0, 'type': 'mel'}
+            else:
+                print('your motif ' + motif + ' is in between registers. Please adjust')
+                
+        for motif in mini_motifs:
+            self._allMotifs[motif] = []
+            self._deltaHelper[motif] = []
+            
+            top_note = np.array(mini_motifs[motif]).max()
+            bottom_note = np.array(mini_motifs[motif]).min()
+            if top_note <= self._pianosections[0]:
+                self._miniMotifsLow[motif] = {'played': False, 'count': 0, 'type': 'chord'}
+            elif bottom_note > self._pianosections[0] and top_note <= self._pianosections[1]:
+                self._miniMotifsMid[motif] = {'played': False, 'count': 0, 'type': 'chord'}
+            elif bottom_note > self._pianosections[1]:
+                self._miniMotifsHi[motif] = {'played': False, 'count': 0, 'type': 'chord'}
             else:
                 print('your motif ' + motif + ' is in between registers. Please adjust')
                                    
@@ -150,6 +175,28 @@ class Motippets(object):
                                 if mapped_mini != None:
                                     self.mapscheme.miniSnippets(motif, section, m)
                                     
+                        else:
+                            self._miniMotifsLow[motif]['played'] = self.compare_chordal_motif(None, motif, 
+                                                                                              mini_motifs.get(motif), 
+                                                                                              note, deltatime=self._deltatime,
+                                                                                              debug=False)
+                            other_minis_count = []
+                            mapped_mini = None
+                            for m in self._miniMotifsLow:
+                                if m != motif:
+                                    other_minis_count.append(self._miniMotifsLow[m]['count'])
+                                    if self._miniMotifsLow[m]['count'] > 0:
+                                        mapped_mini = m
+                                        
+                            np_others = np.array(other_minis_count)
+                            
+                            if self._miniMotifsLow[motif]['played'] and np_others.sum() == 0:
+                                self.mapscheme.miniSnippets(motif, section)
+                                
+                            elif self._miniMotifsLow[motif]['played'] and np_others.sum() > 0:
+                                if mapped_mini != None:
+                                    self.mapscheme.miniSnippets(motif, section, m)                            
+                                    
             ### MID SECTION
             elif section == 'mid':
                 if (note > self._pianosections[0] and
@@ -179,7 +226,29 @@ class Motippets(object):
                                 
                             elif self._miniMotifsMid[motif]['played'] and np_others.sum() > 0:
                                 if mapped_mini != None:
-                                    self.mapscheme.miniSnippets(motif, section, m)                                        
+                                    self.mapscheme.miniSnippets(motif, section, m)  
+                                    
+                        else:
+                            self._miniMotifsMid[motif]['played'] = self.compare_chordal_motif(None, motif, 
+                                                                                              mini_motifs.get(motif), 
+                                                                                              note, deltatime=self._deltatime,
+                                                                                              debug=True)
+                            other_minis_count = []
+                            mapped_mini = None
+                            for m in self._miniMotifsMid:
+                                if m != motif:
+                                    other_minis_count.append(self._miniMotifsMid[m]['count'])
+                                    if self._miniMotifsMid[m]['count'] > 0:
+                                        mapped_mini = m
+                                        
+                            np_others = np.array(other_minis_count)
+                            
+                            if self._miniMotifsMid[motif]['played'] and np_others.sum() == 0:
+                                self.mapscheme.miniSnippets(motif, section)
+                                
+                            elif self._miniMotifsMid[motif]['played'] and np_others.sum() > 0:
+                                if mapped_mini != None:
+                                    self.mapscheme.miniSnippets(motif, section, m)                        
 
             ### HI SECTION
             elif section == 'hi':
@@ -204,6 +273,27 @@ class Motippets(object):
                                         
                             np_others = np.array(other_minis_count)
                                     
+                            if self._miniMotifsHi[motif]['played'] and np_others.sum() == 0:
+                                self.mapscheme.miniSnippets(motif, section)
+                                
+                            elif self._miniMotifsHi[motif]['played'] and np_others.sum() > 0:
+                                if mapped_mini != None:
+                                    self.mapscheme.miniSnippets(motif, section, m)    
+                        else:
+                            self._miniMotifsLow[motif]['played'] = self.compare_chordal_motif(None, motif, 
+                                                                                              mini_motifs.get(motif), 
+                                                                                              note, deltatime=self._deltatime,
+                                                                                              debug=False)
+                            other_minis_count = []
+                            mapped_mini = None
+                            for m in self._miniMotifsHi:
+                                if m != motif:
+                                    other_minis_count.append(self._miniMotifsHi[m]['count'])
+                                    if self._miniMotifsHi[m]['count'] > 0:
+                                        mapped_mini = m
+                                        
+                            np_others = np.array(other_minis_count)
+                            
                             if self._miniMotifsHi[motif]['played'] and np_others.sum() == 0:
                                 self.mapscheme.miniSnippets(motif, section)
                                 
@@ -262,15 +352,22 @@ class Motippets(object):
 
                 self.memorize(note, 20, False, 'Full-section Memory: ')
                 
-                for motif in motifs:
-                    self._motifsCount[motif]['played'] = self.compare_chordal_motif(
-                        None, motif, motifs.get(motif),
-                        note, deltatime=self._deltatime, debug=False)
-    
-                    if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
-                        self.mapscheme.snippets(motif)
-                        self._motifsCount[motif]['count'] = 1                     
-                    
+                for motif in self._allMainMotifs:
+                    if self._motifsCount[motif]['type'] == 'chord':
+                        self._motifsCount[motif]['played'] = self.compare_chordal_motif(
+                            None, motif, motifs.get(motif),
+                            note, deltatime=self._deltatime, debug=False)
+        
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
+                            self.mapscheme.snippets(motif)
+                            self._motifsCount[motif]['count'] = 1                     
+                    else:
+                        self._motifsCount[motif]['played'] = self.compare_motif(None, motif, 
+                                                                                motifs_mel.get(motif),
+                                                                                note)
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
+                            self.mapscheme.snippets(motif)
+                            self._motifsCount[motif]['count'] = 1                        
                     
             ### CONDITIONALS SECTION
             elif section in ('conditional_1', 'conditional_2', 'conditional_3'): #expandable...

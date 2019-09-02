@@ -57,9 +57,9 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
             print('cond', motif_name, 'res', result_name, 'timer: ', timer - t, 'loop time: ', timer)
             if timer == t+1:
                 mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name], 
-                                   display_only=True, flash=True)
+                                   display_only=True, flash=True, display=4)
             else:
-                mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name], display_only=True)
+                mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name], display_only=True, display=4)
         
         rangeParser._timer += 1
         t += 1
@@ -176,6 +176,9 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
     #reset parameter global once it has passed effectively:
     global param_interval
     #mapping, notecounter, conditionals
+    conditional._conditionalCounter = 0 
+    conditional._resultCounter = 0
+    conditional._conditionalStatus = None    
 
     param_interval= 0
     
@@ -194,10 +197,7 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
 
     if notecounter < numberOfnotes:
         parseFlags(result_name, 'false', timer, mapping, mainmotifs, conditional) 
-    
-    conditional._conditionalCounter = 0 
-    conditional._resultCounter = 0
-    conditional._conditionalStatus = None  
+        
 
 def gong_bomb(countdown, result_name, conditional, mapping, debug=False):
     """

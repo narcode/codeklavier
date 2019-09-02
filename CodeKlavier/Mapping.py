@@ -211,12 +211,15 @@ class Mapping_Motippets:
         displays = [1,2]
         num = re.search(r"\d", motif).group()
             
-        display = displays[int(num)%len(displays)]
+        display = displays[(int(num)-1)%len(displays)]
         
-        snippet = self._config['snippets code output'].get(motif)
-        self.__keyboard.type(snippet)
-        self.formatAndSend(snippet, display=display, syntax_color='snippet:')
-        self.evaluateSC('eval', flash=False)
+        try:
+            snippet = self._config['snippets code output'].get(motif)
+            self.__keyboard.type(snippet)
+            self.formatAndSend(snippet, display=display, syntax_color='snippet:')
+            self.evaluateSC('eval', flash=False)
+        except KeyError:
+            print(motif, 'does not exists in the snippets code output section of .ini file')
 
     def miniSnippets(self, motif, pianosection, callback=None):
         """Type a mini snippet for specific pianosections'utf-8'
@@ -225,9 +228,12 @@ class Mapping_Motippets:
         :param str pianosections: the pianosection that is used ('hi', 'mid', 'low')
         :param str motif: the name of the motif to unmap 
         """
-
-        display = self._config['motippets display settings'].getint(motif)             
-        snippet = self._config['snippets code output'].get(motif)
+        
+        try:
+            display = self._config['motippets display settings'].getint(motif)             
+            snippet = self._config['snippets code output'].get(motif)
+        except KeyError:
+            print(motif, 'missing in snippets code output or motippets display settings')
         
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
@@ -333,7 +339,7 @@ class Mapping_Motippets:
                     else:
                         self._osc.send_message("/" + output[2], output[3])          
                         
-    def customPass(self, content, syntax_color=None, display_only=False, flash=False):
+    def customPass(self, content, syntax_color=None, display_only=False, flash=False, display=3):
         """
         post custom string message on codespace and display
 
@@ -353,7 +359,7 @@ class Mapping_Motippets:
         if syntax_color == None:
             syntax_color = 'comment'
             
-        self.formatAndSend(content, display=3, syntax_color=syntax_color+':')
+        self.formatAndSend(content, display=display, syntax_color=syntax_color+':')
         
     def gomb(self):
         """
