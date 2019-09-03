@@ -209,11 +209,11 @@ class Mapping_Motippets:
         :param str configfile: the name of the config file to parse
         """
         displays = [1,2]
-        num = re.search(r"\d", motif).group()
+        #num = re.search(r"\d", motif).group()
             
-        display = displays[(int(num)-1)%len(displays)]
-        
+        #display = displays[(int(num)-1)%len(displays)]        
         try:
+            display = self._config['motippets display settings'].getint(motif)                         
             snippet = self._config['snippets code output'].get(motif)
             self.__keyboard.type(snippet)
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')
@@ -330,14 +330,16 @@ class Mapping_Motippets:
                 self.formatAndSend(output, display=display, syntax_color='primitive:')
             elif text in ('true', 'false'):
                 output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]
-                self.__keyboard.type(output[0])
-                self.evaluateSC('eval', flash=False)
-                self.formatAndSend(output[0], display=display, syntax_color='snippet:')
                 if 'osc' in output:
                     if 'grab_value' in output:
                         self._osc.send_message("/" + output[2], str(mod)) 
                     else:
-                        self._osc.send_message("/" + output[2], output[3])          
+                        self._osc.send_message("/" + output[2], output[3])
+                else:
+                    self.__keyboard.type(output[0])
+                    self.evaluateSC('eval', flash=False)
+                    
+                self.formatAndSend(output[0], display=display, syntax_color='snippet:')                    
                         
     def customPass(self, content, syntax_color=None, display_only=False, flash=False, display=3):
         """
