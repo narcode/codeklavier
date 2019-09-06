@@ -164,6 +164,15 @@ def main():
                                     elif bottom_note > mid_hi:
                                         mini_motifs_played['hi'][mini] = memHi._miniMotifsHi[mini]['count']
         
+                                for mini in mini_motifs:
+                                    top_note = np.array(mini_motifs[mini]).max()
+                                    bottom_note = np.array(mini_motifs[mini]).min()
+                                    if top_note <= mid_low:
+                                        mini_motifs_played['low'][mini] = memLow._miniMotifsLow[mini]['count']
+                                    elif bottom_note > mid_low and top_note <= mid_hi:
+                                        mini_motifs_played['mid'][mini] = memMid._miniMotifsMid[mini]['count']
+                                    elif bottom_note > mid_hi:
+                                        mini_motifs_played['hi'][mini] = memHi._miniMotifsHi[mini]['count']
                                 ##tremolos:
                                 if played.any() > 0:
                                     for m in mini_motifs_played['low']:
@@ -376,6 +385,17 @@ def ck_loop(version='hello world'):
                                 for mini in mini_motifs_mel:
                                     top_note = np.array(mini_motifs_mel[mini]).max()
                                     bottom_note = np.array(mini_motifs_mel[mini]).min()
+                                    if top_note <= mid_low:
+                                        mini_motifs_played['low'][mini] = memLow._miniMotifsLow[mini]['count']
+                                    elif bottom_note > mid_low and top_note <= mid_hi:
+                                        mini_motifs_played['mid'][mini] = memMid._miniMotifsMid[mini]['count']
+                                    elif bottom_note > mid_hi:
+                                        mini_motifs_played['hi'][mini] = memHi._miniMotifsHi[mini]['count']
+                                        
+                                        
+                                for mini in mini_motifs:
+                                    top_note = np.array(mini_motifs[mini]).max()
+                                    bottom_note = np.array(mini_motifs[mini]).min()
                                     if top_note <= mid_low:
                                         mini_motifs_played['low'][mini] = memLow._miniMotifsLow[mini]['count']
                                     elif bottom_note > mid_low and top_note <= mid_hi:
