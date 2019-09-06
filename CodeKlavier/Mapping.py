@@ -251,7 +251,7 @@ class Mapping_Motippets:
 
             callback_snippet = self._config['snippets code output callback'].get(callback)            
             if callback_snippet == None:
-                callback = '### callback error with ' + callback + ' (check .ini) ###'
+                callback_snippet = '### callback error with ' + callback + ' (check .ini) ###'
                 
             self.__keyboard.type(callback_snippet)
             self.evaluateSC('eval', flash=False)
@@ -330,11 +330,11 @@ class Mapping_Motippets:
                 self.formatAndSend(output, display=display, syntax_color='primitive:')
             elif text in ('true', 'false'):
                 output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]
-                if 'osc' in output:
+                if ('osc' or 'osc-reset') in output:
                     if 'grab_value' in output:
                         self._osc.send_message("/" + output[2], str(mod)) 
                     else:
-                        self._osc.send_message("/" + output[2], output[3])
+                        self._osc.send_message("/" + output[2], output[3])             
                 else:
                     self.__keyboard.type(output[0])
                     self.evaluateSC('eval', flash=False)

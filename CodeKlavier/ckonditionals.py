@@ -108,7 +108,7 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
     """
     flags = [r.strip() for r in config['snippets code output'].get(snippet_name+'_'+boolean).split(',')]
     
-    if 'reset' in flags:
+    if ('reset' or 'osc-reset') in flags:
         mainmotifs._motifsCount[flags[2]]['count'] = 0
             
     if 'gomb' in flags:

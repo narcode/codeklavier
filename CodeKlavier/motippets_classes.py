@@ -232,7 +232,7 @@ class Motippets(object):
                             self._miniMotifsMid[motif]['played'] = self.compare_chordal_motif(None, motif, 
                                                                                               mini_motifs.get(motif), 
                                                                                               note, deltatime=self._deltatime,
-                                                                                              debug=True)
+                                                                                              debug=False)
                             other_minis_count = []
                             mapped_mini = None
                             for m in self._miniMotifsMid:
