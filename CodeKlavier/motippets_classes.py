@@ -598,20 +598,23 @@ class Motippets(object):
             if sum_motif == sum_played and (dif_delta < deltatolerance and dif_delta > 0):
                 compare = True
                 if pianosection == 'low':
-                    self._miniMotifsLow[motif_name]['count'] += 1
-                    for m in self._miniMotifsLow:
-                        if m != motif_name:
-                            self._miniMotifsLow[m]['count'] = 0
+                    if motif_name in self._miniMotifsLow:
+                        self._miniMotifsLow[motif_name]['count'] += 1
+                        for m in self._miniMotifsLow:
+                            if m != motif_name:
+                                self._miniMotifsLow[m]['count'] = 0
                 elif pianosection == 'mid':
-                    self._miniMotifsMid[motif_name]['count'] += 1
-                    for m in self._miniMotifsMid:
-                        if m != motif_name:
-                            self._miniMotifsMid[m]['count'] = 0
+                    if motif_name in self._miniMotifsMid:
+                        self._miniMotifsMid[motif_name]['count'] += 1
+                        for m in self._miniMotifsMid:
+                            if m != motif_name:
+                                self._miniMotifsMid[m]['count'] = 0
                 elif pianosection == 'hi':
-                    self._miniMotifsHi[motif_name]['count'] += 1
-                    for m in self._miniMotifsHi:
-                        if m != motif_name:
-                            self._miniMotifsHi[m]['count'] = 0
+                    if motif_name in self._miniMotifsHi:
+                        self._miniMotifsHi[motif_name]['count'] += 1
+                        for m in self._miniMotifsHi:
+                            if m != motif_name:
+                                self._miniMotifsHi[m]['count'] = 0
 
                 if debug:
                     print('played ->' + str(played),
