@@ -148,6 +148,9 @@ def main():
     
                                 for motif in config['chordal main motifs midi']:
                                     motifs_played[motif] = mainMem._motifsCount[motif]['count']
+                                    
+                                for motif in config['melodic main motifs midi']:
+                                    motifs_played[motif] = mainMem._motifsCount[motif]['count']
                                 
                                 played = np.array(list(motifs_played.values()))
                                 
@@ -364,6 +367,9 @@ def ck_loop(version='hello world'):
     
                                 for motif in config['chordal main motifs midi']:
                                     motifs_played[motif] = mainMem._motifsCount[motif]['count']
+                                    
+                                for motif in config['melodic main motifs midi']:
+                                    motifs_played[motif] = mainMem._motifsCount[motif]['count']                                    
                                     
                                 played = np.array(list(motifs_played.values()))
                                     
