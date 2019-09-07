@@ -229,7 +229,7 @@ def main():
                                                                                              args=(ckonditionals.param_interval, totalNotes, 
                                                                                                    conditional_value[cond], 
                                                                                                    True, mapping, 
-                                                                                                   conditionals[cond], mainMem) )
+                                                                                                   conditionals[cond], mainMem, perpetual) )
                                                 threads[conditional_value[cond]].start()
                                                 break
                                             

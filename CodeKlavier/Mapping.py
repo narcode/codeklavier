@@ -270,7 +270,7 @@ class Mapping_Motippets:
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
         if code == None:
-            code = '### tremolo error with ' + motif + ' (check .ini) ###' 
+            print('### tremolo error with ' + motif + ' (check .ini) ###')
         
         self.__keyboard.type(code + ' ' + str(value))
         self.formatAndSend(code + ' ' + str(value), display=display, syntax_color=syntax_color+':')
@@ -330,7 +330,7 @@ class Mapping_Motippets:
                 self.formatAndSend(output, display=display, syntax_color='primitive:')
             elif text in ('true', 'false'):
                 output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]
-                if ('osc' or 'osc-reset') in output:
+                if 'osc' in output:
                     if 'grab_value' in output:
                         self._osc.send_message("/" + output[2], str(mod)) 
                     else:

@@ -51,6 +51,9 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
     if debug:
         print('thread for range started')
         print("range trig -> ", range_trigger, "result num: ", result_name, "range set to: ", piano_range)
+    
+    if perpetual:
+        threads_are_perpetual = True
         
     while threads_are_perpetual:           
         if debug:
@@ -72,7 +75,6 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
                 if rangeParser._range >= piano_range:
                     parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)               
                 else:
-                    mapping.customPass('condition not met :(')
                     parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)                    
                 #else:
                     #mapping.customPass('condition not met', ':(')
@@ -81,7 +83,6 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
                 if rangeParser._range <= piano_range:
                     parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)               
                 else:
-                    mapping.customPass('condition not met :(')
                     parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)
                     
             # reset states:
@@ -106,10 +107,15 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
     :param obj mainmotifs: an instance of a Motippets class dealing witht the main motifs
     :param obj conditional: an instance of a Motippets class dealing witht the conditional motifs
     """
+    global threads_are_perpetual
+    
     flags = [r.strip() for r in config['snippets code output'].get(snippet_name+'_'+boolean).split(',')]
     
-    if ('reset' or 'osc-reset') in flags:
-        mainmotifs._motifsCount[flags[2]]['count'] = 0
+    if snippet_name in config['snippets special flags']:
+        special_flags = [r.strip() for r in config['snippets special flags'].get(snippet_name+'_'+boolean).split(',')]
+    
+        if 'reset' in special_flags:
+            mainmotifs._motifsCount[flags[2]]['count'] = 0
             
     if 'gomb' in flags:
         mapping.result(snippet_name, boolean, flags='gomb')
@@ -125,7 +131,9 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
                 else:
                     mapping.result(snippet_name, boolean, value)
         else:
-            mapping.result(snippet_name, boolean)    
+            if 'loop_stop' in flags:
+                threads_are_perpetual = False
+            mapping.result(snippet_name, boolean)
     
 
 def set_parameters(value, conditional_func, mapping=None, parameters=None, debug=False):
@@ -159,7 +167,7 @@ def set_parameters(value, conditional_func, mapping=None, parameters=None, debug
     range_trigger = 1
 
 def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mapping=None, 
-                conditional=None, mainmotifs=None):
+                conditional=None, mainmotifs=None, perpetual=False):
     """
     Fucntion that counts the numberOfNotes within the timer window
 
@@ -170,30 +178,49 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
     :param obj mapping: an instance of a Mapping class
     :param obj conditional: an instance of a Motippets class
     :param obj mainmotifs: an instance of a Motippets class dealing witht he main motifs
+    :param bool perpetual: boolean flag to make the function loop infinetly or 1 shot ## reserved for future versions
     """
+    global param_interval, threads_are_perpetual, notecounter
+
     print('thread started for result', result_name, 'number of notes:', numberOfnotes)
 
-    #reset parameter global once it has passed effectively:
-    global param_interval
-    #mapping, notecounter, conditionals
     conditional._conditionalCounter = 0 
     conditional._resultCounter = 0
     conditional._conditionalStatus = None    
 
     param_interval= 0
     
-    for s in range(0, timer):
-        if notecounter > numberOfnotes:
-            mapping.customPass('Total notes played: ' + str(notecounter)+'!!!')
-            
-            parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
-            break
-        else:                
-            mapping.customPass('notes played: ' + str(notecounter), display_only=True)
-            
-        if debug:
-            print(notecounter)
-        time.sleep(1)
+    if perpetual:
+        threads_are_perpetual = True
+        
+        while threads_are_perpetual:
+            notecounter = 0
+            for s in range(0, timer):
+                if notecounter > numberOfnotes:
+                    mapping.customPass('Total notes played: ' + str(notecounter)+'!!!')
+                    
+                    parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
+                    break
+                else:                
+                    mapping.customPass('notes played: ' + str(notecounter), display_only=True)
+                    
+                if debug:
+                    print(notecounter)
+                time.sleep(1)
+                
+    else:
+        for s in range(0, timer):
+            if notecounter > numberOfnotes:
+                mapping.customPass('Total notes played: ' + str(notecounter)+'!!!')
+                
+                parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
+                break
+            else:                
+                mapping.customPass('notes played: ' + str(notecounter), display_only=True)
+                
+            if debug:
+                print(notecounter)
+            time.sleep(1)        
 
     if notecounter < numberOfnotes:
         parseFlags(result_name, 'false', timer, mapping, mainmotifs, conditional) 
