@@ -210,7 +210,7 @@ def main():
                                                 if cond in config['snippets code output']:
                                                     conditional_settings = config['conditionals settings'].get(cond).split(',')
                                                     cond_type = conditional_settings[0]
-                                                    perpetual = bool(conditional_settings[1])
+                                                    perpetual = bool(int(conditional_settings[1].strip()))
                                                     if len(conditional_settings) > 2:
                                                         totalNotes = int(conditional_settings[2])
                                                     
@@ -459,7 +459,7 @@ def ck_loop(version='hello world'):
                                                                                                  args=(ckonditionals.param_interval, totalNotes, 
                                                                                                        conditional_value[cond], 
                                                                                                        True, mapping, 
-                                                                                                       conditionals[cond], mainMem) )
+                                                                                                       conditionals[cond], mainMem, perpetual) )
                                                 threads[conditional_value[cond]].start()
                                                 break
                                                 
