@@ -295,29 +295,29 @@ def main():
         for x in range(1, int(display)):
 
             if x == 1:
+                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)
+                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
+                ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
+                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
+            elif x == 2:
                 ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)
                 ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['2'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
-            elif x == 2:
+            elif x == 3:
                 ck_display['title'+str(x)] = tkinter.Text(f['3'], height=1, width=50)
                 ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['3'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
-            elif x == 3:
+            elif x == 4:
                 ck_display['title'+str(x)] = tkinter.Text(f['4'], height=1, width=50)
                 ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
                 ck_display[str(x)] = tkinter.Text(f['4'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
-            elif x == 4:
-                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)
-                ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
-                ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
-                ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 5:
-                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)
+                ck_display['title'+str(x)] = tkinter.Text(f['5'], height=1, width=50)
                 ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
-                ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
+                ck_display[str(x)] = tkinter.Text(f['5'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
             # syntax colors
