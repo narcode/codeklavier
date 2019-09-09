@@ -272,8 +272,9 @@ class Mapping_Motippets:
         if code == None:
             print('### tremolo error with ' + motif + ' (check .ini) ###')
         
-        self.__keyboard.type(code + ' ' + str(value))
-        self.formatAndSend(code + ' ' + str(value), display=display, syntax_color=syntax_color+':')
+        if code != None:
+            self.__keyboard.type(code + ' ' + str(value))
+            self.formatAndSend(code + ' ' + str(value), display=display, syntax_color=syntax_color+':')
         
         flash = display == 5
         self.evaluateSC('eval', flash=flash)
