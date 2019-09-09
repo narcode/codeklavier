@@ -198,11 +198,12 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
             for s in range(0, timer):
                 if conditional._noteCounter > numberOfnotes:
                     mapping.customPass('Total notes played: ' + str(conditional._noteCounter)+'!!!')
-                    
                     parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
                     break
                 else:                
                     mapping.customPass('notes played: ' + str(conditional._noteCounter), display_only=True, display=4)
+                    parseFlags(result_name, 'false', timer, mapping, mainmotifs, conditional)
+                    break                    
                     
                 if debug:
                     print(result_name, conditional._noteCounter)
@@ -217,6 +218,8 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
                 break
             else:                
                 mapping.customPass('notes played: ' + str(conditional._noteCounter), display_only=True, display=4)
+                parseFlags(result_name, 'false', timer, mapping, mainmotifs, conditional)
+                break                
                 
             if debug:
                 print(result_name, conditional._noteCounter)
