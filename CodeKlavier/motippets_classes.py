@@ -387,8 +387,8 @@ class Motippets(object):
                             self._motifsCount[motif]['count'] = 1
 
             ### CONDITIONALS SECTION
-            elif section in ('conditional_1', 'conditional_2', 'conditional_3'): #expandable...
-
+            elif section in self._allConditional_motifs:
+                
                 if note <= self._pianosections[0]:
                     self.memorizeCond(note, 20, False, 'low')
 
