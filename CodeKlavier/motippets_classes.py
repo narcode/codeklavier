@@ -41,7 +41,7 @@ class Motippets(object):
         self._allMainMotifs.update(motifs_mel)
 
         self._conditionalCount = {}
-        for motif in conditional_motifs:
+        for motif in conditional_motifs:            
             self._allMotifs[motif] = {}
             self._deltaHelper[motif] = {}
             self._conditionalCount[motif] = {'played': False, 'count': 0, 'type': 'chord'}
@@ -67,11 +67,27 @@ class Motippets(object):
         self._conditional_results_all.update(conditional_results_motifs_mel)
 
         for c in self._allConditional_motifs:
+            top_note = np.array(self._allConditional_motifs[c]).max()
+            bottom_note = np.array(self._allConditional_motifs[c]).min()
+            
+            if (bottom_note < self._pianosections[0] 
+                and top_note > self._pianosections[0]) or (bottom_note < self._pianosections[1] 
+                                                           and top_note > self._pianosections[1]):
+                print('your motif ' + c + ' is in between registers. Please adjust')
+                
             for register in ['low', 'hi', 'mid']:
                 self._allMotifs[c][register] = []
                 self._deltaHelper[c][register] = []
 
         for r in self._conditional_results_all:
+            top_note = np.array(self._conditional_results_all[r]).max()
+            bottom_note = np.array(self._conditional_results_all[r]).min()
+            
+            if (bottom_note < self._pianosections[0] 
+                and top_note > self._pianosections[0]) or (bottom_note < self._pianosections[1] 
+                                                           and top_note > self._pianosections[1]):
+                print('your motif ' + r + ' is in between registers. Please adjust')
+                
             for register in ['low', 'hi', 'mid']:
                 self._allMotifs[r][register] = []
                 self._deltaHelper[r][register] = []
