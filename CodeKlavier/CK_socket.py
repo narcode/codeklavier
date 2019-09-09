@@ -281,7 +281,7 @@ def main():
         s_width = root.winfo_screenwidth()
         s_height = root.winfo_screenheight()
 
-        for x in range(1, int(display)+1):
+        for x in range(1, int(display)):
 
             print('x is: ', x);
 
@@ -292,7 +292,7 @@ def main():
             f[str(x)].pack_propagate(0)
             f[str(x)].configure(bg='black', bd=3)
 
-        for x in range(1, int(display)+1):
+        for x in range(1, int(display)):
 
             if x == 1:
                 ck_display['title'+str(x)] = tkinter.Text(f['2'], height=1, width=50)
@@ -310,9 +310,9 @@ def main():
                 ck_display[str(x)] = tkinter.Text(f['4'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 4:
-                ck_display['title'+str(x)] = tkinter.Text(f['5'], height=1, width=50)
+                ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)
                 ck_display['title'+str(x)].pack(expand=False, fill=tkinter.BOTH)
-                ck_display[str(x)] = tkinter.Text(f['5'], height=6, width=50)
+                ck_display[str(x)] = tkinter.Text(f['1'], height=6, width=50)
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
             elif x == 5:
                 ck_display['title'+str(x)] = tkinter.Text(f['1'], height=1, width=50)
@@ -343,7 +343,7 @@ def main():
                                                      spacing1=0.3,
                                                      font='MENLO 30',
                                                      relief=normal.get('relief'))
-                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
+                ck_display['title'+str(x)].insert(tkinter.END, "Disklavier\n\n", 'title')
                 ck_display[str(x)].configure(bg=normal.get('background'),
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
@@ -362,7 +362,7 @@ def main():
                                                      spacing1=0.3,
                                                      font='MENLO 30',
                                                      relief=normal.get('relief'))
-                ck_display['title'+str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n\n", 'title')
+                ck_display['title'+str(x)].insert(tkinter.END, "Electronics\n\n", 'title')
                 ck_display[str(x)].configure(bg=normal.get('background'),
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
