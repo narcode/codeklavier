@@ -89,9 +89,12 @@ def main():
     tremoloLow = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     
     #midi listening for conditionals
-    conditionals = {'conditional_1': Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi),
-                    'conditional_2': Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi),
-                    'conditional_3': Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi) }
+    conditionals = {}
+    for motif in conditional_motifs:
+        conditionals[motif] = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
+        
+    for motif in conditional_motifs_mel:
+        conditionals[motif] = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     
     conditionalsRange = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     parameters = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
@@ -190,7 +193,7 @@ def main():
                                 ##conditionals
                                 conditional_value = {}
                                 conditional_params = None
-                                for cond in conditionals['conditional_1']._allConditional_motifs:
+                                for cond in conditionals:
                                     conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)                             
                                                               
                                     for r in conditionals['conditional_1']._conditional_results_all:
@@ -420,7 +423,7 @@ def ck_loop(version='hello world'):
                                 ##conditionals
                                 conditional_value = {}
                                 conditional_params = None
-                                for cond in conditionals['conditional_1']._allConditional_motifs:
+                                for cond in conditionals:
                                     conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)                             
                                                                   
                                     for r in conditionals['conditional_1']._conditional_results_all:
