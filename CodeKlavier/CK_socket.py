@@ -287,7 +287,7 @@ def main():
 
             s[str(x)].bind(('localhost', x*1111))
 
-            f[str(x)] = tkinter.Frame(root, height=s_height, width=s_width/5)
+            f[str(x)] = tkinter.Frame(root, height=s_height, width=s_width/4)
             f[str(x)].pack(fill=tkinter.NONE, side=tkinter.LEFT)
             f[str(x)].pack_propagate(0)
             f[str(x)].configure(bg='black', bd=3)
