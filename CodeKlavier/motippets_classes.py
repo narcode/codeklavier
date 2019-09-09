@@ -138,6 +138,7 @@ class Motippets(object):
         self._conditionalsBuffer = []
         self._resultCounter = 0
         self._conditionalStatus = None
+        self._noteCounter = 0
         self._deltatime = 0
         self._timer = 0
         self._range = 0
@@ -160,6 +161,7 @@ class Motippets(object):
         if (message[0] == self.noteonid):
             note = message[1]
             self._deltatime = ck_deltatime
+            self._noteCounter += 1
 
             ### LOW SECTION
             if section == 'low':

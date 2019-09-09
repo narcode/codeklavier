@@ -115,7 +115,6 @@ def main():
     
                         if message[0] == noteon_id:
                             if message[2] > 0 and message[0] == noteon_id:
-                                ckonditionals.notecounter += 1
     
                                 ck_deltatime_mem.append(ck_deltatime)
     
@@ -194,11 +193,12 @@ def main():
                                 conditional_value = {}
                                 conditional_params = None
                                 for cond in conditionals:
-                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)                             
+                                                                            
+                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)   
                                                               
                                     for r in conditionals['conditional_1']._conditional_results_all:
                                         if conditional_value[cond] == r:
-                                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)                                     
                                             
                                     #set the parameter for the timer:
                                     if isinstance(conditional_params, int) and conditional_params > 0: 
@@ -226,7 +226,7 @@ def main():
                                     if ckonditionals.param_interval > 0:
                                         if conditional_value[cond] != None:                                         
                                             if cond_type == 'note_count':
-                                                ckonditionals.notecounter = 0
+                                                conditionals[cond]._noteCounter = 0
                                                 threads[conditional_value[cond]] = Thread(target=ckonditionals.noteCounter, 
                                                                                              name='conditional note counter thread', 
                                                                                              args=(ckonditionals.param_interval, totalNotes, 
@@ -296,7 +296,6 @@ def ck_loop(version='hello world'):
                     if message[0] != 254 and message[0] != 208:
                         if message[2] > 0: #only noteOn
                             if (message[0] == noteon_id):
-                                ckonditionals.notecounter += 1
 
                                 if message[1] == toggle_note:
                                     print('toggle version -> Motippets')
@@ -343,7 +342,6 @@ def ck_loop(version='hello world'):
 
                         if message[0] == noteon_id:
                             if message[2] > 0 and message[0] == noteon_id:
-                                ckonditionals.notecounter += 1
     
                                 ck_deltatime_mem.append(ck_deltatime)
     
@@ -424,7 +422,8 @@ def ck_loop(version='hello world'):
                                 conditional_value = {}
                                 conditional_params = None
                                 for cond in conditionals:
-                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)                             
+                                            
+                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)                                      
                                                                   
                                     for r in conditionals['conditional_1']._conditional_results_all:
                                         if conditional_value[cond] == r:
@@ -456,7 +455,7 @@ def ck_loop(version='hello world'):
                                     if ckonditionals.param_interval > 0:
                                         if conditional_value[cond] != None:                                         
                                             if cond_type == 'note_count':
-                                                ckonditionals.notecounter = 0
+                                                conditionals[cond]._noteCounter = 0
                                                 threads[conditional_value[cond]] = Thread(target=ckonditionals.noteCounter, 
                                                                                                  name='conditional note counter thread', 
                                                                                                  args=(ckonditionals.param_interval, totalNotes, 

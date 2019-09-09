@@ -10,7 +10,7 @@ from threading import Thread, Event
 threads_are_perpetual = True
 param_interval = 0
 range_trigger = 0
-notecounter = 0
+notecounter = {}
 stop_midi = False
 
 config = configparser.ConfigParser()
@@ -194,35 +194,35 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
         threads_are_perpetual = True
         
         while threads_are_perpetual:
-            notecounter = 0
+            conditional._noteCounter = 0
             for s in range(0, timer):
-                if notecounter > numberOfnotes:
-                    mapping.customPass('Total notes played: ' + str(notecounter)+'!!!')
+                if conditional._noteCounter > numberOfnotes:
+                    mapping.customPass('Total notes played: ' + str(conditional._noteCounter)+'!!!')
                     
                     parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
                     break
                 else:                
-                    mapping.customPass('notes played: ' + str(notecounter), display_only=True)
+                    mapping.customPass('notes played: ' + str(conditional._noteCounter), display_only=True)
                     
                 if debug:
-                    print(notecounter)
+                    print(result_name, conditional._noteCounter)
                 time.sleep(1)
                 
     else:
         for s in range(0, timer):
-            if notecounter > numberOfnotes:
-                mapping.customPass('Total notes played: ' + str(notecounter)+'!!!')
+            if conditional._noteCounter > numberOfnotes:
+                mapping.customPass('Total notes played: ' + str(conditional._noteCounter)+'!!!')
                 
                 parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
                 break
             else:                
-                mapping.customPass('notes played: ' + str(notecounter), display_only=True)
+                mapping.customPass('notes played: ' + str(conditional._noteCounter), display_only=True)
                 
             if debug:
-                print(notecounter)
+                print(result_name, conditional._noteCounter)
             time.sleep(1)        
 
-    if notecounter < numberOfnotes:
+    if conditional._noteCounter < numberOfnotes:
         parseFlags(result_name, 'false', timer, mapping, mainmotifs, conditional) 
         
 
