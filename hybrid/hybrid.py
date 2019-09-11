@@ -442,7 +442,7 @@ def ck_loop(version='hello world'):
                                                 if cond in config['snippets code output']:
                                                     conditional_settings = config['conditionals settings'].get(cond).split(',')
                                                     cond_type = conditional_settings[0]
-                                                    perpetual = bool(conditional_settings[1])
+                                                    perpetual = bool(int(conditional_settings[1].strip()))
                                                     if len(conditional_settings) > 2:
                                                         totalNotes = int(conditional_settings[2])
                                                     
