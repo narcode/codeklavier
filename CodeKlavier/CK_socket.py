@@ -21,8 +21,8 @@ ck_display = {}
 f = {}
 
 # Gui settings (TODO: move to an ini or config file)
-normal = {'relief': tkinter.SUNKEN, 'bd': 5, 'highlightbackground': 'white', 'highlightthickness': 4, 'background': 'black', 'fg': 'cyan'}
-flash = {'relief': tkinter.RAISED, 'bd': 0, 'highlightbackground': 'cyan', 'highlightthickness': 15}
+normal = {'relief': tkinter.SUNKEN, 'bd': 5, 'highlightbackground': 'white', 'highlightthickness': 4, 'background': 'black', 'fg': 'blue'}
+flash = {'relief': tkinter.RAISED, 'bd': 0, 'highlightbackground': 'blue', 'highlightthickness': 15}
 
 #server socket
 listen = True
@@ -114,7 +114,7 @@ def main():
             f[str(x)].pack_propagate(0)
             ck_display[str(x)] = tkinter.Text(f[str(x)], height=6, width=50)
             ck_display[str(x)].pack(fill=tkinter.Y, side=tkinter.LEFT)
-            ck_display[str(x)].configure(bg='black',fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20')
+            ck_display[str(x)].configure(bg='black',fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20')
             ck_display[str(x)].insert(tkinter.END, "Snippet "+str(x)+" \n")
 
             codedump[str(x)] = Thread(target=displayCode, args=(str(x)))
@@ -144,7 +144,7 @@ def main():
             #ck_display[display].tag_config('var', foreground='white')
 
             # syntax colors
-            ck_display[str(x)].tag_config('add', foreground='cyan')
+            ck_display[str(x)].tag_config('add', foreground='blue')
             ck_display[str(x)].tag_config('min', foreground='white')
             ck_display[str(x)].tag_config('div', foreground='#b3649d')
             ck_display[str(x)].tag_config('mul', foreground='#6477b3')
@@ -159,18 +159,18 @@ def main():
             ck_display[str(x)].tag_config('int', foreground='white')
             ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
             ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
-            ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')
+            ck_display[str(x)].tag_config('r_debug', foreground='blue', font='MENLO 20')
 
 
            # TODO: use settings files to configure ck_diplay (like code block for int(display)=5
             if x == 1:
-                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='black', bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "Functions \n")
             elif x == 2:
-                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='black', bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "Stack \n")
             elif x == 3:
-                ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='black', bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "Result \n")
 
 
@@ -183,9 +183,9 @@ def main():
     elif int(display) == 4:
         print('CK displays 1-4 used for CKalculator. Listening on ports 1111, 2222, 3333, 4444')
 
-        theme = 'black'
-        theme_font = 'white'
-        theme_green = 'lime'
+        theme = 'white'
+        theme_font = 'black'
+        theme_green = 'green'
         root.geometry("1920x400")
         s_width = root.winfo_screenwidth()
         s_height = root.winfo_screenheight()
@@ -223,7 +223,7 @@ def main():
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
             # syntax colors
-            ck_display[str(x)].tag_config('add', foreground='cyan')
+            ck_display[str(x)].tag_config('add', foreground='blue')
             ck_display[str(x)].tag_config('min', foreground=theme_font)
             ck_display[str(x)].tag_config('div', foreground='#b3649d')
             ck_display[str(x)].tag_config('mul', foreground='#6477b3')
@@ -238,34 +238,34 @@ def main():
             ck_display[str(x)].tag_config('int', foreground=theme_font)
             ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
             ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
-            ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')
+            ck_display[str(x)].tag_config('r_debug', foreground='blue', font='MENLO 20')
             ck_display[str(x)].tag_config('function', foreground=theme_font, font='MENLO 20')
-            ck_display[str(x)].tag_config('saved', foreground='cyan', font='MENLO 20')
+            ck_display[str(x)].tag_config('saved', foreground='blue', font='MENLO 20')
             
             if x == 1:
-                #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                #ck_display[str(x)].configure(bg='black', bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 #ck_display[str(x)].insert(tkinter.END, "λ Functions \n")
-                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "λ Functions \n\n", 'title')
-                ck_display[str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 2:
-                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Stack \n\n", 'title')
-                ck_display[str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 3:
-                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 60', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 60', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Result \n\n", 'title')
-                ck_display[str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
 
-                #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                #ck_display[str(x)].configure(bg='black', bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 #ck_display[str(x)].insert(tkinter.END, "Result \n")
             elif x == 4:
-                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Piano functions \n\n", 'title')
-                ck_display[str(x)].configure(bg=theme, bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg=theme, bd=5, fg='blue',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
 
 
@@ -323,14 +323,14 @@ def main():
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
             # syntax colors
-            ck_display[str(x)].tag_config('title', foreground='cyan')
+            ck_display[str(x)].tag_config('title', foreground='blue')
             ck_display[str(x)].tag_config('snippets', foreground='white')
             ck_display[str(x)].tag_config('low', foreground='#b3649d')
             ck_display[str(x)].tag_config('mid', foreground='#6477b3')
             ck_display[str(x)].tag_config('hi', foreground='#67b371')
             ck_display[str(x)].tag_config('primitive', foreground='#ebb18a')
             ck_display[str(x)].tag_config('comment', foreground='#a3a3a3')
-            ck_display[str(x)].tag_config('loop', foreground='cyan')
+            ck_display[str(x)].tag_config('loop', foreground='blue')
             ck_display[str(x)].tag_config('warning', foreground='red', font='MENLO 30')
             ck_display[str(x)].tag_config('boom', foreground='red', font='MENLO 30')
             ck_display[str(x)].tag_config('loop2', foreground='#80f7a6')
@@ -407,7 +407,7 @@ def main():
                                              highlightbackground=normal.get('highlightbackground'),
                                              highlightthickness=normal.get('highlightthickness'),
                                              bd=normal.get('bd'),
-                                             fg='cyan',
+                                             fg='blue',
                                              wrap=tkinter.WORD,
                                              spacing1=0.3,
                                              font='MENLO 20',
@@ -488,7 +488,7 @@ def start_flash(display):
 
     :param int display: the display to flash to
     """
-    ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='cyan', highlightthickness=8)
+    ck_display[str(display)].configure(relief=tkinter.RAISED, bd=0, highlightbackground='blue', highlightthickness=8)
 
 def end_flash(display):
     """
