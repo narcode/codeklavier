@@ -196,6 +196,10 @@ def noteCounter(timer=10, numberOfnotes=100, result_name=None, debug=True, mappi
         while threads_are_perpetual:
             conditional._noteCounter = 0                
             for s in range(0, timer):
+                
+                if not threads_are_perpetual:
+                    break
+                
                 if conditional._noteCounter > numberOfnotes:
                     mapping.customPass('Total notes played: ' + str(conditional._noteCounter)+'!!!')
                     parseFlags(result_name, 'true', timer, mapping, mainmotifs, conditional)
