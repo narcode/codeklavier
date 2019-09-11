@@ -220,7 +220,7 @@ def main():
                 ck_display[str(x)].pack(expand=True, fill=tkinter.BOTH)
 
             # syntax colors
-            ck_display[str(x)].tag_config('add', foreground='cyan')
+            ck_display[str(x)].tag_config('add', foreground='#05c0bd')
             ck_display[str(x)].tag_config('min', foreground='black')
             ck_display[str(x)].tag_config('div', foreground='#b3649d')
             ck_display[str(x)].tag_config('mul', foreground='#6477b3')
@@ -235,35 +235,35 @@ def main():
             ck_display[str(x)].tag_config('int', foreground='black')
             ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
             ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
-            ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')
+            ck_display[str(x)].tag_config('r_debug', foreground='#05c0bd', font='MENLO 20')
             ck_display[str(x)].tag_config('function', foreground='black', font='MENLO 20')
-            ck_display[str(x)].tag_config('saved', foreground='cyan', font='MENLO 20')
+            ck_display[str(x)].tag_config('saved', foreground='#05c0bd', font='MENLO 20')
 
 
             if x == 1:
                 #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 #ck_display[str(x)].insert(tkinter.END, "λ Functions \n")
-                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "λ Functions \n\n", 'title')
-                ck_display[str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 2:
-                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Stack \n\n", 'title')
-                ck_display[str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 20', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
             elif x == 3:
-                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 60', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 60', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Result \n\n", 'title')
-                ck_display[str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
 
                 #ck_display[str(x)].configure(bg='black', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 #ck_display[str(x)].insert(tkinter.END, "Result \n")
             elif x == 4:
-                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
+                ck_display['title'+str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 30', relief=tkinter.SUNKEN)
                 ck_display['title'+str(x)].insert(tkinter.END, "Piano functions \n\n", 'title')
-                ck_display[str(x)].configure(bg='white', bd=5, fg='cyan',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
+                ck_display[str(x)].configure(bg='white', bd=5, fg='#05c0bd',wrap=tkinter.WORD,spacing1=0.3, font='MENLO 80', relief=tkinter.SUNKEN)
                 ck_display[str(x)].insert(tkinter.END, "", 'title')
 
 
