@@ -253,8 +253,8 @@ def gong_bomb(countdown, result_name, conditional, mapping, debug=False):
 
     for g in range(0, countdown):
 
-        if not stop_midi:
-            break
+        #if not stop_midi:
+            #break
 
         countdown -= 1
         print(BColors.FAIL + str(countdown) + BColors.ENDC)

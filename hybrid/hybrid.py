@@ -33,9 +33,9 @@ if (myPort == None or noteon_id == None):
     raise LookupError('Missing key information in the config file.')
 
 # activesense compensation
-ck_deltatime_mem = []
-ck_deltatime = 0
-ck_deltadif = 0
+ck_deltatime_mem = {'all': [], 'low': [], 'mid': [], 'hi': []}
+ck_deltatime = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
+ck_deltadif = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
 
 #multiprocessing vars
 threads = {}
@@ -109,24 +109,33 @@ def main():
     
                 if msg:
                     message, deltatime = msg
-                    ck_deltatime += deltatime
+                    for register in ck_deltatime:
+                        ck_deltatime[register] += deltatime
     
                     if message[0] != 254:
     
                         if message[0] == noteon_id:
                             if message[2] > 0 and message[0] == noteon_id:
     
-                                ck_deltatime_mem.append(ck_deltatime)
-    
-                                if len(ck_deltatime_mem) > 2:
-                                    ck_deltatime = 0
-                                    ck_deltatime_mem = ck_deltatime_mem[-2:]
-                                    ck_deltatime_mem[0] = 0
-    
-                                if len(ck_deltatime_mem) == 2:
-                                    ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-                                else:
-                                    ck_deltadif = 0
+                                ck_deltatime_mem['all'].append(ck_deltatime['all'])
+                                
+                                if message[1] <= mid_low:
+                                    ck_deltatime_mem['low'].append(ck_deltatime['low'])
+                                elif message[1] > mid_hi:
+                                    ck_deltatime_mem['hi'].append(ck_deltatime['hi'])
+                                elif (message[1] > mid_low and message[1] <= mid_hi):
+                                    ck_deltatime_mem['mid'].append(ck_deltatime['mid'])
+                                    
+                                for register in ck_deltatime_mem:  
+                                    if len(ck_deltatime_mem[register]) > 2:
+                                        ck_deltatime[register] = 0
+                                        ck_deltatime_mem[register] = ck_deltatime_mem[register][-2:]
+                                        ck_deltatime_mem[register][0] = 0
+        
+                                    if len(ck_deltatime_mem[register]) == 2:
+                                        ck_deltadif[register] = ck_deltatime_mem[register][1] - ck_deltatime_mem[register][0]
+                                    else:
+                                        ck_deltadif[register] = 0                               
     
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')
@@ -143,10 +152,10 @@ def main():
                                     threads['toggle_h'].start()
     
                                 ##motifs:
-                                mainMem.parse_midi(msg, 'full', ck_deltadif)
-                                memLow.parse_midi(msg, 'low', ck_deltadif)
-                                memMid.parse_midi(msg, 'mid', ck_deltadif)
-                                memHi.parse_midi(msg, 'hi', ck_deltadif)
+                                mainMem.parse_midi(msg, 'full', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
+                                memLow.parse_midi(msg, 'low', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
+                                memMid.parse_midi(msg, 'mid', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
+                                memHi.parse_midi(msg, 'hi', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
     
                                 for motif in config['chordal main motifs midi']:
                                     motifs_played[motif] = mainMem._motifsCount[motif]['count']
@@ -179,26 +188,26 @@ def main():
                                 if played.any() > 0:
                                     for m in mini_motifs_played['low']:
                                         if mini_motifs_played['low'][m] > 0:
-                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, m)
+                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif['low'], m)
                                     
                                     for m in mini_motifs_played['mid']:
                                         if mini_motifs_played['mid'][m] > 0:
-                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, m)
+                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif['mid'], m)
                                             
                                     for m in mini_motifs_played['hi']:  
                                         if mini_motifs_played['hi'][m] > 0:
-                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, m)
+                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif['hi'], m)
     
                                 ##conditionals
                                 conditional_value = {}
                                 conditional_params = None
                                 for cond in conditionals:
                                                                             
-                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)   
+                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])   
                                                               
                                     for r in conditionals['conditional_1']._conditional_results_all:
                                         if conditional_value[cond] == r:
-                                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)                                     
+                                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])                                     
                                             
                                     #set the parameter for the timer:
                                     if isinstance(conditional_params, int) and conditional_params > 0: 
@@ -327,8 +336,8 @@ def ck_loop(version='hello world'):
 
     elif version == 'motippets':
         # reset deltatimes
-        ck_deltatime = 0
-        ck_deltatime_mem = []
+        ck_deltatime = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
+        ck_deltatime_mem = {'all': [], 'low': [], 'mid': [], 'hi': []}
 
         try:
             while (not ckonditionals.stop_midi):
@@ -343,17 +352,25 @@ def ck_loop(version='hello world'):
                         if message[0] == noteon_id:
                             if message[2] > 0 and message[0] == noteon_id:
     
-                                ck_deltatime_mem.append(ck_deltatime)
-    
-                                if len(ck_deltatime_mem) > 2:
-                                    ck_deltatime = 0
-                                    ck_deltatime_mem = ck_deltatime_mem[-2:]
-                                    ck_deltatime_mem[0] = 0
-    
-                                if len(ck_deltatime_mem) == 2:
-                                    ck_deltadif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
-                                else:
-                                    ck_deltadif = 0
+                                ck_deltatime_mem['all'].append(ck_deltatime['all'])
+                                
+                                if message[1] <= mid_low:
+                                    ck_deltatime_mem['low'].append(ck_deltatime['low'])
+                                elif message[1] > mid_hi:
+                                    ck_deltatime_mem['hi'].append(ck_deltatime['hi'])
+                                elif (message[1] > mid_low and message[1] <= mid_hi):
+                                    ck_deltatime_mem['mid'].append(ck_deltatime['mid'])
+                                    
+                                for register in ck_deltatime_mem:  
+                                    if len(ck_deltatime_mem[register]) > 2:
+                                        ck_deltatime[register] = 0
+                                        ck_deltatime_mem[register] = ck_deltatime_mem[register][-2:]
+                                        ck_deltatime_mem[register][0] = 0
+        
+                                    if len(ck_deltatime_mem[register]) == 2:
+                                        ck_deltadif[register] = ck_deltatime_mem[register][1] - ck_deltatime_mem[register][0]
+                                    else:
+                                        ck_deltadif[register] = 0
     
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')
@@ -370,10 +387,10 @@ def ck_loop(version='hello world'):
                                     threads['toggle_h'].start()
     
                                 ##motifs:
-                                mainMem.parse_midi(msg, 'full', ck_deltadif)
-                                memLow.parse_midi(msg, 'low', ck_deltadif)
-                                memMid.parse_midi(msg, 'mid', ck_deltadif)
-                                memHi.parse_midi(msg, 'hi', ck_deltadif)
+                                mainMem.parse_midi(msg, 'full', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
+                                memLow.parse_midi(msg, 'low', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
+                                memMid.parse_midi(msg, 'mid', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
+                                memHi.parse_midi(msg, 'hi', ck_deltadif['all'], ck_deltadif['low'], ck_deltadif['hi'], ck_deltadif['mid'])
     
                                 for motif in config['chordal main motifs midi']:
                                     motifs_played[motif] = mainMem._motifsCount[motif]['count']
@@ -408,26 +425,30 @@ def ck_loop(version='hello world'):
                                 if played.any() > 0:
                                     for m in mini_motifs_played['low']:
                                         if mini_motifs_played['low'][m] > 0:
-                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif, m)
+                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif['low'], m)
                                     
                                     for m in mini_motifs_played['mid']:
                                         if mini_motifs_played['mid'][m] > 0:
-                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif, m)
+                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif['mid'], m)
                                             
                                     for m in mini_motifs_played['hi']:  
                                         if mini_motifs_played['hi'][m] > 0:
-                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif, m)
+                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif['hi'], m)
         
                                 ##conditionals
                                 conditional_value = {}
                                 conditional_params = None
                                 for cond in conditionals:
                                             
-                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif)                                      
+                                    conditional_value[cond] = conditionals[cond].parse_midi(msg, cond, ck_deltadif['all'], 
+                                                                                            ck_deltadif['low'], ck_deltadif['hi'], 
+                                                                                            ck_deltadif['mid'])                                      
                                                                   
                                     for r in conditionals['conditional_1']._conditional_results_all:
                                         if conditional_value[cond] == r:
-                                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif)
+                                            conditional_params = parameters.parse_midi(msg, 'params', ck_deltadif['all'], 
+                                                                                       ck_deltadif['low'], ck_deltadif['hi'], 
+                                                                                       ck_deltadif['mid'])
                                                 
                                     #set the parameter for the timer:
                                     if isinstance(conditional_params, int) and conditional_params > 0: 

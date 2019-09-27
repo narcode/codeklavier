@@ -19,6 +19,7 @@ class Motippets(object):
         self.noteoffid = noteoffid
         self._memory = []
         self._memoryCond = {'low': [], 'hi': [], 'mid': []}
+        self._memoryCondDeltas = {'deltalow': [], 'deltahi': [], 'deltamid': []}
 
         self._pianosections = [mid_low, mid_hi]
 
@@ -140,15 +141,21 @@ class Motippets(object):
         self._conditionalStatus = None
         self._noteCounter = 0
         self._deltatime = 0
+        self._deltatime_low = 0
+        self._deltatime_mid = 0
+        self._deltatime_hi = 0
         self._timer = 0
         self._range = 0
 
-    def parse_midi(self, event, section, ck_deltatime=0, target=None):
+    def parse_midi(self, event, section, ck_deltatime=0, ck_deltatime_low=0, ck_deltatime_hi=0, ck_deltatime_mid=0, target=None):
         """Parse the midi signal and process it depending on the register.
 
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
-        :param float ck_deltatime: the deltatime between incoming note-on MIDI messages
+        :param float ck_deltatime: the deltatime between incoming note-on MIDI messages (whole register)
+        :param float ck_deltatime_low: the deltatime between incoming note-on MIDI messages (only low register)
+        :param float ck_deltatime_hi: the deltatime between incoming note-on MIDI messages (only hi register)
+        :param float ck_deltatime_mid: the deltatime between incoming note-on MIDI messages (only mid register)
         :param int target: target the parsing for a specific snippet. None is no target (used for tremolo parsing)
         """
         message, deltatime = event
@@ -393,12 +400,15 @@ class Motippets(object):
                 
                 if note <= self._pianosections[0]:
                     self.memorizeCond(note, 20, False, 'low')
+                    self.memorizeCond(ck_deltatime_low, 20, False, 'deltalow', True)
 
                 if note > self._pianosections[1]:
                     self.memorizeCond(note, 20, False, 'hi')
+                    self.memorizeCond(ck_deltatime_hi, 20, False, 'deltahi', True)
 
                 if (note > self._pianosections[0] and note <= self._pianosections[1]):
                     self.memorizeCond(note, 20, False, 'mid')
+                    self.memorizeCond(ck_deltatime_mid, 20, False, 'deltamid', True)
 
                 for motif in self._allConditional_motifs:
                     if motif == section:
@@ -407,7 +417,7 @@ class Motippets(object):
                                 if self._conditionalCount[motif]['type'] == 'chord':
                                     self._conditionalCount[motif]['played'] = self.compare_chordal_motif(
                                         self._memoryCond[register], motif, conditional_motifs.get(motif),
-                                        note, deltatime=self._deltatime, pianosection=register, debug=False)
+                                        note, deltatime=self._memoryCondDeltas['delta'+register], pianosection=register, debug=False)
                                 else:
                                     self._conditionalCount[motif]['played'] = self.compare_motif(
                                         self._memoryCond[register], motif, conditional_motifs_mel.get(motif),
@@ -429,7 +439,7 @@ class Motippets(object):
                             else:
                                 self._conditionalCount[result]['played'] = self.compare_chordal_motif(
                                     self._memoryCond[register], result, conditional_results_motifs.get(result),
-                                    note, deltatime=self._deltatime, pianosection=register, debug=False)
+                                    note, deltatime=self._memoryCondDeltas['delta'+register], pianosection=register, debug=False)
 
                             if self._conditionalCount[result]['played'] and self._resultCounter == 0:
                                 self.mapscheme.result(result, 'comment')
@@ -472,7 +482,7 @@ class Motippets(object):
             if len(self._conditionalsBuffer) > length:
                 self._conditionalsBuffer = self._conditionalsBuffer[-length:]
 
-    def memorizeCond(self, midinote, length, debug=False, pianosection=None):
+    def memorizeCond(self, midinote, length, debug=False, pianosection=None, delta=False):
         """Store the incoming midi notes by appending to the memory array.
 
         :param midinote: the incoming MIDI note message
@@ -480,13 +490,22 @@ class Motippets(object):
         :param boolean debug: flag to print console debug messages
         :param string pianosection: register name ('low', 'hi', 'mid')
         """
-        self._memoryCond[pianosection].append(midinote)
+        if not delta:                
+            self._memoryCond[pianosection].append(midinote)
+    
+            if len(self._memoryCond[pianosection]) > length:
+                self._memoryCond[pianosection] = self._memoryCond[pianosection][-length:]
+                
+            if debug == True:
+                print(pianosection, ','.join(map(str, self._memoryCond[pianosection])))            
+        else:
+            self._memoryCondDeltas[pianosection].append(midinote)
+    
+            if len(self._memoryCondDeltas[pianosection]) > length:
+                self._memoryCondDeltas[pianosection] = self._memoryCondDeltas[pianosection][-length:]            
 
-        if len(self._memoryCond[pianosection]) > length:
-            self._memoryCond[pianosection] = self._memoryCond[pianosection][-length:]
-
-        if debug == True:
-            print(pianosection, ','.join(map(str, self._memoryCond[pianosection])))
+            if debug == True:
+                print(pianosection, ','.join(map(str, self._memoryCondDeltas[pianosection])))
 
 
     def count_notes(self, array, debug=False):
@@ -529,14 +548,17 @@ class Motippets(object):
             played = self._allMotifs[motif_name]
 
         else:
-            if len(array) > 0:
-                last = array[-1:][0]
-                if last in motif:
-                    self._allMotifs[motif_name][pianosection].append(last)
-                else:
-                    self._allMotifs[motif_name][pianosection] = []
+            if len(array) >= len(motif):
+                played = array[-len(motif):]
+            else:
+                played = []
+                #last = array[-1:][0]
+                #if last in motif:
+                    #self._allMotifs[motif_name][pianosection].append(last)
+                #else:
+                    #self._allMotifs[motif_name][pianosection] = []
 
-            played = self._allMotifs[motif_name][pianosection]
+            #played = self._allMotifs[motif_name][pianosection]
 
         if len(played) >= len(motif):
             played = played[-len(motif):]
@@ -575,7 +597,7 @@ class Motippets(object):
         TODO: describe input/output params
         """
         compare = False
-        if array == None:
+        if array == None and not isinstance(deltatime, list):
             if note in motif:
                 self._allMotifs[motif_name].append(note)
                 self._deltaHelper[motif_name].append(deltatime)
@@ -587,18 +609,26 @@ class Motippets(object):
             deltas = self._deltaHelper[motif_name]
 
         else:
-            if len(array) > 0:
-                last = array[-1:][0]
-                if last in motif:
-                    self._allMotifs[motif_name][pianosection].append(last)
-                    self._deltaHelper[motif_name][pianosection].append(deltatime)
+            if isinstance(deltatime, list):
+                if len(array) >= len(motif):
+                    played = array[-len(motif):]
+                    deltas = deltatime[-(len(motif)-1):]
                 else:
-                    self._allMotifs[motif_name][pianosection] = []
-                    self._deltaHelper[motif_name][pianosection] = []
+                    played = []
+                    deltas = []                    
+            else:
+                played = []
+                deltas = []
+                #if last in motif:
+                    #self._allMotifs[motif_name][pianosection].append(last)
+                    #self._deltaHelper[motif_name][pianosection].append(deltatime)
+                #else:
+                    #self._allMotifs[motif_name][pianosection] = []
+                    #self._deltaHelper[motif_name][pianosection] = []
 
-            played = self._allMotifs[motif_name][pianosection]
-            deltas = self._deltaHelper[motif_name][pianosection]
-
+            #played = self._allMotifs[motif_name][pianosection]
+            #deltas = self._deltaHelper[motif_name][pianosection]
+            
         if len(played) >= len(motif):
             played = played[-len(motif):]
             deltas = deltas[-(len(motif)-1):]
