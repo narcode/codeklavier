@@ -9,12 +9,10 @@ TODO: re-order to have a config loader before execution of prototypes, etc...
 
 import configparser
 import os
-
-currentpath = os.path.dirname(os.path.abspath(__file__))
-projectdir = os.path.abspath(os.path.join(currentpath, os.pardir))
+from CK_config import inifile
 
 config = configparser.ConfigParser()
-config.read(projectdir + '/default_setup.ini', encoding='utf8')
+config.read(inifile, encoding='utf8')
 
 motifs = {}
 motifs_mel = {}
@@ -77,7 +75,7 @@ try:
     less_than_midi = config['lambda'].get('less_than_midi').split(',')
 
 except KeyError:
-    raise LookupError('Missing key information in the config file.')
+    raise LookupError('Missing sections in the config file or the config file does not exist. Maybe a typo?')
 
 # chordal:
 for motif in mottipets_motifs:

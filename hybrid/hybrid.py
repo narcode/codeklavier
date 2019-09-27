@@ -5,7 +5,9 @@ import time
 import numpy as np
 import ckonditionals
 
+
 from threading import Thread, Event
+from CK_config import inifile
 from CK_Setup import Setup
 from Mapping import *
 from motippets_classes import Motippets
@@ -14,7 +16,7 @@ from Motifs import mini_motifs, mini_motifs_mel, conditional_motifs, conditional
      conditional_results_motifs, conditional_results_motifs_mel
 
 config = configparser.ConfigParser()
-config.read('default_setup.ini',encoding='utf8')
+config.read(inifile, encoding='utf8')
 
 try:
     myPort = config['midi'].getint('port')
@@ -23,9 +25,6 @@ try:
     toggle_note = config['Hello World'].getint('toggle')
     mid_low = config['Motippets register division'].getint('mid_low')
     mid_hi = config['Motippets register division'].getint('mid_hi')
-
-    #for motif in config['chordal main motifs midi']:
-    
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
@@ -54,8 +53,6 @@ mini_motifs_played = {'low': {}, 'mid': {}, 'hi': {}}
 
 def main():
     """Start the Hybrid version
-
-    :param string configfile: The configurationfile to use. Defaults to default_setup.ini
     """
     global mapping, parameters, conditionalsRange, conditionals, \
            hello_world_on, ck_deltatime, \

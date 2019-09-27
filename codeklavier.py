@@ -13,9 +13,9 @@ import time
 
 import importlib
 
-import CK_configWriter
 from CK_Setup import Setup, BColors
 from CK_rec import CK_Rec
+import CK_config
 
 ck_deltatime_mem = []
 
@@ -109,31 +109,36 @@ if __name__ == '__main__':
     showHelp = False
     test = False
     record = False
-    interactive = False
-    useConfig = None
+    config = None
     play = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'h:p:rt:',['help', 'play=', 'rec', 'test'])
+        options, args = getopt.getopt(sys.argv[1:],'h:p:i:rt:',['help', 'play=', 'ini=', 'rec', 'test'])
         selected_options = [x[0] for x in options]
+        
+        for o, a in options:
+            if o in ('-h', '--help'):
+                showHelp = True
+            if o in ('-p', '--play'):
+                play = a
+            if o in ('-i', '--play'):
+                config = a
+            if o in ('-t', '--test'):
+                test = True
+            if o in ('-r', '--rec'):
+                record = True    
+                
     except getopt.GetoptError:
-        print('Something went wrong parsing the optional arguments')
-    
-    for o, a in options:
-        if o in ('-h', '--help'):
-            showHelp = True
-        if o in ('-p', '--play'):
-            play = a
-        if o in ('-t', '--test'):
-            test = True
-        if o in ('-r', '--rec'):
-            record = True            
+        print('Something went wrong parsing the optional arguments')        
 
     if showHelp:
         doHelp()
         sys.exit(0)
 
-    config = 'default_setup.ini'
+    if config == None:
+        CK_config.inifile = 'default_setup.ini'
+    else:
+        CK_config.inifile = config
 
     if test:
         miditest(configfile=config)

@@ -13,6 +13,7 @@ import socket
 from pythonosc import udp_client
 import configparser
 import re
+from CK_config import inifile
 
 display1 = 1111
 display2 = 2222
@@ -30,7 +31,7 @@ class Mapping_Motippets:
             print("## Using the Motippets mapping ##")
 
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini', encoding='utf8')
+        self._config.read(inifile, encoding='utf8')
 
         self.__keyboard = Controller()
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -202,11 +203,10 @@ class Mapping_Motippets:
 
         return self.__socket.sendto(bytes(syntax_color+newline+msg, encoding), (host, port))
 
-    def snippets(self, motif, configfile='default_setup.ini'):
+    def snippets(self, motif):
         """Type code snippets
 
         :param str motif: the name of the motif to map
-        :param str configfile: the name of the config file to parse
         """
         displays = [1,2]
         #num = re.search(r"\d", motif).group()

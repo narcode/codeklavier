@@ -5,6 +5,7 @@ import time
 import random
 import configparser
 from CK_Setup import BColors
+from CK_config import inifile
 from threading import Thread, Event
 
 threads_are_perpetual = True
@@ -14,7 +15,7 @@ notecounter = {}
 stop_midi = False
 
 config = configparser.ConfigParser()
-config.read('default_setup.ini',encoding='utf8')
+config.read(inifile, encoding='utf8')
 
 def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
                  piano_range=72, debug=False, perpetual=True, mapping=None,
