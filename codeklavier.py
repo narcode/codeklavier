@@ -36,6 +36,9 @@ def doHelp():
     print('Boot CodeKlavier with version <<name>>')
     print('These versions are available: ' + (', ').join(VERSIONS))   
     print('')    
+    print(BColors.BOLD + '-i | --ini' + BColors.WARNING + ' <<filename.ini>>' + BColors.ENDC)
+    print('Boot CodeKlavier with configuration from <<filename.ini>>')
+    print('')     
     print(BColors.BOLD + '-r | --rec' + BColors.ENDC)
     print('Boot CodeKlavier to record MIDI for machine learning')
     print('')        
@@ -121,7 +124,7 @@ if __name__ == '__main__':
                 showHelp = True
             if o in ('-p', '--play'):
                 play = a
-            if o in ('-i', '--play'):
+            if o in ('-i', '--ini'):
                 config = a
             if o in ('-t', '--test'):
                 test = True
