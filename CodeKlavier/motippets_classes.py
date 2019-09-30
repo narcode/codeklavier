@@ -335,7 +335,7 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'low',
-                            self._deltatime, 0.1, target, False)
+                            self._deltatime_low, 0.1, target, False)
                         self._deltatime = 0
 
             elif section == 'tremoloHi':
@@ -345,7 +345,7 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
-                            self._deltatime, 0.1, target, False)
+                            self._deltatime_hi, 0.1, target, False)
                         self._deltatime = 0
 
             elif section == 'tremoloMid':
@@ -356,7 +356,7 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'mid',
-                            self._deltatime, 0.1, target, False)
+                            self._deltatime_mid, 0.1, target, False)
                         self._deltatime = 0
 
             elif section == 'params':

@@ -185,15 +185,15 @@ def main():
                                 if played.any() > 0:
                                     for m in mini_motifs_played['low']:
                                         if mini_motifs_played['low'][m] > 0:
-                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif['low'], m)
+                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltatime_low=ck_deltadif['low'], target=m)
                                     
                                     for m in mini_motifs_played['mid']:
                                         if mini_motifs_played['mid'][m] > 0:
-                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif['mid'], m)
+                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltatime_mid=ck_deltadif['mid'], target=m)
                                             
                                     for m in mini_motifs_played['hi']:  
                                         if mini_motifs_played['hi'][m] > 0:
-                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif['hi'], m)
+                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltatime_hi=ck_deltadif['hi'], target=m)
     
                                 ##conditionals
                                 conditional_value = {}
