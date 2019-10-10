@@ -999,6 +999,8 @@ class Ckalculator(object):
         self._note_on_cue = []
         self._filtered_cue = []
         self._functionBody = {}
+        self._arg1Counter = 0
+        self._arg2Counter = 0
         self._defineCounter = 0
         self._foundOstinato = False
         self._developedOstinato = False 

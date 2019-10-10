@@ -184,6 +184,9 @@ def main():
         print('CK displays 1-4 used for CKalculator. Listening on ports 1111, 2222, 3333, 4444')
 
         theme = 'black'
+        theme_font = 'white'
+        theme_green = 'lime'
+
         root.geometry("1920x400")
         s_width = root.winfo_screenwidth()
         s_height = root.winfo_screenheight()
@@ -222,22 +225,22 @@ def main():
 
             # syntax colors
             ck_display[str(x)].tag_config('add', foreground='cyan')
-            ck_display[str(x)].tag_config('min', foreground='black')
+            ck_display[str(x)].tag_config('min', foreground=theme_font)
             ck_display[str(x)].tag_config('div', foreground='#b3649d')
             ck_display[str(x)].tag_config('mul', foreground='#6477b3')
             ck_display[str(x)].tag_config('eval', foreground='#67b371')
             ck_display[str(x)].tag_config('pred', foreground='#ebb18a')
-            ck_display[str(x)].tag_config('succ', foreground='black')
+            ck_display[str(x)].tag_config('succ', foreground=theme_font)
             ck_display[str(x)].tag_config('zero', foreground='#eb218a')
-            ck_display[str(x)].tag_config('result', foreground='green')
-            ck_display[str(x)].tag_config('equal', foreground='green')
-            ck_display[str(x)].tag_config('gt', foreground='green')
-            ck_display[str(x)].tag_config('lt', foreground='green')
-            ck_display[str(x)].tag_config('int', foreground='black')
+            ck_display[str(x)].tag_config('result', foreground=theme_green)
+            ck_display[str(x)].tag_config('equal', foreground=theme_green)
+            ck_display[str(x)].tag_config('gt', foreground=theme_green)
+            ck_display[str(x)].tag_config('lt', foreground=theme_green)
+            ck_display[str(x)].tag_config('int', foreground=theme_font)
             ck_display[str(x)].tag_config('error', foreground='red', font='MENLO 60')
             ck_display[str(x)].tag_config('e_debug', foreground='red', font='MENLO 20')
             ck_display[str(x)].tag_config('r_debug', foreground='cyan', font='MENLO 20')
-            ck_display[str(x)].tag_config('function', foreground='black', font='MENLO 20')
+            ck_display[str(x)].tag_config('function', foreground=theme_font, font='MENLO 20')
             ck_display[str(x)].tag_config('saved', foreground='cyan', font='MENLO 20')
             
             if x == 1:
