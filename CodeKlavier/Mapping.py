@@ -32,18 +32,24 @@ class Mapping_Motippets:
 
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         self._config.read(inifile, encoding='utf8')
-
+            
         self.__keyboard = Controller()
+        self._shortcuts = {}     
+       
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
 
-    def evaluateSC(self, what, flash=True, display=5):
+    def evaluate(self, what, flash=True, display=5):
         """Evaluate the SuperCollider command 'what'
 
         :param string what: the command that should be evaluated
         :param bool flash: should eval command flash the screen
         :param int display: the display number that should flash to indicate evaluation
         """
+        
+        for shortcut in self._config['shortcuts']:
+            self._shortcuts[shortcut] = self._config['shortcuts'].get(shortcut).split(',')        
+        
         if flash:
             self.formatAndSend('evaluate:', display=display)
         if what == 'play':
@@ -75,9 +81,9 @@ class Mapping_Motippets:
                 self.__keyboard.type('e')
                 self.__keyboard.release(Key.cmd)
         elif what == 'eval':
-            with self.__keyboard.pressed(Key.shift):
-                self.__keyboard.press(Key.enter)
-                self.__keyboard.release(Key.enter)
+            with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
+                self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
+                self.__keyboard.release(eval('Key.'+self._shortcuts[what][1].strip()))
             time.sleep(0.2)
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
@@ -156,7 +162,7 @@ class Mapping_Motippets:
                         self.goDown()
                         self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'sc-evaluate':
-                        self.evaluateSC('noEnter_eval', flash=display==5)
+                        self.evaluate('noEnter_eval', flash=display==5)
                         self.formatAndSend('', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.tempo':
                         self.__keyboard.type(mapped_string)
@@ -168,7 +174,7 @@ class Mapping_Motippets:
                         self.__keyboard.type(mapped_string)
                         self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'motippetssc-evaluate':
-                        self.evaluateSC('eval', flash=display==5)
+                        self.evaluate('eval', flash=display==5)
         except KeyError:
             raise LookupError('Missing hello world information in the config file.')
 
@@ -217,7 +223,7 @@ class Mapping_Motippets:
             snippet = self._config['snippets code output'].get(motif)
             self.__keyboard.type(snippet)
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')
-            self.evaluateSC('eval', flash=False)
+            self.evaluate('eval', flash=False)
         except KeyError:
             print(motif, 'does not exists in the snippets code output section of .ini file')
 
@@ -242,11 +248,11 @@ class Mapping_Motippets:
         
         if callback == None:
             self.__keyboard.type(snippet)
-            self.evaluateSC('eval', flash=False)
+            self.evaluate('eval', flash=False)
             self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
         else:           
             self.__keyboard.type(snippet)
-            self.evaluateSC('eval', flash=False)
+            self.evaluate('eval', flash=False)
             self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')
 
             callback_snippet = self._config['snippets code output callback'].get(callback)            
@@ -254,7 +260,7 @@ class Mapping_Motippets:
                 callback_snippet = '### callback error with ' + callback + ' (check .ini) ###'
                 
             self.__keyboard.type(callback_snippet)
-            self.evaluateSC('eval', flash=False)
+            self.evaluate('eval', flash=False)
             self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
             
     def tremolo(self, motif, value, syntax_color):
@@ -277,7 +283,7 @@ class Mapping_Motippets:
             self.formatAndSend(code + ' ' + str(value), display=display, syntax_color=syntax_color+':')
         
         flash = display == 5
-        self.evaluateSC('eval', flash=flash)
+        self.evaluate('eval', flash=flash)
 
     def conditional(self, motif):
         """Setup a conditional
@@ -319,7 +325,7 @@ class Mapping_Motippets:
         if flags in ('gomb', ):
             output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]            
             self.__keyboard.type('GOMB countdown started!')
-            self.evaluateSC('eval', flash=False)
+            self.evaluate('eval', flash=False)
             self.formatAndSend('boom:GOMB', display=1)
             self.formatAndSend('boom:COUNTDOWN', display=2)
             self.formatAndSend('boom:STARTED!', display=3) 
@@ -338,7 +344,7 @@ class Mapping_Motippets:
                         self._osc.send_message("/" + output[2], output[3])             
                 else:
                     self.__keyboard.type(output[0])
-                    self.evaluateSC('eval', flash=False)
+                    self.evaluate('eval', flash=False)
                     
                 self.formatAndSend(output[0], display=display, syntax_color='snippet:')                    
                         
