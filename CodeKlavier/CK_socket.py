@@ -186,6 +186,7 @@ def main():
         theme = 'black'
         theme_font = 'white'
         theme_green = 'lime'
+
         root.geometry("1920x400")
         s_width = root.winfo_screenwidth()
         s_height = root.winfo_screenheight()
