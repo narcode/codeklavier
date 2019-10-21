@@ -7,6 +7,10 @@ permalink: /activities
 ### This page gives a run down of public CodeKlavier presentations and milestones to date:
 (newest on top)
 
+August 2019: Paper, lecture and performance at [FARM Berlin 2019](https://icfp19.sigplan.org/home/farm-2019). Watch the video [here](https://youtu.be/K1ai2N9bSqI). Third residency with Patrick Borgeat working on the AR extension
+
+June 2019: Second residency with Patrick Borgeat working on the AR extension.
+
 May 2019: Performaces of the CKalcuλator at Sounds like Soup on the 19th and at Young Amsterdam Artists concert on the 23rd. Both concerts are in Amsterdam. Our second residency with Patrick Borgeat working on the AR extension will take place.
 
 March 2019: First residency with Patrick Borgeat working on the AR extension. Watch the teaser [here](https://youtu.be/p65YavCUEuQ)
