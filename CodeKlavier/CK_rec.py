@@ -15,7 +15,7 @@ class CK_Rec(object):
     Class to handle the recording of midi events in .csv format
     """
 
-    def __init__(self, configfile='../default_setup.ini'):
+    def __init__(self, configfile=None):
         self._configfile = configfile
         self._deltamem = []
            
@@ -40,8 +40,6 @@ class CK_Rec(object):
     def record(self, framesize=10):
         """
         Run a basic miditest to see how the CodeKlavier is receiving your midi.
-    
-        :param string configfile: Path to the configuration file (default: default_setup.ini)
         """
         
         timestamp = time.strftime("%y-%m-%d")

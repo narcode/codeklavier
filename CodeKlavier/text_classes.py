@@ -42,9 +42,6 @@ class TextPrint(object):
                     self.mapscheme.formatAndSend(text[self.counter], display=1, spacing=False, spacechar='')
                 
                 self.counter += 1
-                
-            #if (message[0] == self.pedalid):
-                #print("pedal event handler not defined yet")
                     
     def loadText(self, path=None, text_id=1):
         """ Load a text from a file
