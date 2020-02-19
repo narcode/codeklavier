@@ -40,7 +40,7 @@ class Mapping_Motippets:
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
 
     def evaluate(self, what, flash=True, display=5):
-        """Evaluate the SuperCollider command 'what'
+        """Evaluate the mapped command 'what' from .ini file
 
         :param string what: the command that should be evaluated
         :param bool flash: should eval command flash the screen
@@ -91,6 +91,14 @@ class Mapping_Motippets:
             with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
+        else:
+            print(what)
+            with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
+                if len(self._shortcuts[what][1].strip()) > 1:
+                    self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
+                else:
+                    self.__keyboard.type(self._shortcuts[what][1].strip());
+                self.__keyboard.release(eval('Key.'+self._shortcuts[what][1].strip()))            
 
     def goDown(self, display=5):
         """Press command-arrow down and enter.
