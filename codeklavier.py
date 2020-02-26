@@ -116,7 +116,7 @@ if __name__ == '__main__':
     play = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'h:p:i:rt:',['help', 'play=', 'ini=', 'rec', 'test'])
+        options, args = getopt.getopt(sys.argv[1:],'h:p:i:rt',['help', 'play=', 'ini=', 'rec', 'test'])
         selected_options = [x[0] for x in options]
         
         for o, a in options:
@@ -144,11 +144,11 @@ if __name__ == '__main__':
         CK_config.inifile = config
 
     if test:
-        miditest(configfile=config)
+        miditest(configfile=CK_config.inifile)
         sys.exit(0)
         
     if record:
-        rec = CK_Rec(configfile=config)
+        rec = CK_Rec(configfile=CK_config.inifile)
         rec.record(framesize=1)
         sys.exit(0)        
 
