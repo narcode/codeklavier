@@ -92,7 +92,7 @@ class Mapping_Motippets:
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
         else:
-            print(what)
+            print('shortcut: ', what)
             if len(self._shortcuts[what] == 3):
                 with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()),
                                              eval('Key.'+self._shortcuts[what][1].strip())):
@@ -109,6 +109,7 @@ class Mapping_Motippets:
                         self.__keyboard.type(self._shortcuts[what][1].strip());
                     self.__keyboard.release(eval('Key.'+self._shortcuts[what][1].strip()))
             else:
+                print('trying tab')
                 self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()))
 
     def goDown(self, display=5):
@@ -246,7 +247,6 @@ class Mapping_Motippets:
         try:
             display = self._config['motippets display settings'].getint(motif)                         
             snippet = self._config['snippets code output'].get(motif)
-            print('narcode: ', snippet)
             self.__keyboard.type(snippet)
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')
             self.evaluate(evaluate, flash=False)
