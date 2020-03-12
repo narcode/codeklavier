@@ -111,7 +111,7 @@ class Mapping_Motippets:
                     self.__keyboard.release(eval('Key.'+self._shortcuts[what][1].strip()))
             else:
                 print('trying tab')
-                self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()))
+                self.__keyboard.Key(eval(self._shortcuts[what][0].strip()))
 
     def goDown(self, display=5):
         """Press command-arrow down and enter.
