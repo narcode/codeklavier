@@ -232,6 +232,11 @@ class Mapping_Motippets:
         :param str motif: the name of the motif to map
         """
         displays = [1,2]
+        try:
+            evaluate = self._config['shortcuts mapping'].get(motif)
+        except KeyError:
+            print('default eval')
+            evaluate = 'eval'
         #num = re.search(r"\d", motif).group()
             
         #display = displays[(int(num)-1)%len(displays)]        
@@ -240,7 +245,7 @@ class Mapping_Motippets:
             snippet = self._config['snippets code output'].get(motif)
             self.__keyboard.type(snippet)
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')
-            self.evaluate('eval', flash=False)
+            self.evaluate(evaluate, flash=False)
         except KeyError:
             print(motif, 'does not exists in the snippets code output section of .ini file')
 
