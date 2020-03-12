@@ -236,7 +236,7 @@ class Mapping_Motippets:
         """
         displays = [1,2]
         try:
-            evaluate = self._config['shortcuts mapping'].get(motif)
+            evaluate = self._config['shortcuts'].get(motif)
             print('debug in snippets: ', evaluate)
         except KeyError:
             print('default eval')
