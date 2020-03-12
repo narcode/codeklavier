@@ -94,7 +94,7 @@ class Mapping_Motippets:
         else:
             print('shortcut: ', what)
             print('debig b4 sleep:', self._shortcuts[what])
-            if len(self._shortcuts[what] == 3):
+            if len(self._shortcuts[what]) == 3:
                 with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()),
                                              eval('Key.'+self._shortcuts[what][1].strip())):
                     if len(self._shortcuts[what][2].strip()) > 1:
@@ -102,7 +102,7 @@ class Mapping_Motippets:
                     else:
                         self.__keyboard.type(self._shortcuts[what][2].strip())
                     self.__keyboard.release(eval('Key.'+self._shortcuts[what][2].strip()))
-            elif len(self._shortcuts[what] == 2):
+            elif len(self._shortcuts[what]) == 2:
                 with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
                     if len(self._shortcuts[what][2].strip()) > 1:
                         self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
