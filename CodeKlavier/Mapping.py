@@ -92,8 +92,6 @@ class Mapping_Motippets:
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
         else:
-            print('shortcut: ', what)
-            print('debig b4 sleep:', self._shortcuts[what])
             if len(self._shortcuts[what]) == 3:
                 with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()),
                                              eval('Key.'+self._shortcuts[what][1].strip())):
@@ -110,7 +108,6 @@ class Mapping_Motippets:
                         self.__keyboard.type(self._shortcuts[what][1].strip());
                     self.__keyboard.release(eval('Key.'+self._shortcuts[what][1].strip()))
             else:
-                print('trying tab')
                 self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
 
     def goDown(self, display=5):
@@ -239,7 +236,6 @@ class Mapping_Motippets:
         try:
             evaluate = self._config['shortcuts mapping'].get(motif)
         except KeyError:
-            print('default eval')
             evaluate = 'eval'
         #num = re.search(r"\d", motif).group()
             
@@ -270,19 +266,30 @@ class Mapping_Motippets:
         except KeyError:
             print(motif, 'missing in snippets code output or motippets display settings')
         
+        try:
+            evaluate = self._config['shortcuts mapping'].get(motif)
+        except KeyError:
+            evaluate = 'eval'
+        
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
         if snippet == None:
             snippet = '### code output error with ' + motif + ' (check .ini) ###'
         
         if callback == None:
-            self.__keyboard.type(snippet)
-            self.evaluate('eval', flash=False)
-            self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
+            if evaluate == 'eval':
+                self.__keyboard.type(snippet)
+                self.evaluate(evaluate, flash=False)
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
+            else:
+                self.evaluate(evaluate, flash=False)
         else:           
-            self.__keyboard.type(snippet)
-            self.evaluate('eval', flash=False)
-            self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')
+            if evaluate == 'eval':
+                self.__keyboard.type(snippet)
+                self.evaluate(evaluate, flash=False)
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
+            else:
+                self.evaluate(evaluate, flash=False)
 
             callback_snippet = self._config['snippets code output callback'].get(callback)            
             if callback_snippet == None:
