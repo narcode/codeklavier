@@ -246,6 +246,7 @@ class Mapping_Motippets:
             display = self._config['motippets display settings'].getint(motif)                         
             snippet = self._config['snippets code output'].get(motif)
             print('debug:', snippet)
+            print('debug eval:', evaluate)
             if evaluate == 'eval':
                 self.__keyboard.type(snippet)
                 self.formatAndSend(snippet, display=display, syntax_color='snippet:')
