@@ -82,8 +82,10 @@ class Mapping_Motippets:
                 self.__keyboard.release(Key.cmd)
         elif what == 'eval':
             with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
-                self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
-                self.__keyboard.release(eval('Key.'+self._shortcuts[what][1].strip()))
+                if len(self._shortcuts[what][1].strip()) > 1:
+                    self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
+                else:
+                    self.__keyboard.type(self._shortcuts[what][1].strip())
             time.sleep(0.2)
             self.__keyboard.press(Key.enter)
             self.__keyboard.release(Key.enter)
