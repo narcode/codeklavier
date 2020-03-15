@@ -104,7 +104,7 @@ class Mapping_Motippets:
                     
             elif len(self._shortcuts[what]) == 2:
                 with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
-                    if len(self._shortcuts[what][2].strip()) > 1:
+                    if len(self._shortcuts[what][1].strip()) > 1:
                         self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
                     else:
                         self.__keyboard.type(self._shortcuts[what][1].strip());
@@ -236,25 +236,22 @@ class Mapping_Motippets:
         """
         displays = [1,2]
         try:
-            evaluate = self._config['shortcuts mapping'].get(motif)
+            evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
         except KeyError:
-            evaluate = 'eval'
-        #num = re.search(r"\d", motif).group()
+            print('normal eval')
             
-        #display = displays[(int(num)-1)%len(displays)]        
         try:
             display = self._config['motippets display settings'].getint(motif)                         
             snippet = self._config['snippets code output'].get(motif)
-            print('debug:', snippet)
-            print('debug eval:', evaluate)
-            if evaluate == 'eval':
-                self.__keyboard.type(snippet)
-                self.formatAndSend(snippet, display=display, syntax_color='snippet:')
-                self.evaluate(evaluate, flash=False)
-            else:
-                self.evaluate(evaluate, flash=False)
         except KeyError:
             print(motif, 'does not exists in the snippets code output section of .ini file')
+        
+        if evaluate == 'eval':
+            self.__keyboard.type(snippet)
+            self.formatAndSend(snippet, display=display, syntax_color='snippet:')
+            self.evaluate(evaluate, flash=False)
+        else:
+            self.evaluate(evaluate, flash=False)        
 
     def miniSnippets(self, motif, pianosection, callback=None):
         """Type a mini snippet for specific pianosections'utf-8'
@@ -271,9 +268,9 @@ class Mapping_Motippets:
             print(motif, 'missing in snippets code output or motippets display settings')
         
         try:
-            evaluate = self._config['shortcuts mapping'].get(motif)
+            evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
         except KeyError:
-            evaluate = 'eval'
+            print('normal eval miniSnippets')
         
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
