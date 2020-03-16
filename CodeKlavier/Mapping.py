@@ -244,6 +244,7 @@ class Mapping_Motippets:
         try:
             evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
         except KeyError:
+            evaluate = 'eval'
             print('normal eval')
             
         try:
@@ -276,6 +277,7 @@ class Mapping_Motippets:
         try:
             evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
         except KeyError:
+            evaluate = 'eval'
             print('normal eval miniSnippets')
         
         if display == None:
