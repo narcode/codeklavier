@@ -342,7 +342,8 @@ def ck_loop(version='hello world'):
 
                 if msg:
                     message, deltatime = msg
-                    ck_deltatime += deltatime
+                    for register in ck_deltatime:
+                        ck_deltatime[register] += deltatime
                     
                     if message[0] != 254:
 
