@@ -116,7 +116,6 @@ class Mapping_Motippets:
                         self.__keyboard.type(self._shortcuts[what][1].strip());
                         
             else:
-                print('tab')
                 self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
                 self.__keyboard.release(eval('Key.'+self._shortcuts[what][0].strip()))
 
@@ -247,7 +246,6 @@ class Mapping_Motippets:
             evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
         except KeyError:
             evaluate = 'eval'
-            print('normal eval')
             
         try:
             display = self._config['motippets display settings'].getint(motif)                         
@@ -280,7 +278,6 @@ class Mapping_Motippets:
             evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
         except KeyError:
             evaluate = 'eval'
-            print('normal eval miniSnippets')
         
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
@@ -293,7 +290,6 @@ class Mapping_Motippets:
                 self.evaluate(evaluate, flash=False)
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
             else:
-                print('tab callback is NONE')
                 self.evaluate(evaluate, flash=False)
         else:           
             if evaluate == 'eval':
@@ -301,7 +297,6 @@ class Mapping_Motippets:
                 self.evaluate(evaluate, flash=False)
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
             else:
-                print('tab callback but no eval')
                 self.evaluate(evaluate, flash=False)
 
             callback_snippet = self._config['snippets code output callback'].get(callback)            
@@ -309,7 +304,6 @@ class Mapping_Motippets:
                 callback_snippet = '### callback error with ' + callback + ' (check .ini) ###'
                 
             self.__keyboard.type(callback_snippet)
-            print('tab after callback')
             self.evaluate('eval', flash=False)
             self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
             
