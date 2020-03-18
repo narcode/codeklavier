@@ -293,6 +293,7 @@ class Mapping_Motippets:
                 self.evaluate(evaluate, flash=False)
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
             else:
+                print('tab callback is NONE')
                 self.evaluate(evaluate, flash=False)
         else:           
             if evaluate == 'eval':
@@ -300,6 +301,7 @@ class Mapping_Motippets:
                 self.evaluate(evaluate, flash=False)
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
             else:
+                print('tab callback but no eval')
                 self.evaluate(evaluate, flash=False)
 
             callback_snippet = self._config['snippets code output callback'].get(callback)            
@@ -307,6 +309,7 @@ class Mapping_Motippets:
                 callback_snippet = '### callback error with ' + callback + ' (check .ini) ###'
                 
             self.__keyboard.type(callback_snippet)
+            print('tab after callback')
             self.evaluate('eval', flash=False)
             self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
             
