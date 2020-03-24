@@ -314,8 +314,10 @@ class Mapping_Motippets:
         :param int value: the tremolo value as distance between the notes
         """
             
-        code = self._config['snippets for tremolos'].get(motif)
+        code = self._config['snippets for tremolos'].get(motif).split(',')
         display = self._config['motippets display settings'].getint(motif)
+        prefix = ''
+        suffix = ''
         
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
@@ -323,8 +325,14 @@ class Mapping_Motippets:
             print('### tremolo error with ' + motif + ' (check .ini) ###')
         
         if code != None:
-            self.__keyboard.type(code + ' ' + str(value))
-            self.formatAndSend(code + ' ' + str(value), display=display, syntax_color=syntax_color+':')
+            if len(code) == 2:
+                prefix = code[1]
+            elif len(code) == 3:
+                prefix = code[1]
+                suffix = code[2]
+                
+            self.__keyboard.type(code[0] + prefix + str(value) + suffix)
+            self.formatAndSend(code[0] + prefix + str(value) + suffix, display=display, syntax_color=syntax_color+':')
         
         flash = display == 5
         self.evaluate('eval', flash=flash)
