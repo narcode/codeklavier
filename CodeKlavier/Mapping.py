@@ -249,7 +249,11 @@ class Mapping_Motippets:
             evaluate = self._config['shortcuts mapping'].get(motif)
             print(motif)
             print('1', evaluate)
+            fallback = True
         except KeyError:
+            print('manual eval')
+
+        if fallback:
             evaluate = self._config['shortcuts mapping'].get('eval')
             print('2', evaluate)
             
