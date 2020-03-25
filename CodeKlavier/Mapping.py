@@ -247,6 +247,7 @@ class Mapping_Motippets:
             evaluate = self._config['shortcuts mapping'].get(motif)
             fallback = True
         except KeyError:
+            print('no eval')
 
         if fallback:
             evaluate = self._config['shortcuts'].get('eval')
