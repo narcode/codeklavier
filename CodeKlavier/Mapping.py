@@ -247,8 +247,10 @@ class Mapping_Motippets:
         displays = [1,2]
         try:
             evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
+            print('1', evaluate)
         except KeyError:
             evaluate = self._config['shortcuts mapping'].get('eval')
+            print('2', evaluate)
             
         try:
             display = self._config['motippets display settings'].getint(motif)                         
