@@ -254,7 +254,7 @@ class Mapping_Motippets:
             print('manual eval')
 
         if fallback:
-            evaluate = self._config['shortcuts'].get('eval')
+            evaluate = self._config['shortcuts mapping'].get('eval')
             print('2', evaluate)
             
         try:
