@@ -84,10 +84,8 @@ class Mapping_Motippets:
             if len(self._shortcuts[what]) == 1:
                 print(self._shortcuts[what][0].strip())
                 if len(self._shortcuts[what][0].strip()) > 1:
-                    print('nar')
                     self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
                 else:
-                    print('code')
                     self.__keyboard.type(self._shortcuts[what][0].strip())
             else:        
                 with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
@@ -269,6 +267,7 @@ class Mapping_Motippets:
             self.evaluate(evaluate, flash=False)
         elif evaluate == 'none':
             self.__keyboard.type(snippet)
+            self.__keyboard.type(' ')
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')            
         else:
             self.evaluate(evaluate, flash=False)        
