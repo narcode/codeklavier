@@ -263,7 +263,7 @@ class Mapping_Motippets:
         except KeyError:
             print(motif, 'does not exists in the snippets code output section of .ini file')
         
-        if evaluate == 'eval':
+        if evaluate == 'eval' or evaluate == 'eval_manual':
             self.__keyboard.type(snippet)
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')
             self.evaluate(evaluate, flash=False)
