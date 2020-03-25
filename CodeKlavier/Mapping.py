@@ -244,12 +244,12 @@ class Mapping_Motippets:
         displays = [1,2]
         try:
             evaluate = self._config['shortcuts mapping'].get(motif)
-            fallback = True
         except KeyError:
-            print('no eval')
+            print('fallback eval')
 
-        if fallback:
-            evaluate = self._config['shortcuts'].get('eval')
+        if evaluate == None:
+            if self._config['shortcuts'].get('eval') != 'none':
+                evaluate = 'eval'
             
         try:
             display = self._config['motippets display settings'].getint(motif)                         
@@ -257,15 +257,15 @@ class Mapping_Motippets:
         except KeyError:
             print(motif, 'does not exists in the snippets code output section of .ini file')
         
-        if evaluate == 'eval':
+        if evaluate == 'eval': #automatic evaluation
             self.__keyboard.type(snippet)
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')
             self.evaluate(evaluate, flash=False)
-        elif evaluate == 'none':
+        elif evaluate == None: #disabled automatic evaluation
             self.__keyboard.type(snippet)
             self.__keyboard.type(' ')
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')            
-        else:
+        else: # just a keyboadshortcut and without printed code
             self.evaluate(evaluate, flash=False)        
 
     def miniSnippets(self, motif, pianosection, callback=None):
@@ -283,9 +283,13 @@ class Mapping_Motippets:
             print(motif, 'missing in snippets code output or motippets display settings')
         
         try:
-            evaluate = self._config['shortcuts mapping'].get(motif, fallback='eval')
+            evaluate = self._config['shortcuts mapping'].get(motif)
         except KeyError:
-            evaluate = 'eval'
+            print('fallback eval')
+        
+        if evaluate == None:
+            if self._config['shortcuts'].get('eval') != 'none':
+                evaluate = 'eval'        
         
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
@@ -296,14 +300,22 @@ class Mapping_Motippets:
             if evaluate == 'eval':
                 self.__keyboard.type(snippet)
                 self.evaluate(evaluate, flash=False)
-                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':') 
+            elif evaluate == None: 
+                self.__keyboard.type(snippet)
+                self.__keyboard.type(' ')
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
             else:
                 self.evaluate(evaluate, flash=False)
         else:           
             if evaluate == 'eval':
                 self.__keyboard.type(snippet)
                 self.evaluate(evaluate, flash=False)
-                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')  
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')
+            elif evaluate == None: 
+                self.__keyboard.type(snippet)
+                self.__keyboard.type(' ')
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
             else:
                 self.evaluate(evaluate, flash=False)
 
@@ -312,8 +324,11 @@ class Mapping_Motippets:
                 callback_snippet = '### callback error with ' + callback + ' (check .ini) ###'
                 
             self.__keyboard.type(callback_snippet)
-            self.evaluate('eval', flash=False)
-            self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
+            if evaluate == 'eval':
+                self.evaluate(evaluate, flash=False)
+                self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
+            elif evaluate == None: 
+                self.formatAndSend(callback_snippet, display=display, syntax_color='low:')             
             
     def tremolo(self, motif, value, syntax_color):
         """Type the tremolo command + the tremolo-value
@@ -342,8 +357,19 @@ class Mapping_Motippets:
             self.__keyboard.type(code[0] + prefix + str(value) + suffix)
             self.formatAndSend(code[0] + prefix + str(value) + suffix, display=display, syntax_color=syntax_color+':')
         
+        try:
+            evaluate = self._config['shortcuts mapping'].get(motif)
+        except KeyError:
+            print('fallback eval')
+            
+        if evaluate == None:
+            if self._config['shortcuts'].get('eval') != 'none':
+                evaluate = 'eval'    
+                    
         flash = display == 5
-        self.evaluate('eval', flash=flash)
+        if evaluate == 'eval':
+            self.evaluate('eval', flash=flash) 
+            
 
     def conditional(self, motif):
         """Setup a conditional
