@@ -337,7 +337,7 @@ class Mapping_Motippets:
         :param int value: the tremolo value as distance between the notes
         """
             
-        code = self._config['snippets for tremolos'].get(motif).split(',')
+        code = self._config['snippets for tremolos'].get(motif)
         display = self._config['motippets display settings'].getint(motif)
         prefix = ''
         suffix = ''
@@ -348,6 +348,7 @@ class Mapping_Motippets:
             print('### tremolo error with ' + motif + ' (check .ini) ###')
         
         if code != None:
+            code = code.split(',')
             if len(code) == 2:
                 prefix = code[1]
             elif len(code) == 3:
