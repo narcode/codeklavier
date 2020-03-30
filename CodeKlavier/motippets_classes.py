@@ -11,7 +11,7 @@ class Motippets(object):
     Second prototype of the CodeKlavier
     """
 
-    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi, playedlimit):
+    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi, playedlimit=1):
         """The method to initialise the class and prepare the class variables.
         """
         self.mapscheme = mapping
