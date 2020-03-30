@@ -355,6 +355,7 @@ class Mapping_Motippets:
                 suffix = code[2]
                 
             self.__keyboard.type(code[0] + prefix + str(value) + suffix)
+            self.__keyboard.type(' ')
             self.formatAndSend(code[0] + prefix + str(value) + suffix, display=display, syntax_color=syntax_color+':')
         
         try:
