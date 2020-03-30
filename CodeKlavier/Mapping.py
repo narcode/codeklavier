@@ -336,7 +336,7 @@ class Mapping_Motippets:
         :param string motif: the motif name to be mapped and prependend to the tremolo value.
         :param int value: the tremolo value as distance between the notes
         """
-            
+        print('temolo for', motif)
         code = self._config['snippets for tremolos'].get(motif)
         display = self._config['motippets display settings'].getint(motif)
         prefix = ''
