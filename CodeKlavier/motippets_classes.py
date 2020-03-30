@@ -22,6 +22,7 @@ class Motippets(object):
         self._memoryCondDeltas = {'deltalow': [], 'deltahi': [], 'deltamid': []}
 
         self._pianosections = [mid_low, mid_hi]
+        self._playedlimt = playedlimit
 
         #motifs:
         self._allMotifs = {}
@@ -384,14 +385,14 @@ class Motippets(object):
                             None, motif, motifs.get(motif),
                             note, deltatime=self._deltatime, debug=False)
 
-                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < playedlimit:
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < self._playedlimt:
                             self.mapscheme.snippets(motif)
                             self._motifsCount[motif]['count'] += 1
                     else:
                         self._motifsCount[motif]['played'] = self.compare_motif(None, motif,
                                                                                 motifs_mel.get(motif),
                                                                                 note)
-                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < playedlimit:
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < self._playedlimt:
                             self.mapscheme.snippets(motif)
                             self._motifsCount[motif]['count'] += 1
 
