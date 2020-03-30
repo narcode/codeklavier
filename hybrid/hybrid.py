@@ -25,6 +25,7 @@ try:
     toggle_note = config['Hello World'].getint('toggle')
     mid_low = config['Motippets register division'].getint('mid_low')
     mid_hi = config['Motippets register division'].getint('mid_hi')
+    motifs_playedLimit = config['motif counter'].getint('playlimit')
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
@@ -73,7 +74,7 @@ def main():
     mapping = Mapping_Motippets(False)
     
     # main memory (i.e. listen to the whole register)
-    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
+    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi, motifs_playedLimit)
     
     # midi listening per register
     memLow = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)

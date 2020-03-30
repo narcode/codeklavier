@@ -11,7 +11,7 @@ class Motippets(object):
     Second prototype of the CodeKlavier
     """
 
-    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi):
+    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi, playedlimit):
         """The method to initialise the class and prepare the class variables.
         """
         self.mapscheme = mapping
@@ -384,16 +384,16 @@ class Motippets(object):
                             None, motif, motifs.get(motif),
                             note, deltatime=self._deltatime, debug=False)
 
-                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < playedlimit:
                             self.mapscheme.snippets(motif)
-                            self._motifsCount[motif]['count'] = 1
+                            self._motifsCount[motif]['count'] += 1
                     else:
                         self._motifsCount[motif]['played'] = self.compare_motif(None, motif,
                                                                                 motifs_mel.get(motif),
                                                                                 note)
-                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < playedlimit:
                             self.mapscheme.snippets(motif)
-                            self._motifsCount[motif]['count'] = 1
+                            self._motifsCount[motif]['count'] += 1
 
             ### CONDITIONALS SECTION
             elif section in self._allConditional_motifs:
