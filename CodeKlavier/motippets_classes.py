@@ -688,7 +688,6 @@ class Motippets(object):
         :param boolean debug: wheather to show or hide debug messages
 
         TODO: this should only return the interval integer and on another place define what to do with it!
-        TODO: describe input params
         """
         if debug:
             print('deltatime :' + str(deltatime), 'tolerance :', str(deltatolerance), 'target snippet: ', target)
@@ -696,6 +695,8 @@ class Motippets(object):
             interval = abs(notes[1] - notes[0])
             self._intervalsArray.append(interval)
             self._intervalsArray = self._intervalsArray[-2:]
+
+            print(self._intervalsArray)
 
             interval_reduce = reduce(
                                 (lambda total, sumnotes: total - sumnotes),
