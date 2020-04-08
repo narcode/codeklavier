@@ -343,7 +343,7 @@ class Motippets(object):
                 if note > self._pianosections[1]:
                     self.memorize(note, 4, False, 'Tremolo Hi: ')
 
-                    if self.count_notes(self._memory, True) == 4 and len(self._memory) > 3:
+                    if self.count_notes(self._memory, True) == 8 and len(self._memory) > 3:
                         print(self._deltatime_hi)
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
@@ -516,7 +516,7 @@ class Motippets(object):
 
         TODO: descrine input and output
         """
-        if len(array) > 2:
+        if len(array) > 7:
             count1 = array.count(array[0])
             count2 = array.count(array[1])
 
