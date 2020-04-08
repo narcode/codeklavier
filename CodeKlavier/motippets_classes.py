@@ -344,7 +344,6 @@ class Motippets(object):
                     self.memorize(note, 8, False, 'Tremolo Hi: ')
 
                     if self.count_notes(self._memory, True) == 8 and len(self._memory) > 3:
-                        print(self._deltatime_hi)
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
                             ck_deltatime_hi, 0.15, target, True)
@@ -367,7 +366,7 @@ class Motippets(object):
                 if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                     self._interval = self.tremolo_value(
                         [self._memory[2], self._memory[3]], 'full',
-                        ck_deltatime, 0.15, True)
+                        self._deltatime, 0.15, True)
                     self._deltatime = 0
 
                     return self._interval

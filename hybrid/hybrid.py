@@ -135,7 +135,6 @@ def main():
                                     else:
                                         ck_deltadif[register] = 0                               
     
-                                print(ck_deltadif)
                                 
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')
