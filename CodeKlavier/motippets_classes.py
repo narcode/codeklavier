@@ -344,6 +344,7 @@ class Motippets(object):
                     self.memorize(note, 4, False, 'Tremolo Hi: ')
 
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                        print(self._deltatime_hi)
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
                             self._deltatime_hi, 0.1, target, True)
