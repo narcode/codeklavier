@@ -694,7 +694,7 @@ class Motippets(object):
         if deltatime < deltatolerance:
             interval = abs(notes[1] - notes[0])
             self._intervalsArray.append(interval)
-            self._intervalsArray = self._intervalsArray[-2:]
+            self._intervalsArray = self._intervalsArray[-4:]
 
             print(self._intervalsArray)
 
