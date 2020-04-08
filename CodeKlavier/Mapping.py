@@ -84,7 +84,7 @@ class Mapping_Motippets:
             if len(self._shortcuts[what]) == 1:
                 if len(self._shortcuts[what][0].strip()) > 1:
                     if self._shortcuts[what][0].strip() == 'none': #TODO: make a better function
-                        self.parseEvaluate('eval_manual')
+                        self.parseShortcut('eval_manual')
                     else:
                         self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
                 else:
@@ -103,10 +103,10 @@ class Mapping_Motippets:
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
         else:
-            self.parseEvaluate(what)
+            self.parseShortcut(what)
 
 
-    def parseEvaluate(self, what):
+    def parseShortcut(self, what):
         """ parse the evaluate code from the ini file"""
         if len(self._shortcuts[what]) == 3:
             with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()),
@@ -117,6 +117,7 @@ class Mapping_Motippets:
                     self.__keyboard.type(self._shortcuts[what][2].strip())
                 
         elif len(self._shortcuts[what]) == 2:
+            print(what)
             with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
                 if len(self._shortcuts[what][1].strip()) > 1:
                     self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
