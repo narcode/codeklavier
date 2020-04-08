@@ -331,12 +331,12 @@ class Motippets(object):
             ### TREMOLO
             elif section == 'tremoloLow':
                 if note <= self._pianosections[0]:
-                    self.memorize(note, 4, False, 'Tremolo Low: ')
+                    self.memorize(note, 8, False, 'Tremolo Low: ')
 
-                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                    if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'low',
-                            ck_deltatime_low, 0.1, target, True)
+                            ck_deltatime_low, 0.15, target, True)
                         self._deltatime = 0
 
             elif section == 'tremoloHi':
@@ -353,21 +353,21 @@ class Motippets(object):
             elif section == 'tremoloMid':
                 if (note > self._pianosections[0] and
                     note <= self._pianosections[1]):
-                    self.memorize(note, 4, False, target, 'Tremolo Mid: ')
+                    self.memorize(note, 8, False, target, 'Tremolo Mid: ')
 
-                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                    if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'mid',
-                            ck_deltatime_mid, 0.1, target, True)
+                            ck_deltatime_mid, 0.15, target, True)
                         self._deltatime = 0
 
             elif section == 'params':
-                self.memorize(note, 4, False, 'Parameters tremolo: ')
+                self.memorize(note, 8, False, 'Parameters tremolo: ')
 
                 if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                     self._interval = self.tremolo_value(
                         [self._memory[2], self._memory[3]], 'full',
-                        ck_deltatime, 0.1, True)
+                        ck_deltatime, 0.15, True)
                     self._deltatime = 0
 
                     return self._interval
