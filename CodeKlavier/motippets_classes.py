@@ -347,7 +347,7 @@ class Motippets(object):
                         print(self._deltatime_hi)
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
-                            ck_deltatime_hi, 0.1, target, True)
+                            ck_deltatime_hi, 0.15, target, True)
                         self._deltatime = 0
 
             elif section == 'tremoloMid':
