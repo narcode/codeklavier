@@ -701,6 +701,8 @@ class Motippets(object):
             interval_reduce = reduce(
                                 (lambda total, sumnotes: total - sumnotes),
                                 self._intervalsArray)
+            
+            print(interval_reduce)
 
             if (interval_reduce != 0 and interval > 0):
                     if debug:
