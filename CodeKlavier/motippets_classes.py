@@ -336,17 +336,17 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'low',
-                            ck_deltatime_low, 0.15, target, True)
+                            ck_deltatime_low, 0.15, target, False)
                         self._deltatime = 0
 
             elif section == 'tremoloHi':
                 if note > self._pianosections[1]:
                     self.memorize(note, 8, False, 'Tremolo Hi: ')
 
-                    if self.count_notes(self._memory, True) == 8 and len(self._memory) > 3:
+                    if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
-                            ck_deltatime_hi, 0.15, target, True)
+                            ck_deltatime_hi, 0.15, target, False)
                         self._deltatime = 0
 
             elif section == 'tremoloMid':
@@ -357,7 +357,7 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'mid',
-                            ck_deltatime_mid, 0.15, target, True)
+                            ck_deltatime_mid, 0.15, target, False)
                         self._deltatime = 0
 
             elif section == 'params':
@@ -366,7 +366,7 @@ class Motippets(object):
                 if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                     self._interval = self.tremolo_value(
                         [self._memory[2], self._memory[3]], 'full',
-                        self._deltatime, 0.15, True)
+                        self._deltatime, 0.15)
                     self._deltatime = 0
 
                     return self._interval
@@ -696,13 +696,9 @@ class Motippets(object):
             self._intervalsArray.append(interval)
             self._intervalsArray = self._intervalsArray[-2:]
 
-            print(self._intervalsArray)
-
             interval_reduce = reduce(
                                 (lambda total, sumnotes: total - sumnotes),
                                 self._intervalsArray)
-            
-            print(interval_reduce)
 
             if (interval_reduce != 0 and interval > 0):
                     if debug:
