@@ -336,7 +336,7 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'low',
-                            self._deltatime_low, 0.1, target, False)
+                            self._deltatime_low, 0.1, target, True)
                         self._deltatime = 0
 
             elif section == 'tremoloHi':
@@ -346,7 +346,7 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
-                            self._deltatime_hi, 0.1, target, False)
+                            self._deltatime_hi, 0.1, target, True)
                         self._deltatime = 0
 
             elif section == 'tremoloMid':
@@ -357,7 +357,7 @@ class Motippets(object):
                     if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'mid',
-                            self._deltatime_mid, 0.1, target, False)
+                            self._deltatime_mid, 0.1, target, True)
                         self._deltatime = 0
 
             elif section == 'params':
@@ -366,7 +366,7 @@ class Motippets(object):
                 if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
                     self._interval = self.tremolo_value(
                         [self._memory[2], self._memory[3]], 'full',
-                        self._deltatime, 0.1, False)
+                        self._deltatime, 0.1, True)
                     self._deltatime = 0
 
                     return self._interval
@@ -694,7 +694,7 @@ class Motippets(object):
         if deltatime < deltatolerance:
             interval = abs(notes[1] - notes[0])
             self._intervalsArray.append(interval)
-            self._intervalsArray = self._intervalsArray[-4:]
+            self._intervalsArray = self._intervalsArray[-2:]
 
             print(self._intervalsArray)
 
