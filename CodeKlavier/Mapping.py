@@ -124,8 +124,13 @@ class Mapping_Motippets:
                     self.__keyboard.type(self._shortcuts[what][1].strip());
                     
         else:
-            self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
-            self.__keyboard.release(eval('Key.'+self._shortcuts[what][0].strip()))        
+            print(len(self._shortcuts[what][0].strip()))
+            if len(self._shortcuts[what][0].strip()) > 1:
+                self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
+                self.__keyboard.release(eval('Key.'+self._shortcuts[what][0].strip()))      
+            else:
+                self.__keyboard.type(self._shortcuts[what][0].strip());
+                self.__keyboard.type(' ');
         
 
     def goDown(self, display=5):
