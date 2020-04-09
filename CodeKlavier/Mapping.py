@@ -343,7 +343,7 @@ class Mapping_Motippets:
             elif evaluate == None: 
                 self.formatAndSend(callback_snippet, display=display, syntax_color='low:')             
             
-    def tremolo(self, motif, value, syntax_color):
+    def tremolo(self, motif, value, syntax_color, debug=False):
         """Type the tremolo command + the tremolo-value
 
         :param string motif: the motif name to be mapped and prependend to the tremolo value.
@@ -357,7 +357,8 @@ class Mapping_Motippets:
         if display == None:
             display = '### no display setting for ' + motif + ' in .ini ###'
         if code == None:
-            print('### tremolo error with ' + motif + ' (check .ini) ###')
+            if debug:
+                print('### tremolo error with ' + motif + ' (check .ini) ###')
         
         if code != None:
             code = code.split(',')
