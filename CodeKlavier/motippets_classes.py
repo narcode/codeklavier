@@ -307,7 +307,7 @@ class Motippets(object):
                                 if mapped_mini != None:
                                     self.mapscheme.miniSnippets(motif, section, m)
                         else:
-                            self._miniMotifsLow[motif]['played'] = self.compare_chordal_motif(None, motif,
+                            self._miniMotifsHi[motif]['played'] = self.compare_chordal_motif(None, motif,
                                                                                               mini_motifs.get(motif),
                                                                                               note, deltatime=self._deltatime,
                                                                                               pianosection='hi', debug=False)
