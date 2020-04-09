@@ -677,7 +677,7 @@ class Motippets(object):
 
 
     def tremolo_value(self, notes, pianosection, deltatime,
-                     deltatolerance, target, debug=False):
+                     deltatolerance, target=None, debug=False):
         """Get the interval of a given tremolo.
 
         :param array notes: Array of notes to be analysed
