@@ -423,8 +423,8 @@ class Mapping_Motippets:
         display = 3
         syntax_color = self._config['motippets display settings'].get(motif_name)
         
-        #self.__keyboard.press(Key.enter)
-        #self.__keyboard.release(Key.enter)        
+        self.__keyboard.press(Key.enter)
+        self.__keyboard.release(Key.enter)        
         
         if flags in ('gomb', ):
             output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]            
