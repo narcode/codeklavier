@@ -98,43 +98,45 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
     
             time.sleep(1)
     else:
-        if debug:
-            print('cond', motif_name, 'res', result_name, 'timer: ', timer - t, 'loop time: ', timer)
-            if timer == t+1:
-                mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name],
-                                   display_only=True, flash=True, display=4)
-            else:
-                mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name], display_only=True, display=4)
-
-        rangeParser._timer += 1
-        t += 1
-
-        if t % timer == 0:
+        for s in range(0, timer):
+                
             if debug:
-                print("Range conditional thread finished")
-                print("range was: ", rangeParser._range)
-            if operator == 'more than':
-                if rangeParser._range >= piano_range:
-                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)
+                print('cond', motif_name, 'res', result_name, 'timer: ', timer - t, 'loop time: ', timer)
+                if timer == t+1:
+                    mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name],
+                                       display_only=True, flash=True, display=4)
                 else:
-                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)
-                #else:
-                    #mapping.customPass('condition not met', ':(')
-
-            elif operator == 'less than':
-                if rangeParser._range <= piano_range:
-                    parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)
-                else:
-                    parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)
-
-            # reset states:
-            rangeParser._memory = []
-            conditional._conditionalCounter = 0
-            conditional._resultCounter = 0
-            #conditionals[motif_name]._conditionalCounter = 0
-            #conditionals[motif_name]._resultCounter = 0
-            rangeParser._timer = 0
-            t = 0      
+                    mapping.customPass('conditional looptime: ' + str(timer - t) + '', syntax_colors[motif_name], display_only=True, display=4)
+    
+            rangeParser._timer += 1
+            t += 1
+    
+            if t % timer == 0:
+                if debug:
+                    print("Range conditional thread finished")
+                    print("range was: ", rangeParser._range)
+                if operator == 'more than':
+                    if rangeParser._range >= piano_range:
+                        parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)
+                    else:
+                        parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)
+                    #else:
+                        #mapping.customPass('condition not met', ':(')
+    
+                elif operator == 'less than':
+                    if rangeParser._range <= piano_range:
+                        parseFlags(result_name, 'true', rangeParser._range, mapping, mainmotifs, conditional)
+                    else:
+                        parseFlags(result_name, 'false', rangeParser._range, mapping, mainmotifs, conditional)
+    
+                # reset states:
+                rangeParser._memory = []
+                conditional._conditionalCounter = 0
+                conditional._resultCounter = 0
+                #conditionals[motif_name]._conditionalCounter = 0
+                #conditionals[motif_name]._resultCounter = 0
+                rangeParser._timer = 0
+                t = 0      
 
 def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
     """
