@@ -42,7 +42,8 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
     t = 1
     param_interval = 0
     rangeParser_memory = []
-    syntax_colors = {'conditional_1': 'loop', 'conditional_2': 'loop2', 'conditional_3': 'loop3', }
+    syntax_colors = {'conditional_1': 'loop', 'conditional_2': 'loop2', 'conditional_3': 'loop3', 
+                     'conditional_4': 'loop', 'conditional_5': 'loop2'}
     if timer in config['motippets random limits']:
         rand_limits = [int(l) for l in config['motippets random limits'].get(timer).split(',')]
 
