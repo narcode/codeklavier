@@ -136,7 +136,9 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
                 #conditionals[motif_name]._conditionalCounter = 0
                 #conditionals[motif_name]._resultCounter = 0
                 rangeParser._timer = 0
-                t = 0      
+                t = 0    
+                
+            time.sleep(1)
 
 def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
     """
