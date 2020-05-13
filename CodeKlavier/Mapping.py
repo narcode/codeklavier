@@ -364,7 +364,7 @@ class Mapping_Motippets:
             """1-16 is teh tremolo range of Anne's hands"""
             if len(minmax) == 2: 
                 dif = float(minmax[1]) - float(minmax[0])
-                return ((value - 1) * dif) / 15 + float(minmax[0])
+                return round( ((value - 1) * dif) / 15 + float(minmax[0]), 2)
             else:
                 return value
         
