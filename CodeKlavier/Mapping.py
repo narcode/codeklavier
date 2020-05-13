@@ -360,17 +360,28 @@ class Mapping_Motippets:
             if debug:
                 print('### tremolo error with ' + motif + ' (check .ini) ###')
         
+        def linearscale(value, minmax):
+            """1-16 is teh tremolo range of Anne's hands"""
+            if len(minmax) == 1: 
+                dif = float(minmax[1]) - float(minmax[0])
+                return ((value - 1) * dif) / 15 + float(minmax[0])
+            else:
+                return value
+        
         if code != None:
             code = code.split(',')
+            scaling = [x for x in code if re.match('minmax.+', x)]
+            if len(scaling) == 1:
+                scaling = scaling.findall('\d+', code.pop())
             if len(code) == 2:
                 prefix = code[1]
             elif len(code) == 3:
                 prefix = code[1]
                 suffix = code[2]
                 
-            self.__keyboard.type(code[0] + prefix + str(value) + suffix)
+            self.__keyboard.type(code[0] + prefix + str(linearscale(value, scaling)) + suffix)
             self.__keyboard.type(' ')
-            self.formatAndSend(code[0] + prefix + str(value) + suffix, display=display, syntax_color=syntax_color+':')
+            self.formatAndSend(code[0] + prefix + str(linearscale(value, scaling)) + suffix, display=display, syntax_color=syntax_color+':')
         
         try:
             evaluate = self._config['shortcuts mapping'].get(motif)
