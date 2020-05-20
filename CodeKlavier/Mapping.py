@@ -370,7 +370,7 @@ class Mapping_Motippets:
         
         if code != None:
             code = code.split(',')
-            scaling = [x for x in code if re.match('minmax.', x)]
+            scaling = [x for x in code if re.match('minmax.+', x)]
             if len(scaling) == 1:
                 scaling = re.split("[0-9.?]+", code.pop())
             if len(code) == 2:
