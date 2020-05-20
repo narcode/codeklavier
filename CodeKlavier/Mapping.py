@@ -369,11 +369,14 @@ class Mapping_Motippets:
                 return value
         
         def expscale(value, minmax):
+            minout = float(minmax[0])
+            if minout == 0:
+                minout = 0.0000000000001
+
             if len(minmax) == 2: 
-                dif = float(minmax[1]) - float(minmax[0])
                 if value >= 16:
                     return float(minmax[1])
-                return round( pow(float(minmax[1]) / float(minmax[0]), (value - 1) / 15) * float(minmax[0]), 2)
+                return round( pow(float(minmax[1]) / minout, (value - 1) / 15) * minout, 2)
             else:
                 return value            
         
