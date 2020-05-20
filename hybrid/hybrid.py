@@ -23,6 +23,7 @@ try:
     noteon_id = config['midi'].getint('noteon_id')
     noteoff_id = config['midi'].getint('noteoff_id')
     toggle_note = config['Hello World'].getint('toggle')
+    toggle_callback = config['Hello World'].get('toggle_callback')
     mid_low = config['Motippets register division'].getint('mid_low')
     mid_hi = config['Motippets register division'].getint('mid_hi')
     motifs_playedLimit = config['motif counter'].getint('playlimit')
@@ -291,7 +292,8 @@ def ck_loop(version='hello world'):
     codeK_thread.open_port(myPort)
 
     #go to the end of the codespace screen
-    mapping.goDown()
+    if (toggle_callback != 'none'):
+        mapping.goDown()
     
     if version == 'hello world':
         try:
