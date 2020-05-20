@@ -361,7 +361,7 @@ class Mapping_Motippets:
                 print('### tremolo error with ' + motif + ' (check .ini) ###')
         
         def linearscale(value, minmax):
-            """1-16 is teh tremolo range of Anne's hands"""
+            """1-16 is the tremolo range of Anne's hands"""
             if len(minmax) == 2: 
                 dif = float(minmax[1]) - float(minmax[0])
                 return round( ((value - 1) * dif) / 15 + float(minmax[0]), 2)
@@ -370,9 +370,9 @@ class Mapping_Motippets:
         
         if code != None:
             code = code.split(',')
-            scaling = [x for x in code if re.match('minmax.+', x)]
+            scaling = [x for x in code if re.match('minmax.', x)]
             if len(scaling) == 1:
-                scaling = re.findall("\d+\.?\d+?", code.pop())
+                scaling = re.split("[0-9.?]+", code.pop())
             if len(code) == 2:
                 prefix = code[1]
             elif len(code) == 3:
