@@ -368,20 +368,34 @@ class Mapping_Motippets:
             else:
                 return value
         
+        def expscale(value, minmax):
+            if len(minmax) == 2: 
+                dif = float(minmax[1]) - float(minmax[0])
+                if value >= 16:
+                    return float(minmax[1])
+                return round( pow(float(minmax[1]) / float(minmax[0]), (value - 1) / 15) * float(minmax[0]), 2)
+            else:
+                return value            
+        
         if code != None:
             code = code.split(',')
-            scaling = [x for x in code if re.match('minmax.+', x)]
+            scaling = [x for x in code if re.match("minmax.+", x)]
+            exp = [x for x in code if re.match("exp", x)]
             if len(scaling) == 1:
                 scaling = re.findall("[0-9.?]+", code.pop())
+                if len(exp) > 0:
+                    scaled_value = str(expscale(value, scaling))
+                else:
+                    scaled_value = str(linearscale(value, scaling))
             if len(code) == 2:
                 prefix = code[1]
             elif len(code) == 3:
                 prefix = code[1]
                 suffix = code[2]
                 
-            self.__keyboard.type(code[0] + prefix + str(linearscale(value, scaling)) + suffix)
+            self.__keyboard.type(code[0] + prefix + scaled_value + suffix)
             self.__keyboard.type(' ')
-            self.formatAndSend(code[0] + prefix + str(linearscale(value, scaling)) + suffix, display=display, syntax_color=syntax_color+':')
+            self.formatAndSend(code[0] + prefix + scaled_value + suffix, display=display, syntax_color=syntax_color+':')
         
         try:
             evaluate = self._config['shortcuts mapping'].get(motif)
