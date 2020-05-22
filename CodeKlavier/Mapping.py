@@ -388,8 +388,11 @@ class Mapping_Motippets:
             if len(scaling) == 1:
                 scaling = re.findall("[0-9.?]+", scaling[0])
                 if len(exp) > 0:
+                    code.pop()
+                    code.pop()
                     scaled_value = str(expscale(value, scaling))
                 else:
+                    code.pop()
                     scaled_value = str(linearscale(value, scaling))
             if len(code) == 2:
                 prefix = code[1]
