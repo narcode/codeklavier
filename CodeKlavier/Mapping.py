@@ -386,7 +386,7 @@ class Mapping_Motippets:
             scaling = [x for x in code if re.match("minmax.+", x)]
             exp = [x for x in code if re.match("exp", x)]
             if len(scaling) == 1:
-                scaling = re.findall("[0-9.?]+", code.pop())
+                scaling = re.findall("[0-9.?]+", scaling[0])
                 if len(exp) > 0:
                     scaled_value = str(expscale(value, scaling))
                 else:
