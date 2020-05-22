@@ -381,6 +381,7 @@ class Mapping_Motippets:
                 return value            
         
         if code != None:
+            scaled_value = str(value)
             code = code.split(',')
             scaling = [x for x in code if re.match("minmax.+", x)]
             exp = [x for x in code if re.match("exp", x)]
