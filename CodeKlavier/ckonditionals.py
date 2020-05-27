@@ -45,7 +45,7 @@ def rangeCounter(timer=None, operator='', motif_name=None, result_name=None,
     syntax_colors = {'conditional_1': 'loop', 'conditional_2': 'loop2', 'conditional_3': 'loop3', 
                      'conditional_4': 'loop', 'conditional_5': 'loop2'}
     if timer in config['motippets random limits']:
-        rand_limits = [int(l) for l in config['motippets random limits'].get(timer).split(',')]
+        rand_limits = [float(l) for l in config['motippets random limits'].get(timer).split(',')]
 
     if timer == 'random':
         timer = random.randrange(rand_limits[0],rand_limits[1])
@@ -170,7 +170,7 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
         if 'grab_value' in flags:
             if len(flags) > 3:
                 if flags[4] in config['motippets random limits']:
-                    rand_limits = [int(l) for l in config['motippets random limits'].get(flags[4]).split(',')]
+                    rand_limits = [float(l) for l in config['motippets random limits'].get(flags[4]).split(',')]
                     mapping.result(snippet_name, boolean, random.randint(rand_limits[0], rand_limits[1]))
                 else:
                     mapping.result(snippet_name, boolean, value)
