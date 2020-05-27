@@ -359,24 +359,19 @@ class Mapping_Motippets:
         if code == None:
             if debug:
                 print('### tremolo error with ' + motif + ' (check .ini) ###')
-        
-        def linearscale(value, minmax):
-            """1-16 is the tremolo range of Anne's hands"""
-            if len(minmax) == 2: 
-                dif = float(minmax[1]) - float(minmax[0])
-                return round( ((value - 1) * dif) / 15 + float(minmax[0]), 2)
-            else:
-                return value
-        
-        def expscale(value, minmax):
+              
+        def scale(value, minmax):
             minout = float(minmax[0])
             if minout == 0:
                 minout = 0.0000000000001
 
-            if len(minmax) == 2: 
+            if len(minmax) == 3: 
                 if value >= 16:
                     return float(minmax[1])
-                return round( pow(float(minmax[1]) / minout, (value - 1) / 15) * minout, 2)
+                return round( pow( (value - 1) / (16-1), float(minmax[2]) ) 
+                              * (float(minmax[1]) - float(minmax[0])) 
+                              + float(minmax[0]), 
+                              2)
             else:
                 return value            
         
@@ -384,16 +379,13 @@ class Mapping_Motippets:
             scaled_value = str(value)
             code = code.split(',')
             scaling = [x for x in code if re.match("minmax.+", x)]
-            exp = [x for x in code if re.match("exp", x)]
             if len(scaling) == 1:
                 scaling = re.findall("[0-9.?]+", scaling[0])
-                if len(exp) > 0:
-                    code.pop()
-                    code.pop()
-                    scaled_value = str(expscale(value, scaling))
+                code.pop()
+                if len(scaling) > 2:
+                    scaled_value = str(scale(value, scaling))
                 else:
-                    code.pop()
-                    scaled_value = str(linearscale(value, scaling))
+                    scaled_value = str(scale(value, scaling+['1']))
             if len(code) == 2:
                 prefix = code[1]
             elif len(code) == 3:
