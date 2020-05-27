@@ -171,7 +171,7 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
             if len(flags) > 3:
                 if flags[4] in config['motippets random limits']:
                     rand_limits = [float(l) for l in config['motippets random limits'].get(flags[4]).split(',')]
-                    mapping.result(snippet_name, boolean, random.randint(rand_limits[0], rand_limits[1]))
+                    mapping.result(snippet_name, boolean, random.uniform(rand_limits[0], rand_limits[1]))
                 else:
                     mapping.result(snippet_name, boolean, value)
         else:
