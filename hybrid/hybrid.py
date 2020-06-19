@@ -23,8 +23,10 @@ try:
     noteon_id = config['midi'].getint('noteon_id')
     noteoff_id = config['midi'].getint('noteoff_id')
     toggle_note = config['Hello World'].getint('toggle')
+    toggle_callback = config['Hello World'].get('toggle_callback')
     mid_low = config['Motippets register division'].getint('mid_low')
     mid_hi = config['Motippets register division'].getint('mid_hi')
+    motifs_playedLimit = config['motif counter'].getint('playlimit')
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
@@ -73,7 +75,7 @@ def main():
     mapping = Mapping_Motippets(False)
     
     # main memory (i.e. listen to the whole register)
-    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
+    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi, motifs_playedLimit)
     
     # midi listening per register
     memLow = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
@@ -134,6 +136,7 @@ def main():
                                     else:
                                         ck_deltadif[register] = 0                               
     
+                                
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')
     
@@ -289,7 +292,8 @@ def ck_loop(version='hello world'):
     codeK_thread.open_port(myPort)
 
     #go to the end of the codespace screen
-    mapping.goDown()
+    if (toggle_callback != 'none'):
+        mapping.goDown()
     
     if version == 'hello world':
         try:
@@ -342,7 +346,8 @@ def ck_loop(version='hello world'):
 
                 if msg:
                     message, deltatime = msg
-                    ck_deltatime += deltatime
+                    for register in ck_deltatime:
+                        ck_deltatime[register] += deltatime
                     
                     if message[0] != 254:
 
@@ -422,15 +427,15 @@ def ck_loop(version='hello world'):
                                 if played.any() > 0:
                                     for m in mini_motifs_played['low']:
                                         if mini_motifs_played['low'][m] > 0:
-                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif['low'], m)
+                                            tremoloLow.parse_midi(msg, 'tremoloLow', ck_deltadif['low'], target=m)
                                     
                                     for m in mini_motifs_played['mid']:
                                         if mini_motifs_played['mid'][m] > 0:
-                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif['mid'], m)
+                                            tremoloMid.parse_midi(msg, 'tremoloMid', ck_deltadif['mid'], target=m)
                                             
                                     for m in mini_motifs_played['hi']:  
                                         if mini_motifs_played['hi'][m] > 0:
-                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif['hi'], m)
+                                            tremoloHi.parse_midi(msg, 'tremoloHi', ck_deltadif['hi'], target=m)
         
                                 ##conditionals
                                 conditional_value = {}

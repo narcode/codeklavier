@@ -11,7 +11,7 @@ class Motippets(object):
     Second prototype of the CodeKlavier
     """
 
-    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi):
+    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi, playedlimit=1):
         """The method to initialise the class and prepare the class variables.
         """
         self.mapscheme = mapping
@@ -22,6 +22,7 @@ class Motippets(object):
         self._memoryCondDeltas = {'deltalow': [], 'deltahi': [], 'deltamid': []}
 
         self._pianosections = [mid_low, mid_hi]
+        self._playedlimt = playedlimit
 
         #motifs:
         self._allMotifs = {}
@@ -306,7 +307,7 @@ class Motippets(object):
                                 if mapped_mini != None:
                                     self.mapscheme.miniSnippets(motif, section, m)
                         else:
-                            self._miniMotifsLow[motif]['played'] = self.compare_chordal_motif(None, motif,
+                            self._miniMotifsHi[motif]['played'] = self.compare_chordal_motif(None, motif,
                                                                                               mini_motifs.get(motif),
                                                                                               note, deltatime=self._deltatime,
                                                                                               pianosection='hi', debug=False)
@@ -330,42 +331,42 @@ class Motippets(object):
             ### TREMOLO
             elif section == 'tremoloLow':
                 if note <= self._pianosections[0]:
-                    self.memorize(note, 4, False, 'Tremolo Low: ')
+                    self.memorize(note, 8, False, 'Tremolo Low: ')
 
-                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                    if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'low',
-                            self._deltatime_low, 0.1, target, False)
+                            ck_deltatime_low, 0.15, target, False)
                         self._deltatime = 0
 
             elif section == 'tremoloHi':
                 if note > self._pianosections[1]:
-                    self.memorize(note, 4, False, 'Tremolo Hi: ')
+                    self.memorize(note, 8, False, 'Tremolo Hi: ')
 
-                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                    if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'hi',
-                            self._deltatime_hi, 0.1, target, False)
+                            ck_deltatime_hi, 0.15, target, False)
                         self._deltatime = 0
 
             elif section == 'tremoloMid':
                 if (note > self._pianosections[0] and
                     note <= self._pianosections[1]):
-                    self.memorize(note, 4, False, target, 'Tremolo Mid: ')
+                    self.memorize(note, 8, False, target, 'Tremolo Mid: ')
 
-                    if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                    if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                         self.tremolo_value(
                             [self._memory[2], self._memory[3]], 'mid',
-                            self._deltatime_mid, 0.1, target, False)
+                            ck_deltatime_mid, 0.15, target, False)
                         self._deltatime = 0
 
             elif section == 'params':
-                self.memorize(note, 4, False, 'Parameters tremolo: ')
+                self.memorize(note, 8, False, 'Parameters tremolo: ')
 
-                if self.count_notes(self._memory, False) == 4 and len(self._memory) > 3:
+                if self.count_notes(self._memory, False) == 8 and len(self._memory) > 3:
                     self._interval = self.tremolo_value(
                         [self._memory[2], self._memory[3]], 'full',
-                        self._deltatime, 0.1, False)
+                        self._deltatime, 0.15)
                     self._deltatime = 0
 
                     return self._interval
@@ -384,16 +385,16 @@ class Motippets(object):
                             None, motif, motifs.get(motif),
                             note, deltatime=self._deltatime, debug=False)
 
-                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < self._playedlimt:
                             self.mapscheme.snippets(motif)
-                            self._motifsCount[motif]['count'] = 1
+                            self._motifsCount[motif]['count'] += 1
                     else:
                         self._motifsCount[motif]['played'] = self.compare_motif(None, motif,
                                                                                 motifs_mel.get(motif),
                                                                                 note)
-                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] == 0:
+                        if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < self._playedlimt:
                             self.mapscheme.snippets(motif)
-                            self._motifsCount[motif]['count'] = 1
+                            self._motifsCount[motif]['count'] += 1
 
             ### CONDITIONALS SECTION
             elif section in self._allConditional_motifs:
@@ -514,7 +515,7 @@ class Motippets(object):
 
         TODO: descrine input and output
         """
-        if len(array) > 2:
+        if len(array) > 7:
             count1 = array.count(array[0])
             count2 = array.count(array[1])
 
@@ -676,7 +677,7 @@ class Motippets(object):
 
 
     def tremolo_value(self, notes, pianosection, deltatime,
-                     deltatolerance, target, debug=False):
+                     deltatolerance, target=None, debug=False):
         """Get the interval of a given tremolo.
 
         :param array notes: Array of notes to be analysed
@@ -687,7 +688,6 @@ class Motippets(object):
         :param boolean debug: wheather to show or hide debug messages
 
         TODO: this should only return the interval integer and on another place define what to do with it!
-        TODO: describe input params
         """
         if debug:
             print('deltatime :' + str(deltatime), 'tolerance :', str(deltatolerance), 'target snippet: ', target)
