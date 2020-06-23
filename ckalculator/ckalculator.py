@@ -46,13 +46,15 @@ def main(configfile='default_setup.ini'):
     codeK.open_port(myPort)
 
     codeK.print_lines(20, 1)
-    print("Prototype loaded: Ckalculator 0.1")
+    print("Prototype loaded: Ckalculator AR extension 0.3")
     print("CodeKlavier is ready and LISTENING.")
     codeK.print_lines(20, 1)
-    print("\nPress Control-C to exit.\n")
 
-    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True)
-    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id)
+    print("\nPress Control-C to exit.\n")       
+    
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=True)
+    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=True)
+
     per_note = 0
     ck_deltatime = 0
     articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
@@ -69,8 +71,22 @@ def main(configfile='default_setup.ini'):
                 #print('delta per note:', per_note)
                 #print('delta ck:', ck_deltatime)
 
-                if message[0] != 248:
-
+                if message[0] in (noteoff_id, noteon_id, pedal_id):
+                    
+                    #note ons:
+                    if message[0] == noteon_id:
+                        #per_note = 0
+                        ck_note_dur[message[1]] = ck_deltatime
+                        if message[2] > 0: 
+                            dif = delta_difference(ck_deltatime) # not getting real note duration, only dt between events.
+                            
+                            cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
+                                             ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
+                            
+                            cKalc._noteon_delta[message[1]] = per_note
+                            cKalc._noteon_velocity[message[1]] = message[2]
+                            
+                            
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
                         midinote = message[1]
@@ -82,15 +98,28 @@ def main(configfile='default_setup.ini'):
                                          ck_deltatime=ck_deltatime, articulation=articulation)
 
                         if len(cKost._functionBody) == 1:
-                            cKalc._functionBody['grab_num'] = True
-                            if cKalc._numForFunctionBody != None:
-                                cKost._functionBody['arg2'] = cKalc._numForFunctionBody
-                                print('function body complete...')
-                                cKalc.mapscheme.formatAndSend('function body complete...', display=4,
-                                                              syntax_color='function:')
-                                cKost.storeFunction()
-                                cKalc._functionBody = {}
-                                cKalc._numForFunctionBody = None
+
+                            if cKost._developedOstinato[1] == 1:
+                                cKalc._functionBody['grab_num'] = True
+                               
+                                if cKalc._numForFunctionBody != None:
+                                    cKost._functionBody['arg2'] = cKalc._numForFunctionBody
+                                    print('function body complete...')
+                                    cKalc.mapscheme.formatAndSend('function body complete...', display=4, 
+                                                                  syntax_color='function:')
+                                    cKost.storeFunction()
+                                    cKalc._functionBody = {}
+                                    cKalc._numForFunctionBody = None                                
+                            else:
+                                print('function with no args complete...')
+                                if cKost._arg2Counter == 0:     
+                                    cKost._functionBody['arg2'] = ''                                    
+                                    cKost.storeFunctionAR()
+                                    cKalc._functionBody = {}
+                                else:
+                                    cKost._functionBody['arg2'] = str(cKalc.ar._parallelTrees)
+                                    cKost.storeFunctionAR()
+                                    cKalc._functionBody = {}
 
                         cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=note_duration,
                                          ck_deltatime=ck_deltatime, articulation=articulation, sendToDisplay=False) # needed?
@@ -99,18 +128,6 @@ def main(configfile='default_setup.ini'):
                         per_note = 0
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulation=articulation)
 
-                    if message[0] == noteon_id:
-                        #per_note = 0
-                        ck_note_dur[message[1]] = ck_deltatime
-                        if message[2] > 0:
-                            dif = delta_difference(ck_deltatime) # not getting real note duration, only dt between events.
-
-                            cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note,
-                                             ck_deltatime=dif, articulation=articulation, sendToDisplay=False)
-
-                            cKalc._noteon_delta[message[1]] = per_note
-
-            time.sleep(0.01)
 
     except KeyboardInterrupt:
         print('')

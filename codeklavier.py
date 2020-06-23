@@ -17,6 +17,8 @@ from CK_Setup import Setup, BColors
 from CK_rec import CK_Rec
 import CK_config
 
+
+
 ck_deltatime_mem = []
 
 VERSIONS = ('hybrid', 'ckalculator')
@@ -31,6 +33,7 @@ def doHelp():
     print('Where [OPTION] is:')
     print(BColors.BOLD + '-h | --help' + BColors.ENDC)
     print('Show this help text.')
+
     print('')
     print(BColors.BOLD + '-p | --play' + BColors.WARNING + ' <<name>>' + BColors.ENDC)
     print('Boot CodeKlavier with version <<name>>')

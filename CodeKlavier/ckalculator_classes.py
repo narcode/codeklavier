@@ -12,9 +12,12 @@ from multiprocessing.pool import ThreadPool, Pool
     #ZeroOrMore,Forward,nums,alphas
 #import operator
 from Motifs import motifs_lambda as LambdaMapping
+from Motifs import motifs_ar as AR
 from Mapping import Mapping_Ckalculator
+from ar_classes import CkAR
 from CK_lambda import *
 from CK_parser import *
+import numpy
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -23,10 +26,12 @@ class Ckalculator(object):
     TODO: _fullStack is not used yet but added for the future. Evaluate the decision and either implement or deprecate
     """
     
-    def __init__(self, noteonid, noteoffid, pedal_id, debug=False, print_functions=False):
+    def __init__(self, noteonid, noteoffid, pedal_id, debug=False, print_functions=False, ar_hook=False):
         """The method to initialise the class and prepare the class variables.
         """
-        
+        if ar_hook:
+            self.ar = CkAR()
+                    
         self.mapscheme = Mapping_Ckalculator(True, False)
         self.note_on = noteonid
         self.note_off = noteoffid
@@ -41,6 +46,7 @@ class Ckalculator(object):
         self._pianosections = []
         self._fullStack = []
         self._evalStack = []
+        self._tempEvalStack = []
         self._tempStack = []
         self._temp = False
         self._tempFunctionStack = []
@@ -53,18 +59,27 @@ class Ckalculator(object):
         self._postOstinatoMemory = []
         self.ostinato = {'first': [], 'compare': []}
         self._foundOstinato = False
-        self._developedOstinato = False
+        self._developedOstinato = (False,0)
         self._functionBody = {}
         self._numForFunctionBody = None
         self._pool = ThreadPool(processes=1)
         self._memories = {}
         self.parser = CK_Parser()
         self._noteon_delta = {}
+        self._noteon_velocity = {}
         self._lastnotes = []
         self._lastdeltas = []
+        self._lastioi = []
         self._defineCounter = 0
         self._arg1Counter = 0
-        self._arg2Counter = 0
+        self._arg2Counter = 0 
+        self._successorCounter = 0
+        self._ckar = [] 
+        self._rules = []
+        self._operand = []
+        self._dynamics = []
+        self._tempdynamics = []
+        self._rule_dynamics = []
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -79,10 +94,27 @@ class Ckalculator(object):
             print('valid notes:', self._notesList)
         
         if print_functions:
+            console_output = ''
+            count = 0
             for f in self.ckFunc():
-                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
-                self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                count +=1 
+                if count%2 == 0:
+                    newLine = '\n'
+                    function_printAR = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
+                else:
+                    newLine = ' | '
+                    function_printAR = (',').join(midiToNotes(f['name']))
+                    
+                if len(f['body']) > 1:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                    console_output += function_printAR + newLine
+                else:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                    console_output += function_printAR + newLine
+            self.ar.console(console_output, True)
                 
 
     def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
@@ -92,14 +124,14 @@ class Ckalculator(object):
         :param tuple event: describes the midi event that was received
         :param string section: the MIDI piano range (i.e. low register, mid or high)
         :param float ck_deltatime_per_note: the note durations
-        :param int target: target the parsing for a specific snippet. 0 is no target
+        param float ck_deltatime: the duration between notes
         :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
         """   
         
         message, deltatime = event
 
         if (message[0] == self.pedal):
-            if message[2] == 127 and (')' in self._fullStack or self._temp == False):
+            if message[2] > 90 and (')' in self._fullStack or self._temp == False):
                 print('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
@@ -107,25 +139,64 @@ class Ckalculator(object):
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif message[2] < 30 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
                 self._fullStack.append(')')
                 # to main stack
-                print('temp num stack:', self._tempNumberStack);
+                #print('temp num stack:', self._tempNumberStack);
                 if len(self._tempNumberStack) > 0:
-                    self._numberStack.append(self._tempNumberStack.pop())
+                    
+                    if '.' in self._rules:
+                        self._tempEvalStack.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
+                        #print('eval stack: ', self._tempEvalStack)
+                        if (type(self._tempEvalStack[-1]) == int):
+                            self._rules.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
+                    
+                    if len(self._tempdynamics) > 0:
+                        velocity = int(numpy.average(self._tempdynamics).round())
+                        self._rule_dynamics.append(velocity)
+                        
+                    print('rule till now: ', self._rules)
+                    self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                    self.ar.console(str(self._rules))
+                    print('vel till now: ', self._rule_dynamics)
+                    self.mapscheme._osc.send_message("/ckconsole", str(self._rule_dynamics))
+                    self.ar.console(str(self._rule_dynamics))
+                                            
+                    if len(self._ckar) == 0:
+
+                        if len(self._rule_dynamics) > 0:                            
+                            velocity = ('|').join(map(str, self._rule_dynamics))
+                            
+                        if velocity != '':
+                            rule_dynamics = 'd' + velocity
+                        else:
+                            rule_dynamics = ''
+                        
+                        axiom = 'axiom: ', '*' + ('').join(map(str, self._ckar)) + rule_dynamics 
+                        print(axiom)
+                        self.mapscheme._osc.send_message("/ckconsole", axiom)
+                        self.ar.console(axiom)
+                    
+                    self._numberStack.append(self._tempNumberStack.pop())                    
                 #self.evaluateTempStack(self._tempStack)
                 self._tempFunctionStack = []
                 self._tempNumberStack = []
                 self._temp = False
+                self._tempEvalStack = []
                 self._fullStack = []
+                self._tempdynamics = []
+                #if len(self._ckar) > 0:
+                    #print('axiom to send: ', self._ckar[0])
+                    #self.mapscheme._osc.send_message("/ckar_a", self._ckar[0])
+                    
             
         if message[0] == self.note_on and message[2] > 0:
 
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._note_on_cue.append(message[1])
                     #self.find_ostinato(self._fullMemory, debug=True)
                     #print('note on mem:', self._note_on_cue)
@@ -139,7 +210,8 @@ class Ckalculator(object):
 
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
-            self._deltatime = ck_deltatime_per_note 
+            self._deltatime = ck_deltatime_per_note
+                            
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
 
             
@@ -151,22 +223,49 @@ class Ckalculator(object):
             #else: #no worng note for now... 
             
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._fullMemory.append(note)
                     self.find_ostinato(self._fullMemory, debug=False)                        
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
+                        self.ar.console('define func body...')
                         if self._defineCounter == 0:
                             self.mapscheme.formatAndSend('define func body...', display=4, syntax_color='function:')
                             self._defineCounter += 1
-                        self.define_function_body(note, articulation)
+                        if self._developedOstinato[1] == 1:
+                            self.define_function_body(note, articulation)
+                        else:
+                            self.define_function_bodyAR(note, articulation)
                     
                              
-            if section == 'full':        
+            if section == 'full':     
+                
+                note_on_vel = self._noteon_velocity[note]
+                self.ar._velocityMemory.append(note_on_vel)
+                
+                self._lastioi.append(ck_deltatime)
+                if len(self._lastioi) > 2:
+                    self._lastioi = self._lastioi[-2:]
+                
+                if np.diff(self._lastioi) > 0.03:    
+                    self.ar._deltaMemory.append(ck_deltatime)
+                
+                max_notes = 10 #send to ini
+                if len(self.ar._velocityMemory) > max_notes:
+                    self.ar._velocityMemory = self.ar._velocityMemory[-max_notes:]
+                    self.ar.averageVelocity()
+                    
+                if len(self.ar._deltaMemory) > max_notes:
+                    self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
+                    self.ar.averageSpeed(True)
+                    
+                if self.ar._memorize:
+                    self.ar._memory.append(note)
+                    if len(self.ar._memory) > max_notes:
+                        self.ar._memory = self.ar._memory[-max_notes:] 
                 
         ########### CK function definition ############
-                #print('incoming:', note)
                 self._lastnotes.append(note) # coming from note on messages in main()
                 self._lastdeltas.append(self._noteon_delta[note])
                 if len(self._lastnotes) > 2:
@@ -176,30 +275,15 @@ class Ckalculator(object):
                     
                 last_events = sorted(self._noteon_delta.values())[-2:]
                 last_events_new = np.diff(sorted(self._lastdeltas))
-                #for n in self._noteon_delta.items():
-                    #for l in last_events:
-                        #if l in n:
-                            #self._lastnotes.append(n)
-                #print(self._noteon_delta[note])
-                #print('last events:', last_events)
-                #print('last notes:', self._lastnotes)
-                #print('last deltas:', self._lastdeltas)
-                #print('diff: ', last_events[-1] - last_events[0])
-                #print('diff new: ', last_events_new)
 
                 
-                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
+                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord ### send to .ini
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
                                                                                 self._lastdeltas, 
                                                                                 0.03, True)) 
                 
-                #if last_events[-1] - last_events[0] < 0.03:                    
-                    ##spawn thread for detecting chords:
-                    #chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
-                                                                                #self._noteon_delta[note], 
-                                                                                #0.03, True))
                     chordfound, chord = chordparse.get()
-
+                    
                     if chordfound:
                         for f in self.ckFunc():
                             with Pool(len(self.ckFunc())) as pool:
@@ -209,91 +293,207 @@ class Ckalculator(object):
                                     
                                     try:
                                         function_to_call = getattr(self, f['body']['func'])
-                                        func_exists = True
+                                        func_exists = (True, 'ckalc')
                                     except AttributeError:
                                         #raise NotImplementedError("Class `{}` does not implement `{}`".
                                                                   #format(self.__class__.__name__, 
                                                                          #function_to_call))
-                                        func_exists = False
-                                        print('function not implemented for now... ')
+                                        try:
+                                            function_to_call = getattr(self.ar, f['body']['func'])
+                                            func_exists = (True, 'ar')
+                                            
+                                        except AttributeError:    
+                                            func_exists = (False, '')
+                                            print('function not implemented for now... ')
                                     
-                                    if func_exists:
-                                        if function_to_call.__name__ not in ['successor', 'predecessor']:
-                                            function_to_call(False, sendToDisplay)
+                                    if func_exists[0]:
+                                        if func_exists[1] == 'ckalc':
+                                            if function_to_call.__name__ not in ['successor', 'predecessor']:
+                                                function_to_call(False, sendToDisplay)
                                     
-                                            if f['body']['arg1'].__name__ == 'succ1':
-                                                self.append_successor(f['body']['arg1'])
-                                                self.zeroPlusRec(False, True) ## check 2nd argument    
-                                                self._successorHead = []
-                                    
+                                                if f['body']['arg1'].__name__ == 'succ1':
+                                                    self.append_successor(f['body']['arg1'])
+                                                    self.zeroPlusRec(False, True)
+                                                    #self._successorHead = []
+                                                    
+                                        if func_exists[1] == 'ar':
+                                            if function_to_call.__name__ in ['collect', 'drop']:
+                                                if len(self._numberStack) > 0:
+                                                    num = trampolineRecursiveCounter(self._numberStack[0])
+                                                    function_to_call(num)
+                                            else:
+                                                function_to_call()
+                                            #clear the rule stack
+                                            self._ckar = []
+                                            self._rules = []
+                                            self._dynamics = []
+
+                                                  
                         ########################
                 ########### lambda calculus  ###########
                         ########################
-                                    
-                if note in LambdaMapping.get('successor'):
+                if note in self.ar.mappingTransposition(LambdaMapping.get('successor')):
 
                     if self._deltatime <= articulation['staccato']:
+                        self.storeDynamics(note)
+                        
                         self.successor(successor, sendToDisplay)
                     
                     elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
                         
-                        if note in [LambdaMapping.get('successor')[0]]:
+                        if note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
+                            self.storeDynamics(note)
+                            
                             if len(self._numberStack) == 0:
                                 self.predecessor(zero, sendToDisplay) # what kind of result is better?
                             else:
                                 self.predecessor(predecessor, sendToDisplay)
                                 
                         else: #zero + recursive counter:
-                            self.zeroPlusRec(sendToDisplay)                         
-                                
+                            self.makeLS(sendToDisplay)                                  
+
                         self._successorHead = []
                         
-                elif note in LambdaMapping.get('zero'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('zero')):
+                    #self.storeDynamics(note)
+                    
                     print('identity')
-                    self.zeroPlusRec(sendToDisplay)
+                    self.mapscheme._osc.send_message("/ckconsole", 'identity')
+                    self.ar.console('identity')
+                    self.makeLS(sendToDisplay)
                     self._successorHead = []
+                    self._successorCounter = 0
                                                                             
-                elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('eval')): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
-                    self.mapscheme.newLine(display=1)
-                    if len(self._functionStack) > 0 and len(self._numberStack) > 0:
-                        self.evaluateFunctionStack(self._functionStack, sendToDisplay=sendToDisplay)
-                        if (self._numberStack[0].__name__ is 'succ1'):
-                            self._evalStack = []
-                            self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
-                            if (type(self._evalStack[0]) == int):
-                                                               
-                                if sendToDisplay:
-                                    self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                                 syntax_color='result:')
-                                print(self._evalStack[0])
-                                self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
-                                
-                                # Huygens easter eggs
-                                self.easterEggs(number=str(self._evalStack[0]), debug=True, sendToDisplay=sendToDisplay)
-                                
-                            else: 
-                                if sendToDisplay:
-                                    self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
-                                    self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
-                                   
-                                    self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
-                                
-                                
+                    self.mapscheme._osc.send_message("/ckconsole", 'evaluate')
+                    self.ar.console('evaluate')
+                    
+                    
+                    if self._temp is True:
+                        if len(self._tempFunctionStack) > 0 and len(self._tempNumberStack) > 0:
+                            self.evaluateFunctionStack(self._tempFunctionStack, self._temp, sendToDisplay=sendToDisplay)
+                            if (self._tempNumberStack[0].__name__ is 'succ1'):
+                                self._evalStack = []
+                                self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
+                                if (type(self._evalStack[0]) == int):
+                                                                   
+                                    if sendToDisplay:
+                                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                     syntax_color='result:')
+                                    print('temp stack: ' + str(self._evalStack[0]))
+                                    self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
+                                    
+                                else: 
+                                    if sendToDisplay:
+                                        self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
+                                        self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
+                                        self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))  
+
+                                        self._rules.append('N')
+
+                            self._tempFunctionStack = []                        
                         
-                        else:
-                            #print(self.oscName)
-                            if sendToDisplay:
-                                self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
-                                                             syntax_color='result:')
-                            self.mapscheme._osc.send_message("/"+self.oscName, self._numberStack[0].__name__)
+                    else:
+                        print(self._rules)
+                        self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                        self.ar.console(str(self._rules))
+                        
+                        if len(self._rules) > 1 or len(self._ckar) > 0 or len(self.ar._memory) > 0:
                             
-                        self._functionStack = []
+                            comma = ''
+                            rule = ('').join(map(str, self._rules))
+
+                            velocity = ('|').join(map(str, self._rule_dynamics))
+                            
+                            if velocity != '':
+                                rule_dynamics = 'd' + velocity
+                            else:
+                                rule_dynamics = ''
+      
+                            print('parsed rule: ', rule)
+                            if rule != '':
+                                self.mapscheme._osc.send_message("/ckconsole", rule)
+                                self.ar.console(rule)
+                                #self.mapscheme.websocketSend(rule)
+                                print('parsed dynamics: ', velocity)
+                                if velocity != '':
+                                    self.mapscheme._osc.send_message("/ckconsole", velocity)
+                                    self.ar.console(velocity)
+                            
+                            if len(self._ckar) > 0:
+                                if rule != '':
+                                    comma = ','
+                                rule = '*.'+ ('').join(map(str, self._ckar)) + comma + rule
+                                self._ckar = []
+                                
+                            
+                            if len(self.ar._memory) > 0:
+                                if rule != '':
+                                    comma = ','                                
+                                generation = comma + 'g.' + str(self.ar.meanRegister())
+                            else:
+                                generation = ''
+                                    
+                            print("ckar rule :", rule)
+                            print("mean register :", generation)
+                            print("current tree:", self.ar.currentTree())
+
+                            if len(self.ar._parallelTrees) > 0:
+                                trees = []
+                                for t in self.ar._parallelTrees:
+                                    trees.append(str(t) + '@' + rule + rule_dynamics + generation)
+                                tree = ('#').join(trees)
+                            else:
+                                tree = str(self.ar.currentTree()) + '@' + rule + rule_dynamics + generation 
+                            #self.mapscheme._osc.send_message("/ckar", rule + rule_dynamics)
+                            self.ar.sendRule(tree)
+                            if self.ar._memorize:
+                                self.ar.memoryToggle()
+                                self.ar._memory = []
+                                
+                            self._memory = []
+                            self._rules = []
+                            self._dynamics = []
+                            self._rule_dynamics = []
+                            
+                        self.mapscheme.newLine(display=1)
+                        if len(self._functionStack) > 0 and len(self._numberStack) > 0:
+                            self.evaluateFunctionStack(self._functionStack, sendToDisplay=sendToDisplay)
+                            if (self._numberStack[0].__name__ is 'succ1'):
+                                self._evalStack = []
+                                self._evalStack.append(trampolineRecursiveCounter(self._numberStack[0]))
+                                if (type(self._evalStack[0]) == int):
+                                                                   
+                                    if sendToDisplay:
+                                        self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                     syntax_color='result:')
+                                    print(self._evalStack[0])
+                                    self.mapscheme._osc.send_message("/ckconsole", str(self._evalStack[0]))
+                                    self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
+                                    self.ar.console(str(self._evalStack[0]))
+                                    # Huygens easter eggs
+                                    self.easterEggs(number=str(self._evalStack[0]), debug=True, sendToDisplay=sendToDisplay)
+                                    
+                                else: 
+                                    if sendToDisplay:
+                                        self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
+                                        self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
+                                        self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
+                            
+                            else:
+                                #print(self.oscName)
+                                if sendToDisplay:
+                                    self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
+                                                                 syntax_color='result:')
+                                self.mapscheme._osc.send_message("/"+self.oscName, self._numberStack[0].__name__)
+                                
+                            self._functionStack = []
                     
                 elif note in LambdaMapping.get('predecessor'):
                     print('used via articulation under 1 successor')
                         
-                elif note in LambdaMapping.get('addition'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('addition')):
                     if self._deltatime <= articulation['staccato']:
                         if not self._temp:
                             self.add(False, sendToDisplay)
@@ -305,47 +505,103 @@ class Ckalculator(object):
                         else:
                             self.multiply(True, sendToDisplay)                    
                     
-                elif note in LambdaMapping.get('subtraction'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('subtraction')):
                     if self._deltatime <= articulation['staccato']:                
                         if not self._temp:
                             self.subtract(False, sendToDisplay)  
                         else:
                             self.subtract(True, sendToDisplay)
                     elif self._deltatime > articulation['staccato']:
-                        if not self._temp:
-                            self.divide(False, sendToDisplay) 
-                        else:
-                            self.divide(True, sendToDisplay)                    
+                        self.divide(self._temp, sendToDisplay) 
                     
-                elif note in LambdaMapping.get('multiplication'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('multiplication')):
                     print('used via articulation under addition')
                     
                 elif note in LambdaMapping.get('division'):
                     print('used via articulation under subtraction')
                                     
                 # number comparisons    
-                elif note in LambdaMapping.get('equal'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('equal')):
                     self.equal(sendToDisplay) 
                     
-                elif note in LambdaMapping.get('greater'):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('greater')):
                     if self._deltatime <= articulation['staccato']:                                
-                        self.greater_than(sendToDisplay) 
+                        self.greater_than(self._temp, sendToDisplay) 
                     elif self._deltatime > articulation['staccato']:
-                        self.less_than(sendToDisplay)  
+                        self.less_than(self._temp, sendToDisplay)  
                         
-                elif note in LambdaMapping.get('less'):
-                    print('used via articulation under greater than')                                              
-
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('less')):
+                    print('used via articulation under greater than')    
+                    
+                #AR extension
+                elif note in AR.get('dot'):
+                    self._rules.append('.')
+                    self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                    self.ar.console(str(self._rules))
+                    print(self._rules)
+        
+                elif note in AR.get('next'):
+                    if self._deltatime <= articulation['staccato']:                                
+                        self.ar.nextT() 
+                    elif self._deltatime > articulation['staccato']:
+                        self.ar.prev()
+                        
+                elif note in AR.get('create'):
+                    self.ar.create()
+                    
+                elif note in AR.get('generation'):
+                    self.ar.memoryToggle()
+                    
+                elif note in AR.get('select'):
+                    if self._deltatime <= articulation['staccato']:
+                        if len(self._numberStack) > 0:
+                            tree = trampolineRecursiveCounter(self._numberStack[0])
+                            self.ar.drop(tree)
+                        else:
+                            self.ar.drop()
+                    elif self._deltatime > articulation['staccato']:
+                        if len(self._numberStack) > 0:
+                            tree = trampolineRecursiveCounter(self._numberStack[0])                        
+                            self.ar.collect(tree)
+                        else:
+                            self.ar.collect()
+                        
+                elif note in AR.get('transform'):
+                    self.ar.transform()
+                    
+                elif note in AR.get('shape'):
+                    if self._deltatime <= articulation['staccato']:
+                        if len(self.ar._parallelTrees) > 0:
+                            self.ar.toggleShapeNext(parallelTrees=True)
+                        else:
+                            print(self._deltatime)
+                            self.ar.toggleShapeNext()
+                    else:
+                        if len(self.ar._parallelTrees) > 0:
+                            self.ar.toggleShapePrev(parallelTrees=True)
+                        else:
+                            self.ar.toggleShapePrev() 
+                            
+                elif note in AR.get('clear_rule'):
+                    self._rules = self.ar.clearRule()
+                    self._ckar = self.ar.clearRule()
+                    self._rule_dynamics = self.ar.clearRule()
+   
+    ######
                 
     def successor(self, function, sendToDisplay=True):
         """
-        builds a successor functions chain.\n
-        \n
+        builds a successor functions chain.
+        
         :param function function: the function to apply the successor function to
         """
         if sendToDisplay:
             self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
-        print(function.__name__)       
+        print(function.__name__)
+        self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        #self.ar.console(function.__name__)
+        self._successorCounter += 1
+        self.ar.console(self._successorCounter)
                 
         def nestFunc(function1):
             if len(self._successorHead) == 0:
@@ -354,26 +610,59 @@ class Ckalculator(object):
                 return function(self._successorHead[0])
 
         self._successorHead.append(nestFunc(function))
-                                    
+                                            
         if len(self._successorHead) > 1:
             self._successorHead = self._successorHead[-1:]
     
     def append_successor(self, function, sendToDisplay=True):
         """
-        Append a successor function to the successorHead stack\n
-        \n
+        Append a successor function to the successorHead stack
+        
         :param function function: the function to apply the successor function to
         """
         if sendToDisplay:
             succesors = trampolineRecursiveCounter(function)
             for s in range(succesors):
                 self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
-        print(function.__name__)       
+        print(function.__name__)
+        self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.ar.console(function.__name__)        
                 
         self._successorHead.append(function)
                                     
         if len(self._successorHead) > 1:
-            self._successorHead = self._successorHead[-1:]      
+            self._successorHead = self._successorHead[-1:]    
+            
+    
+    #def predecessor(self, function, sendToDisplay=True):
+        #""" normal predecessor funtion"""
+        #if sendToDisplay: 
+                    #self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
+                #print(function.__name__)
+                #self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+                #self.ar.console(function.__name__)
+        
+        #def nestFunc(function1):
+            #if len(self._numberStack) == 0:
+                #return function(zero)
+            #else:
+                #return function(self._numberStack[0])
+    
+        #self._numberStack.append(nestFunc(function))
+        #self._fullStack.append(nestFunc(function))
+        
+        #if len(self._tempStack) > 0:
+            #if self._tempStack[0] == '(':
+                #self._tempStack.append(nestFunc(function))        
+                                    
+        #if len(self._numberStack) > 1:
+            #if self._numberStack[0].__name__ is 'zero':
+                #self._numberStack = []
+                #return zero
+            #else:
+                #self._numberStack = self._numberStack[-1:]
+                #if self._numberStack[0].__name__ is 'succ1':        
+                
             
     def predecessor(self, function, sendToDisplay=True):
         """
@@ -383,7 +672,10 @@ class Ckalculator(object):
         """
         if sendToDisplay: 
             self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
-        print(function.__name__)       
+        print(function.__name__) 
+        self.mapscheme._osc.send_message("/ckconsole", function.__name__)
+        self.ar.console(function.__name__)
+        
                 
         def nestFunc(function1):
             if len(self._numberStack) == 0:
@@ -451,6 +743,11 @@ class Ckalculator(object):
         #self._functionStack.append(self._lambda.add)
             self._tempFunctionStack.append(add_trampoline)
             
+            print(self._tempFunctionStack)
+            self.mapscheme._osc.send_message("/ckconsole", str(self._tempFunctionStack))
+            self.ar.console(str(self._tempFunctionStack))
+            
+            
         self._fullStack.append(add_trampoline)
         
         if len(self._tempStack) > 0:
@@ -466,6 +763,9 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('-', display=2, syntax_color='min:',spacing=False)               
             self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
         print('subtraction')
+        self.mapscheme._osc.send_message("/ckconsole", 'subtraction')
+        self.ar.console('substraction')
+        
         
         if not temp:
             if len(self._numberStack) == 0:
@@ -491,7 +791,7 @@ class Ckalculator(object):
                 self._tempStack.append(subtract)         
 
 
-    def equal(self, sendToDisplay=True):
+    def equal(self, temp=False, sendToDisplay=True):
         """
         Compare two number expressions for equality\n
         \n
@@ -501,6 +801,9 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('==', display=2, syntax_color='int:', spacing=False)                       
         
         print('equal to')
+        self.mapscheme._osc.send_message("/ckconsole", 'equal to')
+        self.ar.console('equal to')
+        
         
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
@@ -514,7 +817,7 @@ class Ckalculator(object):
         
         
         
-    def greater_than(self, sendToDisplay=True):
+    def greater_than(self, temp=False, sendToDisplay=True):
         """
         Compare two number expressions for equality\n
         \n
@@ -524,18 +827,31 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('>', display=2, syntax_color='int:', spacing=False)                       
         
         print('greater than')
-        if len(self._numberStack) == 0:
-            self._functionStack.append(zero)
+        self.mapscheme._osc.send_message("/ckconsole", 'greater than')
+        
+        if not temp:
+            if len(self._numberStack) == 0:
+                self._functionStack.append(zero)
+            else:
+                self._functionStack.append(self._numberStack[0])
+                #append the operator        
+            #self._functionStack.append(self._lambda.add)
+            self._functionStack.append(greater) 
         else:
-            self._functionStack.append(self._numberStack[0])
-            #append the operator        
-        #self._functionStack.append(self._lambda.add)
-        self._functionStack.append(greater) 
+            if len(self._tempNumberStack) == 0:
+                self._tempFunctionStack.append(zero)
+            else:
+                self._tempFunctionStack.append(self._tempNumberStack[0])
+                #append the operator        
+            #self._functionStack.append(self._lambda.add)
+            self._tempFunctionStack.append(greater)             
+            
+        
         self._fullStack.append(greater)
         self.oscName = "ck_gt"
         
         
-    def less_than(self, sendToDisplay=True):
+    def less_than(self, temp=False, sendToDisplay=True):
         """
         Compare two number expressions for equality\n
         \n
@@ -544,6 +860,10 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('less than', display=1, syntax_color='lt:')  
             self.mapscheme.formatAndSend('<', display=2, syntax_color='int:', spacing=False)                       
         print('less than')
+        self.mapscheme._osc.send_message("/ckconsole", 'less than')
+        self.ar.console('less than')
+        
+        
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
         else:
@@ -603,9 +923,10 @@ class Ckalculator(object):
                                                            self._tempFunctionStack[0], \
                                                            self._tempFunctionStack[2])) 
                     
-                #print('TEMP NUM STACK: ', self._tempNumberStack)
-                #print('NORM STACK: ', self._numberStack)
-                     
+                    print('TEMP NUM STACK: ', self._tempNumberStack)
+                    self.mapscheme._osc.send_message("/ckconsole", str(self._tempNumberStack))
+                    self.ar.console(str(self._tempNumberStack))
+                    print('NORM STACK: ', self._numberStack)
     
     def evaluateTempStack(self, stack):
         """Evaluate the functions within parenthesis.
@@ -629,6 +950,9 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('*', display=2, syntax_color='mul:', spacing=False)                        
             self.mapscheme.formatAndSend('multiply', display=1, syntax_color='mul:')       
         print('multiplication')
+        self.mapscheme._osc.send_message("/ckconsole", 'multiplication')
+        self.ar.console('multiplication')
+        
         
         if not temp:
             if len(self._numberStack) == 0:
@@ -662,6 +986,8 @@ class Ckalculator(object):
             self.mapscheme.formatAndSend('/', display=2, syntax_color='div:', spacing=False)                
             self.mapscheme.formatAndSend('divide', display=1, syntax_color='div:')        
         print('division')
+        self.mapscheme._osc.send_message("/ckconsole", 'division')
+        self.ar.console('division')
         
         if not temp:
             if len(self._numberStack) == 0:
@@ -739,7 +1065,7 @@ class Ckalculator(object):
         param boolean debug: print debugging messages
         """
         length = size*repetitions+size
-        if not self._developedOstinato and len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue?
+        if not self._developedOstinato[0] and len(self._fullMemory) > length: #full_mem needed or better to only use _note_on_cue?
             self._fullMemory = self._fullMemory[-length:]
             self._note_on_cue = self._note_on_cue[-length:]
             self._filtered_cue = self._filtered_cue[-length:]
@@ -788,6 +1114,7 @@ class Ckalculator(object):
                                     if debug:
                                         print('i -> ', i)
                                     print('found ostinato!', midiToNotes(self.ostinato['first']))
+                                    self.ar.console('found ostinato!')
                                     msg_notes = (',').join(midiToNotes(self.ostinato['first']))
                                     self.mapscheme.formatAndSend('found ostinato ' + msg_notes, 
                                                                  display=4, syntax_color='function:')
@@ -852,15 +1179,21 @@ class Ckalculator(object):
             diff = np.subtract(ostinato1, ostinato2)
             
             if np.array_equal(sorted(np.abs(diff)), [0,0,0,1]):
-                self._developedOstinato = True
+                self._developedOstinato = (True, 1)
                 
                 if debug:
                     print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
                 self.mapscheme.formatAndSend('ostinato has 1 note difference! Well done', display=4,
                                                  syntax_color='function:')
+            
+            elif np.array_equal(sorted(np.abs(diff)), [0,0,0,2]):
+                self._developedOstinato = (True, 2)
+                if debug:
+                    print('ostinato has 2 note difference! well done')
             else:
                 print('😤 ostinato was not developed correctly. Please try again')
-                self._developedOstinato = False
+                self.ar.console('try again')
+                self._developedOstinato = (False, 0)
                 self.ostinato = {'first': [], 'compare': []}
                 
                 self.mapscheme.formatAndSend('ostinato was not developed correctly. Please try again', display=4,
@@ -925,7 +1258,15 @@ class Ckalculator(object):
                 if self._deltatime <= articulation['staccato']:
                     self._functionBody['arg1'] = 'greater'
                 elif self._deltatime > articulation['staccato']:
-                    self._functionBody['arg1'] = 'less'                
+                    self._functionBody['arg1'] = 'less'
+                    
+            # AR
+            elif note in AR.get('select'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'drop'          
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'collect'
+                
                     
         elif len(self._functionBody) == 1:
             if debug:
@@ -942,6 +1283,52 @@ class Ckalculator(object):
                 self.mapscheme.formatAndSend('function body arg 2 is:' + self._functionBody['arg2'], display=4,
                                              syntax_color='function:')
             self._arg2Counter += 1
+            
+
+    def define_function_bodyAR(self, note, articulation, debug=True):
+        """
+        High level function to choose an AR function to be used as part of the function body 
+        of a function definition.
+      
+        :param int note: incoming MIDI note
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
+        """ 
+        if len(self._functionBody) == 0:
+                            
+            if note in AR.get('create'):
+                self._functionBody['arg1'] = 'create'
+                
+            if note in AR.get('select'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'drop'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'collect'                        
+                
+            elif note in AR.get('shape'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'toggleShapeNext'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'toggleShapePrev'
+                    
+            elif note in AR.get('clear_rule'):
+                self._functionBody['arg1'] = 'clearRule'             
+        
+            elif note in AR.get('store_collection'):
+                self._functionBody['arg1'] = 'storeCollect'
+                self._arg2Counter += 1                            
+               
+            elif note in AR.get('next'):
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'nextT'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'prev'  
+                    
+            elif note in AR.get('generation'):
+                self._functionBody['arg1'] = 'memoryToggle'
+            
+            self._arg1Counter += 1
+            
+            
 
             
     def storeFunction(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
@@ -986,8 +1373,11 @@ class Ckalculator(object):
             count = 0
             for f in self.ckFunc():
                 count += 1
-                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                if len(f['body']) > 1:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                else:
+                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
                 if count == total:
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
                 else:
@@ -1003,7 +1393,89 @@ class Ckalculator(object):
         self._arg2Counter = 0
         self._defineCounter = 0
         self._foundOstinato = False
-        self._developedOstinato = False 
+        self._developedOstinato = (False,0)
+        
+    def storeFunctionAR(self, funcfile='ck_functions.ini', debug=True, sendToDisplay=True):
+        """
+        Store the defined function in a .ini file for future use.
+        """
+        ck_functions = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        ck_functions.read(funcfile, encoding='utf8')
+        existingfuncs = []
+        
+        for f in self.ckFunc():
+            existingfuncs.append(f['name'])
+            
+        print(existingfuncs)   
+        
+        func_num = len(ck_functions['functions'])
+
+        name = 'function' + repr(func_num+1) + ': '
+        name2 = 'function' + repr(func_num+2) + ': '
+        chord = ','.join(map(str, self.ostinato['first']))
+        chord2 = ','.join(map(str, self.ostinato['compare']))
+        
+        if self._functionBody['arg2'] == '':
+            
+            body = chord + ' -> (' + self._functionBody['arg1'] + ')\n'
+            body2 = chord2 + ' -> (' + self._functionBody['arg1'] + ')\n'
+            
+        else:
+            
+            body = chord + ' -> (' + self._functionBody['arg1'] + self._functionBody['arg2'] + ')\n'
+            body2 = chord2 + ' -> (' + self._functionBody['arg1'] + self._functionBody['arg2'] + ')\n'            
+            
+        
+        with open(funcfile, 'a') as file:
+            if self.ostinato['first'] not in existingfuncs:
+                file.write(name + body)
+                print('function saved 1', midiToNotes(self.ostinato['first']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            if self.ostinato['compare'] not in existingfuncs:
+                file.write(name2 + body2)
+                print('function saved 2', midiToNotes(self.ostinato['compare']))
+            else:
+                print('chord is assigned already. cannot overwrite')
+                
+            file.close()
+            
+            self.ar.console('function saved: ' + self._functionBody['arg1'])
+            
+        if sendToDisplay:
+            total = len(self.ckFunc())
+            count = 0
+            console_output = ''
+            for f in self.ckFunc():
+                count += 1
+                function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func']  + ')'
+                if count == total:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                else:
+                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='saved:')
+                
+                if count%2 == 0:
+                    newLine = '\n'
+                    function_printAR = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func']  + ')'
+                else:
+                    newLine = ' | '
+                    function_printAR = (',').join(midiToNotes(f['name']))
+                    
+                console_output += function_printAR + newLine  
+            
+            self.ar.console(console_output, True)
+
+            
+        #reset the ostinato analysis
+        self.ostinato = {'first': [], 'compare': []}
+        self._fullMemory = []
+        self._note_on_cue = []
+        self._filtered_cue = []
+        self._functionBody = {}
+        self._defineCounter = 0
+        self._foundOstinato = False
+        self._developedOstinato = (False,0)        
                 
     def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
         """
@@ -1058,6 +1530,8 @@ class Ckalculator(object):
         if len(self._successorHead) > 0:
             num = trampolineRecursiveCounter(self._successorHead[0])
             print('succ head: ', num)
+            self.mapscheme._osc.send_message("/ckconsole", str(num))
+            self.ar.console(str(num))            
             
             if len(self._functionBody) > 0:
                 self._numForFunctionBody = num 
@@ -1084,6 +1558,7 @@ class Ckalculator(object):
                     self._tempNumberStack = []                                                                            
                     if self._tempStack[0] == '(':
                         self._tempNumberStack.append(self._successorHead[0])
+                        
                         if sendToDisplay or sendToStack:
                             self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
                                                          display=2, syntax_color='int:', spacing=False)                                        
@@ -1097,7 +1572,99 @@ class Ckalculator(object):
                                     self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
                                                                  syntax_color='result:')                                
                                 print(self._evalStack[0])                        
-                                self._tempFunctionStack = []     
+                                self._tempFunctionStack = []  
+                                
+    def makeLS(self, sendToDisplay: True):
+        if len(self._successorHead) > 0:
+            num = trampolineRecursiveCounter(self._successorHead[0])
+            print('succ head: ', num) 
+            if len(self._functionBody) > 0: ### for functions
+                self._numForFunctionBody = num            
+                
+            self.mapscheme._osc.send_message("/ckconsole", str(trampolineRecursiveCounter(self._successorHead[0])))
+            self.ar.console(str(trampolineRecursiveCounter(self._successorHead[0])))
+            
+            
+            if self._temp is False:
+
+                if '.' in self._rules:
+                    if len(self._dynamics) > 0:
+                        velocity = int(numpy.average(self._dynamics).round())                                    
+                        self._rule_dynamics.append(velocity) 
+                    
+                self._numberStack = []                                
+                #print result:
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.newLine(display=1)
+                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
+                                                 display=2, syntax_color='int:', spacing=False)
+
+                self._numberStack.append(self._successorHead[0])
+                self._fullStack.append(self._successorHead[0])
+                
+                self._rules.append(trampolineRecursiveCounter(self._successorHead[0]))
+                print('rules now osc: ', self._rules)
+                self.mapscheme._osc.send_message("/ckconsole", str( self._rules))
+                self.ar.console(str(self._rules))
+                print('dynamics now: ', self._rule_dynamics)
+                self._dynamics = []
+                
+            else:
+                if sendToDisplay:
+                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.newLine(display=1)
+                
+                if len(self._tempStack) > 0:
+                    self._tempNumberStack = []                                                                            
+                    if self._tempStack[0] == '(':
+                        self._tempNumberStack.append(self._successorHead[0])
+                        
+                        if '.' not in self._rules:
+                            self._ckar.append(trampolineRecursiveCounter(self._successorHead[0]))
+                            print(self._ckar)
+                            self.mapscheme._osc.send_message("/ckconsole", str( self._ckar))
+                            self.ar.console(str(self._ckar))
+                            
+                        
+                        if sendToDisplay:
+                            self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
+                                                         display=2, syntax_color='int:', spacing=False)                                        
+                        
+                        if len(self._tempFunctionStack) > 0:
+                            self.evaluateFunctionStack(self._tempFunctionStack, sendToDisplay=sendToDisplay)                        
+                            if (self._tempNumberStack[0].__name__ is 'succ1'):
+                                self._evalStack = []
+                                self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
+                                if '.' not in self._rules:
+                                    self._ckar.append(self._evalStack[0]);
+                                if sendToDisplay:
+                                    self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
+                                                                 syntax_color='result:')                                
+                                print(self._evalStack[0])
+                                if len(self._ckar) > 0:
+                                    print("ckar axiom: ", self._ckar[0])
+                                #self._tempFunctionStack = []   
+                                
+        else:
+            if self._temp is False:
+                self._rules.append(trampolineRecursiveCounter(zero))
+
+                if '.' in self._rules:
+                    #velocity = int(numpy.average(self._dynamics).round())                                    
+                    self._rule_dynamics.append(0)                    
+                #self._rule_dynamics.append(0)
+                self._dynamics = []
+                print(self._rules)
+                self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                self.ar.console(str(self._rules))
+            else:
+                self._ckar.append(trampolineRecursiveCounter(zero))
+                print(self._ckar)
+                self.mapscheme._osc.send_message("/ckconsole", str(self._ckar))
+                self.ar.console(str(self._ckar))
+                
+                
                                 
     def easterEggs(self, configfile='default_setup.ini', number=100, debug=False, special_num=7,sendToDisplay=True):
         """
@@ -1136,7 +1703,25 @@ class Ckalculator(object):
             print(functions)
         
         return functions
-                   
+    
+    def storeDynamics(self, note, debug=True):
+        """
+        store the velocity for L-system rules
+        note : the incoming midi note
+        """
+        
+        #if '.' in self._rules:
+        if self._temp:
+            self._tempdynamics.append(self._noteon_velocity[note])
+            if debug:
+                print('temp dynamics:', self._tempdynamics)
+        else:    
+            self._dynamics.append(self._noteon_velocity[note])
+            if debug:
+                print('dynamics:', self._dynamics)                
+
+
+        
     #def dumpCkfunctions(self, funcfile='ck_functions.ini', debug=False):
         #"""
         #Dump existing CK custom functions

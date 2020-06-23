@@ -30,6 +30,7 @@ conditional_results_motifs = {}
 conditional_results_motifs_mel = {}
 
 motifs_lambda = {}
+motifs_ar = {}
 
 
 try:
@@ -73,9 +74,22 @@ try:
     equal_than_midi = config['lambda'].get('equality_midi').split(',')
     greater_than_midi = config['lambda'].get('greater_than_midi').split(',')
     less_than_midi = config['lambda'].get('less_than_midi').split(',')
+    
+    dot = config['ar'].get('dot').split(',')
+    create = config['ar'].get('create').split(',')
+    clear_rule = config['ar'].get('clear').split(',')
+    select = config['ar'].get('select').split(',')
+    generation = config['ar'].get('generation').split(',')
+    nextt = config['ar'].get('nextt').split(',')
+    transform = config['ar'].get('transform').split(',')
+    shape = config['ar'].get('shape').split(',')
+    store_collection = config['ar'].get('store_collection').split(',')
+    transp_even = config['ar'].get('transpositon_even').split(',')
+    transp_odd = config['ar'].get('transposition_odd').split(',')
 
 except KeyError:
     raise LookupError('Missing sections in the config file or the config file does not exist. Maybe a typo?')
+
 
 # chordal:
 for motif in mottipets_motifs:
@@ -119,4 +133,16 @@ motifs_lambda['equal'] = list(map(int, equal_than_midi))
 motifs_lambda['greater'] = list(map(int, greater_than_midi))
 motifs_lambda['less'] = list(map(int, less_than_midi))
 
+# AR module
+motifs_ar['dot'] = list(map(int, dot))
+motifs_ar['create'] = list(map(int, create))
+motifs_ar['clear_rule'] = list(map(int, clear_rule))
+motifs_ar['generation'] = list(map(int, generation))
+motifs_ar['select'] = list(map(int, select))
+motifs_ar['next'] = list(map(int, nextt))
+motifs_ar['transform'] = list(map(int, transform))
+motifs_ar['shape'] = list(map(int, shape))
+motifs_ar['store_collection'] = list(map(int, store_collection))
+motifs_ar['transp_even'] = list(map(int, transp_even))
+motifs_ar['transp_odd'] = list(map(int, transp_odd))
 

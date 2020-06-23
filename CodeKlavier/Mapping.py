@@ -13,6 +13,10 @@ import socket
 from pythonosc import udp_client
 import configparser
 import re
+import asyncio
+from websockets import connect
+import json
+import urllib.request
 from CK_config import inifile
 
 display1 = 1111
@@ -20,6 +24,7 @@ display2 = 2222
 display3 = 3333
 display4 = 4444
 display5 = 5555
+
 
 class Mapping_Motippets:
     """Mapping for the Motippets prototype.
@@ -559,7 +564,7 @@ class Mapping_Motippets:
 
 
 class Mapping_Ckalculator:
-    """Mapping for the Ckalculator prototype.
+    """Mapping for the Ckalculator
     """
     def __init__(self, use_display=False, debug=True):
         if debug:
@@ -570,8 +575,30 @@ class Mapping_Ckalculator:
         if use_display:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120)
+        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57140, True)
+        ##self._websocketUri = '192.168.178.235:8080/ckar_serve'
 
+        #with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
+            #self._wsUri = json.loads(u.read(100))
+            #print(self._wsUri)
+
+##### websockets for AR ####
+    #async def websocketConnect(self, json):
+        #async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
+            #await websocket.send(json)
+        
+    #def websocketSend(self, json):
+        #try:
+            #asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
+        #except:
+            #print('websocket offline!')
+            #pass
+        
+    
+    #def prepareJson(self, wstype='lsys', payload=''):
+        #return json.dumps({'type': wstype, 'payload': payload})
+            
+    
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
         """format and prepare a string for sending it over UDP socket
@@ -592,7 +619,7 @@ class Mapping_Ckalculator:
         elif display == 3:
             port = 3333
         elif display == 4:
-            port = 4444        
+            port = 4444
 
         if spacing:
             newline = '\n'
@@ -612,6 +639,106 @@ class Mapping_Ckalculator:
         elif display == 3:
             port = 3333
         elif display == 4:
-            port = 4444 
-            
+            port = 4444
+
         return self.__socket.sendto(bytes('line:\n', 'utf-8'), ('localhost', port))
+
+
+class Mapping_CKAR:
+    """Mapping for the AR extension
+    """
+    def __init__(self, debug=True):
+        
+        if debug:
+            print("## Using the AR mapping ##")
+            
+        self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        self._config.read('default_setup.ini', encoding='utf8')
+        
+        server = self._config['ar'].get('server')
+        self.even = self._config['ar'].getint('transpositon_even')
+        self.odd = self._config['ar'].getint('transposition_odd')
+                
+        if server != 'local':
+            with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
+                self._wsUri = json.loads(u.read(100))
+                print(self._wsUri)  
+        else:
+            print('server:', server)    
+            host = socket.gethostbyname(socket.gethostname())
+            self._wsUri = {'host': host, 'port': '8081'}
+            print(self._wsUri)
+            
+        #self.wsConnect()
+        #asyncio.run(self.cue())
+        
+    async def cue(self):
+        self._cue = asyncio.Queue()
+        await asyncio.create_task(self.websocketloop())
+        
+    
+    async def websocketloop(self, json):
+        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=None) as websocket:
+            #while True:
+            await websocket.send(json)
+            
+        
+    async def connect(self):
+        try:
+            
+            self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=10)
+            self.websocket = await self._conn.__aenter__()
+            print('web socket connected!')
+        except:
+            print('connection error. Is the websocket server running?')
+        
+        return self
+    
+    def wsConnect(self):
+        asyncio.get_event_loop().run_until_complete(self.connect())
+       
+
+    async def send(self, json):
+        try:
+            await self.websocket.send(json)    
+        except:
+            print('connection closed, trying to reconnect... ')
+            self.wsConnect()
+
+            
+    async def sendToCue(self, json):
+        print("send to cue")
+        await self._cue.put(json)   
+    
+    
+    async def receive_new(self):
+        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=None) as websocket:
+            async for msg in websocket:
+                return json.loads(msg)
+            
+    async def receive(self):
+        async for message in self.websocket:
+            return json.loads(message)
+        
+        
+    def prepareJson(self, wstype='lsys', payload=''):
+        return json.dumps({'type': wstype, 'payload': payload})
+    
+    
+    def prepareJsonShape(self, tree='1', shape=''):
+        return json.dumps({'type': 'shape', 'tree': tree, 'shape': shape})    
+    
+    
+    def prepareJsonTransform(self, tree='1', position=[], rotation=[]):
+        return json.dumps({'type': 'transform', 'tree': tree, 'position': position, 'scale': [1,1,1], 
+                          'rotation': rotation})
+    
+    def prepareJsonValue(self, wstype='-val', tree='1', payload=''):
+        return json.dumps({'type': 'value','key': tree+wstype, 'payload':payload})    
+    
+
+    # type: value, key: string, payload: normalized float
+    # key: treeId-vel, density, range, register, 

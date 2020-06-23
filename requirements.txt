@@ -2,6 +2,7 @@ pynput==1.3.6
 fn==0.4.3
 numpy==1.15.4
 sphinx
+websockets
 pyobjc-core==5.2
 pyobjc-framework-Cocoa==5.2
 pyobjc-framework-Quartz==5.2

@@ -1,0 +1,24 @@
+[lambda]
+# lambda function : midi number mapped to the function ORIGINAL
+evaluate_function: 59
+identity_midi: 23
+select_first_midi: 0
+select_second_midi: 0
+successor_midi: 83, 95
+predecessor_midi: 0
+add_midi: 107
+subtract_midi: 71
+mult_midi: 0
+division_midi: 0
+greater_than_midi: 47
+equality_midi: 0
+less_than_midi: 0
+
+[articulation]
+# articulation name : threshold in seconds
+chord: 0.02
+staccato: 0.35
+sostenuto: 0.8
+
+[ar]
+dot: 35
