@@ -17,6 +17,7 @@ import asyncio
 from websockets import connect
 import json
 import urllib.request
+from CK_config import inifile
 
 display1 = 1111
 display2 = 2222
@@ -24,319 +25,38 @@ display3 = 3333
 display4 = 4444
 display5 = 5555
 
-class Mapping_HelloWorld:
-    """Mapping for the Hello World prototype.
-
-    :param use_display boolean: set if code should be printed in UDP display
-    """
-
-    def __init__(self, use_display=False):
-        """Init the class
-
-        Print that the user is using this mapping and set the controller.
-        """
-        if debug:
-            print("## Using the Hello World mapping ##")
-
-        #Read config and settings
-        self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini', encoding='utf8')
-        self.__keyboard = Controller()
-        self.use_display = use_display
-
-        if use_display:
-            self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-    def evaluateSC(self):
-        """Evaluate the SuperCollider command (presses shift-enter).
-        """
-
-        with self.__keyboard.pressed(Key.shift):
-            self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.shift)
-
-    def stopSC(self, midinumber):
-        """If ``midinumber`` is 66, then stop SuperCollider
-
-        By issueing a cmd-. command.
-
-        :param int midinumber: the midinumber pressed on the keyboard
-        """
-        if midinumber == 66:
-            self.__keyboard.press(Key.cmd)
-            self.__keyboard.type('.')
-            self.__keyboard.release(Key.cmd)
-
-    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=''):
-        """format and prepare a string for sending it over UDP socket
-
-        :param str msg: the string to be sent
-        :param str encoding: the character encoding
-        :param str host: the UDP server hostname
-        :param int display: the UDP destination port
-        """
-
-        if display == 1:
-            port = 1111
-        elif display == 2:
-            port = 2222
-        elif display == 3:
-            port = 3333
-        elif display == 4:
-            port = 4444
-
-        if self.use_display:
-            return self.__socket.sendto(bytes(syntax_color+'\n'+msg, encoding), (host, port))
-        else:
-            return
-
-    def mapping(self, midinumber, prototype='Hello World', debug=False):
-        """Type a letter that is coupled to this midi note.
-
-        :param int midinumber: the midinumber that is played
-        """
-        try:
-            midis = str(midinumber)
-            if midis in self._config[prototype]:
-                if debug:
-                    print(midinumber, self._config[prototype].get(midis))
-                mapped_string = self._config[prototype].get(midis)
-
-
-                if len(mapped_string) < 2:
-                    # chars and nums
-                    if debug:
-                        print(mapped_string)
-                    self.__keyboard.type(mapped_string)
-                    self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
-                else:
-                    # special keys or stirngs
-                    if mapped_string == 'space':
-                        self.__keyboard.press(Key.space)
-                        self.__keyboard.release(Key.space)
-                        self.formatAndSend(' ', display=5, syntax_color='hello:', spacing=False)
-                    elif mapped_string == 'enter':
-                        self.__keyboard.press(Key.enter)
-                        self.__keyboard.release(Key.enter)
-                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
-                    elif mapped_string == 'backspace':
-                        self.__keyboard.press(Key.backspace)
-                        self.__keyboard.release(Key.backspace)
-                        self.formatAndSend('', display=5, syntax_color='delete:', spacing=False)
-                    elif mapped_string == 'down':
-                        self.goDown()
-                        self.formatAndSend('\n', display=5, syntax_color='hello:', spacing=False)
-                    elif mapped_string == 'sc-evaluate':
-                        self.evaluateSC('noEnter_eval')
-                        self.formatAndSend('', display=5, syntax_color='hello:', spacing=False)
-                    elif mapped_string == '.tempo':
-                        self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
-                    elif mapped_string == '.play':
-                        self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=5, syntax_color='hello:', spacing=False)
-                    elif mapped_string == 'motippetssc-evaluate':
-                        self.evaluateSC('eval')
-        except KeyError:
-            raise LookupError('Missing hello world information in the config file.')
-
-class Mapping_HelloWorld_NKK:
-    """Mapping of the HelloWorld piece
-    as played on the Leiden Nacht van Kunst en Kultuur.
-    """
-
-    def __init__(self):
-        """Mapping for the Hello World NKK (installation flavour).
-        """
-        print("Using the Hello World mapping (NKK)")
-        self.__keyboard = Controller()
-
-    def evaluateSC(self, what):
-        """Evaluate the SuperCollider command 'what'
-
-        :param what string: the command that should be evaluated
-        """
-        if what == 'play':
-            with self.__keyboard.pressed(Key.cmd):
-                self.__keyboard.press(Key.right)
-                self.__keyboard.release(Key.right)
-            time.sleep(0.01)
-            self.__keyboard.type('.play')
-            with self.__keyboard.pressed(Key.shift):
-                self.__keyboard.press(Key.enter)
-                self.__keyboard.release(Key.enter)
-            time.sleep(0.01)
-            self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.enter)
-        elif what == 'stop':
-            with self.__keyboard.pressed(Key.cmd):
-                self.__keyboard.press(Key.right)
-                self.__keyboard.release(Key.right)
-            time.sleep(0.01)
-            self.__keyboard.type('.stop')
-            with self.__keyboard.pressed(Key.shift):
-                self.__keyboard.press(Key.enter)
-                self.__keyboard.release(Key.enter)
-            time.sleep(0.01)
-            self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.enter)
-        elif what == 'alt_eval':
-            with self.__keyboard.pressed(Key.cmd):
-                self.__keyboard.type('e')
-                self.__keyboard.release(Key.cmd)
-        elif what == 'eval':
-            with self.__keyboard.pressed(Key.shift):
-                self.__keyboard.press(Key.enter)
-                self.__keyboard.release(Key.enter)
-            time.sleep(0.01)
-            self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.enter)
-
-    def stopSC(self, midinumber):
-        """If ``midinumber`` is 66, then stop SuperCollider
-
-        By issueing a cmd-. command.
-
-        :param int midinumber: the midinumber that is played
-        """
-        if midinumber == 66:
-            self.__keyboard.press(Key.cmd)
-            self.__keyboard.type('.')
-            self.__keyboard.release(Key.cmd)
-
-    def enter(self):
-        """Press the enter key.
-        """
-        self.__keyboard.press(Key.enter)
-        self.__keyboard.release(Key.enter)
-
-    def delete(self):
-        """Press the backspace key.
-        """
-        self.__keyboard.press(Key.backspace)
-        self.__keyboard.release(Key.backspace)
-
-    def mapping(self, midinumber):
-        """Type a letter that is coupled to this midi note.
-
-        :param int midinumber: the midinumber that is played
-        """
-        # chars and nums
-        if midinumber == 87:
-            self.__keyboard.type('h')
-        elif midinumber == 92:
-            self.__keyboard.type('l')
-        elif midinumber == 90:
-            self.__keyboard.type('e')
-        elif midinumber == 94:
-            self.__keyboard.type('o')
-        elif midinumber == 95:
-            self.__keyboard.type('p')
-        elif midinumber == 91:
-            self.__keyboard.type('n')
-        elif midinumber == 89:
-            self.__keyboard.type('r')
-        elif midinumber == 84:
-            self.__keyboard.type('t')
-        elif midinumber == 83:
-            self.__keyboard.type('s')
-        elif midinumber == 80:
-            self.__keyboard.type('o')
-        elif midinumber == 102:
-            self.__keyboard.type('a')
-        elif midinumber == 104:
-            self.__keyboard.type('f')
-        elif midinumber == 106:
-            self.__keyboard.type('x')
-        elif midinumber == 88:
-            self.__keyboard.type('d')
-        elif midinumber == 89:
-            self.__keyboard.type('r')
-        elif midinumber == 103:
-            self.__keyboard.type('-')
-        elif midinumber == 105:
-            self.__keyboard.type('+')
-        elif midinumber == 107:
-            self.delete()
-       # special keys
-        elif midinumber == 85:
-            self.__keyboard.type('~')
-        elif midinumber == 101:
-            self.__keyboard.type('=')
-        elif midinumber == 98:
-            self.evaluateSC('stop')
-        elif midinumber == 99:
-            self.__keyboard.type('.tempo')
-        elif midinumber == 97:
-            self.evaluateSC('play')
-        elif midinumber == 108:
-            self.evaluateSC('eval')
-       # numbers keys
-        elif midinumber == 77:
-            self.__keyboard.type('1')
-        elif midinumber == 79:
-            self.__keyboard.type('2')
-        elif midinumber == 81:
-            self.__keyboard.type('3')
 
 class Mapping_Motippets:
     """Mapping for the Motippets prototype.
 
        Includes Hello World mappings for the Hybrid prototype
     """
-    def __init__(self, debug=True, snippets='snippets'):
+    def __init__(self, debug=True, snippets='snippets code output'):
         if debug:
             print("## Using the Motippets mapping ##")
 
-        #Read config and settings
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini', encoding='utf8')
-
-        # TODO: optimize with new style!
-        try:
-            self.__snippet1 = self._config[snippets].get('snippet1')
-            self.__snippet2 = self._config[snippets].get('snippet2')
-
-            self.__mini_snippet_hi_1 = self._config[snippets].get('mini_snippet_hi_1')
-            self.__mini_unmap_hi_2 = self._config[snippets].get('mini_unmap_hi_2')
-
-            self.__mini_snippet_hi_2 = self._config[snippets].get('mini_snippet_hi_2')
-            self.__mini_unmap_hi_1 = self._config[snippets].get('mini_unmap_hi_1')
-
-            self.__mini_snippet_mid_1 = self._config[snippets].get('mini_snippet_mid_1')
-            self.__mini_unmap_mid_2 = self._config[snippets].get('mini_unmap_mid_2')
-
-            self.__mini_snippet_mid_2 = self._config[snippets].get('mini_snippet_mid_2')
-            self.__mini_snippet_mid_2b = self._config[snippets].get('mini_snippet_mid_2') # check?
-            self.__mini_unmap_mid_1 = self._config[snippets].get('mini_unmap_mid_1')
-
-            self.__mini_snippet_mid_3 = self._config[snippets].get('mini_snippet_mid_3')
-            self.__mini_unmap_mid_3 = self._config[snippets].get('mini_unmap_mid_3')
-
-            self.__mini_snippet_low_1 = self._config[snippets].get('mini_snippet_low_1')
-            self.__mini_snippet_low_1_amp = self._config[snippets].get('mini_snippet_low_1_amp')
-            self.__mini_unmap_low_1 = self._config[snippets].get('mini_unmap_low_1')
-            self.__mini_unmap_low_2 = self._config[snippets].get('mini_unmap_low_2')
-            self.__mini_unmap_low_3 = self._config[snippets].get('mini_unmap_low_3')
-
-            self.__mini_snippet_low_2 = self._config[snippets].get('mini_snippet_low_2')
-            self.__mini_snippet_low_1_amp = self._config[snippets].get('mini_snippet_low_1_amp')
-            self.__mini_unmap_low_1 = self._config[snippets].get('mini_unmap_low_1')
-            self.__mini_unmap_low_2 = self._config[snippets].get('mini_unmap_low_2')
-            self.__mini_unmap_low_3 = self._config[snippets].get('mini_unmap_low_3')
-
-        except KeyError:
-            raise LookupError('Missing snippets in the config file.')
-
+        self._config.read(inifile, encoding='utf8')
+            
         self.__keyboard = Controller()
+        self._shortcuts = {}     
+       
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
 
-    def evaluateSC(self, what):
-        """Evaluate the SuperCollider command 'what'
+    def evaluate(self, what, flash=True, display=5):
+        """Evaluate the mapped command 'what' from .ini file
 
         :param string what: the command that should be evaluated
+        :param bool flash: should eval command flash the screen
+        :param int display: the display number that should flash to indicate evaluation
         """
+        
+        for shortcut in self._config['shortcuts']:
+            self._shortcuts[shortcut] = self._config['shortcuts'].get(shortcut).split(',')        
+        
+        if flash:
+            self.formatAndSend('evaluate:', display=display)
         if what == 'play':
             with self.__keyboard.pressed(Key.cmd):
                 self.__keyboard.press(Key.right)
@@ -366,19 +86,60 @@ class Mapping_Motippets:
                 self.__keyboard.type('e')
                 self.__keyboard.release(Key.cmd)
         elif what == 'eval':
-            with self.__keyboard.pressed(Key.shift):
+            if len(self._shortcuts[what]) == 1:
+                if len(self._shortcuts[what][0].strip()) > 1:
+                    if self._shortcuts[what][0].strip() == 'none': #TODO: make a better function
+                        self.parseShortcut('eval_manual')
+                    else:
+                        self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
+                else:
+                    self.__keyboard.type(self._shortcuts[what][0].strip())
+            else:        
+                with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
+                    if len(self._shortcuts[what][1].strip()) > 1:
+                        self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
+                    else:
+                        self.__keyboard.type(self._shortcuts[what][1].strip())
+                time.sleep(0.2)
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
-            time.sleep(0.2)
-            self.__keyboard.press(Key.enter)
-            self.__keyboard.release(Key.enter)
         elif what == 'noEnter_eval':
             with self.__keyboard.pressed(Key.shift):
                 self.__keyboard.press(Key.enter)
                 self.__keyboard.release(Key.enter)
+        else:
+            self.parseShortcut(what)
+
+
+    def parseShortcut(self, what):
+        """ parse the evaluate code from the ini file"""
+        if len(self._shortcuts[what]) == 3:
+            with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()),
+                                         eval('Key.'+self._shortcuts[what][1].strip())):
+                if len(self._shortcuts[what][2].strip()) > 1:
+                    self.__keyboard.press(eval('Key.'+self._shortcuts[what][2].strip()))
+                else:
+                    self.__keyboard.type(self._shortcuts[what][2].strip())
+                
+        elif len(self._shortcuts[what]) == 2:
+            with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip())):
+                if len(self._shortcuts[what][1].strip()) > 1:
+                    self.__keyboard.press(eval('Key.'+self._shortcuts[what][1].strip()))
+                else:
+                    self.__keyboard.type(self._shortcuts[what][1].strip());
+                    
+        else:
+            if len(self._shortcuts[what][0].strip()) > 1:
+                self.__keyboard.press(eval('Key.'+self._shortcuts[what][0].strip()))
+                self.__keyboard.release(eval('Key.'+self._shortcuts[what][0].strip()))      
+            else:
+                self.__keyboard.type(self._shortcuts[what][0].strip());
+                self.__keyboard.type(' ');
+        
 
     def goDown(self, display=5):
         """Press command-arrow down and enter.
+        
         :param int display: the display number to which to send the udp messages
         """
         self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
@@ -401,7 +162,6 @@ class Mapping_Motippets:
         """
         self.__keyboard.press(Key.backspace)
         self.__keyboard.release(Key.backspace)
-
 
     def mapping(self, midinumber, prototype='Hello World', display=5, debug=False):
         """Type a letter that is coupled to this midi note.
@@ -447,7 +207,7 @@ class Mapping_Motippets:
                         self.goDown()
                         self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'sc-evaluate':
-                        self.evaluateSC('noEnter_eval')
+                        self.evaluate('noEnter_eval', flash=display==5)
                         self.formatAndSend('', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.tempo':
                         self.__keyboard.type(mapped_string)
@@ -459,10 +219,9 @@ class Mapping_Motippets:
                         self.__keyboard.type(mapped_string)
                         self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'motippetssc-evaluate':
-                        self.evaluateSC('eval')
+                        self.evaluate('eval', flash=display==5)
         except KeyError:
             raise LookupError('Missing hello world information in the config file.')
-
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color='', spacing=True):
         """format and prepare a string for sending it over UDP socket
@@ -485,6 +244,8 @@ class Mapping_Motippets:
             port = 4444
         elif display == 5:
             port = 5555
+        else:
+            port = 1111
 
         if spacing:
             newline = '\n'
@@ -493,444 +254,314 @@ class Mapping_Motippets:
 
         return self.__socket.sendto(bytes(syntax_color+newline+msg, encoding), (host, port))
 
-    def snippets(self, num, configfile='default_setup.ini'):
+    def snippets(self, motif):
         """Type code snippets
 
-        :param int num: the id of the code snippet to play
-        :param str configfile: the name of the config file to parse
+        :param str motif: the name of the motif to map
         """
+        displays = [1,2]
+        try:
+            evaluate = self._config['shortcuts mapping'].get(motif)
+        except KeyError:
+            print('fallback eval')
 
-        if num == 1:
-            self.__keyboard.type(self.__snippet1)
-            self.formatAndSend(self.__snippet1, display=1, syntax_color='snippet:')
-            self.evaluateSC('eval')
-        elif num == 2:
-            self.__keyboard.type(self.__snippet2)
-            self.formatAndSend(self.__snippet2, display=2, syntax_color='snippet:')
-            self.evaluateSC('eval')
+        if evaluate == None:
+            if self._config['shortcuts'].get('eval') != 'none':
+                evaluate = 'eval'
+            
+        try:
+            display = self._config['motippets display settings'].getint(motif)                         
+            snippet = self._config['snippets code output'].get(motif)
+        except KeyError:
+            print(motif, 'does not exists in the snippets code output section of .ini file')
+        
+        if evaluate == 'eval': #automatic evaluation
+            self.__keyboard.type(snippet)
+            self.formatAndSend(snippet, display=display, syntax_color='snippet:')
+            self.evaluate(evaluate, flash=False)
+        elif evaluate == None: #disabled automatic evaluation
+            self.__keyboard.type(snippet)
+            self.__keyboard.type(' ')
+            self.formatAndSend(snippet, display=display, syntax_color='snippet:')            
+        else: # just a keyboadshortcut and without printed code
+            self.evaluate(evaluate, flash=False)        
 
-    def miniSnippets(self, snippet_num, pianosection):
+    def miniSnippets(self, motif, pianosection, callback=None):
         """Type a mini snippet for specific pianosections'utf-8'
 
-        :param int snippet_num: the id of the mini snippet to play
-        :param string pianosections: the pianosection that is used ('hi', 'mid', 'low')
+        :param str motif: the name of the motif mapped to the desired snippet
+        :param str pianosections: the pianosection that is used ('hi', 'mid', 'low')
+        :param str motif: the name of the motif to unmap 
         """
-        if snippet_num == 1 and pianosection == 'hi':
-            self.__keyboard.type(self.__mini_snippet_hi_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num, syntax_color='snippet:')
-        if snippet_num == 1 and pianosection == 'hi with unmap':
-            self.__keyboard.type(self.__mini_snippet_hi_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_hi_1, display=snippet_num, syntax_color='snippet:')
-            #unmap other motif
-            self.__keyboard.type(self.__mini_unmap_hi_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_hi_2, display=snippet_num, syntax_color='snippet:')
-        if snippet_num == 1 and pianosection == 'mid':
-            self.__keyboard.type(self.__mini_snippet_mid_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_mid_1, display=5, syntax_color='mid:')
-        if snippet_num == 1 and pianosection == 'mid with unmap':
-            self.__keyboard.type(self.__mini_snippet_mid_1)
-            self.evaluateSC('eval')
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num, syntax_color='snippet:')
+        
+        try:
+            display = self._config['motippets display settings'].getint(motif)             
+            snippet = self._config['snippets code output'].get(motif)
+        except KeyError:
+            print(motif, 'missing in snippets code output or motippets display settings')
+        
+        try:
+            evaluate = self._config['shortcuts mapping'].get(motif)
+        except KeyError:
+            print('fallback eval')
+        
+        if evaluate == None:
+            if self._config['shortcuts'].get('eval') != 'none':
+                evaluate = 'eval'        
+        
+        if display == None:
+            display = '### no display setting for ' + motif + ' in .ini ###'
+        if snippet == None:
+            snippet = '### code output error with ' + motif + ' (check .ini) ###'
+        
+        if callback == None:
+            if evaluate == 'eval':
+                self.__keyboard.type(snippet)
+                self.evaluate(evaluate, flash=False)
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':') 
+            elif evaluate == None: 
+                self.__keyboard.type(snippet)
+                self.__keyboard.type(' ')
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
+            else:
+                self.evaluate(evaluate, flash=False)
+        else:           
+            if evaluate == 'eval':
+                self.__keyboard.type(snippet)
+                self.evaluate(evaluate, flash=False)
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')
+            elif evaluate == None: 
+                self.__keyboard.type(snippet)
+                self.__keyboard.type(' ')
+                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
+            else:
+                self.evaluate(evaluate, flash=False)
 
-        if snippet_num == 3 and pianosection == 'mid':
-            self.__keyboard.type(self.__mini_snippet_mid_3)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_3, display=5, syntax_color='snippet:')
-        if snippet_num == 3 and pianosection == 'mid with unmap 1':
-            self.__keyboard.type(self.__mini_snippet_mid_3)
-            self.evaluateSC('eval')
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num, syntax_color='snippet:')
-        if snippet_num == 3 and pianosection == 'mid with unmap 2':
-            self.__keyboard.type(self.__mini_snippet_mid_3)
-            self.evaluateSC('eval')
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_2, display=snippet_num, syntax_color='snippet:')
-
-
-         ## LOW SECTION
-        if snippet_num == 1 and pianosection == 'low':
-            self.__keyboard.type(self.__mini_snippet_low_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num, syntax_color='low:')
-        if snippet_num == 1 and pianosection == 'low amp':
-            self.__keyboard.type(self.__mini_snippet_low_1_amp)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num, syntax_color='low:')
-        if snippet_num == 1 and pianosection == 'low with unmap 2':
-            self.__keyboard.type(self.__mini_snippet_low_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num, syntax_color='low:')
-            #unmap 2:
-            self.__keyboard.type(self.__mini_unmap_low_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num, syntax_color='low:')
-        if snippet_num == 1 and pianosection == 'low with unmap 3':
-            self.__keyboard.type(self.__mini_snippet_low_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num, syntax_color='low:')
-            #unmap 3:
-            self.__keyboard.type(self.__mini_unmap_low_3)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num, syntax_color='low:')
-        if snippet_num == 1 and pianosection == 'low amp with unmap 1':
-            self.__keyboard.type(self.__mini_snippet_low_1_amp)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1_amp, display=snippet_num, syntax_color='low:')
-            #unmap 1:
-            self.__keyboard.type(self.__mini_unmap_low_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num, syntax_color='low:')
-        if snippet_num == 1 and pianosection == 'low amp with unmap 2':
-            self.__keyboard.type(self.__mini_snippet_low_1_amp)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_1, display=snippet_num, syntax_color='low:')
-            #unmap 2:
-            self.__keyboard.type(self.__mini_unmap_low_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_2, display=snippet_num, syntax_color='low:')
-
-        # for snippet 2:
-        if snippet_num == 2 and pianosection == 'hi':
-            self.__keyboard.type(self.__mini_snippet_hi_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num, syntax_color='hi:')
-        if snippet_num == 2 and pianosection == 'hi with unmap':
-            self.__keyboard.type(self.__mini_snippet_hi_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_hi_2, display=snippet_num, syntax_color='hi:')
-            #unmap other motif
-            self.__keyboard.type(self.__mini_unmap_hi_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_hi_1, display=snippet_num, syntax_color='hi:')
-        if snippet_num == 2 and pianosection == 'mid':
-            self.__keyboard.type(self.__mini_snippet_mid_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_mid_2, display=snippet_num, syntax_color='mid:')
-        if snippet_num == 2 and pianosection == 'mid with unmap':
-            self.__keyboard.type(self.__mini_snippet_mid_2b)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_mid_2b, display=snippet_num, syntax_color='mid:')
-            #unmap
-            self.__keyboard.type(self.__mini_unmap_mid_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_mid_1, display=snippet_num, syntax_color='mid:')
-
-            ## LOW SECTION
-        if snippet_num == 2 and pianosection == 'low':
-            self.__keyboard.type(self.__mini_snippet_low_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num, syntax_color='low:')
-        if snippet_num == 2 and pianosection == 'low with unmap 1':
-            self.__keyboard.type(self.__mini_snippet_low_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num, syntax_color='low:')
-            #unmap 1:
-            self.__keyboard.type(self.__mini_unmap_low_1)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_1, display=snippet_num, syntax_color='low:')
-        if snippet_num == 2 and pianosection == 'low with unmap 3':
-            self.__keyboard.type(self.__mini_snippet_low_2)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_snippet_low_2, display=snippet_num, syntax_color='low:')
-            #unmap 3:
-            self.__keyboard.type(self.__mini_unmap_low_3)
-            self.evaluateSC('eval')
-            self.formatAndSend(self.__mini_unmap_low_3, display=snippet_num, syntax_color='low:')
-
-
-    def tremolo(self, pianoregister, value):
+            callback_snippet = self._config['snippets code output callback'].get(callback)            
+            if callback_snippet == None:
+                callback_snippet = '### callback error with ' + callback + ' (check .ini) ###'
+                
+            self.__keyboard.type(callback_snippet)
+            if evaluate == 'eval':
+                self.evaluate(evaluate, flash=False)
+                self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
+            elif evaluate == None: 
+                self.formatAndSend(callback_snippet, display=display, syntax_color='low:')             
+            
+    def tremolo(self, motif, value, syntax_color, debug=False):
         """Type the tremolo command + the tremolo-value
 
-        :param string pianoregister: the pianoregister the tremolo is played in. Values are: 'hi_1', 'hi_2', 'mid_1',
-        'mid_2', 'mid_3', 'low_1', 'low_2', 'low_3'.
+        :param string motif: the motif name to be mapped and prependend to the tremolo value.
         :param int value: the tremolo value as distance between the notes
         """
-        if pianoregister == 'hi_1':
-            self.__keyboard.type('~tremoloH1 = ' + str(value))
-            self.formatAndSend('~tremoloH1 = ' + str(value), display=1, syntax_color='hi:')
-        elif pianoregister == 'hi_2':
-            self.__keyboard.type('~tremoloH2 = ' + str(value))
-            self.formatAndSend('~tremoloH2 = ' + str(value), display=2, syntax_color='hi:')
-        elif pianoregister == 'mid_1':
-            self.__keyboard.type('~tremoloM1 = ' + str(value))
-            self.formatAndSend('~tremoloM1 = ' + str(value), display=5, syntax_color='mid:')
-        elif pianoregister == 'mid_2':
-            self.__keyboard.type('~tremoloM2 = ' + str(value))
-            self.formatAndSend('~tremoloM2 = ' + str(value), display=2, syntax_color='mid:')
-        elif pianoregister == 'mid_3':
-            self.__keyboard.type('~tremoloM3 = ' + str(value))
-            self.formatAndSend('~tremoloM3 = ' + str(value), display=5, syntax_color='mid:')
-        elif pianoregister == 'low_1':
-            self.__keyboard.type('~tremoloL1 = ' + str(value))
-            self.formatAndSend('~tremoloL1 = ' + str(value), display=1, syntax_color='low:')
-        elif pianoregister == 'low_2':
-            self.__keyboard.type('~tremoloL2 = ' + str(value))
-            self.formatAndSend('~tremoloL2 = ' + str(value), display=2, syntax_color='low:')
-        elif pianoregister == 'low_3':
-            self.__keyboard.type('~tremoloL1amp = ' + str(value))
-            self.formatAndSend('~tremoloL1amp = ' + str(value), display=1, syntax_color='low:')
-        self.evaluateSC('eval')
+        code = self._config['snippets for tremolos'].get(motif)
+        display = self._config['motippets display settings'].getint(motif)
+        prefix = ''
+        suffix = ''
+        
+        if display == None:
+            display = '### no display setting for ' + motif + ' in .ini ###'
+        if code == None:
+            if debug:
+                print('### tremolo error with ' + motif + ' (check .ini) ###')
+              
+        def scale(value, minmax):
+            minout = float(minmax[0])
+            if minout == 0:
+                minout = 0.0000000000001
 
-    def conditional(self, conditional_num):
+            if len(minmax) == 3: 
+                if value >= 16:
+                    return float(minmax[1])
+                return round( pow( (value - 1) / (16-1), float(minmax[2]) ) 
+                              * (float(minmax[1]) - float(minmax[0])) 
+                              + float(minmax[0]), 
+                              2)
+            else:
+                return value            
+        
+        if code != None:
+            scaled_value = str(value)
+            code = code.split(',')
+            scaling = [x for x in code if re.match("minmax.+", x)]
+            if len(scaling) == 1:
+                scaling = re.findall("[0-9.?]+", scaling[0])
+                code.pop()
+                if len(scaling) > 2:
+                    scaled_value = str(scale(value, scaling))
+                else:
+                    scaled_value = str(scale(value, scaling+['1']))
+            if len(code) == 2:
+                prefix = code[1]
+            elif len(code) == 3:
+                prefix = code[1]
+                suffix = code[2]
+                
+            self.__keyboard.type(code[0] + prefix + scaled_value + suffix)
+            self.__keyboard.type(' ')
+            self.formatAndSend(code[0] + prefix + scaled_value + suffix, display=display, syntax_color=syntax_color+':')
+        
+        try:
+            evaluate = self._config['shortcuts mapping'].get(motif)
+        except KeyError:
+            print('fallback eval')
+            
+        if evaluate == None:
+            if self._config['shortcuts'].get('eval') != 'none':
+                evaluate = 'eval'    
+                    
+        flash = display == 5
+        if evaluate == 'eval':
+            self.evaluate('eval', flash=flash) 
+            
+
+    def conditional(self, motif):
         """Setup a conditional
+        
+        :param str motif: the motif name that corresponds to the code output in the .ini file
 
-        There are three options: settimg up a conditional if number of notes
-        played is more than 100 in ... (option 1), setting up a conditional if
-        range is more than ... (option 2), and setting up a conditional if range
-        is less than ... (option 3).
-
-        :param int conditional_num: the selection for the type of conditional
+        There are three options:
+        
+        1. setting up a conditional if number of notes
+        played is more than 100 in ...
+        
+        2. setting up a conditional if
+        range is more than ... 
+        
+        3.setting up a conditional if range
+        is less than ...
+        
         """
-        if conditional_num == 1:
-            self.__keyboard.type('// setting up a conditional: IF number of\
-            notes played is more than 100 in...')
-            self.enter()
-            self.formatAndSend('setting up a conditional: \nIF number of notes played is more than 100 in...', display=3, syntax_color='primitive:')
-        elif conditional_num == 2:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is more than...')
-            self.enter()
-            self.formatAndSend('setting up an ONGOING conditional: \nIF range is more than...', display=3, syntax_color='primitive:')
-        elif conditional_num == 3:
-            self.__keyboard.type('// setting up an ONGOING conditional: IF range is less than...')
-            self.enter()
-            self.formatAndSend('setting up an ONGOING conditional: \nIF range is less than...', display=3, syntax_color='primitive:')
+        
+        code = self._config['snippets code output'].get(motif)
+        
+        if code == None:
+            code = '### code output error with ' + motif + ' (check .ini) ###'        
+        
+        self.__keyboard.type(code)
+        self.enter()
+        self.formatAndSend(code, display=3, syntax_color='primitive:')        
 
-    def result(self, result_num, text, mod=0): #how to make optional params?
+    def result(self, motif_name, text, mod=0, flags=None):
         """TOOD: document function
 
-        :param int result_num: type of result?
+        :param str motif_name: motif name coresponding to the desired result
         :param string text: indication of the type of message
-        :param mod: some function
-        :type mod: int or None
+        :param int mod: a value passed from the calling function
         """
-        if result_num == 7: #testing...
+        display = 3
+        syntax_color = self._config['motippets display settings'].get(motif_name)
+        
+        self.__keyboard.press(Key.enter)
+        self.__keyboard.release(Key.enter)        
+        
+        if flags in ('gomb', ):
+            output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]            
+            self.__keyboard.type('GOMB countdown started!')
+            self.evaluate('eval', flash=False)
+            self.formatAndSend('boom:GOMB', display=1)
+            self.formatAndSend('boom:COUNTDOWN', display=2)
+            self.formatAndSend('boom:STARTED!', display=3) 
+        else:
             if text == 'comment':
-                self.__keyboard.type('// if true -> stop ~snippet2')
+                output = self._config['snippets code output'].get(motif_name+'_comment')
+                self.__keyboard.type(output)
                 self.enter()
-                self.formatAndSend('if true -> stop ~snippet2', display=3, syntax_color='snippet:')
-            elif text == 'code':
-                self._osc.send_message("/ck_pp", "text1")
-                self.__keyboard.type('~snippet2.stop(10);')
-                self.evaluateSC('eval')
-                self.formatAndSend('~snippet2.stop;', display=3, syntax_color='snippet:')
-            elif text == 'less than':
-                self.__keyboard.type('//less than an 8ve. Nothing happens :(')
-                self.evaluateSC('eval')
-                self.formatAndSend('if false -> Nothing happens BUUUUU!', display=3, syntax_color='primitive:')
-
-        elif result_num == 2:
-            if text == 'comment':
-                self.__keyboard.type('// if true -> stop ~snippet1')
-                self.enter()
-                self.formatAndSend('if true -> stop ~snippet1', display=3, syntax_color='primitive:')
-            elif text == 'code':
-                self.__keyboard.type('~snippet1.stop(20);')
-                self.evaluateSC('eval')
-                self.formatAndSend('~snippet1.stop;', display=3, syntax_color='snippet:')
-            elif text == 'less than':
-                self.__keyboard.type('//less than an 8ve. Nothing happens :(')
-                self.evaluateSC('eval')
-                self.formatAndSend('if false -> Nothing happens BUUUUU!', display=3, syntax_color='primitive:')
-
-        elif result_num == 3:
-            if text == 'comment':
-                self.__keyboard.type('// if true -> play gong sound!')
-                self.enter()
-                self.formatAndSend('if true -> play gong sound!', display=3, syntax_color='primitive:')
-            elif text == 'code':
-                #self.__keyboard.type('~gong.play(' + str(mod) + ');')
-                #self.evaluateSC('eval')
-                self._osc.send_message("/ck_pp", "quote")
-                self._osc.send_message("/gong", str(mod))
-                self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
-            elif text == 'less than':
-                #self.__keyboard.type('~gong.play(' + str(mod) + ');');
-                #self.evaluateSC('eval')
-                self._osc.send_message("/gong", str(mod))
-                self.formatAndSend('~gong.play(' + str(mod) + ');', display=3, syntax_color='snippet:')
-
-
-        elif result_num == 4:
-            if text == 'comment':
-                self.__keyboard.type('HUYGENS! //is activating...')
-                self.evaluateSC('eval')
-                self.formatAndSend('HUYGENS', display=1, syntax_color='warning:')
-                self.formatAndSend('IS', display=2, syntax_color='warning:')
-                self.formatAndSend('ACTIVATING...', display=3, syntax_color='warning:')
-            elif text == 'start':
-                self.__keyboard.type('// HUYGENS countdown started!')
-                self.evaluateSC('eval')
-                self.formatAndSend('HUYGENS', display=1, syntax_color='warning:')
-                self.formatAndSend('COUNTDOWN', display=2, syntax_color='warning:')
-                self.formatAndSend('STARTED!', display=3, syntax_color='warning:')
-            elif text == 'code':
-                self.__keyboard.type("")
-                self.enter()
-                self.__keyboard.type("  ____   ____   ____  __  __ _ ")
-                self.enter()
-                self.formatAndSend(" ____ ", display=5, syntax_color='primitive:')
-                self.formatAndSend("  ____  ", display=1, syntax_color='primitive:')
-                self.formatAndSend("  ____  ", display=2, syntax_color='primitive:')
-                self.formatAndSend(" __  __  ", display=3, syntax_color='primitive:')
-                self.formatAndSend(" _ ", display=4, syntax_color='primitive:')
-                self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
-                self.enter()
-                self.formatAndSend("|  _ \ ", display=5, syntax_color='primitive:')
-                self.formatAndSend(" / __ \ ", display=1, syntax_color='primitive:')
-                self.formatAndSend(" / __ \ ", display=2, syntax_color='primitive:')
-                self.formatAndSend("|  \/  |", display=3, syntax_color='primitive:')
-                self.formatAndSend("| | ", display=4, syntax_color='primitive:')
-                self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
-                self.enter()
-                self.formatAndSend("| |_) | ", display=5, syntax_color='primitive:')
-                self.formatAndSend("| |  | |", display=1, syntax_color='primitive:')
-                self.formatAndSend("| |  | |", display=2, syntax_color='primitive:')
-                self.formatAndSend("| \  / |", display=3, syntax_color='primitive:')
-                self.formatAndSend("| | ", display=4, syntax_color='primitive:')
-                self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
-                self.enter()
-                self.formatAndSend("|  _ <| ", display=5, syntax_color='primitive:')
-                self.formatAndSend("| |  | |", display=1, syntax_color='primitive:')
-                self.formatAndSend("| |  | |", display=2, syntax_color='primitive:')
-                self.formatAndSend("| |\/| |", display=3, syntax_color='primitive:')
-                self.formatAndSend("| | ", display=4, syntax_color='primitive:')
-                self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
-                self.enter()
-                self.formatAndSend("| |_) | ", display=5, syntax_color='primitive:')
-                self.formatAndSend("| |__| |", display=1, syntax_color='primitive:')
-                self.formatAndSend("| |__| |", display=2, syntax_color='primitive:')
-                self.formatAndSend("| |  | |", display=3, syntax_color='primitive:')
-                self.formatAndSend("|_| ", display=4, syntax_color='primitive:')
-                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  THE END ¯\('…')/¯ ")
-                self.enter()
-                self.formatAndSend("|____/", display=5, syntax_color='primitive:')
-                self.formatAndSend(" \____/", display=1, syntax_color='primitive:')
-                self.formatAndSend(" \____/", display=2, syntax_color='primitive:')
-                self.formatAndSend("|_|  |_|", display=3, syntax_color='primitive:')
-                self.formatAndSend("(_) \n\n (^0^)//¯  AIR DE COUR \n\n THE END ¯\('…')/¯ ", display=4, syntax_color='primitive:')
-                self.__keyboard.type("")
-                self.enter()
-            elif text == 'huygens':
-                self.__keyboard.type('~stop.all;')
-                self.__keyboard.type('~huygens.end;') # ~huygens.end to not have the ending Huygens extract
-                self.evaluateSC('eval')
-
-        elif result_num == 8:
-            if text == 'comment':
-                self.__keyboard.type('// if true -> play Huyg')
-                self.enter()
-                self.formatAndSend('if true -> play Huyg', display=3, syntax_color='primitive:')
-            elif text == 'code':
-                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                #self.evaluateSC('eval')
-                self._osc.send_message("/huygens", str(mod))
-                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
-            elif text == 'less than':
-                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                #self.evaluateSC('eval')
-                self._osc.send_message("/huygens", str(mod))
-                self.formatAndSend('~huygens.stuk(' + str(mod) + ');', display=3, syntax_color='snippet:')
-
-        elif result_num == 6:
-            if text == 'comment':
-                self.__keyboard.type('HUYGENS! //is activating...')
-                self.evaluateSC('eval')
-            elif text == 'start':
-                self.__keyboard.type('// HUYGENS countdown started!')
-                self.evaluateSC('eval')
-            elif text == 'code':
-                self.__keyboard.type("")
-                self.enter()
-                self.__keyboard.type("  ____   ____   ____  __  __ _ ")
-                self.enter()
-                self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
-                self.enter()
-                self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
-                self.enter()
-                self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
-                self.enter()
-                self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
-                self.enter()
-                self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)   (^0^)//¯  AIR DE COUR  ¯\\(^0^) ")
-                self.enter()
-                self.__keyboard.type("")
-                self.enter()
-            elif text == 'huygens':
-                self.__keyboard.type('~huygens.end')
-                self.evaluateSC('eval')
-
-        elif result_num == 1:
-            if text == 'comment':
-                self.__keyboard.type('// if true -> play disklavier gong')
-                self.enter()
-                self.formatAndSend('if true -> play disklavier gong', display=3, syntax_color='primitive:')
-            elif text == 'code':
-                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                #self.evaluateSC('eval')
-                self._osc.send_message("/pianogong", str(mod)) #narcode check why with two text vars?
-                self.formatAndSend('DOOOOONG!;', display=3, syntax_color='snippet:')
-            elif text == 'less than':
-                #self.__keyboard.type('~huygens.stuk('+ str(mod) +');')
-                #self.evaluateSC('eval')
-                self._osc.send_message("/pianogong", str(mod))
-                self.formatAndSend('DOOOOONG!', display=3, syntax_color='snippet:')
-
-        elif result_num == 5:
-            if text == 'comment':
-                self.__keyboard.type('// if true -> piano cluster takeover')
-                self.enter()
-                self.formatAndSend('if true -> piano cluster takeover', display=3, syntax_color='primitive:')
-            elif text == 'code':
-                self._osc.send_message("/pianotake", str(mod))
-                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
-            elif text == 'less than':
-                self._osc.send_message("/pianotake", str(mod))
-                self.formatAndSend('piano takeover + 1', display=3, syntax_color='snippet:')
-
-    def customPass(self, name, content, osc_only=False):
+                self.formatAndSend(output, display=display, syntax_color='primitive:')
+            elif text in ('true', 'false'):
+                output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]
+                if 'osc' in output:
+                    if 'grab_value' in output:
+                        self._osc.send_message("/" + output[2], str(mod)) 
+                    else:
+                        self._osc.send_message("/" + output[2], output[3])             
+                else:
+                    self.__keyboard.type(output[0])
+                    self.evaluate('eval', flash=False)
+                    
+                self.formatAndSend(output[0], display=display, syntax_color='snippet:')                    
+                        
+    def customPass(self, content, syntax_color=None, display_only=False, flash=False, display=3):
         """
         post custom string message on codespace and display
 
-        :param string name: a label to print in front of the string
         :param string content: the message or content
+        :param str syntax_color: the reference name for a display color        
+        :param bool display_only: flag to only send content to display and ignore normal typing
+        :param bool falsh: execute a brief flashing in the display
         """
-        self.formatAndSend(name + " " + content, display=3, syntax_color='comment:')
 
-        if not osc_only:
-            self.__keyboard.type(name + " " + content)
+        if not display_only:
+            self.__keyboard.type(content)
             self.enter()
 
-
-    def onlyDisplay(self, content, tag=1, warning=False):
+        if flash:
+            content = 'flash:' + content
+            
+        if syntax_color == None:
+            syntax_color = 'comment'
+            
+        self.formatAndSend(content, display=display, syntax_color=syntax_color+':')
+        
+    def gomb(self):
         """
-        print a custom string on the UDP display only!
-
-        :param string content: the message or content
-        :param int tag: the reference to a color tag
-        :param warning: wether to print the message with the warning color tag (i.e. red)
-
+        special function to end a coding session/perfromance with a BANG
         """
-        if warning:
-            self.formatAndSend(content, display=4, syntax_color='warning:')
-        else:
-            if tag == 2:
-                self.formatAndSend(content, display=4, syntax_color='loop2:')
-            elif tag == 3:
-                self.formatAndSend(content, display=4, syntax_color='loop3:')
-            else:
-                self.formatAndSend(content, display=4, syntax_color='loop:')
+        for i in range(1, 4):
+            for display_num in range(1, 6):
+                self.formatAndSend('KILL:red', display=display_num)
+            time.sleep(0.1)
+            for display_num in range(1, 6):
+                self.formatAndSend('KILL:black', display=display_num)
+            time.sleep(0.1)
+        
+        self.__keyboard.type("")
+        self.enter()
+        self.__keyboard.type("  ____   ____   ____  __  __ _ ")
+        self.enter()
+        self.formatAndSend(" ____ ", display=1, syntax_color='primitive:')
+        self.formatAndSend("  ____  ", display=2, syntax_color='primitive:')
+        self.formatAndSend("  ____  ", display=3, syntax_color='primitive:')
+        self.formatAndSend(" __  __  ", display=4, syntax_color='primitive:')
+        self.formatAndSend(" _ ", display=5, syntax_color='primitive:')
+        self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
+        self.enter()
+        self.formatAndSend("|  _ \ ", display=1, syntax_color='primitive:')
+        self.formatAndSend(" / __ \ ", display=2, syntax_color='primitive:')
+        self.formatAndSend(" / __ \ ", display=3, syntax_color='primitive:')
+        self.formatAndSend("|  \/  |", display=4, syntax_color='primitive:')
+        self.formatAndSend("| | ", display=5, syntax_color='primitive:')
+        self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
+        self.enter()
+        self.formatAndSend("| |_) | ", display=1, syntax_color='primitive:')
+        self.formatAndSend("| |  | |", display=2, syntax_color='primitive:')
+        self.formatAndSend("| |  | |", display=3, syntax_color='primitive:')
+        self.formatAndSend("| \  / |", display=4, syntax_color='primitive:')
+        self.formatAndSend("| | ", display=5, syntax_color='primitive:')
+        self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
+        self.enter()
+        self.formatAndSend("|  _ <| ", display=1, syntax_color='primitive:')
+        self.formatAndSend("| |  | |", display=2, syntax_color='primitive:')
+        self.formatAndSend("| |  | |", display=3, syntax_color='primitive:')
+        self.formatAndSend("| |\/| |", display=4, syntax_color='primitive:')
+        self.formatAndSend("| | ", display=5, syntax_color='primitive:')
+        self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
+        self.enter()
+        self.formatAndSend("| |_) | ", display=1, syntax_color='primitive:')
+        self.formatAndSend("| |__| |", display=2, syntax_color='primitive:')
+        self.formatAndSend("| |__| |", display=3, syntax_color='primitive:')
+        self.formatAndSend("| |  | |", display=4, syntax_color='primitive:')
+        self.formatAndSend("|_| ", display=5, syntax_color='primitive:')
+        self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)")
+        self.enter()
+        self.formatAndSend("|____/", display=1, syntax_color='primitive:')
+        self.formatAndSend(" \____/", display=2, syntax_color='primitive:')
+        self.formatAndSend(" \____/", display=3, syntax_color='primitive:')
+        self.formatAndSend("|_|  |_|", display=4, syntax_color='primitive:')
+        self.formatAndSend("(_)", display=5, syntax_color='primitive:')
+        self.__keyboard.type("")
+        self.enter()        
+
 
 class Mapping_Ckalculator:
     """Mapping for the Ckalculator

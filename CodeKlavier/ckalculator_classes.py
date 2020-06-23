@@ -314,6 +314,7 @@ class Ckalculator(object):
                                                 if f['body']['arg1'].__name__ == 'succ1':
                                                     self.append_successor(f['body']['arg1'])
                                                     self.zeroPlusRec(False, True)
+                                                    #self._successorHead = []
                                                     
                                         if func_exists[1] == 'ar':
                                             if function_to_call.__name__ in ['collect', 'drop']:
@@ -326,7 +327,8 @@ class Ckalculator(object):
                                             self._ckar = []
                                             self._rules = []
                                             self._dynamics = []
-                                    
+
+                                                  
                         ########################
                 ########### lambda calculus  ###########
                         ########################
@@ -924,7 +926,6 @@ class Ckalculator(object):
                     print('TEMP NUM STACK: ', self._tempNumberStack)
                     self.mapscheme._osc.send_message("/ckconsole", str(self._tempNumberStack))
                     self.ar.console(str(self._tempNumberStack))
-                    
                     print('NORM STACK: ', self._numberStack)
     
     def evaluateTempStack(self, stack):
@@ -1388,6 +1389,8 @@ class Ckalculator(object):
         self._note_on_cue = []
         self._filtered_cue = []
         self._functionBody = {}
+        self._arg1Counter = 0
+        self._arg2Counter = 0
         self._defineCounter = 0
         self._foundOstinato = False
         self._developedOstinato = (False,0)

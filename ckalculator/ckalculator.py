@@ -21,7 +21,7 @@ def main(configfile='default_setup.ini'):
     start the CKalculator
     """
     global ckalculator_listens, ck_deltatime_mem
-       
+
     config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
     config.read(configfile, encoding='utf8')
 
@@ -37,30 +37,32 @@ def main(configfile='default_setup.ini'):
         chord = config['articulation'].getfloat('chord')
     except KeyError:
         raise LookupError('Missing midi and articulation information in the config file.')
-    
+
     if (myPort == None or noteon_id == None):
         raise LookupError('Missing port and device id information in the config file.')
-    
+
     codeK = Setup()
     codeK.print_welcome(27)
     codeK.open_port(myPort)
-    
+
     codeK.print_lines(20, 1)
     print("Prototype loaded: Ckalculator AR extension 0.3")
     print("CodeKlavier is ready and LISTENING.")
     codeK.print_lines(20, 1)
+
     print("\nPress Control-C to exit.\n")       
     
     cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=True)
     cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=True)
+
     per_note = 0
     ck_deltatime = 0
     articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
-    
+
     try:
         while ckalculator_listens:
             msg = codeK.get_message()
-            
+
             if msg:
                 #print(msg)
                 message, deltatime = msg
@@ -86,16 +88,17 @@ def main(configfile='default_setup.ini'):
                             
                             
                     #note offs:
-                    if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):        
+                    if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
                         midinote = message[1]
                         #print(ck_note_dur)
                         if midinote in ck_note_dur:
-                            note_duration = ck_deltatime - ck_note_dur.pop(midinote)                        
-                        
-                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration, 
+                            note_duration = ck_deltatime - ck_note_dur.pop(midinote)
+
+                        cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration,
                                          ck_deltatime=ck_deltatime, articulation=articulation)
-                        
+
                         if len(cKost._functionBody) == 1:
+
                             if cKost._developedOstinato[1] == 1:
                                 cKalc._functionBody['grab_num'] = True
                                
@@ -117,35 +120,30 @@ def main(configfile='default_setup.ini'):
                                     cKost._functionBody['arg2'] = str(cKalc.ar._parallelTrees)
                                     cKost.storeFunctionAR()
                                     cKalc._functionBody = {}
-                                    
-                                
 
-                        
                         cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=note_duration,
                                          ck_deltatime=ck_deltatime, articulation=articulation, sendToDisplay=False) # needed?
-                    
+
                     if message[0] == pedal_id and message[1] == pedal_sostenuto:
                         per_note = 0
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulation=articulation)
 
-                            
-            time.sleep(0.01)
-                            
+
     except KeyboardInterrupt:
         print('')
     finally:
         codeK.end()
 
-def delta_difference(deltatime):   
+def delta_difference(deltatime):
     # activesense compensation
     global ck_deltatime_mem
-    
+
     ck_deltatime_mem.append(deltatime)
     #print('deltatimes stack: ', ck_deltatime_mem)
-    
+
     if len(ck_deltatime_mem) > 2:
         ck_deltatime_mem = ck_deltatime_mem[-2:]
-        
+
         if len(ck_deltatime_mem) == 2:
             dif = ck_deltatime_mem[1] - ck_deltatime_mem[0]
             if dif < 0:
@@ -153,8 +151,8 @@ def delta_difference(deltatime):
             return dif
         else:
             return 0
-        
-        
+
+
 if (__name__ == '__main__'):
     try:
         options, args = getopt.getopt(sys.argv[1:],'hc:m:',['help', 'configfile=', 'makeconfig='])
@@ -189,6 +187,3 @@ if (__name__ == '__main__'):
 
     #no options were supplied: run motippets with default settings
     main()
-
-                                           
-                                           
