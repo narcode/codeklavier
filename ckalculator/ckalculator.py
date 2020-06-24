@@ -16,7 +16,7 @@ ckalculator_listens = True
 ck_deltatime_mem = []
 ck_note_dur = {}
 
-def main(configfile='default_setup.ini'):
+def main(configfile='default_setup.ini', ar_hook=False):
     """
     start the CKalculator
     """
@@ -52,8 +52,8 @@ def main(configfile='default_setup.ini'):
 
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=True)
-    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=True)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=ar_hook)
+    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=ar_hook)
 
     per_note = 0
     ck_deltatime = 0

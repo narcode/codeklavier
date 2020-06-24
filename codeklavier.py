@@ -21,7 +21,7 @@ import CK_config
 
 ck_deltatime_mem = []
 
-VERSIONS = ('hybrid', 'ckalculator')
+VERSIONS = ('ckar', 'ckalculator', 'hybrid')
 
 def doHelp():
     """
@@ -101,9 +101,15 @@ def boot(configfile='default_setup.ini', version=None):
     if (version not in VERSIONS):
         raise ValueError(BColors.WARNING + 'This version doesn\'t exist. Please retry.' + BColors.ENDC)
     
-    module = importlib.import_module(version)
-    version = getattr(module, version)
-    eval(version.main())
+    if version == 'ckar':
+        version = 'ckalculator'
+        module = importlib.import_module(version)
+        version = getattr(module, version)
+        eval(version.main(ar_hook=True))
+    else:
+        module = importlib.import_module(version)
+        version = getattr(module, version)
+        eval(version.main())        
     
 if __name__ == '__main__':
     """
