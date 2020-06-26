@@ -310,6 +310,9 @@ def ck_loop(version='hello world'):
                     if message[0] != 254 and message[0] != 208:
                         if message[2] > 0: #only noteOn
                             if (message[0] == noteon_id):
+                                
+                            #store veolocities for websocket:
+                            mainMem._noteon_velocity[message[1]] = message[2]                            
 
                                 if message[1] == toggle_note:
                                     print('toggle version -> Motippets')
@@ -377,6 +380,9 @@ def ck_loop(version='hello world'):
                                         ck_deltadif[register] = ck_deltatime_mem[register][1] - ck_deltatime_mem[register][0]
                                     else:
                                         ck_deltadif[register] = 0
+                                        
+                                #store veolocities for websocket:
+                                mainMem._noteon_velocity[message[1]] = message[2]                                
     
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')
