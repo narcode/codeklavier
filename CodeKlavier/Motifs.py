@@ -75,7 +75,7 @@ try:
     greater_than_midi = config['lambda'].get('greater_than_midi').split(',')
     less_than_midi = config['lambda'].get('less_than_midi').split(',')
     
-    if len(config['ar']) > 0:
+    if len(config['ar']) > 1:
         dot = config['ar'].get('dot').split(',')
         create = config['ar'].get('create').split(',')
         clear_rule = config['ar'].get('clear').split(',')

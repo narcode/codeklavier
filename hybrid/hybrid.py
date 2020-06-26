@@ -1,6 +1,6 @@
 import configparser
-import getopt
-import sys
+#import getopt
+#import sys
 import time
 import numpy as np
 import ckonditionals
@@ -75,7 +75,7 @@ def main():
     mapping = Mapping_Motippets(False)
     
     # main memory (i.e. listen to the whole register)
-    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi, motifs_playedLimit)
+    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi, motifs_playedLimit, ar_hook=True)
     
     # midi listening per register
     memLow = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
@@ -117,6 +117,7 @@ def main():
                             if message[2] > 0 and message[0] == noteon_id:
     
                                 ck_deltatime_mem['all'].append(ck_deltatime['all'])
+                                                                
                                 
                                 if message[1] <= mid_low:
                                     ck_deltatime_mem['low'].append(ck_deltatime['low'])
@@ -134,7 +135,10 @@ def main():
                                     if len(ck_deltatime_mem[register]) == 2:
                                         ck_deltadif[register] = ck_deltatime_mem[register][1] - ck_deltatime_mem[register][0]
                                     else:
-                                        ck_deltadif[register] = 0                               
+                                        ck_deltadif[register] = 0   
+                                        
+                                #store veolocities for websocket:
+                                mainMem._noteon_velocity[message[1]] = message[2]
     
                                 
                                 if message[1] == toggle_note:
