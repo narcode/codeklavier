@@ -647,7 +647,7 @@ class Mapping_Ckalculator:
 class Mapping_CKAR:
     """Mapping for the AR extension
     """
-    def __init__(self, debug=True):
+    def __init__(self, debug=False):
         
         if debug:
             print("## Using the AR mapping ##")
