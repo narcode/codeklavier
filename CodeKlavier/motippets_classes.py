@@ -423,7 +423,7 @@ class Motippets(object):
                     
                 if len(self.ar._deltaMemory) > max_notes:
                     self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
-                    self.ar.averageSpeed(True)
+                    self.ar.averageSpeed()
                     
                 if self.ar._memorize:
                     self.ar._memory.append(note)
