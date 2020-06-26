@@ -311,8 +311,8 @@ def ck_loop(version='hello world'):
                         if message[2] > 0: #only noteOn
                             if (message[0] == noteon_id):
                                 
-                            #store veolocities for websocket:
-                            mainMem._noteon_velocity[message[1]] = message[2]                            
+                                #store veolocities for websocket:
+                                mainMem._noteon_velocity[message[1]] = message[2]                            
 
                                 if message[1] == toggle_note:
                                     print('toggle version -> Motippets')
