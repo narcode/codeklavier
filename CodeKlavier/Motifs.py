@@ -136,7 +136,7 @@ motifs_lambda['greater'] = list(map(int, greater_than_midi))
 motifs_lambda['less'] = list(map(int, less_than_midi))
 
 # AR module
-if len(motifs_ar) > 0:
+if len(config['ar']) > 1:
     motifs_ar['dot'] = list(map(int, dot))
     motifs_ar['create'] = list(map(int, create))
     motifs_ar['clear_rule'] = list(map(int, clear_rule))
