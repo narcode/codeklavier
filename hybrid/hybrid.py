@@ -118,23 +118,24 @@ def main():
     
                 if msg:
                     message, deltatime = msg
+
                     for register in ck_deltatime:
                         ck_deltatime[register] += deltatime
     
                     if message[0] != 254:
+       
+                        #note offs:
+                        if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
+                            midinote = message[1]
+                            print(midinote)
+                            if midinote in ck_note_dur:
+                                note_duration = ck_deltatime['all'] - ck_note_dur.pop(midinote)
+                                
+                            cKalc.parse_rt_values(msg, 'full', ck_deltatime_per_note=note_duration,
+                                                  ck_deltatime=ck_deltatime['all'], articulation=articulation, debug=False)     
     
                         if message[0] == noteon_id:
                             ck_note_dur[message[1]] = ck_deltatime['all']
-                            
-                            #note offs:
-                            if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
-                                midinote = message[1]
-                                
-                                if midinote in ck_note_dur:
-                                    note_duration = ck_deltatime['all'] - ck_note_dur.pop(midinote)
-                                    
-                                cKalc.parse_rt_values(msg, 'full', ck_deltatime_per_note=note_duration,
-                                                      ck_deltatime=ck_deltatime['all'], articulation=articulation, debug=False) 
                                 
                             if message[2] > 0 and message[0] == noteon_id:
     
