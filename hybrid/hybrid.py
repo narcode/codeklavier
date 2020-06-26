@@ -11,6 +11,7 @@ from CK_config import inifile
 from CK_Setup import Setup
 from Mapping import *
 from motippets_classes import Motippets
+from ckalculator_classes import Ckalculator
 from hello_classes import HelloWorld
 from Motifs import mini_motifs, mini_motifs_mel, conditional_motifs, conditional_motifs_mel, \
      conditional_results_motifs, conditional_results_motifs_mel
@@ -22,11 +23,15 @@ try:
     myPort = config['midi'].getint('port')
     noteon_id = config['midi'].getint('noteon_id')
     noteoff_id = config['midi'].getint('noteoff_id')
+    pedal_id = config['midi'].getint('pedal_id')
     toggle_note = config['Hello World'].getint('toggle')
     toggle_callback = config['Hello World'].get('toggle_callback')
     mid_low = config['Motippets register division'].getint('mid_low')
     mid_hi = config['Motippets register division'].getint('mid_hi')
     motifs_playedLimit = config['motif counter'].getint('playlimit')
+    staccato = config['articulation'].getfloat('staccato')
+    sostenuto = config['articulation'].getfloat('sostenuto')
+    chord = config['articulation'].getfloat('chord')    
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
@@ -37,7 +42,9 @@ if (myPort == None or noteon_id == None):
 ck_deltatime_mem = {'all': [], 'low': [], 'mid': [], 'hi': []}
 ck_deltatime = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
 ck_deltadif = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
-
+articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
+per_note = 0
+ck_note_dur = {}
 #multiprocessing vars
 threads = {}
 #notecounter = 0
@@ -75,7 +82,7 @@ def main():
     mapping = Mapping_Motippets(False)
     
     # main memory (i.e. listen to the whole register)
-    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi, motifs_playedLimit, ar_hook=True)
+    mainMem = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi, motifs_playedLimit)
     
     # midi listening per register
     memLow = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
@@ -98,6 +105,9 @@ def main():
     conditionalsRange = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     parameters = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     
+    #websocket (now parses velocity and average spped)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=True)
+    
     try:
         while keep_main_alive:
             while hello_world_on:
@@ -114,6 +124,18 @@ def main():
                     if message[0] != 254:
     
                         if message[0] == noteon_id:
+                            ck_note_dur[message[1]] = ck_deltatime['all']
+                            
+                            #note offs:
+                            if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
+                                midinote = message[1]
+                                
+                                if midinote in ck_note_dur:
+                                    note_duration = ck_deltatime['all'] - ck_note_dur.pop(midinote)
+                                    
+                                cKalc.parse_rt_values(msg, 'full', ck_deltatime_per_note=note_duration,
+                                                      ck_deltatime=ck_deltatime['all'], articulation=articulation, debug=False) 
+                                
                             if message[2] > 0 and message[0] == noteon_id:
     
                                 ck_deltatime_mem['all'].append(ck_deltatime['all'])
@@ -137,9 +159,8 @@ def main():
                                     else:
                                         ck_deltadif[register] = 0   
                                         
-                                #store veolocities for websocket:
-                                mainMem._noteon_velocity[message[1]] = message[2]
-    
+                                #velocity for websocket:
+                                cKalc._noteon_velocity[message[1]] = message[2]    
                                 
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')

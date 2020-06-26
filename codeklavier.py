@@ -104,7 +104,7 @@ def boot(configfile='default_setup.ini', version=None):
     if version == 'ckar':
         version = 'ckalculator'
         module = importlib.import_module(version)
-        version = getattr(module, version)
+        version = getattr(module, version) 
         eval(version.main(ar_hook=True))
     else:
         module = importlib.import_module(version)

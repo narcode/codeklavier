@@ -588,6 +588,55 @@ class Ckalculator(object):
                     self._rule_dynamics = self.ar.clearRule()
    
     ######
+    
+    def parse_rt_values(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
+                   articulation={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, debug=False):
+        """Parse the midi signal and process average speed and velocity for a websocket
+
+        :param tuple event: describes the midi event that was received
+        :param string section: the MIDI piano range (i.e. low register, mid or high)
+        :param float ck_deltatime_per_note: the note durations
+        param float ck_deltatime: the duration between notes
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
+        """   
+        
+        message, deltatime = event
+        
+        if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
+            note = message[1]
+            self._deltatime = ck_deltatime_per_note
+
+            if debug:
+                print(event)
+                
+            if section == 'full':     
+                
+                note_on_vel = self._noteon_velocity[note]
+                print(self._noteon_velocity)
+                self.ar._velocityMemory.append(note_on_vel)
+                
+                self._lastioi.append(ck_deltatime)
+                if len(self._lastioi) > 2:
+                    self._lastioi = self._lastioi[-2:]
+                
+                if np.diff(self._lastioi) > 0.03:    
+                    self.ar._deltaMemory.append(ck_deltatime)
+                
+                max_notes = 10 #send to ini
+                if len(self.ar._velocityMemory) > max_notes:
+                    self.ar._velocityMemory = self.ar._velocityMemory[-max_notes:]
+                    self.ar.averageVelocity()
+                    
+                if len(self.ar._deltaMemory) > max_notes:
+                    self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
+                    self.ar.averageSpeed()
+                    
+                if self.ar._memorize:
+                    self.ar._memory.append(note)
+                    if len(self.ar._memory) > max_notes:
+                        self.ar._memory = self.ar._memory[-max_notes:]     
+    
+    ######
                 
     def successor(self, function, sendToDisplay=True):
         """

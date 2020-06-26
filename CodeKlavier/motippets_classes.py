@@ -1,7 +1,6 @@
 #import rtmidi
 import numpy as np
 from functools import reduce
-from ar_classes import CkAR
 from Motifs import motifs, motifs_mel, conditional_motifs, conditional_motifs_mel, mini_motifs, \
      mini_motifs_mel, conditional_results_motifs, conditional_results_motifs_mel
 
@@ -12,12 +11,9 @@ class Motippets(object):
     Second prototype of the CodeKlavier
     """
 
-    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi, playedlimit=1, ar_hook=False):
+    def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi, playedlimit=1):
         """The method to initialise the class and prepare the class variables.
         """
-        
-        if ar_hook:
-            self.ar = CkAR()
             
         self.mapscheme = mapping
         self.noteonid = noteonid
@@ -403,32 +399,7 @@ class Motippets(object):
                                                                                 note)
                         if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < self._playedlimt:
                             self.mapscheme.snippets(motif)
-                            self._motifsCount[motif]['count'] += 1
-                
-                #send velocity and speed vai AR class:
-                note_on_vel = self._noteon_velocity[note]
-                self.ar._velocityMemory.append(note_on_vel)
-                
-                self._lastioi.append(ck_deltatime)
-                if len(self._lastioi) > 2:
-                    self._lastioi = self._lastioi[-2:]
-                
-                if np.diff(self._lastioi) > 0.03:    
-                    self.ar._deltaMemory.append(ck_deltatime)
-                
-                max_notes = 10 #send to ini
-                if len(self.ar._velocityMemory) > max_notes:
-                    self.ar._velocityMemory = self.ar._velocityMemory[-max_notes:]
-                    self.ar.averageVelocity()
-                    
-                if len(self.ar._deltaMemory) > max_notes:
-                    self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
-                    self.ar.averageSpeed()
-                    
-                if self.ar._memorize:
-                    self.ar._memory.append(note)
-                    if len(self.ar._memory) > max_notes:
-                        self.ar._memory = self.ar._memory[-max_notes:]                
+                            self._motifsCount[motif]['count'] += 1           
             
 
             ### CONDITIONALS SECTION
