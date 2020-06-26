@@ -653,7 +653,7 @@ class Mapping_CKAR:
             print("## Using the AR mapping ##")
             
         self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini', encoding='utf8')
+        self._config.read(inifile, encoding='utf8')
         
         server = self._config['ar'].get('server')
         self.even = self._config['ar'].getint('transpositon_even')
