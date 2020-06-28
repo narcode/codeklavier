@@ -612,8 +612,9 @@ class Ckalculator(object):
             if section == 'full':     
                 
                 note_on_vel = self._noteon_velocity[note]
-                print(self._noteon_velocity)
                 self.ar._velocityMemory.append(note_on_vel)
+                if debug:
+                    print(self._noteon_velocity)                
                 
                 self._lastioi.append(ck_deltatime)
                 if len(self._lastioi) > 2:

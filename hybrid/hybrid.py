@@ -35,13 +35,12 @@ try:
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
-if (myPort == None or noteon_id == None):
-    raise LookupError('Missing key information in the config file.')
 
 # activesense compensation
 ck_deltatime_mem = {'all': [], 'low': [], 'mid': [], 'hi': []}
 ck_deltatime = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
 ck_deltadif = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
+
 articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
 per_note = 0
 ck_note_dur = {}
@@ -66,7 +65,8 @@ def main():
     global mapping, parameters, conditionalsRange, conditionals, \
            hello_world_on, ck_deltatime, \
            ck_deltatime_mem, codeK, mainMem, memLow, memMid, memHi, \
-           tremoloHi, tremoloLow, tremoloMid
+           tremoloHi, tremoloLow, tremoloMid, per_note, ck_note_dur, \
+           articulation, ck_deltadif
     
     codeK = Setup()
     codeK.print_welcome(27)
@@ -118,7 +118,7 @@ def main():
     
                 if msg:
                     message, deltatime = msg
-
+                    per_note += deltatime
                     for register in ck_deltatime:
                         ck_deltatime[register] += deltatime
     
@@ -127,7 +127,7 @@ def main():
                         #note offs:
                         if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
                             midinote = message[1]
-                            print(midinote)
+
                             if midinote in ck_note_dur:
                                 note_duration = ck_deltatime['all'] - ck_note_dur.pop(midinote)
                                 
@@ -137,7 +137,7 @@ def main():
                         if message[0] == noteon_id:
                             ck_note_dur[message[1]] = ck_deltatime['all']
                                 
-                            if message[2] > 0 and message[0] == noteon_id:
+                            if message[2] > 0:
     
                                 ck_deltatime_mem['all'].append(ck_deltatime['all'])
                                                                 
@@ -161,6 +161,7 @@ def main():
                                         ck_deltadif[register] = 0   
                                         
                                 #velocity for websocket:
+                                cKalc._noteon_delta[message[1]] = per_note
                                 cKalc._noteon_velocity[message[1]] = message[2]    
                                 
                                 if message[1] == toggle_note:
