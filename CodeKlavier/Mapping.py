@@ -659,15 +659,20 @@ class Mapping_CKAR:
         self.even = self._config['ar'].getint('transpositon_even')
         self.odd = self._config['ar'].getint('transposition_odd')
                 
-        if server != 'local':
+        if server not in ('local', 'keyboardsunite.com'):
             with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
                 self._wsUri = json.loads(u.read(100))
                 print(self._wsUri)  
-        else:
+        elif server == 'local':
             print('server:', server)    
             host = socket.gethostbyname(socket.gethostname())
             self._wsUri = {'host': host, 'port': '8081'}
             print(self._wsUri)
+        else:
+            print('server:', server)    
+            self._wsUri = {'host': server, 'port': '8081'}
+            print(self._wsUri)            
+            
             
         #self.wsConnect()
         #asyncio.run(self.cue())
