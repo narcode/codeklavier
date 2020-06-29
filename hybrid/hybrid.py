@@ -43,6 +43,7 @@ ck_deltadif = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
 
 articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
 per_note = 0
+ck_deltatime_internal = 0
 ck_note_dur = {}
 #multiprocessing vars
 threads = {}
@@ -66,7 +67,7 @@ def main():
            hello_world_on, ck_deltatime, \
            ck_deltatime_mem, codeK, mainMem, memLow, memMid, memHi, \
            tremoloHi, tremoloLow, tremoloMid, per_note, ck_note_dur, \
-           articulation, ck_deltadif
+           articulation, ck_deltadif, ck_deltatime_internal
     
     codeK = Setup()
     codeK.print_welcome(27)
@@ -119,20 +120,22 @@ def main():
                 if msg:
                     message, deltatime = msg
                     per_note += deltatime
+                    ck_deltatime_internal += deltatime
+                    
                     for register in ck_deltatime:
                         ck_deltatime[register] += deltatime
     
-                    if message[0] != 254:
+                    if message[0] in (noteoff_id, noteon_id, pedal_id):
        
                         #note offs:
                         if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
                             midinote = message[1]
 
                             if midinote in ck_note_dur:
-                                note_duration = ck_deltatime['all'] - ck_note_dur.pop(midinote)
+                                note_duration = ck_deltatime_internal - ck_note_dur.pop(midinote)
                                 
                             cKalc.parse_rt_values(msg, 'full', ck_deltatime_per_note=note_duration,
-                                                  ck_deltatime=ck_deltatime['all'], articulation=articulation, debug=False)     
+                                                  ck_deltatime=ck_deltatime_internal, articulation=articulation, debug=False)     
     
                         if message[0] == noteon_id:
                             ck_note_dur[message[1]] = ck_deltatime['all']
