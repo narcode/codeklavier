@@ -225,11 +225,13 @@ def main():
                                                     perpetual = bool(int(conditional_settings[1].strip()))
                                                     if len(conditional_settings) > 2:
                                                         totalNotes = int(conditional_settings[2])
+                                                    else:
+                                                        totalNotes = None
                                                     
                                                 threads['set_param'] = Thread(target=ckonditionals.set_parameters, 
                                                                               name='set timer value', 
                                                                               args=(conditional_params, cond_type, 
-                                                                                    mapping, parameters) )
+                                                                                    mapping, parameters, totalNotes) )
                                                 threads['set_param'].start()
 
                                     if ckonditionals.param_interval > 0:

@@ -180,7 +180,7 @@ def parseFlags(snippet_name, boolean, value, mapping, mainmotifs, conditional):
             mapping.result(snippet_name, boolean)
 
 
-def set_parameters(value, conditional_func, mapping=None, parameters=None, debug=False):
+def set_parameters(value, conditional_func, mapping=None, parameters=None, ini_param=None, debug=False):
     """
     function to parse a full range tremolo. This value can be used as a param for the
     other functions.
@@ -196,7 +196,7 @@ def set_parameters(value, conditional_func, mapping=None, parameters=None, debug
     print('thread started for parameter set', 'func:', conditional_func)
 
     if conditional_func == 'note_count':
-        mapping.customPass('more than 100 notes played in the next ' + str(value) + ' seconds?', flash=True)
+        mapping.customPass('more than ' + str(ini_param) + ' notes played in the next ' + str(value) + ' seconds?', flash=True)
     elif conditional_func in ('range_more_than', 'range_less_than'):
         mapping.customPass('range set to: ' + str(value) + ' semitones...', flash=True)
     elif conditional_func == 'gomb':
