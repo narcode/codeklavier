@@ -39,6 +39,8 @@ Install with pip3
 2. pynput
 3. sphinx
 4. numpy
+5. python-osc (if you want to use the AR module and Caffeine Extension)
+6. websockets (idem)
 
 Run ``pip3 install -r requirements.txt`` to install the required libraries.
 
