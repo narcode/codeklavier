@@ -85,10 +85,7 @@ def main(configfile=inifile):
                         if len(cKost._functionBody) == 1:
                             cKalc._functionBody['grab_num'] = True
                             if cKalc._numForFunctionBody != None:                                
-                                if cKost._functionBody['arg1'] == 'shift_mapping':
-                                    cKost._functionBody['arg2'] = noteName(midinote)
-                                else:
-                                    cKost._functionBody['arg2'] = cKalc._numForFunctionBody
+                                cKost._functionBody['arg2'] = cKalc._numForFunctionBody
                                     
                                 print('function body complete...')
                                 cKalc.mapscheme.formatAndSend('function body complete...', display=4,
