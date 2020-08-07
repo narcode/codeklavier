@@ -86,7 +86,6 @@ def main(configfile=inifile):
                             cKalc._functionBody['grab_num'] = True
                             if cKalc._numForFunctionBody != None:                                
                                 if cKost._functionBody['arg1'] == 'shift_mapping':
-                                    cKalc._functionBody['grab_num'] = False
                                     cKost._functionBody['arg2'] = noteName(midinote)
                                 else:
                                     cKost._functionBody['arg2'] = cKalc._numForFunctionBody
