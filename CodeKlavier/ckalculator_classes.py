@@ -143,10 +143,10 @@ class Ckalculator(object):
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
 
             
-            if self.wrong_note(note, False):
-                #self._nonMappedNoteCounter += 1
-                #print(self._nonMappedNoteCounter)
-                self.shift_mapping(shift_type='target note', )
+            #if self.wrong_note(note, False):
+                ##self._nonMappedNoteCounter += 1
+                ##print(self._nonMappedNoteCounter)
+                #self.shift_mapping(shift_type='random')
 
             #else: #no worng note for now... 
             
@@ -220,11 +220,15 @@ class Ckalculator(object):
                                     if func_exists:
                                         if function_to_call.__name__ not in ['successor', 'predecessor']:
                                             function_to_call(False, sendToDisplay)
-                                    
+                                            
                                             if f['body']['arg1'].__name__ == 'succ1':
-                                                self.append_successor(f['body']['arg1'])
-                                                self.zeroPlusRec(False, True) ## check 2nd argument    
-                                                self._successorHead = []
+                                                if function_to_call.__name__ == 'shift_mapping':
+                                                    self.shift_mapping(f['body']['arg1'])
+                                                else:
+                                                    self.append_successor(f['body']['arg1'])
+                                                    self.zeroPlusRec(False, True) ## check 2nd argument    
+                                                    self._successorHead = []
+                                                
                                     
                         ########################
                 ########### lambda calculus  ###########
