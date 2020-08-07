@@ -223,7 +223,7 @@ class Ckalculator(object):
                                             
                                             if f['body']['arg1'].__name__ == 'succ1':
                                                 if function_to_call.__name__ == 'shift_mapping':
-                                                    self.shift_mapping(f['body']['arg1'])
+                                                    self.shift_mapping(trampolineRecursiveCounter(f['body']['arg1']))
                                                 else:
                                                     self.append_successor(f['body']['arg1'])
                                                     self.zeroPlusRec(False, True) ## check 2nd argument    
@@ -1041,6 +1041,7 @@ class Ckalculator(object):
                     self.mapscheme.formatAndSend('Wrong note!\n'+shift_type, display=3, syntax_color='error:')
             
             if shift_type == 'interval':
+                print('interval shift triggered by', offset)
                 for mapping in mappings:
                     LambdaMapping[mapping[0]] = list(map(lambda x: 
                                                          self._pianoRange[(x + offset) % len(
