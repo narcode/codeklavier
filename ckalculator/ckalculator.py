@@ -6,6 +6,7 @@ import sys
 import rtmidi
 import configparser
 import CK_configWriter
+from CK_config import inifile
 from CK_Setup import Setup, BColors
 from ckalculator_classes import Ckalculator
 
@@ -16,7 +17,7 @@ ckalculator_listens = True
 ck_deltatime_mem = []
 ck_note_dur = {}
 
-def main(configfile='default_setup.ini'):
+def main(configfile=inifile):
     """
     start the CKalculator
     """
