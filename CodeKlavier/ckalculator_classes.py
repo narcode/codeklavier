@@ -1048,7 +1048,7 @@ class Ckalculator(object):
                                                          mapping[1]))
                     
             if shift_type == 'target note':
-                if target_note == 'C':
+                #if target_note == 'C':
                     
                 for mapping in mappings:
                     LambdaMapping[mapping[0]] = list(map(lambda x: 
