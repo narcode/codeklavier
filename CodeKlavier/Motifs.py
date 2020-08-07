@@ -109,7 +109,7 @@ for motif in conditional_results_motifs_mel:
 
 # lambda calculus
 for motif in ckalculator_motifs:
-    motifs_lambda[motif] = list(map(int, motif))
+    motifs_lambda[motif] = list(map(int, ckalculator_motifs[motif]))
 #motifs_lambda['eval'] = list(map(int, evaluate_function))
 #motifs_lambda['zero'] = list(map(int, identity_midi))
 #motifs_lambda['true'] = list(map(int, select_first))
