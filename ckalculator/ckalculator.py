@@ -84,8 +84,13 @@ def main(configfile=inifile):
 
                         if len(cKost._functionBody) == 1:
                             cKalc._functionBody['grab_num'] = True
-                            if cKalc._numForFunctionBody != None:
-                                cKost._functionBody['arg2'] = cKalc._numForFunctionBody
+                            if cKalc._numForFunctionBody != None:                                
+                                if cKost._functionBody['arg1'] == 'shift_mapping':
+                                    cKalc._functionBody['grab_num'] = False
+                                    cKost._functionBody['arg2'] = noteName(midinote)
+                                else:
+                                    cKost._functionBody['arg2'] = cKalc._numForFunctionBody
+                                    
                                 print('function body complete...')
                                 cKalc.mapscheme.formatAndSend('function body complete...', display=4,
                                                               syntax_color='function:')
@@ -135,6 +140,10 @@ def delta_difference(deltatime):
             return dif
         else:
             return 0
+        
+def noteName(midinote):
+    note_names = {0:"C",1:"C#",2:"D",3:"D#",4:"E",5:"F",6:"F#",7:"G",8:"G#",9:"A",10:"A#",11:"B"}
+    return note_names[midinote%12]
 
 
 if (__name__ == '__main__'):

@@ -146,7 +146,7 @@ class Ckalculator(object):
             if self.wrong_note(note, False):
                 #self._nonMappedNoteCounter += 1
                 #print(self._nonMappedNoteCounter)
-                self.shift_mapping(1, 'random')
+                self.shift_mapping(shift_type='target note', )
 
             #else: #no worng note for now... 
             
@@ -899,7 +899,10 @@ class Ckalculator(object):
                         self._functionBody['arg1'] = 'predecessor'
                             
             elif note in LambdaMapping.get('zero'):
-                self._functionBody['arg1'] = 'zero'
+                if self._deltatime <= articulation['staccato']:
+                    self._functionBody['arg1'] = 'zero'
+                elif self._deltatime > articulation['staccato']:
+                    self._functionBody['arg1'] = 'equal'                   
                
             elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                 self._functionBody['arg1'] = 'eval'
@@ -922,8 +925,8 @@ class Ckalculator(object):
                     self._functionBody['arg1'] = 'divide'
                     
             # number comparisons    
-            elif note in LambdaMapping.get('equal'):
-                self._functionBody['arg1'] = 'equal'
+            elif note in LambdaMapping.get('shift'):
+                self._functionBody['arg1'] = 'shift_mapping'
                 
             elif note in LambdaMapping.get('greater'):
                 if self._deltatime <= articulation['staccato']:
@@ -1009,14 +1012,14 @@ class Ckalculator(object):
         self._foundOstinato = False
         self._developedOstinato = False 
                 
-    def shift_mapping(self, offset, shift_type='interval', target_note='', configfile='default_setup.ini', sendToDisplay=True):
+    def shift_mapping(self, offset=0, shift_type='interval', target_note='', configfile='default_setup.ini', sendToDisplay=True):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played.
         
         :param int offset: the offset in semitones
-        :param str shift_type: the type of shifting to perform. options are now 'semitone' or 'octave shift'
+        :param str shift_type: the type of shifting to perform. options are now 'random', interval', 'octave shift' or 'target note'
         :param str target_note: if shit_type 'target_note' is used, this param points to the desired note. .i.e. 'C#'
-        note that this is a relative target, as if 'C' is always the root
+    
         """
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
@@ -1047,14 +1050,17 @@ class Ckalculator(object):
                                                              self._pianoRange) - 21],
                                                          mapping[1]))
                     
-            if shift_type == 'target note':
-                #if target_note == 'C':
-                    
+            if shift_type == 'target note':                   
                 for mapping in mappings:
                     LambdaMapping[mapping[0]] = list(map(lambda x: 
-                                                         self._pianoRange[(x + offset) % len(
+                                                         self._pianoRange[(x + calculate_interval(x, target_note)) % len(
                                                              self._pianoRange) - 21], #compensate for lower note being 21 not 0
-                                                         mapping[1]))            
+                                                         mapping[1]))  
+            
+            def calculate_interval(note, target):
+                note_offsets = {"C":0,"C#":1,"D":2,"D#":3,"E":4,"F":5,"F#":6,"G":7,"G#":8,"A":9,"A#":10,"B":11}
+                return note_offsets[target]-(note%12)
+                
             
             for item in list(LambdaMapping.values()):
                 for sub_item in item:
