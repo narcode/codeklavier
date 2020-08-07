@@ -249,9 +249,13 @@ class Ckalculator(object):
                         self._successorHead = []
                         
                 elif note in LambdaMapping.get('zero'):
-                    print('identity')
-                    self.zeroPlusRec(sendToDisplay)
-                    self._successorHead = []
+                    if self._deltatime <= articulation['staccato']:                                
+                        print('identity')
+                        self.zeroPlusRec(sendToDisplay)
+                        self._successorHead = []
+                    elif self._deltatime > articulation['staccato']:
+                        self.equal(sendToDisplay)                      
+                    
                                                                             
                 elif note in LambdaMapping.get('eval'): # if chord (> 0.02) and which notes? 
                     print('evaluate!')
@@ -325,7 +329,7 @@ class Ckalculator(object):
                                     
                 # number comparisons    
                 elif note in LambdaMapping.get('equal'):
-                    self.equal(sendToDisplay) 
+                    print('used via articulation under identity')
                     
                 elif note in LambdaMapping.get('greater'):
                     if self._deltatime <= articulation['staccato']:                                
@@ -1005,11 +1009,14 @@ class Ckalculator(object):
         self._foundOstinato = False
         self._developedOstinato = False 
                 
-    def shift_mapping(self, offset, shift_type='semitone', configfile='default_setup.ini', sendToDisplay=True):
+    def shift_mapping(self, offset, shift_type='interval', target_note='', configfile='default_setup.ini', sendToDisplay=True):
         """
-        shift the mapping structure every time a note not belonging to the original mapping is played
+        shift the mapping structure every time a note not belonging to the original mapping is played.
+        
         :param int offset: the offset in semitones
         :param str shift_type: the type of shifting to perform. options are now 'semitone' or 'octave shift'
+        :param str target_note: if shit_type 'target_note' is used, this param points to the desired note. .i.e. 'C#'
+        note that this is a relative target, as if 'C' is always the root
         """
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
@@ -1021,12 +1028,12 @@ class Ckalculator(object):
             self._notesList = []
                     
             if shift_type == 'random':           
-                shift_type = random.choice(['octave shift', 'semitone shift'])
+                shift_type = random.choice(['octave shift', 'interval'])
                 print(shift_type)
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('Wrong note!\n'+shift_type, display=3, syntax_color='error:')
             
-            if shift_type == 'semitone shift':
+            if shift_type == 'interval':
                 for mapping in mappings:
                     LambdaMapping[mapping[0]] = list(map(lambda x: 
                                                          self._pianoRange[(x + offset) % len(
@@ -1039,6 +1046,14 @@ class Ckalculator(object):
                                                          self._pianoRange[(x + 12) % len(
                                                              self._pianoRange) - 21],
                                                          mapping[1]))
+                    
+            if shift_type == 'target note':
+                if 
+                for mapping in mappings:
+                    LambdaMapping[mapping[0]] = list(map(lambda x: 
+                                                         self._pianoRange[(x + offset) % len(
+                                                             self._pianoRange) - 21], #compensate for lower note being 21 not 0
+                                                         mapping[1]))            
             
             for item in list(LambdaMapping.values()):
                 for sub_item in item:
