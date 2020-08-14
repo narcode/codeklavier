@@ -27,7 +27,7 @@ class CkWebsocket(object):
     def receiveState(self):
         try:
             state = self.loop.run_until_complete(self.mapping.receive_new())
-            print(state))
+            print(state)
                 
         except:
             print('error receiving')
@@ -84,6 +84,11 @@ class CkWebsocket(object):
         
     def makeJsonValue(self, display, value, wstype='-vel'):
         """ make a Json object for sending a Value"""   
-        return self.mapping.prepareJsonValue(wstype=wstype, display=str(display), payload=value)
+        formatted = self.mapping.prepareJsonValue(wstype=wstype, display=str(display), payload=value)
+        return self.run_in_loop(formatted)
+
+    def makeJson(self, wstype='lsys', payload=''):
+            """ make a Json object for L-system rule"""        
+            return self.mapping.prepareJson(wstype, payload)    
 
     

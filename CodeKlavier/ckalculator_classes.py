@@ -142,6 +142,7 @@ class Ckalculator(object):
             note = message[1]
             self._deltatime = ck_deltatime_per_note 
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
+            self.websocket.makeJsonValue(1, str(note), 'console')
 
             
             #if self.wrong_note(note, False):

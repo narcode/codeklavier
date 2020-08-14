@@ -13,6 +13,10 @@ import socket
 from pythonosc import udp_client
 import configparser
 import re
+import asyncio
+from websockets import connect
+import json
+import urllib.request
 from CK_config import inifile
 
 display1 = 1111
@@ -691,6 +695,9 @@ class Mapping_Websocket:
     async def receive(self):
         async for message in self.websocket:
             return json.loads(message)
+        
+    def prepareJson(self, wstype='lsys', payload=''):
+            return json.dumps({'type': wstype, 'payload': payload})    
             
-    def prepareJsonValue(self, wstype='-val', display='1', payload=''):
-        return json.dumps({'type': 'value','key': display+wstype, 'payload':payload})  
+    def prepareJsonValue(self, wstype='val', display=1, payload=''):
+        return json.dumps({'type': 'value','key': wstype, 'display': display, 'payload':payload})  
