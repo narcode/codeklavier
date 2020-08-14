@@ -66,6 +66,8 @@ class Ckalculator(object):
         self._arg2Counter = 0
         self.easterEggs_config = eggsfile
         self.shift_count = 0
+
+        print(eggsfile)
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -1087,7 +1089,7 @@ class Ckalculator(object):
                 # TODO: pass to boot config
                 configs = ['asia', 'europe', 'northamerica', 'southamerica', 'oceania', 'africa', 'antarctica']
                 self.shift_count += 1
-                self.easterEggs_config = '../codeklavier-extensions/' + configs[self.shift_count%(len(configs))] + '.ini'
+                self.easterEggs_config = '~/codeklavier-extensions/' + configs[self.shift_count%(len(configs))] + '.ini'
                 self.websocket.makeJsonValue(3, 'loaded ' ++ self.easterEggs_config, 'cmd')
                 self.websocket.makeJsonValue('cmd', 'changeimagefolder', configs[self.shift_count%(len(configs))])
                 for mapping in mappings:
