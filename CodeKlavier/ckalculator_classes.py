@@ -1131,7 +1131,7 @@ class Ckalculator(object):
                                              #syntax_color='e_debug:');
                 self.websocket.makeJsonValue(3, 'eval mapped to ' +
                                              note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
-                                             str(LambdaMapping.get('eval')[0]) + ')', debug)
+                                             str(LambdaMapping.get('eval')[0]) + ')', 'debug')
             #print('new valid notes', self._notesList)
         
     def zeroPlusRec(self, sendToDisplay=True, sendToStack=False):
