@@ -143,7 +143,7 @@ class Ckalculator(object):
             self._deltatime = ck_deltatime_per_note 
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
             
-            #self.websocket.makeJsonValue(1, str(note), 'console')
+            #self.websocket.makeJsonValue('console', str(note), 'console')
 
             
             #if self.wrong_note(note, False):
@@ -162,7 +162,7 @@ class Ckalculator(object):
                         print('define func body...')
                         if self._defineCounter == 0:
                             #self.mapscheme.formatAndSendUDP('define func body...', display=4, syntax_color='function:')
-                            self.websocket.makeJsonValue(4, 'define function body...', 'function')
+                            self.websocket.makeJsonValue('console', 'define function body...', 'function')
                             self._defineCounter += 1
                         self.define_function_body(note, articulation)
                     
@@ -826,7 +826,8 @@ class Ckalculator(object):
                                     msg_notes = (',').join(midiToNotes(self.ostinato['first']))
                                     #self.mapscheme.formatAndSendUDP('found ostinato ' + msg_notes, 
                                                                  #display=4, syntax_color='function:')
-                                    self.websocket.makeJsonValue(4, 'found ostinato', 'function')
+                                    self.websocket.makeJsonValue('console', 'found ostinato', 'function')
+                                    self.websocket.makeJsonValue('cmd', 'openconsole')
                                 else:
                                     self._foundOstinato = False
                         else:
@@ -884,7 +885,7 @@ class Ckalculator(object):
             if debug:
                 print('ostinato did not change')
                 #self.mapscheme.formatAndSendUDP('ostinato did not change', display=4, syntax_color='function:')
-                self.websocket.makeJsonValue(4, 'ostinato did not change', 'function')
+                self.websocket.makeJsonValue('console', 'ostinato did not change', 'function')
         else:
             diff = np.subtract(ostinato1, ostinato2)
             
@@ -895,7 +896,7 @@ class Ckalculator(object):
                     print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
                 #self.mapscheme.formatAndSendUDP('ostinato has 1 note difference! Well done', display=4,
                                                  #syntax_color='function:')
-                self.websocket.makeJsonValue(4, 'ostinato has 1 note difference! Well done 👸🏼-> ', 'function')
+                self.websocket.makeJsonValue('console', 'ostinato has 1 note difference! Well done 👸🏼-> ', 'function')
             else:
                 print('😤 ostinato was not developed correctly. Please try again')
                 self._developedOstinato = False
@@ -903,7 +904,7 @@ class Ckalculator(object):
                 
                 #self.mapscheme.formatAndSendUDP('ostinato was not developed correctly. Please try again', display=4,
                                              #syntax_color='function:')
-                self.websocket.makeJsonValue(4, 'ostinato was not developed correctly. Please try again', 'function')
+                self.websocket.makeJsonValue('console', 'ostinato was not developed correctly. Please try again', 'function')
         # clean ostinato memory
         self._foundOstinato = False
         self._fullMemory = []
@@ -975,7 +976,7 @@ class Ckalculator(object):
             if self._arg1Counter == 0:
                 #self.mapscheme.formatAndSendUDP('function body arg 1 is:' + self._functionBody['arg1'], display=4,
                                              #syntax_color='function:')
-                self.websocket.makeJsonValue(4, 'function body arg 1 is:', 'function')
+                self.websocket.makeJsonValue('console', 'function body arg 1 is:', 'function')
             self._arg1Counter += 1
                 
         elif len(self._functionBody) == 2:
@@ -984,7 +985,7 @@ class Ckalculator(object):
             if self.arg2Counter == 0:
                 #self.mapscheme.formatAndSendUDP('function body arg 2 is:' + self._functionBody['arg2'], display=4,
                                              #syntax_color='function:')
-                self.websocket.makeJsonValue(4, 'function body arg 2 is:' + self._functionBody['arg2'], 'function')
+                self.websocket.makeJsonValue('console', 'function body arg 2 is:' + self._functionBody['arg2'], 'function')
             self._arg2Counter += 1
 
             
@@ -1037,7 +1038,8 @@ class Ckalculator(object):
                     self.websocket.makeJsonValue(4, function_print, 'function')
                 else:
                     #self.mapscheme.formatAndSendUDP(function_print, display=4, syntax_color='saved:')
-                    self.websocket.makeJsonValue(4, function_print, 'saved')
+                    self.websocket.makeJsonValue('console', function_print, 'saved')
+                    self.websocket.makeJsonValue('cmd', 'closeconsole')
             
         #reset the ostinato analysis
         self.ostinato = {'first': [], 'compare': []}
