@@ -113,10 +113,11 @@ if __name__ == '__main__':
     test = False
     record = False
     config = None
+    config_eggs = None    
     play = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'h:p:i:rt',['help', 'play=', 'ini=', 'rec', 'test'])
+        options, args = getopt.getopt(sys.argv[1:],'h:p:i:e:rt',['help', 'play=', 'ini=', 'eggs=''rec', 'test'])
         selected_options = [x[0] for x in options]
         
         for o, a in options:
@@ -126,6 +127,8 @@ if __name__ == '__main__':
                 play = a
             if o in ('-i', '--ini'):
                 config = a
+            if o in ('-e', '--eggs'):
+                config_eggs = a                
             if o in ('-t', '--test'):
                 test = True
             if o in ('-r', '--rec'):
@@ -142,6 +145,11 @@ if __name__ == '__main__':
         CK_config.inifile = 'default_setup.ini'
     else:
         CK_config.inifile = config
+    
+    if config_eggs == None:
+        CK_config.eggsfile = 'default_setup.ini'
+    else:
+        CK_config.eggsfile = config_eggs
 
     if test:
         miditest(configfile=CK_config.inifile)

@@ -11,6 +11,8 @@ from websocket import CkWebsocket
 from Mapping import Mapping_Ckalculator
 from CK_lambda import *
 from CK_parser import *
+from CK_config import eggsfile
+from CK_config import inifile
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -62,6 +64,8 @@ class Ckalculator(object):
         self._defineCounter = 0
         self._arg1Counter = 0
         self._arg2Counter = 0
+        self.easterEggs_config = eggsfile
+        self.shift_count = 0
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -745,7 +749,7 @@ class Ckalculator(object):
                 self._conditionalsBuffer = self._conditionalsBuffer[-length:]   
 
 
-    def wrong_note(self, note, debug=False, configfile='default_setup.ini'):
+    def wrong_note(self, note, debug=False, configfile=inifile):
         """
         calculate the wrong notes based on the semi-tone tolerance 
         :param int note: the midinote coming in
@@ -1053,7 +1057,7 @@ class Ckalculator(object):
         self._foundOstinato = False
         self._developedOstinato = False 
                 
-    def shift_mapping(self, offset=0, shift_type='interval', target_note='', configfile='default_setup.ini', sendToDisplay=True):
+    def shift_mapping(self, offset=0, shift_type='interval', target_note='', configfile=inifile, sendToDisplay=True):
         """
         shift the mapping structure every time a note not belonging to the original mapping is played.
         
@@ -1080,6 +1084,11 @@ class Ckalculator(object):
             
             if shift_type == 'interval':
                 print('interval shift triggered by', offset)
+                # TODO: pass to boot config
+                configs = ['asia', 'europe', 'northamerica', 'southamerica', 'oceania', 'africa', 'antarctica']
+                self.shift_count += 1
+                self.easterEggs_config = '../codeklavier-extensions/' + configs[self.shift_count%(len(configs))] + '.ini'
+                self.websocket.makeJsonValue('cmd', 'changepic', 'pic')
                 for mapping in mappings:
                     LambdaMapping[mapping[0]] = list(map(lambda x: 
                                                          self._pianoRange[(x + offset) % len(
@@ -1173,12 +1182,13 @@ class Ckalculator(object):
                                 print(self._evalStack[0])                        
                                 self._tempFunctionStack = []     
                                 
-    def easterEggs(self, configfile='default_setup.ini', number=100, debug=False, special_num=7,sendToDisplay=True):
+    def easterEggs(self, number=100, debug=False, special_num=7,sendToDisplay=True):
         """
         Attach certain events to specific numbers. Easter egg style.
         
         :param string number: the number-key to grab the value from the config file
         """
+        configfile = self.easterEggs_config
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
         
