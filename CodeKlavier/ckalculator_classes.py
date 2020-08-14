@@ -1088,7 +1088,8 @@ class Ckalculator(object):
                 configs = ['asia', 'europe', 'northamerica', 'southamerica', 'oceania', 'africa', 'antarctica']
                 self.shift_count += 1
                 self.easterEggs_config = '../codeklavier-extensions/' + configs[self.shift_count%(len(configs))] + '.ini'
-                self.websocket.makeJsonValue('cmd', 'changepic', 'pic')
+                self.websocket.makeJsonValue(3, 'loaded ' ++ self.easterEggs_config, 'cmd')
+                self.websocket.makeJsonValue('cmd', 'changeimagefolder', configs[self.shift_count%(len(configs))])
                 for mapping in mappings:
                     LambdaMapping[mapping[0]] = list(map(lambda x: 
                                                          self._pianoRange[(x + offset) % len(
