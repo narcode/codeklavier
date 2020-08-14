@@ -39,7 +39,7 @@ class TextPrint(object):
                 
                 if self.counter < len(text):
                     print(text[self.counter])
-                    self.mapscheme.formatAndSend(text[self.counter], display=1, spacing=False, spacechar='')
+                    self.mapscheme.formatAndSendUDP(text[self.counter], display=1, spacing=False, spacechar='')
                 
                 self.counter += 1
                     

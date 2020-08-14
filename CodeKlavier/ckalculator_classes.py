@@ -2,16 +2,12 @@
 
 import functools
 import array
-from inspect import signature
 import random
 import configparser
 import numpy as np
-#from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool, Pool
-#from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
-    #ZeroOrMore,Forward,nums,alphas
-#import operator
 from Motifs import motifs_lambda as LambdaMapping
+from websocket import CkWebsocket
 from Mapping import Mapping_Ckalculator
 from CK_lambda import *
 from CK_parser import *
@@ -28,6 +24,7 @@ class Ckalculator(object):
         """
         
         self.mapscheme = Mapping_Ckalculator(True, False)
+        self.websocket = CkWebsocket()
         self.note_on = noteonid
         self.note_off = noteoffid
         self.pedal = pedal_id
@@ -82,7 +79,8 @@ class Ckalculator(object):
             for f in self.ckFunc():
                 function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                 f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
-                self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                #self.mapscheme.formatAndSendUDP(function_print, display=4, syntax_color='function:')
+                self.websocket.makeJsonValue(4, function_print, 'function')
                 
 
     def parse_midi(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
@@ -102,7 +100,8 @@ class Ckalculator(object):
             if message[2] == 127 and (')' in self._fullStack or self._temp == False):
                 print('(')
                 if sendToDisplay:
-                    self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
+                    #self.mapscheme.formatAndSendUDP('(', display=2, syntax_color='int:', spacing=False)
+                    self.websocket.makeJsonValue(2, '(', 'parenthesis')
                 self._fullStack.append('(')
                 self._tempStack = []
                 self._tempStack.append('(')                
@@ -110,7 +109,8 @@ class Ckalculator(object):
             elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
                 if sendToDisplay:
-                    self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
+                    #self.mapscheme.formatAndSendUDP(')', display=2, syntax_color='int:', spacing=False)                
+                    self.websocket.makeJsonValue(2, ')', 'parenthesis')
                 self._fullStack.append(')')
                 # to main stack
                 print('temp num stack:', self._tempNumberStack);
@@ -132,8 +132,9 @@ class Ckalculator(object):
                 else:
                     if self._functionBody == '':
                         print('ostinato developed, awaiting arithmetic function')
-                        self.mapscheme.formatAndSend('ostinato developed, awaiting arithmetic function', display=2, 
-                                                     syntax_color='result:')
+                        #self.mapscheme.formatAndSendUDP('ostinato developed, awaiting arithmetic function', display=2, 
+                                                     #syntax_color='result:')
+                        self.websocket.makeJsonValue(2, 'ostinato developed, awaiting arithmetic function', 'result')
                         
         #print(self._noteon_delta)
 
@@ -158,7 +159,8 @@ class Ckalculator(object):
                     if len(self._functionBody) < 2:
                         print('define func body...')
                         if self._defineCounter == 0:
-                            self.mapscheme.formatAndSend('define func body...', display=4, syntax_color='function:')
+                            #self.mapscheme.formatAndSendUDP('define func body...', display=4, syntax_color='function:')
+                            self.websocket.makeJsonValue(4, 'define function body...', 'function')
                             self._defineCounter += 1
                         self.define_function_body(note, articulation)
                     
@@ -272,8 +274,9 @@ class Ckalculator(object):
                             if (type(self._evalStack[0]) == int):
                                                                
                                 if sendToDisplay:
-                                    self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                                 syntax_color='result:')
+                                    #self.mapscheme.formatAndSendUDP(str(self._evalStack[0]), display=3, \
+                                                                 #syntax_color='result:')
+                                    self.websocket.makeJsonValue(3, str(self._evalStack[0]), 'result')
                                 print(self._evalStack[0])
                                 self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                                 
@@ -282,8 +285,10 @@ class Ckalculator(object):
                                 
                             else: 
                                 if sendToDisplay:
-                                    self.mapscheme.formatAndSend('error', display=3, syntax_color='error:')
-                                    self.mapscheme.formatAndSend('result is not a number', display=3, syntax_color='e_debug:')
+                                    #self.mapscheme.formatAndSendUDP('error', display=3, syntax_color='error:')
+                                    self.websocket.makeJsonValue(3, 'error', 'error')
+                                    #self.mapscheme.formatAndSendUDP('result is not a number', display=3, syntax_color='e_debug:')
+                                    self.websocket.makeJsonValue(3, 'result is not a number', 'debug')
                                    
                                     self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
                                 
@@ -292,8 +297,9 @@ class Ckalculator(object):
                         else:
                             #print(self.oscName)
                             if sendToDisplay:
-                                self.mapscheme.formatAndSend(self._numberStack[0].__name__, display=3, \
-                                                             syntax_color='result:')
+                                #self.mapscheme.formatAndSendUDP(self._numberStack[0].__name__, display=3, \
+                                                             #syntax_color='result:')
+                                self.websocket.makeJsonValue(3, self._numberStack[0].__name__, 'result')
                             self.mapscheme._osc.send_message("/"+self.oscName, self._numberStack[0].__name__)
                             
                         self._functionStack = []
@@ -352,7 +358,8 @@ class Ckalculator(object):
         :param function function: the function to apply the successor function to
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='succ:', spacing=False)
+            #self.mapscheme.formatAndSendUDP(function.__name__, display=1, syntax_color='succ:', spacing=False)
+            self.websocket.makeJsonValue(1, function.__name__, 'succ')
         print(function.__name__)       
                 
         def nestFunc(function1):
@@ -375,7 +382,8 @@ class Ckalculator(object):
         if sendToDisplay:
             succesors = trampolineRecursiveCounter(function)
             for s in range(succesors):
-                self.mapscheme.formatAndSend('successor', display=1, syntax_color='succ:', spacing=False)
+                #self.mapscheme.formatAndSendUDP('successor', display=1, syntax_color='succ:', spacing=False)
+                self.websocket.makeJsonValue(1, 'successor', 'succ')
         print(function.__name__)       
                 
         self._successorHead.append(function)
@@ -390,7 +398,8 @@ class Ckalculator(object):
         :param function function: the function to apply the predecessor function to
         """
         if sendToDisplay: 
-            self.mapscheme.formatAndSend(function.__name__, display=1, syntax_color='pred:', spacing=False)
+            #self.mapscheme.formatAndSendUDP(function.__name__, display=1, syntax_color='pred:', spacing=False)
+            self.websocket.makeJsonValue(1, function.__name__, 'pred')
         print(function.__name__)       
                 
         def nestFunc(function1):
@@ -418,15 +427,16 @@ class Ckalculator(object):
                     
                     if (type(self._evalStack[0]) == int):
                         if sendToDisplay:
-                            self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                         syntax_color='result:')
+                            #self.mapscheme.formatAndSendUDP(str(self._evalStack[0]), display=3, \
+                                                         #syntax_color='result:')
+                            self.websocket.makeJsonValue(3, str(self._evalStack[0]), 'result')
                         print(self._evalStack[0])
                         self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                         
                         # Huygens easter eggs
                         self.easterEggs(number=str(self._evalStack[0]), debug=True, sendToDisplay=sendToDisplay)
                         
-                    #self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._numberStack[0])), display=2, syntax_color='int:')                
+                    #self.mapscheme.formatAndSendUDP(str(trampolineRecursiveCounter(self._numberStack[0])), display=2, syntax_color='int:')                
                     #print(trampolineRecursiveCounter(self._numberStack[0]))
                 else:
                     print('predecessor receives only number expressions!')
@@ -438,8 +448,10 @@ class Ckalculator(object):
         \n
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('+', display=2, syntax_color='add:', spacing=False)                       
-            self.mapscheme.formatAndSend('add', display=1, syntax_color='add:')               
+            #self.mapscheme.formatAndSendUDP('+', display=2, syntax_color='add:', spacing=False)
+            self.websocket.makeJsonValue(2, '+', 'add')
+            #self.mapscheme.formatAndSendUDP('add', display=1, syntax_color='add:')
+            self.websocket.makeJsonValue(1, 'add', 'add')
         print('addition')
         
         if not temp:
@@ -471,8 +483,10 @@ class Ckalculator(object):
         \n
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('-', display=2, syntax_color='min:',spacing=False)               
-            self.mapscheme.formatAndSend('minus', display=1, syntax_color='min:')       
+            #self.mapscheme.formatAndSendUDP('-', display=2, syntax_color='min:',spacing=False)
+            self.websocket.makeJsonValue(2, '-', 'min')
+            #self.mapscheme.formatAndSendUDP('minus', display=1, syntax_color='min:')       
+            self.websocket.makeJsonValue(1, 'minus', 'min')
         print('subtraction')
         
         if not temp:
@@ -505,8 +519,10 @@ class Ckalculator(object):
         \n
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('equal to', display=1, syntax_color='equal:') 
-            self.mapscheme.formatAndSend('==', display=2, syntax_color='int:', spacing=False)                       
+            self.websocket.makeJsonValue(1, 'equal to', 'comp')
+            #self.mapscheme.formatAndSendUDP('equal to', display=1, syntax_color='equal:') 
+            self.websocket.makeJsonValue(2, '==', 'add', 'comp')
+            #self.mapscheme.formatAndSendUDP('==', display=2, syntax_color='int:', spacing=False)                       
         
         print('equal to')
         
@@ -528,8 +544,10 @@ class Ckalculator(object):
         \n
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('greater than', display=1, syntax_color='gt:') 
-            self.mapscheme.formatAndSend('>', display=2, syntax_color='int:', spacing=False)                       
+            #self.mapscheme.formatAndSendUDP('greater than', display=1, syntax_color='gt:') 
+            self.websocket.makeJsonValue(1, 'greater than', 'comp')
+            #self.mapscheme.formatAndSendUDP('>', display=2, syntax_color='int:', spacing=False)                       
+            self.websocket.makeJsonValue(2, '>', 'comp')
         
         print('greater than')
         if len(self._numberStack) == 0:
@@ -549,8 +567,10 @@ class Ckalculator(object):
         \n
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('less than', display=1, syntax_color='lt:')  
-            self.mapscheme.formatAndSend('<', display=2, syntax_color='int:', spacing=False)                       
+            #self.mapscheme.formatAndSendUDP('less than', display=1, syntax_color='lt:')  
+            self.websocket.makeJsonValue(1, 'less than', 'comp')
+            #self.mapscheme.formatAndSendUDP('<', display=2, syntax_color='int:', spacing=False)                       
+            self.websocket.makeJsonValue(2, '<', 'comp')
         print('less than')
         if len(self._numberStack) == 0:
             self._functionStack.append(zero)
@@ -570,7 +590,8 @@ class Ckalculator(object):
         :param function args: the function arguments to pass
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('apply functions', display=1, syntax_color='eval:')       
+            #self.mapscheme.formatAndSendUDP('apply functions', display=1, syntax_color='eval:')    
+            self.websocket.makeJsonValue(1, 'apply functions', 'eval')
             self.mapscheme.newLine(display=1)       
         
         def evaluate2args(function, *args):
@@ -634,8 +655,10 @@ class Ckalculator(object):
         \n
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('*', display=2, syntax_color='mul:', spacing=False)                        
-            self.mapscheme.formatAndSend('multiply', display=1, syntax_color='mul:')       
+            #self.mapscheme.formatAndSendUDP('*', display=2, syntax_color='mul:', spacing=False)      
+            self.websocket.makeJsonValue(2, '*', 'arith')
+            #self.mapscheme.formatAndSendUDP('multiply', display=1, syntax_color='mul:')
+            self.websocket.makeJsonValue(1, 'multiply', 'arith')
         print('multiplication')
         
         if not temp:
@@ -667,8 +690,10 @@ class Ckalculator(object):
         \n
         """
         if sendToDisplay:
-            self.mapscheme.formatAndSend('/', display=2, syntax_color='div:', spacing=False)                
-            self.mapscheme.formatAndSend('divide', display=1, syntax_color='div:')        
+            #self.mapscheme.formatAndSendUDP('/', display=2, syntax_color='div:', spacing=False)  
+            self.websocket.makeJsonValue(2, '/', 'arith')
+            self.websocket.makeJsonValue(1, 'divide', 'arith')
+            #self.mapscheme.formatAndSendUDP('divide', display=1, syntax_color='div:')        
         print('division')
         
         if not temp:
@@ -797,8 +822,9 @@ class Ckalculator(object):
                                         print('i -> ', i)
                                     print('found ostinato!', midiToNotes(self.ostinato['first']))
                                     msg_notes = (',').join(midiToNotes(self.ostinato['first']))
-                                    self.mapscheme.formatAndSend('found ostinato ' + msg_notes, 
-                                                                 display=4, syntax_color='function:')
+                                    #self.mapscheme.formatAndSendUDP('found ostinato ' + msg_notes, 
+                                                                 #display=4, syntax_color='function:')
+                                    self.websocket.makeJsonValue(4, 'found ostinato', 'function')
                                 else:
                                     self._foundOstinato = False
                         else:
@@ -855,7 +881,8 @@ class Ckalculator(object):
             self.ostinato = {'first': [], 'compare': []}
             if debug:
                 print('ostinato did not change')
-                self.mapscheme.formatAndSend('ostinato did not change', display=4, syntax_color='function:')
+                #self.mapscheme.formatAndSendUDP('ostinato did not change', display=4, syntax_color='function:')
+                self.websocket.makeJsonValue(4, 'ostinato did not change', 'function')
         else:
             diff = np.subtract(ostinato1, ostinato2)
             
@@ -864,15 +891,17 @@ class Ckalculator(object):
                 
                 if debug:
                     print('ostinato has 1 note difference! Well done 👸🏼-> ', diff)
-                self.mapscheme.formatAndSend('ostinato has 1 note difference! Well done', display=4,
-                                                 syntax_color='function:')
+                #self.mapscheme.formatAndSendUDP('ostinato has 1 note difference! Well done', display=4,
+                                                 #syntax_color='function:')
+                self.websocket.makeJsonValue(4, 'ostinato has 1 note difference! Well done 👸🏼-> ', 'function')
             else:
                 print('😤 ostinato was not developed correctly. Please try again')
                 self._developedOstinato = False
                 self.ostinato = {'first': [], 'compare': []}
                 
-                self.mapscheme.formatAndSend('ostinato was not developed correctly. Please try again', display=4,
-                                             syntax_color='function:')
+                #self.mapscheme.formatAndSendUDP('ostinato was not developed correctly. Please try again', display=4,
+                                             #syntax_color='function:')
+                self.websocket.makeJsonValue(4, 'ostinato was not developed correctly. Please try again', 'function')
         # clean ostinato memory
         self._foundOstinato = False
         self._fullMemory = []
@@ -942,16 +971,18 @@ class Ckalculator(object):
             if debug:
                 print('function body arg 1 is: ', self._functionBody['arg1'])
             if self._arg1Counter == 0:
-                self.mapscheme.formatAndSend('function body arg 1 is:' + self._functionBody['arg1'], display=4,
-                                             syntax_color='function:')
+                #self.mapscheme.formatAndSendUDP('function body arg 1 is:' + self._functionBody['arg1'], display=4,
+                                             #syntax_color='function:')
+                self.websocket.makeJsonValue(4, 'function body arg 1 is:', 'function')
             self._arg1Counter += 1
                 
         elif len(self._functionBody) == 2:
             if debug:
                 print('function body arg 2 is: ', self._functionBody['arg2'])
             if self.arg2Counter == 0:
-                self.mapscheme.formatAndSend('function body arg 2 is:' + self._functionBody['arg2'], display=4,
-                                             syntax_color='function:')
+                #self.mapscheme.formatAndSendUDP('function body arg 2 is:' + self._functionBody['arg2'], display=4,
+                                             #syntax_color='function:')
+                self.websocket.makeJsonValue(4, 'function body arg 2 is:' + self._functionBody['arg2'], 'function')
             self._arg2Counter += 1
 
             
@@ -1000,9 +1031,11 @@ class Ckalculator(object):
                 function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                 f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
                 if count == total:
-                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                    #self.mapscheme.formatAndSendUDP(function_print, display=4, syntax_color='function:')
+                    self.websocket.makeJsonValue(4, function_print, 'function')
                 else:
-                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='saved:')
+                    #self.mapscheme.formatAndSendUDP(function_print, display=4, syntax_color='saved:')
+                    self.websocket.makeJsonValue(4, function_print, 'saved')
             
         #reset the ostinato analysis
         self.ostinato = {'first': [], 'compare': []}
@@ -1038,7 +1071,8 @@ class Ckalculator(object):
                 shift_type = random.choice(['octave shift', 'interval'])
                 print(shift_type)
                 if sendToDisplay:
-                    self.mapscheme.formatAndSend('Wrong note!\n'+shift_type, display=3, syntax_color='error:')
+                    #self.mapscheme.formatAndSendUDP('Wrong note!\n'+shift_type, display=3, syntax_color='error:')
+                    self.websocket.makeJsonValue(3, 'Wrong note!\n'+shift_type, 'error')
             
             if shift_type == 'interval':
                 print('interval shift triggered by', offset)
@@ -1075,10 +1109,13 @@ class Ckalculator(object):
             #print('new mapping', LambdaMapping)
             note_names = {24:"C",25:"C#",26:"D",27:"D#",28:"E",29:"F",30:"F#",31:"G",32:"G#",33:"A",34:"A#",35:"B"}
             if sendToDisplay:
-                self.mapscheme.formatAndSend('eval mapped to ' +
+                #self.mapscheme.formatAndSendUDP('eval mapped to ' +
+                                             #note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
+                                             #str(LambdaMapping.get('eval')[0]) + ')', display=3,
+                                             #syntax_color='e_debug:');
+                self.websocket.makeJsonValue(3, 'eval mapped to ' +
                                              note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
-                                             str(LambdaMapping.get('eval')[0]) + ')', display=3,
-                                             syntax_color='e_debug:');
+                                             str(LambdaMapping.get('eval')[0]) + ')', debug)
             #print('new valid notes', self._notesList)
         
     def zeroPlusRec(self, sendToDisplay=True, sendToStack=False):
@@ -1093,10 +1130,12 @@ class Ckalculator(object):
                 self._numberStack = []                                
                 #print result:
                 if sendToDisplay or sendToStack:
-                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.formatAndSendUDP('zero', display=1, syntax_color='zero:')  
+                    self.websocket.makeJsonValue(1, 'zero', 'identity')
                     #self.mapscheme.newLine(display=1)
-                    self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._successorHead[0])), \
-                                                 display=2, syntax_color='int:', spacing=False)
+                    #self.mapscheme.formatAndSendUDP(str(trampolineRecursiveCounter(self._successorHead[0])), \
+                                                 #display=2, syntax_color='int:', spacing=False)
+                    self.websocket.makeJsonValue(2, str(trampolineRecursiveCounter(self._successorHead[0])), 'int')
 
                 self._numberStack.append(self._successorHead[0])
                 self._fullStack.append(self._successorHead[0])
@@ -1104,25 +1143,29 @@ class Ckalculator(object):
             
             else:
                 if sendToDisplay:
-                    self.mapscheme.formatAndSend('zero', display=1, syntax_color='zero:')  
+                    #self.mapscheme.formatAndSendUDP('zero', display=1, syntax_color='zero:')  
+                    self.websocket.makeJsonValue(1,'zero', 'identity')
                     #self.mapscheme.newLine(display=1)
                 
                 if len(self._tempStack) > 0:
                     self._tempNumberStack = []                                                                            
                     if self._tempStack[0] == '(':
                         self._tempNumberStack.append(self._successorHead[0])
+                        value = trampolineRecursiveCounter(self._tempNumberStack[0])
                         if sendToDisplay or sendToStack:
-                            self.mapscheme.formatAndSend(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
-                                                         display=2, syntax_color='int:', spacing=False)                                        
+                            #self.mapscheme.formatAndSendUDP(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
+                                                         #display=2, syntax_color='int:', spacing=False)    
+                            self.websocket.makeJsonValue(3,str(value), 'int')
                         
                         if len(self._tempFunctionStack) > 0:
                             self.evaluateFunctionStack(self._tempFunctionStack, sendToDisplay=sendToDisplay)                        
                             if (self._tempNumberStack[0].__name__ is 'succ1'):
                                 self._evalStack = []
-                                self._evalStack.append(trampolineRecursiveCounter(self._tempNumberStack[0]))
+                                self._evalStack.append(value)
                                 if sendToDisplay:
-                                    self.mapscheme.formatAndSend(str(self._evalStack[0]), display=3, \
-                                                                 syntax_color='result:')                                
+                                    #self.mapscheme.formatAndSendUDP(str(self._evalStack[0]), display=3, \
+                                                                 #syntax_color='result:') 
+                                    self.websocket.makeJsonValue(3, str(self._evalStack[0]), 'result')
                                 print(self._evalStack[0])                        
                                 self._tempFunctionStack = []     
                                 
@@ -1144,7 +1187,8 @@ class Ckalculator(object):
 
             if sendToDisplay:
                 self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
-                self.mapscheme.formatAndSend(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
+                #self.mapscheme.formatAndSendUDP(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
+                self.websocket.makeJsonValue(3, config['easter eggs'].get(number), 'egg')
 
     
     def ckFunc(self, funcfile='ck_functions.ini', debug=False):

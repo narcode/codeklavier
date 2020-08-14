@@ -88,8 +88,9 @@ def main(configfile=inifile):
                                 cKost._functionBody['arg2'] = cKalc._numForFunctionBody
                                     
                                 print('function body complete...')
-                                cKalc.mapscheme.formatAndSend('function body complete...', display=4,
-                                                              syntax_color='function:')
+                                #cKalc.mapscheme.formatAndSendUDP('function body complete...', display=4,
+                                                              #syntax_color='function:')
+                                cKalc.websocket.makeJsonValue(4, 'function body complete...', 'function')
                                 cKost.storeFunction()
                                 cKalc._functionBody = {}
                                 cKalc._numForFunctionBody = None

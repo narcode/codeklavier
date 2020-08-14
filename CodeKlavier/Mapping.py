@@ -51,7 +51,7 @@ class Mapping_Motippets:
             self._shortcuts[shortcut] = self._config['shortcuts'].get(shortcut).split(',')        
         
         if flash:
-            self.formatAndSend('evaluate:', display=display)
+            self.formatAndSendUDP('evaluate:', display=display)
         if what == 'play':
             with self.__keyboard.pressed(Key.cmd):
                 self.__keyboard.press(Key.right)
@@ -137,7 +137,7 @@ class Mapping_Motippets:
         
         :param int display: the display number to which to send the udp messages
         """
-        self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
+        self.formatAndSendUDP('\n', display=display, syntax_color='hello:', spacing=False)
 
         with self.__keyboard.pressed(Key.cmd):
             self.__keyboard.press(Key.down)
@@ -176,49 +176,49 @@ class Mapping_Motippets:
                 if len(mapped_string) < 2:
                     # chars and nums
                     self.__keyboard.type(mapped_string)
-                    self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
+                    self.formatAndSendUDP(mapped_string, display=display, syntax_color='hello:', spacing=False)
                 else:
                     # strings
                     string = re.findall('^\'.*', mapped_string)
                     if len(string) > 0:
                         mapped_string = string[0].replace("\'","")
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP(mapped_string, display=display, syntax_color='hello:', spacing=False)
 
                     # special keys
                     if mapped_string == 'space':
                         self.__keyboard.press(Key.space)
                         self.__keyboard.release(Key.space)
-                        self.formatAndSend(' ', display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP(' ', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'enter':
                         self.__keyboard.press(Key.enter)
                         self.__keyboard.release(Key.enter)
-                        self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP('\n', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'backspace':
                         self.__keyboard.press(Key.backspace)
                         self.__keyboard.release(Key.backspace)
-                        self.formatAndSend('', display=display, syntax_color='delete:', spacing=False)
+                        self.formatAndSendUDP('', display=display, syntax_color='delete:', spacing=False)
                     elif mapped_string == 'down':
                         self.goDown()
-                        self.formatAndSend('\n', display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP('\n', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'sc-evaluate':
                         self.evaluate('noEnter_eval', flash=display==5)
-                        self.formatAndSend('', display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP('', display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.tempo':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.play':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == '.load' or mapped_string == '.close':
                         self.__keyboard.type(mapped_string)
-                        self.formatAndSend(mapped_string, display=display, syntax_color='hello:', spacing=False)
+                        self.formatAndSendUDP(mapped_string, display=display, syntax_color='hello:', spacing=False)
                     elif mapped_string == 'motippetssc-evaluate':
                         self.evaluate('eval', flash=display==5)
         except KeyError:
             raise LookupError('Missing hello world information in the config file.')
 
-    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color='', spacing=True):
+    def formatAndSendUDP(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color='', spacing=True):
         """format and prepare a string for sending it over UDP socket
 
         :param str msg: the string to be sent
@@ -272,12 +272,12 @@ class Mapping_Motippets:
         
         if evaluate == 'eval': #automatic evaluation
             self.__keyboard.type(snippet)
-            self.formatAndSend(snippet, display=display, syntax_color='snippet:')
+            self.formatAndSendUDP(snippet, display=display, syntax_color='snippet:')
             self.evaluate(evaluate, flash=False)
         elif evaluate == None: #disabled automatic evaluation
             self.__keyboard.type(snippet)
             self.__keyboard.type(' ')
-            self.formatAndSend(snippet, display=display, syntax_color='snippet:')            
+            self.formatAndSendUDP(snippet, display=display, syntax_color='snippet:')            
         else: # just a keyboadshortcut and without printed code
             self.evaluate(evaluate, flash=False)        
 
@@ -313,22 +313,22 @@ class Mapping_Motippets:
             if evaluate == 'eval':
                 self.__keyboard.type(snippet)
                 self.evaluate(evaluate, flash=False)
-                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':') 
+                self.formatAndSendUDP(snippet, display=display, syntax_color=pianosection+':') 
             elif evaluate == None: 
                 self.__keyboard.type(snippet)
                 self.__keyboard.type(' ')
-                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
+                self.formatAndSendUDP(snippet, display=display, syntax_color=pianosection+':')                
             else:
                 self.evaluate(evaluate, flash=False)
         else:           
             if evaluate == 'eval':
                 self.__keyboard.type(snippet)
                 self.evaluate(evaluate, flash=False)
-                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')
+                self.formatAndSendUDP(snippet, display=display, syntax_color=pianosection+':')
             elif evaluate == None: 
                 self.__keyboard.type(snippet)
                 self.__keyboard.type(' ')
-                self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
+                self.formatAndSendUDP(snippet, display=display, syntax_color=pianosection+':')                
             else:
                 self.evaluate(evaluate, flash=False)
 
@@ -339,9 +339,9 @@ class Mapping_Motippets:
             self.__keyboard.type(callback_snippet)
             if evaluate == 'eval':
                 self.evaluate(evaluate, flash=False)
-                self.formatAndSend(callback_snippet, display=display, syntax_color='low:')
+                self.formatAndSendUDP(callback_snippet, display=display, syntax_color='low:')
             elif evaluate == None: 
-                self.formatAndSend(callback_snippet, display=display, syntax_color='low:')             
+                self.formatAndSendUDP(callback_snippet, display=display, syntax_color='low:')             
             
     def tremolo(self, motif, value, syntax_color, debug=False):
         """Type the tremolo command + the tremolo-value
@@ -394,7 +394,7 @@ class Mapping_Motippets:
                 
             self.__keyboard.type(code[0] + prefix + scaled_value + suffix)
             self.__keyboard.type(' ')
-            self.formatAndSend(code[0] + prefix + scaled_value + suffix, display=display, syntax_color=syntax_color+':')
+            self.formatAndSendUDP(code[0] + prefix + scaled_value + suffix, display=display, syntax_color=syntax_color+':')
         
         try:
             evaluate = self._config['shortcuts mapping'].get(motif)
@@ -435,7 +435,7 @@ class Mapping_Motippets:
         
         self.__keyboard.type(code)
         self.enter()
-        self.formatAndSend(code, display=3, syntax_color='primitive:')        
+        self.formatAndSendUDP(code, display=3, syntax_color='primitive:')        
 
     def result(self, motif_name, text, mod=0, flags=None):
         """TOOD: document function
@@ -454,15 +454,15 @@ class Mapping_Motippets:
             output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]            
             self.__keyboard.type('GOMB countdown started!')
             self.evaluate('eval', flash=False)
-            self.formatAndSend('boom:GOMB', display=1)
-            self.formatAndSend('boom:COUNTDOWN', display=2)
-            self.formatAndSend('boom:STARTED!', display=3) 
+            self.formatAndSendUDP('boom:GOMB', display=1)
+            self.formatAndSendUDP('boom:COUNTDOWN', display=2)
+            self.formatAndSendUDP('boom:STARTED!', display=3) 
         else:
             if text == 'comment':
                 output = self._config['snippets code output'].get(motif_name+'_comment')
                 self.__keyboard.type(output)
                 self.enter()
-                self.formatAndSend(output, display=display, syntax_color='primitive:')
+                self.formatAndSendUDP(output, display=display, syntax_color='primitive:')
             elif text in ('true', 'false'):
                 output = [r.strip() for r in self._config['snippets code output'].get(motif_name+'_'+text).split(',')]
                 if 'osc' in output:
@@ -474,7 +474,7 @@ class Mapping_Motippets:
                     self.__keyboard.type(output[0])
                     self.evaluate('eval', flash=False)
                     
-                self.formatAndSend(output[0], display=display, syntax_color='snippet:')                    
+                self.formatAndSendUDP(output[0], display=display, syntax_color='snippet:')                    
                         
     def customPass(self, content, syntax_color=None, display_only=False, flash=False, display=3):
         """
@@ -496,7 +496,7 @@ class Mapping_Motippets:
         if syntax_color == None:
             syntax_color = 'comment'
             
-        self.formatAndSend(content, display=display, syntax_color=syntax_color+':')
+        self.formatAndSendUDP(content, display=display, syntax_color=syntax_color+':')
         
     def gomb(self):
         """
@@ -504,56 +504,56 @@ class Mapping_Motippets:
         """
         for i in range(1, 4):
             for display_num in range(1, 6):
-                self.formatAndSend('KILL:red', display=display_num)
+                self.formatAndSendUDP('KILL:red', display=display_num)
             time.sleep(0.1)
             for display_num in range(1, 6):
-                self.formatAndSend('KILL:black', display=display_num)
+                self.formatAndSendUDP('KILL:black', display=display_num)
             time.sleep(0.1)
         
         self.__keyboard.type("")
         self.enter()
         self.__keyboard.type("  ____   ____   ____  __  __ _ ")
         self.enter()
-        self.formatAndSend(" ____ ", display=1, syntax_color='primitive:')
-        self.formatAndSend("  ____  ", display=2, syntax_color='primitive:')
-        self.formatAndSend("  ____  ", display=3, syntax_color='primitive:')
-        self.formatAndSend(" __  __  ", display=4, syntax_color='primitive:')
-        self.formatAndSend(" _ ", display=5, syntax_color='primitive:')
+        self.formatAndSendUDP(" ____ ", display=1, syntax_color='primitive:')
+        self.formatAndSendUDP("  ____  ", display=2, syntax_color='primitive:')
+        self.formatAndSendUDP("  ____  ", display=3, syntax_color='primitive:')
+        self.formatAndSendUDP(" __  __  ", display=4, syntax_color='primitive:')
+        self.formatAndSendUDP(" _ ", display=5, syntax_color='primitive:')
         self.__keyboard.type(" |  _ \ / __ \ / __ \|  \/  | |")
         self.enter()
-        self.formatAndSend("|  _ \ ", display=1, syntax_color='primitive:')
-        self.formatAndSend(" / __ \ ", display=2, syntax_color='primitive:')
-        self.formatAndSend(" / __ \ ", display=3, syntax_color='primitive:')
-        self.formatAndSend("|  \/  |", display=4, syntax_color='primitive:')
-        self.formatAndSend("| | ", display=5, syntax_color='primitive:')
+        self.formatAndSendUDP("|  _ \ ", display=1, syntax_color='primitive:')
+        self.formatAndSendUDP(" / __ \ ", display=2, syntax_color='primitive:')
+        self.formatAndSendUDP(" / __ \ ", display=3, syntax_color='primitive:')
+        self.formatAndSendUDP("|  \/  |", display=4, syntax_color='primitive:')
+        self.formatAndSendUDP("| | ", display=5, syntax_color='primitive:')
         self.__keyboard.type(" | |_) | |  | | |  | | \  / | |")
         self.enter()
-        self.formatAndSend("| |_) | ", display=1, syntax_color='primitive:')
-        self.formatAndSend("| |  | |", display=2, syntax_color='primitive:')
-        self.formatAndSend("| |  | |", display=3, syntax_color='primitive:')
-        self.formatAndSend("| \  / |", display=4, syntax_color='primitive:')
-        self.formatAndSend("| | ", display=5, syntax_color='primitive:')
+        self.formatAndSendUDP("| |_) | ", display=1, syntax_color='primitive:')
+        self.formatAndSendUDP("| |  | |", display=2, syntax_color='primitive:')
+        self.formatAndSendUDP("| |  | |", display=3, syntax_color='primitive:')
+        self.formatAndSendUDP("| \  / |", display=4, syntax_color='primitive:')
+        self.formatAndSendUDP("| | ", display=5, syntax_color='primitive:')
         self.__keyboard.type(" |  _ <| |  | | |  | | |\/| | |")
         self.enter()
-        self.formatAndSend("|  _ <| ", display=1, syntax_color='primitive:')
-        self.formatAndSend("| |  | |", display=2, syntax_color='primitive:')
-        self.formatAndSend("| |  | |", display=3, syntax_color='primitive:')
-        self.formatAndSend("| |\/| |", display=4, syntax_color='primitive:')
-        self.formatAndSend("| | ", display=5, syntax_color='primitive:')
+        self.formatAndSendUDP("|  _ <| ", display=1, syntax_color='primitive:')
+        self.formatAndSendUDP("| |  | |", display=2, syntax_color='primitive:')
+        self.formatAndSendUDP("| |  | |", display=3, syntax_color='primitive:')
+        self.formatAndSendUDP("| |\/| |", display=4, syntax_color='primitive:')
+        self.formatAndSendUDP("| | ", display=5, syntax_color='primitive:')
         self.__keyboard.type(" | |_) | |__| | |__| | |  | |_|")
         self.enter()
-        self.formatAndSend("| |_) | ", display=1, syntax_color='primitive:')
-        self.formatAndSend("| |__| |", display=2, syntax_color='primitive:')
-        self.formatAndSend("| |__| |", display=3, syntax_color='primitive:')
-        self.formatAndSend("| |  | |", display=4, syntax_color='primitive:')
-        self.formatAndSend("|_| ", display=5, syntax_color='primitive:')
+        self.formatAndSendUDP("| |_) | ", display=1, syntax_color='primitive:')
+        self.formatAndSendUDP("| |__| |", display=2, syntax_color='primitive:')
+        self.formatAndSendUDP("| |__| |", display=3, syntax_color='primitive:')
+        self.formatAndSendUDP("| |  | |", display=4, syntax_color='primitive:')
+        self.formatAndSendUDP("|_| ", display=5, syntax_color='primitive:')
         self.__keyboard.type(" |____/ \____/ \____/|_|  |_(_)")
         self.enter()
-        self.formatAndSend("|____/", display=1, syntax_color='primitive:')
-        self.formatAndSend(" \____/", display=2, syntax_color='primitive:')
-        self.formatAndSend(" \____/", display=3, syntax_color='primitive:')
-        self.formatAndSend("|_|  |_|", display=4, syntax_color='primitive:')
-        self.formatAndSend("(_)", display=5, syntax_color='primitive:')
+        self.formatAndSendUDP("|____/", display=1, syntax_color='primitive:')
+        self.formatAndSendUDP(" \____/", display=2, syntax_color='primitive:')
+        self.formatAndSendUDP(" \____/", display=3, syntax_color='primitive:')
+        self.formatAndSendUDP("|_|  |_|", display=4, syntax_color='primitive:')
+        self.formatAndSendUDP("(_)", display=5, syntax_color='primitive:')
         self.__keyboard.type("")
         self.enter()        
 
@@ -573,7 +573,7 @@ class Mapping_Ckalculator:
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120)
 
 
-    def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
+    def formatAndSendUDP(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
         """format and prepare a string for sending it over UDP socket
 
         :param str msg: the string to be sent
@@ -615,3 +615,82 @@ class Mapping_Ckalculator:
             port = 4444 
             
         return self.__socket.sendto(bytes('line:\n', 'utf-8'), ('localhost', port))
+
+class Mapping_Websocket:
+    """Mapping for the Websocket
+    """
+    def __init__(self, debug=False):
+        
+        if debug:
+            print("## Loaded the Webosocket mapping ##")
+            
+        self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        self._config.read(inifile, encoding='utf8')
+        
+        server = self._config['ar'].get('server')
+
+        if server not in ('local', 'keyboardsunite.com'):
+            with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
+                self._wsUri = json.loads(u.read(100))
+                print(self._wsUri)  
+        elif server == 'local':
+            print('server:', server)    
+            host = socket.gethostbyname(socket.gethostname())
+            self._wsUri = {'host': host, 'port': '8081'}
+            print(self._wsUri)
+        else:
+            print('server:', server)    
+            self._wsUri = {'host': server, 'port': '8081'}
+            print(self._wsUri)            
+            
+    async def cue(self):
+        self._cue = asyncio.Queue()
+        await asyncio.create_task(self.websocketloop())        
+    
+    async def websocketloop(self, json):
+        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=None) as websocket:
+            #while True:
+            await websocket.send(json)       
+        
+    async def connect(self):
+        try:
+            
+            self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=10)
+            self.websocket = await self._conn.__aenter__()
+            print('web socket connected!')
+        except:
+            print('connection error. Is the websocket server running?')
+        
+        return self
+    
+    def wsConnect(self):
+        asyncio.get_event_loop().run_until_complete(self.connect())
+       
+
+    async def send(self, json):
+        try:
+            await self.websocket.send(json)    
+        except:
+            print('connection closed, trying to reconnect... ')
+            self.wsConnect()
+
+            
+    async def sendToCue(self, json):
+        print("send to cue")
+        await self._cue.put(json)   
+    
+    
+    async def receive_new(self):
+        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+                                 ping_interval=3, ping_timeout=None) as websocket:
+            async for msg in websocket:
+                return json.loads(msg)
+            
+    async def receive(self):
+        async for message in self.websocket:
+            return json.loads(message)
+            
+    def prepareJsonValue(self, wstype='-val', display='1', payload=''):
+        return json.dumps({'type': 'value','key': display+wstype, 'payload':payload})  
