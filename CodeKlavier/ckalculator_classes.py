@@ -66,6 +66,7 @@ class Ckalculator(object):
         self._arg2Counter = 0
         self.easterEggs_config = eggsdir + 'asia.ini'
         self.shift_count = 0
+        self._consoleOpen = False
 
         if debug:
             print(eggsdir)
@@ -286,6 +287,11 @@ class Ckalculator(object):
                                     #self.mapscheme.formatAndSendUDP(str(self._evalStack[0]), display=3, \
                                                                  #syntax_color='result:')
                                     self.websocket.makeJsonValue(3, str(self._evalStack[0]), 'result')
+
+                                    if self._consoleOpen:
+                                        self.websocket.makeJsonValue('cmd', 'closeconsole')
+                                        self._consoleOpen = False 
+                                        
                                 print(self._evalStack[0])
                                 self.mapscheme._osc.send_message("/ck", str(self._evalStack[0]))
                                 
@@ -833,8 +839,9 @@ class Ckalculator(object):
                                     msg_notes = (',').join(midiToNotes(self.ostinato['first']))
                                     #self.mapscheme.formatAndSendUDP('found ostinato ' + msg_notes, 
                                                                  #display=4, syntax_color='function:')
+                                    self.websocket.makeJsonValue('cmd', 'openconsole', 'console')
                                     self.websocket.makeJsonValue('console', 'found ostinato', 'function')
-                                    self.websocket.makeJsonValue('cmd', 'openconsole')
+
                                 else:
                                     self._foundOstinato = False
                         else:
@@ -1207,7 +1214,9 @@ class Ckalculator(object):
             if sendToDisplay:
                 self.mapscheme._osc.send_message("/ck_easteregg", config['easter eggs'].get(number))    
                 #self.mapscheme.formatAndSendUDP(config['easter eggs'].get(number), syntax_color='r_debug:', display=3)
-                self.websocket.makeJsonValue(3, config['easter eggs'].get(number), 'egg')
+                self.websocket.makeJsonValue('cmd', 'openconsole')
+                self._consoleOpen = True
+                self.websocket.makeJsonValue('console', config['easter eggs'].get(number), 'egg')
 
     
     def ckFunc(self, funcfile='ck_functions.ini', debug=False):
