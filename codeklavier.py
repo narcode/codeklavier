@@ -37,7 +37,10 @@ def doHelp():
     print('These versions are available: ' + (', ').join(VERSIONS))   
     print('')    
     print(BColors.BOLD + '-i | --ini' + BColors.WARNING + ' <<filename.ini>>' + BColors.ENDC)
-    print('Boot CodeKlavier with configuration from <<filename.ini>>')
+    print('Boot CodeKlavier with configuration from <<filename.ini>. Full path is needed!>')
+    print('')    
+    print(BColors.BOLD + '-e | --eggs' + BColors.WARNING + ' <<dir>>' + BColors.ENDC)
+    print('Boot CodeKlavier with alternative directory for easter eggs. Wrtie the path of the dir')    
     print('')     
     print(BColors.BOLD + '-r | --rec' + BColors.ENDC)
     print('Boot CodeKlavier to record MIDI for machine learning')
@@ -117,7 +120,7 @@ if __name__ == '__main__':
     play = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'h:p:i:e:rt',['help', 'play=', 'ini=', 'eggs=''rec', 'test'])
+        options, args = getopt.getopt(sys.argv[1:],'h:p:i:e:rt',['help', 'play=', 'ini=', 'eggs=', 'rec', 'test'])
         selected_options = [x[0] for x in options]
         
         for o, a in options:
@@ -147,9 +150,9 @@ if __name__ == '__main__':
         CK_config.inifile = config
     
     if config_eggs == None:
-        CK_config.eggsfile = 'default_setup.ini'
+        CK_config.eggsdir = 'default_setup.ini'
     else:
-        CK_config.eggsfile = config_eggs
+        CK_config.eggsdir = config_eggs
 
     if test:
         miditest(configfile=CK_config.inifile)

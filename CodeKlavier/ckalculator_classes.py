@@ -11,7 +11,7 @@ from websocket import CkWebsocket
 from Mapping import Mapping_Ckalculator
 from CK_lambda import *
 from CK_parser import *
-from CK_config import eggsfile
+from CK_config import eggsdir
 from CK_config import inifile
 
 class Ckalculator(object):
@@ -64,10 +64,11 @@ class Ckalculator(object):
         self._defineCounter = 0
         self._arg1Counter = 0
         self._arg2Counter = 0
-        self.easterEggs_config = eggsfile
+        self.easterEggs_config = eggsdir + 'asia.ini'
         self.shift_count = 0
 
-        print(eggsfile)
+        if debug:
+            print(eggsdir)
         
         # fill/define the piano range:
         self._pianoRange = array.array('i', (i for i in range (21, 109)))
@@ -1089,7 +1090,7 @@ class Ckalculator(object):
                 # TODO: pass to boot config
                 configs = ['asia', 'europe', 'northamerica', 'southamerica', 'oceania', 'africa', 'antarctica']
                 self.shift_count += 1
-                self.easterEggs_config = '~/codeklavier-extensions/' + configs[self.shift_count%(len(configs))] + '.ini'
+                self.easterEggs_config = eggsdir + configs[self.shift_count%(len(configs))] + '.ini'
                 self.websocket.makeJsonValue(3, 'loaded ' + self.easterEggs_config, 'cmd')
                 self.websocket.makeJsonValue('cmd', 'changeimagefolder', configs[self.shift_count%(len(configs))])
                 for mapping in mappings:
@@ -1192,6 +1193,7 @@ class Ckalculator(object):
         :param string number: the number-key to grab the value from the config file
         """
         configfile = self.easterEggs_config
+        print(configfile)
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
         
