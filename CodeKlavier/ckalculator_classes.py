@@ -114,7 +114,7 @@ class Ckalculator(object):
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif message[2] == 0 and self._temp:
                 print(')')
                 if sendToDisplay:
                     #self.mapscheme.formatAndSendUDP(')', display=2, syntax_color='int:', spacing=False)                
@@ -324,10 +324,7 @@ class Ckalculator(object):
                         
                 elif note in LambdaMapping.get('addition'):
                     if self._deltatime <= articulation['staccato']:
-                        if not self._temp:
-                            self.add(False, sendToDisplay)
-                        else:
-                            self.add(temp=True)
+                        self.add(self._temp, sendToDisplay)
                     elif self._deltatime > articulation['staccato']:
                         if not self._temp:
                             self.multiply(False, sendToDisplay) 
@@ -536,7 +533,7 @@ class Ckalculator(object):
         if sendToDisplay:
             self.websocket.makeJsonValue(1, 'equal to', 'comp')
             #self.mapscheme.formatAndSendUDP('equal to', display=1, syntax_color='equal:') 
-            self.websocket.makeJsonValue(2, '==', 'add', 'comp')
+            self.websocket.makeJsonValue(2, '==', 'comp')
             #self.mapscheme.formatAndSendUDP('==', display=2, syntax_color='int:', spacing=False)                       
         
         print('equal to')
@@ -1179,21 +1176,21 @@ class Ckalculator(object):
                         if sendToDisplay or sendToStack:
                             #self.mapscheme.formatAndSendUDP(str(trampolineRecursiveCounter(self._tempNumberStack[0])), \
                                                          #display=2, syntax_color='int:', spacing=False)    
-                            self.websocket.makeJsonValue(3,str(value), 'int')
+                            self.websocket.makeJsonValue(2, str(value), 'int')
                         
                         if len(self._tempFunctionStack) > 0:
-                            self.evaluateFunctionStack(self._tempFunctionStack, sendToDisplay=sendToDisplay)                        
+                            self.evaluateFunctionStack(self._tempFunctionStack, self._temp, sendToDisplay=sendToDisplay)                        
                             if (self._tempNumberStack[0].__name__ is 'succ1'):
                                 self._evalStack = []
                                 self._evalStack.append(value)
                                 if sendToDisplay:
                                     #self.mapscheme.formatAndSendUDP(str(self._evalStack[0]), display=3, \
                                                                  #syntax_color='result:') 
-                                    self.websocket.makeJsonValue(3, str(self._evalStack[0]), 'result')
+                                    self.websocket.makeJsonValue(2, str(self._evalStack[0]), 'inte')
                                 print(self._evalStack[0])                        
                                 self._tempFunctionStack = []     
                                 
-    def easterEggs(self, number=100, debug=False, special_num=7,sendToDisplay=True):
+    def easterEggs(self, number=100, debug=False, special_num=None,sendToDisplay=True):
         """
         Attach certain events to specific numbers. Easter egg style.
         
@@ -1204,7 +1201,7 @@ class Ckalculator(object):
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
         
-        if int(number)%special_num is 0: #for huygens its 42
+        if (special_num != None) and (int(number)%special_num is 0): #for huygens its 42
             number = str(special_num)
 
         if number in config['easter eggs']:
