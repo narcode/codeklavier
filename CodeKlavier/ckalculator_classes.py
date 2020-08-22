@@ -84,6 +84,7 @@ class Ckalculator(object):
             print('valid notes:', self._notesList)
         
         if print_functions:
+            self.websocket.makeJsonValue(4, 'cleardisplay', 'cmd')
             for f in self.ckFunc():
                 function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                 f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
@@ -109,7 +110,7 @@ class Ckalculator(object):
                 print('(')
                 if sendToDisplay:
                     #self.mapscheme.formatAndSendUDP('(', display=2, syntax_color='int:', spacing=False)
-                    self.websocket.makeJsonValue(2, '(', 'parenthesis')
+                    self.websocket.makeJsonValue(2, '(', 'parenthesisopen')
                 self._fullStack.append('(')
                 self._tempStack = []
                 self._tempStack.append('(')                
@@ -118,7 +119,7 @@ class Ckalculator(object):
                 print(')')
                 if sendToDisplay:
                     #self.mapscheme.formatAndSendUDP(')', display=2, syntax_color='int:', spacing=False)                
-                    self.websocket.makeJsonValue(2, ')', 'parenthesis')
+                    self.websocket.makeJsonValue(2, ')', 'parenthesisclose')
                 self._fullStack.append(')')
                 # to main stack
                 print('temp num stack:', self._tempNumberStack);
@@ -300,12 +301,13 @@ class Ckalculator(object):
                                 
                             else: 
                                 if sendToDisplay:
-                                    #self.mapscheme.formatAndSendUDP('error', display=3, syntax_color='error:')
                                     self.websocket.makeJsonValue(3, 'error', 'error')
-                                    #self.mapscheme.formatAndSendUDP('result is not a number', display=3, syntax_color='e_debug:')
                                     self.websocket.makeJsonValue(3, 'result is not a number', 'debug')
-                                   
                                     self.mapscheme._osc.send_message("/ck_error", str(self._evalStack[0]))
+                                    
+                                    if self._consoleOpen:
+                                        self.websocket.makeJsonValue('cmd', 'closeconsole')
+                                        self._consoleOpen = False                                     
                                 
                                 
                         
@@ -315,6 +317,11 @@ class Ckalculator(object):
                                 #self.mapscheme.formatAndSendUDP(self._numberStack[0].__name__, display=3, \
                                                              #syntax_color='result:')
                                 self.websocket.makeJsonValue(3, self._numberStack[0].__name__, 'result')
+
+                                if self._consoleOpen:
+                                    self.websocket.makeJsonValue('cmd', 'closeconsole')
+                                    self._consoleOpen = False                                  
+                                
                             self.mapscheme._osc.send_message("/"+self.oscName, self._numberStack[0].__name__)
                             
                         self._functionStack = []
@@ -1092,11 +1099,14 @@ class Ckalculator(object):
             if shift_type == 'interval':
                 print('interval shift triggered by', offset)
                 # TODO: pass to boot config
-                configs = ['asia', 'europe', 'northamerica', 'southamerica', 'oceania', 'africa', 'antarctica']
+                configs = ['asia', 'europe', 'northamerica', 'oceania', 'africa', 'southamerica', 'antarctica', 'world']
                 self.shift_count += 1
                 self.easterEggs_config = eggsdir + configs[self.shift_count%(len(configs))] + '.ini'
                 self.websocket.makeJsonValue(3, 'loaded ' + self.easterEggs_config, 'cmd')
                 self.websocket.makeJsonValue('cmd', 'changeimagefolder', configs[self.shift_count%(len(configs))])
+
+                self.websocket.makeJsonValue('cmd', 'closeconsole')
+                    
                 for mapping in mappings:
                     LambdaMapping[mapping[0]] = list(map(lambda x: 
                                                          self._pianoRange[(x + offset) % len(
@@ -1134,7 +1144,7 @@ class Ckalculator(object):
                                              #note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
                                              #str(LambdaMapping.get('eval')[0]) + ')', display=3,
                                              #syntax_color='e_debug:');
-                self.websocket.makeJsonValue(3, 'eval mapped to ' +
+                self.websocket.makeJsonValue(2, 'eval mapped to ' +
                                              note_names.get((LambdaMapping.get('eval')[0]%len(note_names))+24) + ' (' +
                                              str(LambdaMapping.get('eval')[0]) + ')', 'debug')
             #print('new valid notes', self._notesList)
@@ -1183,14 +1193,14 @@ class Ckalculator(object):
                             if (self._tempNumberStack[0].__name__ is 'succ1'):
                                 self._evalStack = []
                                 self._evalStack.append(value)
-                                if sendToDisplay:
+                                #if sendToDisplay:
                                     #self.mapscheme.formatAndSendUDP(str(self._evalStack[0]), display=3, \
                                                                  #syntax_color='result:') 
-                                    self.websocket.makeJsonValue(2, str(self._evalStack[0]), 'inte')
+                                    #self.websocket.makeJsonValue(2, str(self._evalStack[0]), 'int')
                                 print(self._evalStack[0])                        
                                 self._tempFunctionStack = []     
                                 
-    def easterEggs(self, number=100, debug=False, special_num=None,sendToDisplay=True):
+    def easterEggs(self, number=100, debug=False,sendToDisplay=True):
         """
         Attach certain events to specific numbers. Easter egg style.
         
@@ -1200,6 +1210,8 @@ class Ckalculator(object):
         print(configfile)
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
+        
+        special_num = config['easter eggs'].getint('multipleof')
         
         if (special_num != None) and (int(number)%special_num is 0): #for huygens its 42
             number = str(special_num)
