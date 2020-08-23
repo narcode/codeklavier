@@ -83,6 +83,9 @@ def main(configfile=inifile):
                                          ck_deltatime=ck_deltatime, articulation=articulation)
 
                         if len(cKost._functionBody) == 1:
+                            if len(cKalc._functionBody) == 0:
+                                cKalc._numberStack = []
+                                cKalc._successorHead = []
                             cKalc._functionBody['grab_num'] = True
                             if cKalc._numForFunctionBody != None:                                
                                 cKost._functionBody['arg2'] = cKalc._numForFunctionBody
