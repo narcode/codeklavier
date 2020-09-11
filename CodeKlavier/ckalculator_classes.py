@@ -1080,6 +1080,7 @@ class Ckalculator(object):
         :param str target_note: if shit_type 'target_note' is used, this param points to the desired note. .i.e. 'C#'
     
         """
+        global LambdaMapping
         config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
         config.read(configfile, encoding='utf8')
         
@@ -1106,14 +1107,14 @@ class Ckalculator(object):
                 self.websocket.makeJsonValue('cmd', 'changeimagefolder', configs[self.shift_count%(len(configs))])
 
                 self.websocket.makeJsonValue('cmd', 'closeconsole')
-                st_moritz_range = [60,61,62,63,64,65,66,67,68,69,70,72]
-                for mapping in mappings:
-                    LambdaMapping[mapping[0]] = list(map(lambda x: 
-                                                         st_moritz_range[((x + offset)-st_moritz_range[0]) % len(st_moritz_range)],
-                                                         #self._pianoRange[(x + offset) % len(
-                                                             #self._pianoRange) - 21], #compensate for lower note being 21 not 0
-                                                             
-                                                         mapping[1]))
+                if (LambdaMapping['eval'][0] + offset) > 71:
+                    print('no more shit')
+                else:
+                    for mapping in mappings: 
+                        LambdaMapping[mapping[0]] = list(map(lambda x: 
+                                                             self._pianoRange[(x + offset) % len(
+                                                                 self._pianoRange) - 21], #compensate for lower note being 21 not 0
+                                                             mapping[1]))
             elif shift_type == 'octave shift':
                 print('octave shift triggered')
                 for mapping in mappings:

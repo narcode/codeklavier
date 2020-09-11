@@ -63,19 +63,6 @@ try:
     #ckalculator
     for motif in config['lambda']:
         ckalculator_motifs[motif] = config['lambda'].get(motif).split(',')    
-    #identity_midi = config['lambda'].get('identity_midi').split(',')
-    #evaluate_function = config['lambda'].get('evaluate_function').split(',')
-    #select_first = config['lambda'].get('select_first_midi').split(',')
-    #select_second = config['lambda'].get('select_second_midi').split(',')
-    #successor = config['lambda'].get('successor_midi').split(',')
-    #predecessor = config['lambda'].get('predecessor_midi').split(',')
-    #add_midi = config['lambda'].get('add_midi').split(',')
-    #subtract_midi = config['lambda'].get('subtract_midi').split(',')
-    #mult_midi = config['lambda'].get('mult_midi').split(',')
-    #division_midi = config['lambda'].get('division_midi').split(',')
-    #equal_than_midi = config['lambda'].get('equality_midi').split(',')
-    #greater_than_midi = config['lambda'].get('greater_than_midi').split(',')
-    #less_than_midi = config['lambda'].get('less_than_midi').split(',')
 
 except KeyError:
     raise LookupError('Missing sections in the config file or the config file does not exist. Maybe a typo?')
@@ -110,19 +97,5 @@ for motif in conditional_results_motifs_mel:
 # lambda calculus
 for motif in ckalculator_motifs:
     motifs_lambda[motif] = list(map(int, ckalculator_motifs[motif]))
-#motifs_lambda['eval'] = list(map(int, evaluate_function))
-#motifs_lambda['zero'] = list(map(int, identity_midi))
-#motifs_lambda['true'] = list(map(int, select_first))
-#motifs_lambda['false'] = list(map(int, select_second))
-#motifs_lambda['successor'] = list(map(int, successor))
-#motifs_lambda['predecessor'] = list(map(int, predecessor))
-#motifs_lambda['addition'] = list(map(int, add_midi))
-#motifs_lambda['subtraction'] = list(map(int, subtract_midi))
-#motifs_lambda['multiplication'] = list(map(int, mult_midi))
-#motifs_lambda['division'] = list(map(int, division_midi))
-#motifs_lambda['equal'] = list(map(int, equal_than_midi))
-#motifs_lambda['greater'] = list(map(int, greater_than_midi))
-#motifs_lambda['less'] = list(map(int, less_than_midi))
-#motifs_lambda['shift'] = list(map(int, shift_midi))
 
 
