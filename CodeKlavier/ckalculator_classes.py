@@ -243,13 +243,17 @@ class Ckalculator(object):
                 
                 note_on_vel = self._noteon_velocity[note]
                 self.ar._velocityMemory.append(note_on_vel)
-                
+                                    
                 self._lastioi.append(ck_deltatime)
                 if len(self._lastioi) > 2:
                     self._lastioi = self._lastioi[-2:]
                 
-                if np.diff(self._lastioi) > 0.03:    
-                    self.ar._deltaMemory.append(ck_deltatime)
+                if note > 95:
+                    print('diff: ', np.diff(self._lastioi))
+                    if np.diff(self._lastioi) > 4:
+                        self.ar._deltaMemory = [];
+                    if np.diff(self._lastioi) > 0.03:    
+                        self.ar._deltaMemory.append(ck_deltatime)
                 
                 max_notes = 10 #send to ini
                 if len(self.ar._velocityMemory) > max_notes:
