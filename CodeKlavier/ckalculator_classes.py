@@ -131,7 +131,7 @@ class Ckalculator(object):
         message, deltatime = event
 
         if (message[0] == self.pedal):
-            if message[2] > 90 and (')' in self._fullStack or self._temp == False):
+            if message[2] < 30 and (')' in self._fullStack or self._temp == False):
                 print('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
@@ -139,7 +139,7 @@ class Ckalculator(object):
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] < 30 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif message[2] > 90 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
@@ -348,10 +348,11 @@ class Ckalculator(object):
                         if note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
                             self.storeDynamics(note)
                             
-                            if len(self._numberStack) == 0:
-                                self.predecessor(zero, sendToDisplay) # what kind of result is better?
-                            else:
-                                self.predecessor(predecessor, sendToDisplay)
+                            self.successor(successor, sendToDisplay) #onlu for fokker extension
+                            #if len(self._numberStack) == 0:
+                                #self.predecessor(zero, sendToDisplay) # what kind of result is better?
+                            #else:
+                                #self.predecessor(predecessor, sendToDisplay)
                                 
                         else: #zero + recursive counter:
                             self.makeLS(sendToDisplay)                                  
@@ -572,6 +573,7 @@ class Ckalculator(object):
                         
                 elif note in AR.get('transform'):
                     self.ar.transform()
+                    
                     
                 elif note in AR.get('shape'):
                     if self._deltatime <= articulation['staccato']:

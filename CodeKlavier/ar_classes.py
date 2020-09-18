@@ -21,6 +21,9 @@ class CkAR(object):
         self.loop = asyncio.get_event_loop()
         self.shapes = []
         self._shapes = {}
+        self.roots = [0,1,2,3,4]
+        self.root = 0
+        self._roots = {}
         self.shape = 0;
         self._deltaMemory = []
         self._velocityMemory = []
@@ -51,8 +54,11 @@ class CkAR(object):
         for tree in range(0, self.trees):
             self._shapes[str(tree+1)] = {}
             self._shapes[str(tree+1)]['shape'] = 1
+            self._roots[str(tree+1)] = {}
+            self._roots[str(tree+1)]['root'] = 1            
                 
         print('trees and shapes:', self._shapes)
+        print('roots', self._roots)
             
     
     def nextT(self):
@@ -179,6 +185,7 @@ class CkAR(object):
         self.trees = self.trees + 1
         self.navigate = self.trees - 1
         self._shapes[str(self.trees)] = {'shape': 1}
+        self._roots[str(self.trees)] = {'root': 0}
         print('create new tree', 'total trees: ', self.trees)
         print('curent trees: ', self._shapes)
         self.run_in_loop(self.makeJson('view', str(self.trees) ))
@@ -226,11 +233,18 @@ class CkAR(object):
         """
         self._parallelTrees = collection
         print('collection loaded', collection)
-        
+       
         
     def transform(self):
-        "Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"
-        x = random.uniform(-1, 1)
+        """Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"""
+        #x = random.uniform(-1, 1)
+        current = self.currentTree()
+        self.root = self._roots[str(current)]['root']
+        print('root b4:',self.root)
+        self.root += 1
+        print('root after:',self.root)
+        new_root = self.roots[self.root%len(self.roots)]         
+        
         y = random.uniform(0, 1)
         z = random.uniform(-1, 1)
         
@@ -239,19 +253,20 @@ class CkAR(object):
         r3 = random.uniform(0, 360)
         
         if len(self._parallelTrees) == 0:
+            self._roots[str(current)]['root'] = new_root
+            self.console('root shift: ' + str(new_root))   
             
-            current = self.currentTree()
-            self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
+            self.run_in_loop(self.makeJsonTransform(str(current), [new_root, z, y], [r1,r2,r3]))
             print('transform tree', current)
             
         else:
             
             for t in self._parallelTrees:
-                self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y], [r1,r2,r3]))
+                self.run_in_loop(self.makeJsonTransform(str(t), [new_root, 0, y], [r1,r2,r3]))
        
        
     def mappingTransposition(self, notes, debug=False):
-        """ apply a transpotion offset based on the current view """
+        """ apply a tranposition offset based on the current view """
         if debug:
             print('notes: ', notes)
         if self.currentTree()%2 == 0:
