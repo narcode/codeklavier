@@ -76,10 +76,11 @@ def main(configfile='default_setup.ini', ar_hook=False):
                 if message[0] in (noteoff_id, noteon_id, pedal_id):
                     
                     #note ons:
-                    if message[0] == noteon_id:
+                    if message[0] == noteon_id and message[2] > 0:
                         #per_note = 0
                         ck_note_dur[message[1]] = ck_deltatime
                         if message[2] > 0: 
+                            print('delta ck note on:', ck_deltatime)
                             dif = delta_difference(ck_deltatime) # not getting real note duration, only dt between events.
                             
                             cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
@@ -92,9 +93,11 @@ def main(configfile='default_setup.ini', ar_hook=False):
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
                         midinote = message[1]
-                        #print(ck_note_dur)
+                        print(ck_note_dur)
                         if midinote in ck_note_dur:
                             note_duration = ck_deltatime - ck_note_dur.pop(midinote)
+                            #print(ck_deltatime)
+                            #print('dur:', note_duration)
 
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration,
                                          ck_deltatime=ck_deltatime, articulation=articulation)

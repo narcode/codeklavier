@@ -131,7 +131,7 @@ class Ckalculator(object):
         message, deltatime = event
 
         if (message[0] == self.pedal):
-            if message[2] < 30 and (')' in self._fullStack or self._temp == False):
+            if message[2] > 90 and (')' in self._fullStack or self._temp == False):
                 print('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
@@ -139,7 +139,7 @@ class Ckalculator(object):
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] > 90 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif message[2] < 30 and '(' in self._fullStack: #could also be: and self._temp = True
                 print(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
