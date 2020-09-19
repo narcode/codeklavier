@@ -260,8 +260,8 @@ class CkAR(object):
             print('transform tree', current)
             
         else:
-            
             for t in self._parallelTrees:
+                self._roots[str(t)]['root'] = new_root
                 self.run_in_loop(self.makeJsonTransform(str(t), [new_root, 0, y], [r1,r2,r3]))
        
        
