@@ -206,7 +206,7 @@ class CkAR(object):
             self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')            
 
         print('drop:', self._parallelTrees)
-        self.console('collected trees: ' + str(self._parallelTrees))
+        self.console('collected trees: ' + str(self._parallelTrees), True)
         
     def memoryToggle(self, debug=True):
         """ store the notes into the memory bank"""
