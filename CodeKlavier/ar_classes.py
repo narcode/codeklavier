@@ -224,7 +224,7 @@ class CkAR(object):
             self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')
             
         print('collected trees:', self._parallelTrees)
-        self.console('collected trees: ' + str(self._parallelTrees))
+        self.console('collected trees: ' + str(self._parallelTrees), True)
         
         
     def storeCollect(self, collection=[]):
