@@ -153,11 +153,11 @@ if __name__ == '__main__':
         CK_config.inifile = config
 
     if test:
-        miditest(configfile=config)
+        miditest(configfile=CK_config.inifile)
         sys.exit(0)
         
     if record:
-        rec = CK_Rec(configfile=config)
+        rec = CK_Rec(configfile=CK_config.inifile)
         rec.record(framesize=1)
         sys.exit(0)        
 
