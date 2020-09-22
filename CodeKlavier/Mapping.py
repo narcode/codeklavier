@@ -107,12 +107,29 @@ class Mapping_Motippets:
 
 
     def parseShortcut(self, what):
-        """ parse the evaluate code from the ini file"""
-        if len(self._shortcuts[what]) == 3:
+        """
+        Parse the evaluate code from the ini file
+
+        The 'what' command can contain up to 4 keys. If there is more than 1 key, all
+        the first keys are pressed down and the last key is then typed (or pressed and
+        released), as you would normally do yourself.
+        """
+        if len(self._shortcuts[what]) == 4:
+            with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()),
+                                         eval('Key.'+self._shortcuts[what][1].strip()),
+                                         eval('Key.'+self._shortcuts[what][2].strip())):
+                if len(self._shortcuts[what][3].strip()) > 1:
+                    self.__keyboard.press(eval('Key.'+self._shortcuts[what][3].strip()))
+                    self.__keyboard.release(eval('Key.'+self._shortcuts[what][3].strip()))
+                else:
+                    self.__keyboard.type(self._shortcuts[what][3].strip())
+
+        elif len(self._shortcuts[what]) == 3:
             with self.__keyboard.pressed(eval('Key.'+self._shortcuts[what][0].strip()),
                                          eval('Key.'+self._shortcuts[what][1].strip())):
                 if len(self._shortcuts[what][2].strip()) > 1:
                     self.__keyboard.press(eval('Key.'+self._shortcuts[what][2].strip()))
+                    self.__keyboard.release(eval('Key.'+self._shortcuts[what][2].strip()))
                 else:
                     self.__keyboard.type(self._shortcuts[what][2].strip())
                 
