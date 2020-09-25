@@ -360,14 +360,14 @@ class Ckalculator(object):
                         if note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
                             self.storeDynamics(note)
                             
-                            self.successor(successor, sendToDisplay) #onlu for fokker extension
+                            self.successor(successor, sendToDisplay) #only for fokker extension
                             #if len(self._numberStack) == 0:
                                 #self.predecessor(zero, sendToDisplay) # what kind of result is better?
                             #else:
                                 #self.predecessor(predecessor, sendToDisplay)
                                 
-                        else: #zero + recursive counter:
-                            self.makeLS(sendToDisplay)                                  
+                        #else: #zero + recursive counter:
+                            #self.makeLS(sendToDisplay)                                  
 
                         self._successorHead = []
                         
