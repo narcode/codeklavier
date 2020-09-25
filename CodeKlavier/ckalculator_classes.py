@@ -959,10 +959,10 @@ class Ckalculator(object):
             :param function function: the function to evaluate with the given args
             :param function args: the function arguments to pass
             """
-            args = len(signature(function).parameters)
-            if args == 1:
+            func_args = len(signature(function).parameters)
+            if func_args == 1:
                 return function(args[0])
-            elif args == 2:
+            elif func_args == 2:
                 return function(args[0], args[1])
         
         if type(stack) is not list:
