@@ -224,11 +224,14 @@ class CkAR(object):
         
     def collect(self, tree=1):
         """Collect a LS-tree for parallel processing"""
-        if tree not in self._parallelTrees and tree <= self.trees:
-            self._parallelTrees.append(tree)
-        else: 
-            #print('\ntree not created yet or already collected, TREE:', tree, '\n')
-            self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')
+        if not isinstance(tree, int):
+            return
+        else:
+            if tree not in self._parallelTrees and tree <= self.trees:
+                self._parallelTrees.append(tree)
+            else: 
+                #print('\ntree not created yet or already collected, TREE:', tree, '\n')
+                self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')
             
         print('collected trees:', self._parallelTrees)
         self.console('collected trees: ' + str(self._parallelTrees), True)
@@ -269,8 +272,9 @@ class CkAR(object):
             
         else:
             for t in self._parallelTrees:
-                self._roots[str(t)]['root'] = new_root
-                self.run_in_loop(self.makeJsonTransform(str(t), [new_root, 0, y], [r1,r2,r3]))
+                if str(t) in self._roots:
+                    self._roots[str(t)]['root'] = new_root
+                    self.run_in_loop(self.makeJsonTransform(str(t), [new_root, 0, y], [r1,r2,r3]))
        
     def erick(self):
         """ open a bracket """

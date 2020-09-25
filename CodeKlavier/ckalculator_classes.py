@@ -18,6 +18,7 @@ from ar_classes import CkAR
 from CK_lambda import *
 from CK_parser import *
 import numpy
+from inspect import signature
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -958,7 +959,11 @@ class Ckalculator(object):
             :param function function: the function to evaluate with the given args
             :param function args: the function arguments to pass
             """
-            return function(args[0], args[1])
+            args = len(signature(function).parameters)
+            if args == 1:
+                return function(args[0])
+            elif args == 2:
+                return function(args[0], args[1])
         
         if type(stack) is not list:
             print('This function expects a List/Stack')
