@@ -366,7 +366,9 @@ class Ckalculator(object):
                             #else:
                                 #self.predecessor(predecessor, sendToDisplay)
                                 
-                        #else: #zero + recursive counter:
+                        else: #zero + recursive counter:
+                            self.storeDynamics(note)
+                            self.successor(successor, sendToDisplay)                            
                             #self.makeLS(sendToDisplay)                                  
 
                         self._successorHead = []
