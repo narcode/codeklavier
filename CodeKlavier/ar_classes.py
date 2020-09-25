@@ -30,6 +30,8 @@ class CkAR(object):
         self._memory = []
         self._memorize = False
         self._delayerRunning = False
+        self._erick = False
+        self._abraham = False
         
         self.receiveState()        
         
@@ -208,6 +210,11 @@ class CkAR(object):
         print('drop:', self._parallelTrees)
         self.console('collected trees: ' + str(self._parallelTrees), True)
         
+    def dropAll(self):
+        """ Drop all trees in the colletion """
+        self._parallelTrees = []
+        self.console('collected trees: ' + str(self._parallelTrees), True)
+    
     def memoryToggle(self, debug=True):
         """ store the notes into the memory bank"""
         self._memorize = not self._memorize        
@@ -233,6 +240,7 @@ class CkAR(object):
         """
         self._parallelTrees = collection
         print('collection loaded', collection)
+        self.console('collected trees: ' + str(self._parallelTrees), True)
        
         
     def transform(self):
@@ -264,6 +272,15 @@ class CkAR(object):
                 self._roots[str(t)]['root'] = new_root
                 self.run_in_loop(self.makeJsonTransform(str(t), [new_root, 0, y], [r1,r2,r3]))
        
+    def erick(self):
+        """ open a bracket """
+        self._erick = True
+        print('erick called')
+        
+    def abraham(self):
+        """ open a bracket """
+        self._abraham = True
+        print('abraham called')
        
     def mappingTransposition(self, notes, debug=False):
         """ apply a tranposition offset based on the current view """

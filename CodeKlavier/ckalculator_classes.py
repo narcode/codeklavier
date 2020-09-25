@@ -106,10 +106,14 @@ class Ckalculator(object):
                     function_printAR = (',').join(midiToNotes(f['name']))
                     
                 if len(f['body']) > 1:
-                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
-                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
-                    console_output += function_printAR + newLine
+                    if f['body']['func'] == 'storeCollect':
+                        function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                            f['body']['arg1'] + ' ' + f['body']['arg2'] + f['body']['arg3'] + ' ' + ')'
+                    else:
+                        function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                            f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                        self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                        console_output += function_printAR + newLine
                 else:
                     function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
@@ -130,17 +134,21 @@ class Ckalculator(object):
         
         message, deltatime = event
 
-        if (message[0] == self.pedal):
-            if message[2] > 90 and (')' in self._fullStack or self._temp == False):
+        if (message[0] == self.pedal or self.ar._erick or self.ar._abraham):
+            if ( message[2] > 90 and (')' in self._fullStack or self._temp == False) ) or self.ar._erick:
+                self.ar._erick = False
                 print('(')
+                self.ar.console('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
                 self._fullStack.append('(')
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] < 30 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif (message[2] < 30 and '(' in self._fullStack) or self.ar._abraham: #could also be: and self._temp = True
+                self.ar._abraham = False
                 print(')')
+                self.ar.console(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
                 self._fullStack.append(')')
@@ -325,6 +333,9 @@ class Ckalculator(object):
                                                 if len(self._numberStack) > 0:
                                                     num = trampolineRecursiveCounter(self._numberStack[0])
                                                     function_to_call(num)
+                                            elif function_to_call.__name__ in ['storeCollect']:
+                                                function_to_call([int(f['body']['arg1']), int(f['body']['arg2']),
+                                                                  int(f['body']['arg3'])])
                                             else:
                                                 function_to_call()
                                             #clear the rule stack
@@ -1321,8 +1332,7 @@ class Ckalculator(object):
                 if self._deltatime <= articulation['staccato']:
                     self._functionBody['arg1'] = 'drop'          
                 elif self._deltatime > articulation['staccato']:
-                    self._functionBody['arg1'] = 'collect'
-                
+                    self._functionBody['arg1'] = 'collect'                
                     
         elif len(self._functionBody) == 1:
             if debug:
@@ -1380,7 +1390,7 @@ class Ckalculator(object):
                     self._functionBody['arg1'] = 'prev'  
                     
             elif note in AR.get('generation'):
-                self._functionBody['arg1'] = 'memoryToggle'
+                self._functionBody['arg1'] = 'memoryToggle'                
             
             self._arg1Counter += 1
             
