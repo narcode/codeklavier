@@ -372,7 +372,7 @@ class Ckalculator(object):
                             self.successor(successor, sendToDisplay)                            
                             #self.makeLS(sendToDisplay)                                  
                         
-                elif note in self.ar.mappingTransposition(LambdaMapping.get('zero'), debug=True):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('zero')):
                     #self.storeDynamics(note)
                     
                     print('identity')
