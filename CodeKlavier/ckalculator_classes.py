@@ -351,29 +351,28 @@ class Ckalculator(object):
                 if note in self.ar.mappingTransposition(LambdaMapping.get('successor')):
 
                     if self._deltatime <= articulation['staccato']:
-                        self.storeDynamics(note)
-                        
+                        self.storeDynamics(note)                
                         self.successor(successor, sendToDisplay)
+                    if self._deltatime > articulation['staccato']:
+                        self.storeDynamics(note)                
+                        self.successor(successor, sendToDisplay)  
                     
-                    elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
-                        
-                        if note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
+                #this is either the func 'zero' or 'predecessor'
+                elif note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
+                    
+                    if self._deltatime <= articulation['staccato']:
                             self.storeDynamics(note)
-                            
                             self.successor(successor, sendToDisplay) #only for fokker extension
                             #if len(self._numberStack) == 0:
                                 #self.predecessor(zero, sendToDisplay) # what kind of result is better?
                             #else:
-                                #self.predecessor(predecessor, sendToDisplay)
-                                
-                        else: #zero + recursive counter:
+                                #self.predecessor(predecessor, sendToDisplay)  
+                    else: #zero + recursive counter:
                             self.storeDynamics(note)
                             self.successor(successor, sendToDisplay)                            
                             #self.makeLS(sendToDisplay)                                  
-
-                        self._successorHead = []
                         
-                elif note in self.ar.mappingTransposition(LambdaMapping.get('zero')):
+                elif note in self.ar.mappingTransposition(LambdaMapping.get('zero'), debug=True):
                     #self.storeDynamics(note)
                     
                     print('identity')
