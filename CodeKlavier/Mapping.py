@@ -129,7 +129,7 @@ class Mapping_Motippets:
                 self.__keyboard.release(eval('Key.'+self._shortcuts[what][0].strip()))      
             else:
                 self.__keyboard.type(self._shortcuts[what][0].strip());
-                self.__keyboard.type(' ');
+                #self.__keyboard.type(' ');
         
 
     def goDown(self, display=5):
@@ -276,7 +276,7 @@ class Mapping_Motippets:
             self.evaluate(evaluate, flash=False)
         elif evaluate == None: #disabled automatic evaluation
             self.__keyboard.type(snippet)
-            self.__keyboard.type(' ')
+            #self.__keyboard.type(' ')
             self.formatAndSend(snippet, display=display, syntax_color='snippet:')            
         else: # just a keyboadshortcut and without printed code
             self.evaluate(evaluate, flash=False)        
@@ -316,7 +316,7 @@ class Mapping_Motippets:
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':') 
             elif evaluate == None: 
                 self.__keyboard.type(snippet)
-                self.__keyboard.type(' ')
+                #self.__keyboard.type(' ')
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
             else:
                 self.evaluate(evaluate, flash=False)
@@ -327,7 +327,7 @@ class Mapping_Motippets:
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')
             elif evaluate == None: 
                 self.__keyboard.type(snippet)
-                self.__keyboard.type(' ')
+                #self.__keyboard.type(' ')
                 self.formatAndSend(snippet, display=display, syntax_color=pianosection+':')                
             else:
                 self.evaluate(evaluate, flash=False)
@@ -393,7 +393,7 @@ class Mapping_Motippets:
                 suffix = code[2]
                 
             self.__keyboard.type(code[0] + prefix + scaled_value + suffix)
-            self.__keyboard.type(' ')
+            #self.__keyboard.type(' ')
             self.formatAndSend(code[0] + prefix + scaled_value + suffix, display=display, syntax_color=syntax_color+':')
         
         try:
