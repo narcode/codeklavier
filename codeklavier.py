@@ -78,7 +78,8 @@ def miditest(configfile='default_setup.ini'):
 
             if msg:
                 message, deltatime = msg
-                print('deltatime: ', deltatime, 'msg: ', message)
+                if message[0] == 144:
+                    print('deltatime: ', deltatime, 'msg: ', message)
 
             time.sleep(0.01)
 

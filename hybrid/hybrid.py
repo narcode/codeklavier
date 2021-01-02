@@ -111,7 +111,7 @@ def main():
                     for register in ck_deltatime:
                         ck_deltatime[register] += deltatime
     
-                    if message[0] != 254:
+                    if message[0] != 248:
     
                         if message[0] == noteon_id:
                             if message[2] > 0 and message[0] == noteon_id:
@@ -305,7 +305,7 @@ def ck_loop(version='hello world'):
                 if msg:
                     message, deltatime = msg
 
-                    if message[0] != 254 and message[0] != 208:
+                    if message[0] != 254 and message[0] != 208 and message[0] != 248:
                         if message[2] > 0: #only noteOn
                             if (message[0] == noteon_id):
 
