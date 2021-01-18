@@ -26,11 +26,11 @@ class Ckalculator(object):
     TODO: _fullStack is not used yet but added for the future. Evaluate the decision and either implement or deprecate
     """
     
-    def __init__(self, noteonid, noteoffid, pedal_id, debug=False, print_functions=False, ar_hook=False):
+    def __init__(self, noteonid, noteoffid, pedal_id, config='default_setup.ini', debug=False, print_functions=False, ar_hook=False):
         """The method to initialise the class and prepare the class variables.
         """
         if ar_hook:
-            self.ar = CkAR()
+            self.ar = CkAR(config)
                     
         self.mapscheme = Mapping_Ckalculator(True, False)
         self.note_on = noteonid

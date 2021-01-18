@@ -103,7 +103,7 @@ def boot(configfile='default_setup.ini', version=None):
     
     module = importlib.import_module(version)
     version = getattr(module, version)
-    eval(version.main())
+    eval(version.main(configfile))
     
 if __name__ == '__main__':
     """

@@ -647,22 +647,24 @@ class Mapping_Ckalculator:
 class Mapping_CKAR:
     """Mapping for the AR extension
     """
-    def __init__(self, debug=True):
+    def __init__(self, config='default_setup.ini', debug=True):
         
         if debug:
             print("## Using the AR mapping ##")
             
-        self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-        self._config.read('default_setup.ini', encoding='utf8')
+        self._config = config
+        #self._config.read(config, encoding='utf8')
         
         server = self._config['ar'].get('server')
+        chan = self._config['ar'].get('channel')
         self.even = self._config['ar'].getint('transpositon_even')
         self.odd = self._config['ar'].getint('transposition_odd')
                 
         if server != 'local':
-            with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
-                self._wsUri = json.loads(u.read(100))
-                print(self._wsUri)  
+            with urllib.request.urlopen(f'https://ar.codeklavier.space/master/channel?id={chan}') as u:
+                resp = json.load(u)
+                print(resp)  
+                self._wsUri = resp['websocketBaseURL']
         else:
             print('server:', server)    
             host = socket.gethostbyname(socket.gethostname())

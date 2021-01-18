@@ -52,8 +52,8 @@ def main(configfile='default_setup.ini'):
 
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=True)
-    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=True)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, config=config, print_functions=True, ar_hook=True)
+    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, config=config, ar_hook=True)
 
     per_note = 0
     ck_deltatime = 0

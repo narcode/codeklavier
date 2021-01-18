@@ -13,9 +13,9 @@ import time
 class CkAR(object):
     """Main class for the AR extension"""
     
-    def __init__(self):
+    def __init__(self, config='default_setup.ini'):
         self.trees = 1
-        self.mapping = Mapping_CKAR()
+        self.mapping = Mapping_CKAR(config=config)
         self.navigate = 0
         self._parallelTrees = []
         self.loop = asyncio.get_event_loop()
