@@ -23,6 +23,10 @@ permalink: /videos
 
 <div style='display:flex; flex-flow:column; text-align:center'>
 <div>@ studio</div>
+<iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/Q4k_5G4UBPI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div style='height:50px'></div>  
+<iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/hD-PWNDebD4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div style='height:50px'></div>   
 <iframe width="400" height="215" src="https://www.youtube-nocookie.com/embed/p65YavCUEuQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <div style='height:50px'></div> 
 <iframe width="400" height="215" src="https://www.youtube.com/embed/6QEhnffDlk8?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
