@@ -75,7 +75,7 @@ After installing the libraries, plug in your midi device and run the miditest by
 [Codeklavier Videos](http://codeklavier.space/videos)
 
 ## Publications
-[Publications page](https://codeklavier.space/videos)
+[Publications page](https://codeklavier.space/publications)
 
 ## Support
 This project is made possible by the Creative Industries Fonds NL, our angel sponsor and the festivals and venues that book us for paid concerts. However, our funding will soon run out so if you believe in the project and would like to support it, please consider "buying us a coffee". Every little bit counts and we greatly appreciate your support!
