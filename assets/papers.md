@@ -5,22 +5,22 @@ permalink: /publications
 # CodeKlavier Publications 📝
 
 <br><br>
-## In process: Writing Chapter 17 of the book ....
+## In process: Writing Chapter 17 of the book 'Re-thinking The Musical Instrument'
 
 <br><br>
 ## The sound of lambda
-*Authors:* Felipe Ignacio Noriega, Anne Veinberg<br>
-*Publication:* FARM 2019: Proceedings of the 7th ACM SIGPLAN International Workshop on Functional Art, Music, Modeling, and DesignAugust 2019 Pages 56–60<br>
+**Authors:** Felipe Ignacio Noriega, Anne Veinberg<br>
+**Publication:** FARM 2019: Proceedings of the 7th ACM SIGPLAN International Workshop on Functional Art, Music, Modeling, and DesignAugust 2019 Pages 56–60<br>
 [link](https://doi.org/10.1145/3331543.3342583D)
 
 <br><br>
 ## Coding with the piano: The first phase of the CodeKlavier's development
-*Authors:* Anne Veinberg, Felipe Ignacio Noriega<br>
-*Publication:* International Computer Music Conference 2018<br>
+**Authors:** Anne Veinberg, Felipe Ignacio Noriega<br>
+**Publication:** International Computer Music Conference 2018<br>
 [link](https://drive.google.com/file/d/1UIr2JyPqRw833OIkBgDrx2P6VjZcEKf1/view)
 
 <br><br>
 ## Scheduled visual contact as a strategy for improved communication in a live coder and piano ensemble
-*Authors:* Anne Veinberg, Felipe Ignacio Noriega<br>
-*Publication:* International Conference on Live Coding 2016<br>
+**Authors:** Anne Veinberg, Felipe Ignacio Noriega<br>
+**Publication:** International Conference on Live Coding 2016<br>
 [link](https://www.keyboardsunite.com/offzz/ICLC-paperrevised.pdf)
