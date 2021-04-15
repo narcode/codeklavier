@@ -36,7 +36,7 @@ The L-systems engine is the second element and transforms the symbols into forma
 These structures, along with some characteristics of the piano playing, are then applied to the visuals designed by Patrick Borgeat and rendered in Unity. This is the final step of the technological process and produces the AR visuals which you experience during the show on the ARquatic app.
 
 ## Credits
-Anne Veinberg[https://anneveinberg.com/] - piano/CodeKlavier creator\n
+Anne Veinberg[https://anneveinberg.com/] - piano/CodeKlavier creator n\
 Felipe Ignacio Noriega[https://felipeignacio.info/] - laptop audio/CodeKlavier creator
 Patrick Borgeat[http://www.cappel-nord.de/b/] - visuals
 
