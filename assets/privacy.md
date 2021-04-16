@@ -18,4 +18,4 @@ None
 None
 
 ## Questions?
-You can always send an email to out producer and pianist anne.veinberg [at] gmail.com
+You can always send an email to our producer and pianist anne.veinberg [at] gmail.com
