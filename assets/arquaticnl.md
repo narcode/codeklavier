@@ -5,16 +5,17 @@
 
 ## Shows
 
-Zaterdag 29 Mei
-["Meer dan Muziek" Festival in Toets des Tijds, Amsterdam](www.toetsdestijds.nl)
-Tijd: 14.30, 16.30, 19.00, 21.15
+Zaterdag 29 Mei \
+["Meer dan Muziek" Festival in Toets des Tijds, Amsterdam](www.toetsdestijds.nl) \
+Tijd: 14.30, 16.30, 19.00, 21.15 \
+Wordt ook gestreamed, link te volgen
 
-Zaterdag 5 Juni
-[De Kwekerij, Hilversum](https://www.dekwekerijhilversum.nl/)
-Tijd: ntb
+Zaterdag 5 Juni \
+[De Kwekerij, Hilversum](https://www.dekwekerijhilversum.nl/) \
+Tijd: ntb 
 
-Zondag 6 Juni
-[Pinetum, Hilversum](https://pinetum.nl/)
+Zondag 6 Juni \
+[Pinetum, Hilversum](https://pinetum.nl/) \
 14.30, 15.30, 16.30
 
 ## Motivatie
