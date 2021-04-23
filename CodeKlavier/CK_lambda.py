@@ -403,7 +403,7 @@ def parseCKfunc(function_string, functionnum):
     func = args[0]
     arg = {}
     
-    if func in ['storeCollect', 'sendRule']:
+    if func in ['storeCollect', 'sendRuleAR']:
         arg = {}
         for x in range(len(args)):
             arg[x] = args[x]    

@@ -109,7 +109,7 @@ class Ckalculator(object):
                     if f['body']['func'] == 'storeCollect':
                         function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                             f['body']['arg1'] + ' ' + f['body']['arg2'] + f['body']['arg3'] + ' ' + ')'
-                    elif f['body']['func'] == 'sendRule':
+                    elif f['body']['func'] == 'sendRuleAR':
                         function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                             f['body']['arg1'] + ' ' + f['body']['arg2'] + ' ' + ')'                    
                     else:
