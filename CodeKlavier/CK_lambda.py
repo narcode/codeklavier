@@ -407,14 +407,15 @@ def parseCKfunc(function_string, functionnum):
         for x in range(len(args)):
             arg[x] = args[x]    
     
-    elif len(args) > 1:
-        arg1 = args[1]
-        arg1str = args[1]
-        variable = args[2]
-    
-        if re.match(r'\d', arg1):
-            #arg1 = int(arg1)
-            arg1 = numToLambda(int(arg1))
+    else:
+        if len(args) > 1:
+            arg1 = args[1]
+            arg1str = args[1]
+            variable = args[2]
+        
+            if re.match(r'\d', arg1):
+                #arg1 = int(arg1)
+                arg1 = numToLambda(int(arg1))
     
     # make name integers:
     name = list(map(int, name))
