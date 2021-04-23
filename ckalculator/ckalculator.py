@@ -71,21 +71,7 @@ def main(configfile='default_setup.ini'):
                 #print('delta per note:', per_note)
                 #print('delta ck:', ck_deltatime)
 
-                if message[0] in (noteoff_id, noteon_id, pedal_id):
-                    
-                    #note ons:
-                    if message[0] == noteon_id:
-                        #per_note = 0
-                        ck_note_dur[message[1]] = ck_deltatime
-                        if message[2] > 0: 
-                            dif = delta_difference(ck_deltatime) # not getting real note duration, only dt between events.
-                            
-                            cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
-                                             ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
-                            
-                            cKalc._noteon_delta[message[1]] = per_note
-                            cKalc._noteon_velocity[message[1]] = message[2]
-                            
+                if message[0] in (noteoff_id, noteon_id, pedal_id):                          
                             
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
@@ -127,6 +113,19 @@ def main(configfile='default_setup.ini'):
                     if message[0] == pedal_id and message[1] == pedal_sostenuto:
                         per_note = 0
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=0, ck_deltatime=0, articulation=articulation)
+                    
+                    #note ons:
+                    if message[0] == noteon_id:
+                        #per_note = 0
+                        ck_note_dur[message[1]] = ck_deltatime
+                        if message[2] > 0: 
+                            dif = delta_difference(ck_deltatime) # not getting real note duration, only dt between events.
+                            
+                            cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
+                                             ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
+                            
+                            cKalc._noteon_delta[message[1]] = per_note
+                            cKalc._noteon_velocity[message[1]] = message[2]                    
 
 
     except KeyboardInterrupt:
