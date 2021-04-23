@@ -401,6 +401,7 @@ def parseCKfunc(function_string, functionnum):
     body = re.findall(r'[\(\)].*', function_string)[0]
     args = re.findall(r'\w+', body)
     func = args[0]
+    arg = {}
     
     if func in ['storeCollect', 'sendRule']:
         arg = {}
