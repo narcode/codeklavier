@@ -62,6 +62,8 @@ def miditest(configfile='default_setup.ini'):
     try:
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('noteon_id')
+        pedal = config['midi'].getint('pedal_id')
+        sostenuto = config['midi'].getint('pedal_midi_id')
     except KeyError:
         raise LookupError('Missing key information in the config file.')
 
@@ -78,7 +80,7 @@ def miditest(configfile='default_setup.ini'):
 
             if msg:
                 message, deltatime = msg
-                if message[0] == 144:
+                if message[0] in [device_id, pedal, sostenuto]:
                     print('deltatime: ', deltatime, 'msg: ', message)
 
             time.sleep(0.01)
