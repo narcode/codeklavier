@@ -230,12 +230,14 @@ class CkAR(object):
     def dropAll(self):
         """ Drop all trees in the colletion """
         self._parallelTrees = []
+        self.console('collected trees: ' + str(self._parallelTrees))
         self.console('collected trees: ' + str(self._parallelTrees), True)
         
     def collectAll(self):
         """ Collect all trees in the colletion """
         for tree in range(1, self.trees+1):
             self._parallelTrees.append(tree)
+        self.console('collected trees: ' + str(self._parallelTrees))
         self.console('collected trees: ' + str(self._parallelTrees), True) 
         
     def transform(self):
