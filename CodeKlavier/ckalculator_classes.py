@@ -106,10 +106,17 @@ class Ckalculator(object):
                     function_printAR = (',').join(midiToNotes(f['name']))
                     
                 if len(f['body']) > 1:
-                    function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
-                        f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
-                    self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
-                    console_output += function_printAR + newLine
+                    if f['body']['func'] == 'storeCollect':
+                        function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                            f['body']['arg1'] + ' ' + f['body']['arg2'] + f['body']['arg3'] + ' ' + ')'
+                    elif f['body']['func'] == 'sendRule':
+                        function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                            f['body']['arg1'] + ' ' + f['body']['arg2'] + ' ' + ')'                    
+                    else:
+                        function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                            f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
+                        self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
+                        console_output += function_printAR + newLine
                 else:
                     function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ')'
                     self.mapscheme.formatAndSend(function_print, display=4, syntax_color='function:')
