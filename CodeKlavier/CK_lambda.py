@@ -402,7 +402,12 @@ def parseCKfunc(function_string, functionnum):
     args = re.findall(r'\w+', body)
     func = args[0]
     
-    if len(args) > 1:
+    if func in ['storeCollect', 'sendRule']:
+        arg = {}
+        for x in range(len(args)):
+            arg[x] = args[x]    
+    
+    elif len(args) > 1:
         arg1 = args[1]
         arg1str = args[1]
         variable = args[2]
