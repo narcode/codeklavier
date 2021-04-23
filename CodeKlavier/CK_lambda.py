@@ -427,11 +427,15 @@ def parseCKfunc(function_string, functionnum):
     parsed['body'] = {}
     parsed['body']['func'] = func
     
-    if len(args) > 1:
-        parsed['body']['arg1'] = arg1
-        parsed['body']['var'] = variable
-    
-        parsed['body']['arg1str'] = arg1str
+    if (len(arg) > 0):
+        arg.pop(0)
+        for x in range(1, len(arg)+1):
+            parsed['body']['arg'+str(x)] = arg[x]
+    else:        
+        if len(args) > 1:
+            parsed['body']['arg1'] = arg1
+            parsed['body']['var'] = variable
+            parsed['body']['arg1str'] = arg1str
    
     return parsed 
     
