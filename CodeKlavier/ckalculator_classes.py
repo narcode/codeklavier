@@ -322,9 +322,9 @@ class Ckalculator(object):
                                                     num = trampolineRecursiveCounter(self._numberStack[0])
                                                     function_to_call(num)
                                                     
-                                            else if function_to_call.__name__ in ['sendRule']: 
-                                                arg = f['body']['arg1'];
-                                                function_to_call()
+                                            elif function_to_call.__name__ in ['sendRule']: 
+                                                arg = f['body']['arg1']
+                                                function_to_call(arg)
                                             else:
                                                 function_to_call()
                                             #clear the rule stack
