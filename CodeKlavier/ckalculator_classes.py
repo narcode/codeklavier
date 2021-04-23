@@ -321,6 +321,10 @@ class Ckalculator(object):
                                                 if len(self._numberStack) > 0:
                                                     num = trampolineRecursiveCounter(self._numberStack[0])
                                                     function_to_call(num)
+                                                    
+                                            else if function_to_call.__name__ in ['sendRule']: 
+                                                arg = f['body']['arg1'];
+                                                function_to_call()
                                             else:
                                                 function_to_call()
                                             #clear the rule stack
