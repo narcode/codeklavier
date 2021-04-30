@@ -10,13 +10,6 @@ Zaterdag 29 Mei \
 Tijd: 14.30, 16.30, 19.00, 21.15 \
 Wordt ook gestreamed, link te volgen
 
-Zaterdag 5 Juni \
-[De Kwekerij, Hilversum](https://www.dekwekerijhilversum.nl/) \
-Tijd: ntb 
-
-Zondag 6 Juni \
-[Pinetum, Hilversum](https://pinetum.nl/) \
-14.30, 15.30, 16.30
 
 ## Motivatie
 Wij zijn geïnspireerd om te werken met L-systemen vanwege de oorsprong vanuit de natuur en organische groei - die nemen wij graag mee naar de muzikale en programmeerparadigma's. Hoewel L-systemen al op grote schaal worden gebruikt in generatieve kunst en muziek, zijn we geïnteresseerd in het onderzoeken hoe dit eenvoudige model kan worden gebruikt door de piano-codeur om complexe structuren uit te drukken en hoe de regels ervan de pianistische improvisatie zullen vormen. Bovendien werd het werk van Lindenmayer hier in Nederland aan de Universiteit van Utrecht in 1968 gedaan en voortbouwend daarop door middel van artistieke verkenning, maakt Nederland een bijzondere locatie voor de presentatie van dit project.
