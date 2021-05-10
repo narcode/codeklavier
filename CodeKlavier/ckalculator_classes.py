@@ -286,7 +286,7 @@ class Ckalculator(object):
                 
                 if abs(last_events_new) < 0.02: #deltatime tolerance between the notes of a chord ### send to .ini
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
-                                                                                last_events, 
+                                                                                self._lastdeltas, 
                                                                                 0.02, False)) 
                 
                     chordfound, chord = chordparse.get()
