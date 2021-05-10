@@ -362,7 +362,7 @@ class CkAR(object):
             for t in self._parallelTrees:
                 trees = []
                 if t == len(self._parallelTrees):
-                    trees.append(str(t) + '@' + str(tree) + '@' + axiom + '.' + rule)
+                    trees.append(str(t) + '@' + axiom + '.' + rule)
                     tree = ('#').join(trees)                
                 self.run_in_loop(self.makeJson('lsys', str(tree)))
         
