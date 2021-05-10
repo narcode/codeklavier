@@ -265,7 +265,7 @@ class Ckalculator(object):
                     
                 if len(self.ar._deltaMemory) > max_notes:
                     self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
-                    self.ar.averageSpeed(True)
+                    self.ar.averageSpeed(False)
                     
                 if self.ar._memorize:
                     self.ar._memory.append(note)
@@ -275,19 +275,19 @@ class Ckalculator(object):
         ########### CK function definition ############
                 self._lastnotes.append(note) # coming from note on messages in main()
                 self._lastdeltas.append(self._noteon_delta[note])
-                if len(self._lastnotes) > 2:
-                    self._lastnotes = self._lastnotes[-2:]
-                if len(self._lastdeltas) > 2:
-                    self._lastdeltas = self._lastdeltas[-2:]
+                if len(self._lastnotes) > 4:
+                    self._lastnotes = self._lastnotes[-4:]
+                if len(self._lastdeltas) > 4:
+                    self._lastdeltas = self._lastdeltas[-4:]
                     
-                last_events = sorted(self._noteon_delta.values())[-2:]
-                last_events_new = np.diff(sorted(self._lastdeltas))
+                last_events = sorted(self._noteon_delta.values())[-4:]
+                last_events_new = np.diff(sorted(last_events), 3)
 
                 
-                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord ### send to .ini
+                if abs(last_events_new) < 0.03: #deltatime tolerance between the notes of a chord ### send to .ini
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
-                                                                                self._lastdeltas, 
-                                                                                0.03, True)) 
+                                                                                last_events, 
+                                                                                0.03, False)) 
                 
                     chordfound, chord = chordparse.get()
                     
@@ -337,7 +337,10 @@ class Ckalculator(object):
                                             self._ckar = []
                                             self._rules = []
                                             self._dynamics = []
-
+                
+                else:
+                    self.parser._chordmemory = []
+                    self.parser._deltamemory = []
                                                   
                         ########################
                 ########### lambda calculus  ###########

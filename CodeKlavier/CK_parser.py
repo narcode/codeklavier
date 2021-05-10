@@ -144,7 +144,7 @@ class CK_Parser(object):
         param float deltatolerance: the minimum deltatime tolerance to consider the 
         incoming notes a chord (i.e. simultanously played)
         """
-        
+
         for note in notes:
             if note not in self._chordmemory:
                 self._chordmemory.append(note)
@@ -177,6 +177,7 @@ class CK_Parser(object):
                 chord = self._chordmemory
                 self._chordmemory = []
                 self._deltamemory = []
+                print('detected!', chord)
                 return True, chord
             #else:
                 #chord = self._chordmemory
