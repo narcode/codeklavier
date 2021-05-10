@@ -355,8 +355,16 @@ class CkAR(object):
         
     def sendRuleAR(self, axiom, rule):
         """ send a LS rule via websocket, for piano functions"""
-        tree = self.currentTree()
-        self.run_in_loop(self.makeJson('lsys', str(tree) + '@' + axiom + '.' + rule))
+        if len(self._parallelTrees) == 0:
+            tree = self.currentTree()
+            self.run_in_loop(self.makeJson('lsys', str(tree) + '@' + axiom + '.' + rule))
+        else:
+            for t in self._parallelTrees:
+                trees = []
+                if t == len(self._parallelTrees):
+                    trees.append(str(t) + '@' + str(tree) + '@' + axiom + '.' + rule)
+                    tree = ('#').join(trees)                
+                self.run_in_loop(self.makeJson('lsys', str(tree)))
         
     def clearRule(self):
         """ clear the active L-sys rule gmemory"""
