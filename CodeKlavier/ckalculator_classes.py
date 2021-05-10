@@ -284,10 +284,10 @@ class Ckalculator(object):
                 last_events_new = np.diff(sorted(last_events), 3)
 
                 
-                if abs(last_events_new) < 0.03: #deltatime tolerance between the notes of a chord ### send to .ini
+                if abs(last_events_new) < 0.02: #deltatime tolerance between the notes of a chord ### send to .ini
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
                                                                                 last_events, 
-                                                                                0.03, False)) 
+                                                                                0.02, False)) 
                 
                     chordfound, chord = chordparse.get()
                     

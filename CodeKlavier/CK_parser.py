@@ -135,7 +135,7 @@ class CK_Parser(object):
         return False, None 
 
 
-    def parseChordTuple(self, notes=None, size=4, deltatimes=None, deltatolerance=0.03, debug=False):
+    def parseChordTuple(self, notes=None, size=4, deltatimes=None, deltatolerance=0.02, debug=False):
         """
         Parse notes than are played simultanously and store them in a list
         param int notes: The incoming MIDI notes as a tuple
