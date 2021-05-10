@@ -359,12 +359,12 @@ class CkAR(object):
             tree = self.currentTree()
             self.run_in_loop(self.makeJson('lsys', str(tree) + '@' + axiom + '.' + rule))
         else:
+            trees = []
             for t in self._parallelTrees:
-                trees = []
-                if t == len(self._parallelTrees):
-                    trees.append(str(t) + '@' + axiom + '.' + rule)
-                    tree = ('#').join(trees)                
-                self.run_in_loop(self.makeJson('lsys', str(tree)))
+                trees.append(str(t) + '@' + axiom + '.' + rule)
+                
+            tree = ('#').join(trees)                
+            self.run_in_loop(self.makeJson('lsys', str(tree)))
         
     def clearRule(self):
         """ clear the active L-sys rule gmemory"""
