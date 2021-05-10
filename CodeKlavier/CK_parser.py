@@ -179,10 +179,10 @@ class CK_Parser(object):
                 self._deltamemory = []
                 print('detected!', chord)
                 return True, chord
-            #else:
+            else:
                 #chord = self._chordmemory
-                #self._chordmemory = []
-                #self._deltamemory = []                
+                self._chordmemory = []
+                self._deltamemory = []                
             
         if debug:
             print('chordmem: ', self._chordmemory, 'deltamem', 
