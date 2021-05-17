@@ -626,32 +626,33 @@ class Mapping_Ckalculator:
 class Mapping_CKAR:
     """Mapping for the AR extension
     """
-    def __init__(self, config='default_setup.ini', debug=True):
+    def __init__(self, debug=False):
         
         if debug:
             print("## Using the AR mapping ##")
             
-        self._config = config
-        #self._config.read(config, encoding='utf8')
+        self._config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+        self._config.read(inifile, encoding='utf8')
         
         server = self._config['ar'].get('server')
         chan = self._config['ar'].get('channel')
         self.even = self._config['ar'].getint('transpositon_even')
         self.odd = self._config['ar'].getint('transposition_odd')
                 
-        if server != 'local':
+        if server not in ('local', 'keyboardsunite.com'):
             with urllib.request.urlopen(f'https://ar.codeklavier.space/master/channel?id={chan}') as u:
                 resp = json.load(u)
                 print(resp)  
                 self._wsUri = resp['websocketBaseURL']
+        elif server == 'local':
+            print('server:', server)    
+            host = socket.gethostbyname(socket.gethostname())
+            self._wsUri = {'host': host, 'port': '8081'}
+            print(self._wsUri)
         else:
-            print('server local deprecated like this. Please use channel: nl')    
-            #host = socket.gethostbyname(socket.gethostname())
-            #self._wsUri = {'host': host, 'port': '8081'}
-            #print(self._wsUri)
-            
-        #self.wsConnect()
-        #asyncio.run(self.cue())
+            print('server:', server)    
+            self._wsUri = {'host': server, 'port': '8081'}
+            print(self._wsUri)            
         
     async def cue(self):
         self._cue = asyncio.Queue()

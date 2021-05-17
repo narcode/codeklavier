@@ -21,12 +21,17 @@ class CkAR(object):
         self.loop = asyncio.get_event_loop()
         self.shapes = []
         self._shapes = {}
+        self.roots = [0,1,2,3,4]
+        self.root = 0
+        self._roots = {}
         self.shape = 0;
         self._deltaMemory = []
         self._velocityMemory = []
         self._memory = []
         self._memorize = False
         self._delayerRunning = False
+        self._erick = False
+        self._abraham = False
         
         self.receiveState()        
         
@@ -51,8 +56,11 @@ class CkAR(object):
         for tree in range(0, self.trees):
             self._shapes[str(tree+1)] = {}
             self._shapes[str(tree+1)]['shape'] = 1
+            self._roots[str(tree+1)] = {}
+            self._roots[str(tree+1)]['root'] = 1            
                 
         print('trees and shapes:', self._shapes)
+        print('roots', self._roots)
             
     
     def nextT(self):
@@ -179,6 +187,7 @@ class CkAR(object):
         self.trees = self.trees + 1
         self.navigate = self.trees - 1
         self._shapes[str(self.trees)] = {'shape': 1}
+        self._roots[str(self.trees)] = {'root': 0}
         print('create new tree', 'total trees: ', self.trees)
         print('curent trees: ', self._shapes)
         self.run_in_loop(self.makeJson('view', str(self.trees) ))
@@ -199,8 +208,19 @@ class CkAR(object):
             self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')            
 
         print('drop:', self._parallelTrees)
-        self.console('collected trees: ' + str(self._parallelTrees))
+        self.console('collected trees: ' + str(self._parallelTrees), True)
         
+    def dropAll(self):
+        """ Drop all trees in the colletion """
+        self._parallelTrees = []
+        self.console('collected trees: ' + str(self._parallelTrees), True)
+        
+    def collectAll(self):
+        """ Collect all trees in the colletion """
+        for tree in range(1, self.trees+1):
+            self._parallelTrees.append(tree)
+        self.console('collected trees: ' + str(self._parallelTrees), True)        
+    
     def memoryToggle(self, debug=True):
         """ store the notes into the memory bank"""
         self._memorize = not self._memorize        
@@ -210,14 +230,17 @@ class CkAR(object):
         
     def collect(self, tree=1):
         """Collect a LS-tree for parallel processing"""
-        if tree not in self._parallelTrees and tree <= self.trees:
-            self._parallelTrees.append(tree)
-        else: 
-            #print('\ntree not created yet or already collected, TREE:', tree, '\n')
-            self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')
+        if not isinstance(tree, int):
+            return
+        else:
+            if tree not in self._parallelTrees and tree <= self.trees:
+                self._parallelTrees.append(tree)
+            else: 
+                #print('\ntree not created yet or already collected, TREE:', tree, '\n')
+                self.console('\ntree not created yet or already collected, TREE:' + str(tree) + '\n')
             
         print('collected trees:', self._parallelTrees)
-        self.console('collected trees: ' + str(self._parallelTrees))
+        self.console('collected trees: ' + str(self._parallelTrees), True)
         
         
     def storeCollect(self, collection=[]):
@@ -226,7 +249,8 @@ class CkAR(object):
         """
         self._parallelTrees = collection
         print('collection loaded', collection)
-        
+        self.console('collected trees: ' + str(self._parallelTrees), True)
+      
     def dropAll(self):
         """ Drop all trees in the colletion """
         self._parallelTrees = []
@@ -241,8 +265,15 @@ class CkAR(object):
         self.console('collected trees: ' + str(self._parallelTrees), True) 
         
     def transform(self):
-        "Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"
-        x = random.uniform(-1, 1)
+        """Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"""
+        #x = random.uniform(-1, 1)
+        current = self.currentTree()
+        self.root = self._roots[str(current)]['root']
+        print('root b4:',self.root)
+        self.root += 1
+        print('root after:',self.root)
+        new_root = self.roots[self.root%len(self.roots)]         
+        
         y = random.uniform(0, 1)
         z = random.uniform(-1, 1)
         
@@ -251,19 +282,30 @@ class CkAR(object):
         r3 = random.uniform(0, 360)
         
         if len(self._parallelTrees) == 0:
+            self._roots[str(current)]['root'] = new_root
+            self.console('root shift: ' + str(new_root))   
             
-            current = self.currentTree()
-            self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
+            self.run_in_loop(self.makeJsonTransform(str(current), [new_root, z, y], [r1,r2,r3]))
             print('transform tree', current)
             
         else:
-            
             for t in self._parallelTrees:
-                self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y], [r1,r2,r3]))
+                if str(t) in self._roots:
+                    self._roots[str(t)]['root'] = new_root
+                    self.run_in_loop(self.makeJsonTransform(str(t), [new_root, 0, y], [r1,r2,r3]))
        
+    def erick(self):
+        """ open a bracket """
+        self._erick = True
+        print('erick called')
+        
+    def abraham(self):
+        """ open a bracket """
+        self._abraham = True
+        print('abraham called')
        
     def mappingTransposition(self, notes, debug=False):
-        """ apply a transpotion offset based on the current view """
+        """ apply a tranposition offset based on the current view """
         if debug:
             print('notes: ', notes)
         if self.currentTree()%2 == 0:

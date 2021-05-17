@@ -1,4 +1,4 @@
-import rtmidi
+#import rtmidi
 import numpy as np
 from functools import reduce
 from Motifs import motifs, motifs_mel, conditional_motifs, conditional_motifs_mel, mini_motifs, \
@@ -14,6 +14,7 @@ class Motippets(object):
     def __init__(self, mapping, noteonid, noteoffid, mid_low, mid_hi, playedlimit=1):
         """The method to initialise the class and prepare the class variables.
         """
+            
         self.mapscheme = mapping
         self.noteonid = noteonid
         self.noteoffid = noteoffid
@@ -23,6 +24,10 @@ class Motippets(object):
 
         self._pianosections = [mid_low, mid_hi]
         self._playedlimt = playedlimit
+
+        #for websocket:
+        self._noteon_velocity = {}
+        self._lastioi = []
 
         #motifs:
         self._allMotifs = {}
@@ -394,7 +399,8 @@ class Motippets(object):
                                                                                 note)
                         if self._motifsCount[motif]['played'] and self._motifsCount[motif]['count'] < self._playedlimt:
                             self.mapscheme.snippets(motif)
-                            self._motifsCount[motif]['count'] += 1
+                            self._motifsCount[motif]['count'] += 1           
+            
 
             ### CONDITIONALS SECTION
             elif section in self._allConditional_motifs:

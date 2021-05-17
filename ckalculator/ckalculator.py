@@ -8,6 +8,7 @@ import configparser
 import CK_configWriter
 from CK_Setup import Setup, BColors
 from ckalculator_classes import Ckalculator
+from CK_config import inifile
 
 # increase recursion limit:
 sys.setrecursionlimit(3000)
@@ -16,30 +17,31 @@ ckalculator_listens = True
 ck_deltatime_mem = []
 ck_note_dur = {}
 
-def main(configfile='default_setup.ini'):
+config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
+config.read(inifile, encoding='utf8')
+
+# TODO: optimize...
+try:
+    myPort = config['midi'].getint('port')
+    noteon_id = config['midi'].getint('noteon_id')
+    noteoff_id = config['midi'].getint('noteoff_id')
+    pedal_id = config['midi'].getint('pedal_id')
+    pedal_sostenuto = config['midi'].getint('pedal_midi_sostenuto')
+    staccato = config['articulation'].getfloat('staccato')
+    sostenuto = config['articulation'].getfloat('sostenuto')
+    chord = config['articulation'].getfloat('chord')
+except KeyError:
+    raise LookupError('Missing midi and articulation information in the config file.')
+
+if (myPort == None or noteon_id == None):
+    raise LookupError('Missing port and device id information in the config file.')
+
+
+def main(configfile='default_setup.ini', ar_hook=False):
     """
     start the CKalculator
     """
     global ckalculator_listens, ck_deltatime_mem
-
-    config = configparser.ConfigParser(delimiters=(':'), comment_prefixes=('#'))
-    config.read(configfile, encoding='utf8')
-
-    # TODO: optimize...
-    try:
-        myPort = config['midi'].getint('port')
-        noteon_id = config['midi'].getint('noteon_id')
-        noteoff_id = config['midi'].getint('noteoff_id')
-        pedal_id = config['midi'].getint('pedal_id')
-        pedal_sostenuto = config['midi'].getint('pedal_midi_sostenuto')
-        staccato = config['articulation'].getfloat('staccato')
-        sostenuto = config['articulation'].getfloat('sostenuto')
-        chord = config['articulation'].getfloat('chord')
-    except KeyError:
-        raise LookupError('Missing midi and articulation information in the config file.')
-
-    if (myPort == None or noteon_id == None):
-        raise LookupError('Missing port and device id information in the config file.')
 
     codeK = Setup()
     codeK.print_welcome(27)
@@ -52,8 +54,8 @@ def main(configfile='default_setup.ini'):
 
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, config=config, print_functions=True, ar_hook=True)
-    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, config=config, ar_hook=True)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=ar_hook)
+    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=ar_hook)
 
     per_note = 0
     ck_deltatime = 0
@@ -72,13 +74,14 @@ def main(configfile='default_setup.ini'):
                 #print('delta ck:', ck_deltatime)
 
                 if message[0] in (noteoff_id, noteon_id, pedal_id):                          
-                            
                     #note offs:
                     if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
                         midinote = message[1]
                         #print(ck_note_dur)
                         if midinote in ck_note_dur:
                             note_duration = ck_deltatime - ck_note_dur.pop(midinote)
+                            #print(ck_deltatime)
+                            #print('dur:', note_duration)
 
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration,
                                          ck_deltatime=ck_deltatime, articulation=articulation)

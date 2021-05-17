@@ -1,6 +1,6 @@
 import configparser
-import getopt
-import sys
+#import getopt
+#import sys
 import time
 import numpy as np
 import ckonditionals
@@ -11,6 +11,7 @@ from CK_config import inifile
 from CK_Setup import Setup
 from Mapping import *
 from motippets_classes import Motippets
+from ckalculator_classes import Ckalculator
 from hello_classes import HelloWorld
 from Motifs import mini_motifs, mini_motifs_mel, conditional_motifs, conditional_motifs_mel, \
      conditional_results_motifs, conditional_results_motifs_mel
@@ -22,22 +23,28 @@ try:
     myPort = config['midi'].getint('port')
     noteon_id = config['midi'].getint('noteon_id')
     noteoff_id = config['midi'].getint('noteoff_id')
+    pedal_id = config['midi'].getint('pedal_id')
     toggle_note = config['Hello World'].getint('toggle')
     toggle_callback = config['Hello World'].get('toggle_callback')
     mid_low = config['Motippets register division'].getint('mid_low')
     mid_hi = config['Motippets register division'].getint('mid_hi')
     motifs_playedLimit = config['motif counter'].getint('playlimit')
+    staccato = config['articulation'].getfloat('staccato')
+    sostenuto = config['articulation'].getfloat('sostenuto')
+    chord = config['articulation'].getfloat('chord')    
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
-if (myPort == None or noteon_id == None):
-    raise LookupError('Missing key information in the config file.')
 
 # activesense compensation
 ck_deltatime_mem = {'all': [], 'low': [], 'mid': [], 'hi': []}
 ck_deltatime = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
 ck_deltadif = {'all': 0, 'low': 0, 'mid': 0, 'hi': 0}
 
+articulation = {'chord': chord, 'staccato': staccato, 'sostenuto': sostenuto}
+per_note = 0
+ck_deltatime_internal = 0
+ck_note_dur = {}
 #multiprocessing vars
 threads = {}
 #notecounter = 0
@@ -59,7 +66,8 @@ def main():
     global mapping, parameters, conditionalsRange, conditionals, \
            hello_world_on, ck_deltatime, \
            ck_deltatime_mem, codeK, mainMem, memLow, memMid, memHi, \
-           tremoloHi, tremoloLow, tremoloMid
+           tremoloHi, tremoloLow, tremoloMid, per_note, ck_note_dur, \
+           articulation, ck_deltadif, ck_deltatime_internal
     
     codeK = Setup()
     codeK.print_welcome(27)
@@ -98,6 +106,9 @@ def main():
     conditionalsRange = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     parameters = Motippets(mapping, noteon_id, noteoff_id, mid_low, mid_hi)
     
+    #websocket (now parses velocity and average spped)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=True)
+    
     try:
         while keep_main_alive:
             while hello_world_on:
@@ -108,15 +119,31 @@ def main():
     
                 if msg:
                     message, deltatime = msg
+                    per_note += deltatime
+                    ck_deltatime_internal += deltatime
+                    
                     for register in ck_deltatime:
                         ck_deltatime[register] += deltatime
     
-                    if message[0] != 254:
+                    if message[0] in (noteoff_id, noteon_id, pedal_id):
+       
+                        #note offs:
+                        if (message[0] == noteoff_id or (message[0] == noteon_id and message[2] == 0)):
+                            midinote = message[1]
+
+                            if midinote in ck_note_dur:
+                                note_duration = ck_deltatime_internal - ck_note_dur.pop(midinote)
+                                
+                            cKalc.parse_rt_values(msg, 'full', ck_deltatime_per_note=note_duration,
+                                                  ck_deltatime=ck_deltatime_internal, articulation=articulation, debug=False)     
     
                         if message[0] == noteon_id:
-                            if message[2] > 0 and message[0] == noteon_id:
+                            ck_note_dur[message[1]] = ck_deltatime['all']
+                                
+                            if message[2] > 0:
     
                                 ck_deltatime_mem['all'].append(ck_deltatime['all'])
+                                                                
                                 
                                 if message[1] <= mid_low:
                                     ck_deltatime_mem['low'].append(ck_deltatime['low'])
@@ -134,8 +161,11 @@ def main():
                                     if len(ck_deltatime_mem[register]) == 2:
                                         ck_deltadif[register] = ck_deltatime_mem[register][1] - ck_deltatime_mem[register][0]
                                     else:
-                                        ck_deltadif[register] = 0                               
-    
+                                        ck_deltadif[register] = 0   
+                                        
+                                #velocity for websocket:
+                                cKalc._noteon_delta[message[1]] = per_note
+                                cKalc._noteon_velocity[message[1]] = message[2]    
                                 
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')
@@ -306,6 +336,9 @@ def ck_loop(version='hello world'):
                     if message[0] != 254 and message[0] != 208:
                         if message[2] > 0: #only noteOn
                             if (message[0] == noteon_id):
+                                
+                                #store veolocities for websocket:
+                                mainMem._noteon_velocity[message[1]] = message[2]                            
 
                                 if message[1] == toggle_note:
                                     print('toggle version -> Motippets')
@@ -373,7 +406,10 @@ def ck_loop(version='hello world'):
                                         ck_deltadif[register] = ck_deltatime_mem[register][1] - ck_deltatime_mem[register][0]
                                     else:
                                         ck_deltadif[register] = 0
-    
+                                                                     
+                                #store veolocities for websocket:
+                                mainMem._noteon_velocity[message[1]] = message[2]      
+                                
                                 if message[1] == toggle_note:
                                     print('toggle version -> Hello World')
     

@@ -2,7 +2,7 @@
 
 import functools
 import array
-from inspect import signature
+#from inspect import signature
 import random
 import configparser
 import numpy as np
@@ -18,6 +18,7 @@ from ar_classes import CkAR
 from CK_lambda import *
 from CK_parser import *
 import numpy
+from inspect import signature
 
 class Ckalculator(object):
     """Ckalculator Class
@@ -137,17 +138,21 @@ class Ckalculator(object):
         
         message, deltatime = event
 
-        if (message[0] == self.pedal):
-            if message[2] > 90 and (')' in self._fullStack or self._temp == False):
+        if (message[0] == self.pedal or self.ar._erick or self.ar._abraham):
+            if ( message[2] > 90 and (')' in self._fullStack or self._temp == False) ) or self.ar._erick:
+                self.ar._erick = False
                 print('(')
+                self.ar.console('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
                 self._fullStack.append('(')
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] < 30 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif (message[2] < 30 and '(' in self._fullStack) or self.ar._abraham: #could also be: and self._temp = True
+                self.ar._abraham = False
                 print(')')
+                self.ar.console(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
                 self._fullStack.append(')')
@@ -250,13 +255,17 @@ class Ckalculator(object):
                 
                 note_on_vel = self._noteon_velocity[note]
                 self.ar._velocityMemory.append(note_on_vel)
-                
+                                    
                 self._lastioi.append(ck_deltatime)
                 if len(self._lastioi) > 2:
                     self._lastioi = self._lastioi[-2:]
                 
-                if np.diff(self._lastioi) > 0.03:    
-                    self.ar._deltaMemory.append(ck_deltatime)
+                if note > 95:
+                    print('diff: ', np.diff(self._lastioi))
+                    if np.diff(self._lastioi) > 4:
+                        self.ar._deltaMemory = [];
+                    if np.diff(self._lastioi) > 0.03:    
+                        self.ar._deltaMemory.append(ck_deltatime)
                 
                 max_notes = 10 #send to ini
                 if len(self.ar._velocityMemory) > max_notes:
@@ -328,7 +337,9 @@ class Ckalculator(object):
                                                 if len(self._numberStack) > 0:
                                                     num = trampolineRecursiveCounter(self._numberStack[0])
                                                     function_to_call(num)
-                                                    
+                                            elif function_to_call.__name__ in ['storeCollect']:
+                                                function_to_call([int(f['body']['arg1']), int(f['body']['arg2']),
+                                                                  int(f['body']['arg3'])])
                                             elif function_to_call.__name__ in ['sendRuleAR']: 
                                                 function_to_call(f['body']['arg1'], f['body']['arg2'])
                                             else:
@@ -348,24 +359,26 @@ class Ckalculator(object):
                 if note in self.ar.mappingTransposition(LambdaMapping.get('successor')):
 
                     if self._deltatime <= articulation['staccato']:
-                        self.storeDynamics(note)
-                        
+                        self.storeDynamics(note)                
                         self.successor(successor, sendToDisplay)
+                    if self._deltatime > articulation['staccato']:
+                        self.storeDynamics(note)                
+                        self.successor(successor, sendToDisplay)  
                     
-                    elif self._deltatime > articulation['staccato']: #this is either the func 'zero' or 'predecessor'
-                        
-                        if note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
+                #this is either the func 'zero' or 'predecessor'
+                elif note in [self.ar.mappingTransposition(LambdaMapping.get('successor')[0])]:
+                    
+                    if self._deltatime <= articulation['staccato']:
                             self.storeDynamics(note)
-                            
-                            if len(self._numberStack) == 0:
-                                self.predecessor(zero, sendToDisplay) # what kind of result is better?
-                            else:
-                                self.predecessor(predecessor, sendToDisplay)
-                                
-                        else: #zero + recursive counter:
-                            self.makeLS(sendToDisplay)                                  
-
-                        self._successorHead = []
+                            self.successor(successor, sendToDisplay) #only for fokker extension
+                            #if len(self._numberStack) == 0:
+                                #self.predecessor(zero, sendToDisplay) # what kind of result is better?
+                            #else:
+                                #self.predecessor(predecessor, sendToDisplay)  
+                    else: #zero + recursive counter:
+                            self.storeDynamics(note)
+                            self.successor(successor, sendToDisplay)                            
+                            #self.makeLS(sendToDisplay)                                  
                         
                 elif note in self.ar.mappingTransposition(LambdaMapping.get('zero')):
                     #self.storeDynamics(note)
@@ -582,6 +595,7 @@ class Ckalculator(object):
                 elif note in AR.get('transform'):
                     self.ar.transform()
                     
+                    
                 elif note in AR.get('shape'):
                     if self._deltatime <= articulation['staccato']:
                         if len(self.ar._parallelTrees) > 0:
@@ -600,6 +614,56 @@ class Ckalculator(object):
                     self._ckar = self.ar.clearRule()
                     self._rule_dynamics = self.ar.clearRule()
    
+    ######
+    
+    def parse_rt_values(self, event, section, ck_deltatime_per_note=0, ck_deltatime=0,
+                   articulation={'staccato': 0.1, 'sostenuto': 0.8, 'chord': 0.02}, debug=False):
+        """Parse the midi signal and process average speed and velocity for a websocket
+
+        :param tuple event: describes the midi event that was received
+        :param string section: the MIDI piano range (i.e. low register, mid or high)
+        :param float ck_deltatime_per_note: the note durations
+        param float ck_deltatime: the duration between notes
+        :param list articulation: array containg the threshold in deltatime values for articulation (i.e. staccato, sostenuto, etc.)
+        """   
+        
+        message, deltatime = event
+        
+        if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
+            note = message[1]
+            self._deltatime = ck_deltatime_per_note
+
+            if debug:
+                print(event)
+                
+            if section == 'full':     
+                
+                note_on_vel = self._noteon_velocity[note]
+                self.ar._velocityMemory.append(note_on_vel)
+                if debug:
+                    print(self._noteon_velocity)                
+                
+                self._lastioi.append(ck_deltatime)
+                if len(self._lastioi) > 2:
+                    self._lastioi = self._lastioi[-2:]
+                
+                if np.diff(self._lastioi) > 0.03:    
+                    self.ar._deltaMemory.append(ck_deltatime)
+                
+                max_notes = 10 #send to ini
+                if len(self.ar._velocityMemory) > max_notes:
+                    self.ar._velocityMemory = self.ar._velocityMemory[-max_notes:]
+                    self.ar.averageVelocity()
+                    
+                if len(self.ar._deltaMemory) > max_notes:
+                    self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
+                    self.ar.averageSpeed()
+                    
+                if self.ar._memorize:
+                    self.ar._memory.append(note)
+                    if len(self.ar._memory) > max_notes:
+                        self.ar._memory = self.ar._memory[-max_notes:]     
+    
     ######
                 
     def successor(self, function, sendToDisplay=True):
@@ -904,7 +968,11 @@ class Ckalculator(object):
             :param function function: the function to evaluate with the given args
             :param function args: the function arguments to pass
             """
-            return function(args[0], args[1])
+            func_args = len(signature(function).parameters)
+            if func_args == 1:
+                return function(args[0])
+            elif func_args == 2:
+                return function(args[0], args[1])
         
         if type(stack) is not list:
             print('This function expects a List/Stack')
@@ -1278,8 +1346,7 @@ class Ckalculator(object):
                 if self._deltatime <= articulation['staccato']:
                     self._functionBody['arg1'] = 'drop'          
                 elif self._deltatime > articulation['staccato']:
-                    self._functionBody['arg1'] = 'collect'
-                
+                    self._functionBody['arg1'] = 'collect'                
                     
         elif len(self._functionBody) == 1:
             if debug:
@@ -1337,7 +1404,7 @@ class Ckalculator(object):
                     self._functionBody['arg1'] = 'prev'  
                     
             elif note in AR.get('generation'):
-                self._functionBody['arg1'] = 'memoryToggle'
+                self._functionBody['arg1'] = 'memoryToggle'                
             
             self._arg1Counter += 1
             
