@@ -9,6 +9,10 @@ permalink: /arquatic
 Codeklavier’s ‘ARquatic Live’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater world unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic Live’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance or tune in at home for a streamed experience, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
 
 ## Shows
+Sunday June 6
+"ARquatic Live" at the [Pinetum, Hilversum](https://pinetum.nl/)
+Times: 14.00, 15.00, 16.00
+
 Sunday June 13th \
 ["More than just Music" Festival at Toets des Tijds, Amsterdam](toetsdestijds.com) and in combination with other performances. \
 Times: 14.30, 16.30, 19.00 and 21.00 \
