@@ -576,29 +576,8 @@ class Mapping_Ckalculator:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57140, True)
-        ##self._websocketUri = '192.168.178.235:8080/ckar_serve'
 
-        #with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
-            #self._wsUri = json.loads(u.read(100))
-            #print(self._wsUri)
-
-##### websockets for AR ####
-    #async def websocketConnect(self, json):
-        #async with websockets.connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve') as websocket:
-            #await websocket.send(json)
-        
-    #def websocketSend(self, json):
-        #try:
-            #asyncio.get_event_loop().run_until_complete(self.websocketConnect(json))
-        #except:
-            #print('websocket offline!')
-            #pass
-        
-    
-    #def prepareJson(self, wstype='lsys', payload=''):
-        #return json.dumps({'type': wstype, 'payload': payload})
-            
-    
+##### websockets for AR ####    
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
         """format and prepare a string for sending it over UDP socket
@@ -656,13 +635,15 @@ class Mapping_CKAR:
         self._config.read(inifile, encoding='utf8')
         
         server = self._config['ar'].get('server')
+        chan = self._config['ar'].get('channel')
         self.even = self._config['ar'].getint('transpositon_even')
         self.odd = self._config['ar'].getint('transposition_odd')
                 
         if server not in ('local', 'keyboardsunite.com'):
-            with urllib.request.urlopen('https://keyboardsunite.com/ckar/get.php') as u:
-                self._wsUri = json.loads(u.read(100))
-                print(self._wsUri)  
+            with urllib.request.urlopen(f'https://ar.codeklavier.space/master/channel?id={chan}') as u:
+                resp = json.load(u)
+                print(resp)  
+                self._wsUri = resp['websocketBaseURL']
         elif server == 'local':
             print('server:', server)    
             host = socket.gethostbyname(socket.gethostname())
@@ -672,10 +653,6 @@ class Mapping_CKAR:
             print('server:', server)    
             self._wsUri = {'host': server, 'port': '8081'}
             print(self._wsUri)            
-            
-            
-        #self.wsConnect()
-        #asyncio.run(self.cue())
         
     async def cue(self):
         self._cue = asyncio.Queue()
@@ -683,7 +660,7 @@ class Mapping_CKAR:
         
     
     async def websocketloop(self, json):
-        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+        async with connect(self._wsUri + 'ckar_serve', 
                                  ping_interval=3, ping_timeout=None) as websocket:
             #while True:
             await websocket.send(json)
@@ -692,7 +669,7 @@ class Mapping_CKAR:
     async def connect(self):
         try:
             
-            self._conn = connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+            self._conn = connect(self._wsUri+'ckar_serve', 
                                  ping_interval=3, ping_timeout=10)
             self.websocket = await self._conn.__aenter__()
             print('web socket connected!')
@@ -719,7 +696,7 @@ class Mapping_CKAR:
     
     
     async def receive_new(self):
-        async with connect('ws://'+self._wsUri['host']+':'+self._wsUri['port']+'/ckar_serve', 
+        async with connect(self._wsUri+'ckar_serve', 
                                  ping_interval=3, ping_timeout=None) as websocket:
             async for msg in websocket:
                 return json.loads(msg)

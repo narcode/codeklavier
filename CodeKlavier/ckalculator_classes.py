@@ -27,11 +27,11 @@ class Ckalculator(object):
     TODO: _fullStack is not used yet but added for the future. Evaluate the decision and either implement or deprecate
     """
     
-    def __init__(self, noteonid, noteoffid, pedal_id, debug=False, print_functions=False, ar_hook=False):
+    def __init__(self, noteonid, noteoffid, pedal_id, config='default_setup.ini', debug=False, print_functions=False, ar_hook=False):
         """The method to initialise the class and prepare the class variables.
         """
         if ar_hook:
-            self.ar = CkAR()
+            self.ar = CkAR(config)
                     
         self.mapscheme = Mapping_Ckalculator(True, False)
         self.note_on = noteonid
@@ -110,6 +110,9 @@ class Ckalculator(object):
                     if f['body']['func'] == 'storeCollect':
                         function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                             f['body']['arg1'] + ' ' + f['body']['arg2'] + f['body']['arg3'] + ' ' + ')'
+                    elif f['body']['func'] == 'sendRuleAR':
+                        function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
+                            f['body']['arg1'] + ' ' + f['body']['arg2'] + ' ' + ')'                    
                     else:
                         function_print = (',').join(midiToNotes(f['name'])) + ' -> (' + f['body']['func'] + ' ' + \
                             f['body']['arg1str'] + ' ' + f['body']['var'] + ')'
@@ -271,7 +274,7 @@ class Ckalculator(object):
                     
                 if len(self.ar._deltaMemory) > max_notes:
                     self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
-                    self.ar.averageSpeed(True)
+                    self.ar.averageSpeed(False)
                     
                 if self.ar._memorize:
                     self.ar._memory.append(note)
@@ -281,19 +284,19 @@ class Ckalculator(object):
         ########### CK function definition ############
                 self._lastnotes.append(note) # coming from note on messages in main()
                 self._lastdeltas.append(self._noteon_delta[note])
-                if len(self._lastnotes) > 2:
-                    self._lastnotes = self._lastnotes[-2:]
-                if len(self._lastdeltas) > 2:
-                    self._lastdeltas = self._lastdeltas[-2:]
+                if len(self._lastnotes) > 4:
+                    self._lastnotes = self._lastnotes[-4:]
+                if len(self._lastdeltas) > 4:
+                    self._lastdeltas = self._lastdeltas[-4:]
                     
-                last_events = sorted(self._noteon_delta.values())[-2:]
-                last_events_new = np.diff(sorted(self._lastdeltas))
+                last_events = sorted(self._noteon_delta.values())[-4:]
+                last_events_new = np.diff(sorted(last_events), 3)
 
-                
-                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord ### send to .ini
+                print('chord detection diff: ', abs(last_events_new))
+                if abs(last_events_new) < 0.025: #deltatime tolerance between the notes of a chord ### send to .ini
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
                                                                                 self._lastdeltas, 
-                                                                                0.03, True)) 
+                                                                                0.025, True)) 
                 
                     chordfound, chord = chordparse.get()
                     
@@ -337,13 +340,18 @@ class Ckalculator(object):
                                             elif function_to_call.__name__ in ['storeCollect']:
                                                 function_to_call([int(f['body']['arg1']), int(f['body']['arg2']),
                                                                   int(f['body']['arg3'])])
+                                            elif function_to_call.__name__ in ['sendRuleAR']: 
+                                                function_to_call(f['body']['arg1'], f['body']['arg2'])
                                             else:
                                                 function_to_call()
                                             #clear the rule stack
                                             self._ckar = []
                                             self._rules = []
                                             self._dynamics = []
-
+                
+                else:
+                    self.parser._chordmemory = []
+                    self.parser._deltamemory = []
                                                   
                         ########################
                 ########### lambda calculus  ###########

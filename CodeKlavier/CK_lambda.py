@@ -403,10 +403,10 @@ def parseCKfunc(function_string, functionnum):
     func = args[0]
     arg = {}
     
-    if func == 'storeCollect':
+    if func in ['storeCollect', 'sendRuleAR']:
         arg = {}
         for x in range(len(args)):
-            arg[x] = args[x]
+            arg[x] = args[x]    
     
     else:
         if len(args) > 1:
@@ -436,7 +436,6 @@ def parseCKfunc(function_string, functionnum):
         if len(args) > 1:
             parsed['body']['arg1'] = arg1
             parsed['body']['var'] = variable
-        
             parsed['body']['arg1str'] = arg1str
    
     return parsed 

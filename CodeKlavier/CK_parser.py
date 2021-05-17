@@ -135,7 +135,7 @@ class CK_Parser(object):
         return False, None 
 
 
-    def parseChordTuple(self, notes=None, size=4, deltatimes=None, deltatolerance=0.03, debug=False):
+    def parseChordTuple(self, notes=None, size=4, deltatimes=None, deltatolerance=0.02, debug=False):
         """
         Parse notes than are played simultanously and store them in a list
         param int notes: The incoming MIDI notes as a tuple
@@ -144,7 +144,7 @@ class CK_Parser(object):
         param float deltatolerance: the minimum deltatime tolerance to consider the 
         incoming notes a chord (i.e. simultanously played)
         """
-        
+
         for note in notes:
             if note not in self._chordmemory:
                 self._chordmemory.append(note)
@@ -177,6 +177,7 @@ class CK_Parser(object):
                 chord = self._chordmemory
                 self._chordmemory = []
                 self._deltamemory = []
+                print('detected!', chord)
                 return True, chord
             #else:
                 #chord = self._chordmemory

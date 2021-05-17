@@ -13,9 +13,9 @@ import time
 class CkAR(object):
     """Main class for the AR extension"""
     
-    def __init__(self):
+    def __init__(self, config='default_setup.ini'):
         self.trees = 1
-        self.mapping = Mapping_CKAR()
+        self.mapping = Mapping_CKAR(config=config)
         self.navigate = 0
         self._parallelTrees = []
         self.loop = asyncio.get_event_loop()
@@ -250,7 +250,19 @@ class CkAR(object):
         self._parallelTrees = collection
         print('collection loaded', collection)
         self.console('collected trees: ' + str(self._parallelTrees), True)
-       
+      
+    def dropAll(self):
+        """ Drop all trees in the colletion """
+        self._parallelTrees = []
+        self.console('collected trees: ' + str(self._parallelTrees))
+        self.console('collected trees: ' + str(self._parallelTrees), True)
+        
+    def collectAll(self):
+        """ Collect all trees in the colletion """
+        for tree in range(1, self.trees+1):
+            self._parallelTrees.append(tree)
+        self.console('collected trees: ' + str(self._parallelTrees))
+        self.console('collected trees: ' + str(self._parallelTrees), True) 
         
     def transform(self):
         """Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"""
@@ -382,6 +394,19 @@ class CkAR(object):
     def sendRule(self, string):
         """ send a LS rule via websocket"""
         self.run_in_loop(self.makeJson('lsys', string)) 
+        
+    def sendRuleAR(self, axiom, rule):
+        """ send a LS rule via websocket, for piano functions"""
+        if len(self._parallelTrees) == 0:
+            tree = self.currentTree()
+            self.run_in_loop(self.makeJson('lsys', str(tree) + '@' + axiom + '.' + rule))
+        else:
+            trees = []
+            for t in self._parallelTrees:
+                trees.append(str(t) + '@' + axiom + '.' + rule)
+                
+            tree = ('#').join(trees)                
+            self.run_in_loop(self.makeJson('lsys', str(tree)))
         
     def clearRule(self):
         """ clear the active L-sys rule gmemory"""
