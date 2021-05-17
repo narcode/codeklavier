@@ -10,13 +10,17 @@ permalink: /arquaticnl
 ## Shows
 Zondag 6 Juni \
 ARquatic Live in het [Pinetum, Hilversum](https://pinetum.nl/) \
-Tijd: 14.00, 15.00, 16.00
+Tijd: 14.00, 15.00, 16.00 \
 Reservering is verplicht. Klik [hier](https://forms.gle/1mtK5oPnPk34KYtC9) om het formulier in te vullen 
 
 Zondag 13 Juni \
 ["Meer dan Muziek" Festival in Toets des Tijds, Amsterdam](www.toetsdestijds.nl) \
 Tijd: 14.30, 16.30, 19.00, 21.15 \
 Wordt ook gestreamed, link te volgen
+
+## Download de app
+
+De ARquatic app is te downloaden [hier voor apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) en [hier voor android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US)
 
 
 ## Motivatie
@@ -31,5 +35,10 @@ De L-systeemengine is het tweede element en zet de symbolen om in formele gramma
 
 Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens toegepast op de visuals ontworpen door Patrick Borgeat en weergegeven in Unity. Dit is de laatste stap van het technologische proces en levert de AR-visuals op die je tijdens de show ervaart via de ARquatic app.
 
+### Sponsors
+
+Met dank aan het Stimulerings Fonds NL en onze angel sponsor voor het mogelijk maken van de CodeKlavier project.
+
+Met dank aan het Fonds Podium kunsten Balkonscenes Fonds voor het mogelijk maken van de optredens in Juni 2021.
 
 
