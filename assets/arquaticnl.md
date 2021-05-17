@@ -5,7 +5,7 @@
 
 ## Shows
 
-Zaterdag 29 Mei \
+Zondag 13 Juni \
 ["Meer dan Muziek" Festival in Toets des Tijds, Amsterdam](www.toetsdestijds.nl) \
 Tijd: 14.30, 16.30, 19.00, 21.15 \
 Wordt ook gestreamed, link te volgen
