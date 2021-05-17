@@ -1,3 +1,7 @@
+---
+permalink: /arquaticnl
+---
+
 # ARquatic
 
 ## Over ARquatic
