@@ -11,6 +11,7 @@ permalink: /arquaticnl
 Zondag 6 Juni \
 ARquatic Live in het [Pinetum, Hilversum](https://pinetum.nl/) \
 Tijd: 14.00, 15.00, 16.00
+Reservering is verplicht. Klik [hier](https://forms.gle/1mtK5oPnPk34KYtC9) om het formulier in te vullen 
 
 Zondag 13 Juni \
 ["Meer dan Muziek" Festival in Toets des Tijds, Amsterdam](www.toetsdestijds.nl) \
