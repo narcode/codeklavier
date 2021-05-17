@@ -292,7 +292,7 @@ class Ckalculator(object):
                 last_events = sorted(self._noteon_delta.values())[-4:]
                 last_events_new = np.diff(sorted(last_events), 3)
 
-                print('chord detection diff: ', abs(last_events_new))
+                #print('chord detection diff: ', abs(last_events_new))
                 if abs(last_events_new) < 0.025: #deltatime tolerance between the notes of a chord ### send to .ini
                     chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
                                                                                 self._lastdeltas, 

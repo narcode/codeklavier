@@ -15,7 +15,7 @@ class CkAR(object):
     
     def __init__(self, config='default_setup.ini'):
         self.trees = 1
-        self.mapping = Mapping_CKAR(config=config)
+        self.mapping = Mapping_CKAR()
         self.navigate = 0
         self._parallelTrees = []
         self.loop = asyncio.get_event_loop()
