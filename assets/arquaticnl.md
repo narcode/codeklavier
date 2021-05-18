@@ -20,8 +20,7 @@ Wordt ook gestreamed, link te volgen
 
 ## Download de app
 
-De ARquatic app is te downloaden [hier voor apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) en [hier voor android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US)
-
+De ARquatic app is binnenkort te downloaden [hier voor apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) en [hier voor android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). Wij raden u aan om de app vlak voor het optreden te installeren in verbrand met eventueele updates. Om de app te kunnen gebruiken heeft een Apple iphone SE/6S of later nodig of een Android 8.1 of later. 
 
 ## Motivatie
 Wij zijn geïnspireerd om te werken met L-systemen vanwege de oorsprong vanuit de natuur en organische groei - die nemen wij graag mee naar de muzikale en programmeerparadigma's. Hoewel L-systemen al op grote schaal worden gebruikt in generatieve kunst en muziek, zijn we geïnteresseerd in het onderzoeken hoe dit eenvoudige model kan worden gebruikt door de piano-codeur om complexe structuren uit te drukken en hoe de regels ervan de pianistische improvisatie zullen vormen. Bovendien werd het werk van Lindenmayer hier in Nederland aan de Universiteit van Utrecht in 1968 gedaan en voortbouwend daarop door middel van artistieke verkenning, maakt Nederland een bijzondere locatie voor de presentatie van dit project.
