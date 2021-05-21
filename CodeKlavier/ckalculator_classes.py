@@ -305,53 +305,9 @@ class Ckalculator(object):
                         
                         if chordfound:
                             for f in self.ckFunc():
-                                with Pool(len(self.ckFunc())) as pool:
-                                    result = pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
-                                    #print('process result for ' + f['ref'], result.get())
-                                    if result.get():
-                                        
-                                        try:
-                                            function_to_call = getattr(self, f['body']['func'])
-                                            func_exists = (True, 'ckalc')
-                                        except AttributeError:
-                                            #raise NotImplementedError("Class `{}` does not implement `{}`".
-                                                                      #format(self.__class__.__name__, 
-                                                                             #function_to_call))
-                                            try:
-                                                function_to_call = getattr(self.ar, f['body']['func'])
-                                                func_exists = (True, 'ar')
-                                                
-                                            except AttributeError:    
-                                                func_exists = (False, '')
-                                                print('function not implemented for now... ')
-                                        
-                                        if func_exists[0]:
-                                            if func_exists[1] == 'ckalc':
-                                                if function_to_call.__name__ not in ['successor', 'predecessor']:
-                                                    function_to_call(False, sendToDisplay)
-                                        
-                                                    if f['body']['arg1'].__name__ == 'succ1':
-                                                        self.append_successor(f['body']['arg1'])
-                                                        self.zeroPlusRec(False, True)
-                                                        #self._successorHead = []
-                                                        
-                                            if func_exists[1] == 'ar':
-                                                if function_to_call.__name__ in ['collect', 'drop']:
-                                                    if len(self._numberStack) > 0:
-                                                        num = trampolineRecursiveCounter(self._numberStack[0])
-                                                        function_to_call(num)
-                                                elif function_to_call.__name__ in ['storeCollect']:
-                                                    function_to_call([int(f['body']['arg1']), int(f['body']['arg2']),
-                                                                      int(f['body']['arg3'])])
-                                                elif function_to_call.__name__ in ['sendRuleAR']: 
-                                                    function_to_call(f['body']['arg1'], f['body']['arg2'])
-                                                else:
-                                                    function_to_call()
-                                                #clear the rule stack
-                                                self._ckar = []
-                                                self._rules = []
-                                                self._dynamics = []
-                      
+                                result = self._pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
+                                #print('process result for ' + f['ref'], result.get())
+                                self._pool.apply_async(self.parallelFunctionExec, (result, f))
                                                                               
                         ########################
                 ########### lambda calculus  ###########
@@ -664,7 +620,56 @@ class Ckalculator(object):
                     if len(self.ar._memory) > max_notes:
                         self.ar._memory = self.ar._memory[-max_notes:]     
     
-    ######
+    ###### parallelism 
+    
+    def parallelFunctionExec(self, result=None, f=None):       
+        if result.get():
+            try:
+                function_to_call = getattr(self, f['body']['func'])
+                func_exists = (True, 'ckalc')
+            except AttributeError:
+                #raise NotImplementedError("Class `{}` does not implement `{}`".
+                                          #format(self.__class__.__name__, 
+                                                 #function_to_call))
+                try:
+                    function_to_call = getattr(self.ar, f['body']['func'])
+                    func_exists = (True, 'ar')
+                    
+                except AttributeError:    
+                    func_exists = (False, '')
+                    print('function not implemented for now... ')
+            
+            if func_exists[0]:
+                if func_exists[1] == 'ckalc':
+                    if function_to_call.__name__ not in ['successor', 'predecessor']:
+                        function_to_call(False, sendToDisplay)
+            
+                        if f['body']['arg1'].__name__ == 'succ1':
+                            self.append_successor(f['body']['arg1'])
+                            self.zeroPlusRec(False, True)
+                            #self._successorHead = []
+                            
+                if func_exists[1] == 'ar':
+                    if function_to_call.__name__ in ['collect', 'drop']:
+                        if len(self._numberStack) > 0:
+                            num = trampolineRecursiveCounter(self._numberStack[0])
+                            function_to_call(num)
+                    elif function_to_call.__name__ in ['storeCollect']:
+                        function_to_call([int(f['body']['arg1']), int(f['body']['arg2']),
+                                          int(f['body']['arg3'])])
+                    elif function_to_call.__name__ in ['sendRuleAR']: 
+                        function_to_call(f['body']['arg1'], f['body']['arg2'])
+                    else:
+                        function_to_call()
+                    #clear the rule stack
+                    self._ckar = []
+                    self._rules = []
+                    self._dynamics = []    
+        
+    
+    
+    
+    ####### lambda calc
                 
     def successor(self, function, sendToDisplay=True):
         """

@@ -210,11 +210,7 @@ class CkAR(object):
 
         print('drop:', self._parallelTrees)
         self.console('collected trees: ' + str(self._parallelTrees), True)
-        
-    def dropAll(self):
-        """ Drop all trees in the colletion """
-        self._parallelTrees = []
-        self.console('collected trees: ' + str(self._parallelTrees), True)
+    
         
     def collectAll(self):
         """ Collect all trees in the colletion """
@@ -253,7 +249,7 @@ class CkAR(object):
         self.console('collected trees: ' + str(self._parallelTrees), True)
       
     def dropAll(self):
-        """ Drop all trees in the colletion """
+        """ Drop all trees in the collection """
         self._parallelTrees = []
         self.console('collected trees: ' + str(self._parallelTrees))
         self.console('collected trees: ' + str(self._parallelTrees), True)

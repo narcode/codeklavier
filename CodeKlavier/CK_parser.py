@@ -213,7 +213,6 @@ class CK_Parser(object):
             compare = False
             
         return self.compareChordRecursive(basechord, chord, compare)
-    
 
 
 # handy functions
