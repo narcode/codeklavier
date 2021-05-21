@@ -10,8 +10,8 @@ Codeklavier’s ‘ARquatic Live’ is an audio and Augmented Reality experience
 
 ## Shows
 Sunday June 6
-"ARquatic Live" at the [Pinetum Blijdenstein, Hilversum](https://pinetum.nl/)
-Times: 14.00, 15.00, 16.00
+"ARquatic Live" at the [Pinetum Blijdenstein, Hilversum](https://pinetum.nl/) \
+Times: 14.00, 15.00, 16.00 \
 Click [here](https://docs.google.com/forms/d/e/1FAIpQLSeAYk1hxl8dgQnCNXU6J_PYcoqnBeAUuDKNK2jzGA3xLDZ22w/viewform) to make your reservation
 
 Sunday June 13th \
