@@ -3,7 +3,6 @@
 import getopt
 import time
 import sys
-import rtmidi
 import configparser
 import CK_configWriter
 from CK_Setup import Setup, BColors
@@ -37,7 +36,7 @@ if (myPort == None or noteon_id == None):
     raise LookupError('Missing port and device id information in the config file.')
 
 
-def main(configfile='default_setup.ini', ar_hook=False):
+def main(configfile='default_setup.ini', ar_hook=(False, False)):
     """
     start the CKalculator
     """
@@ -48,14 +47,14 @@ def main(configfile='default_setup.ini', ar_hook=False):
     codeK.open_port(myPort)
 
     codeK.print_lines(20, 1)
-    print("Prototype loaded: Ckalculator AR extension 0.3")
+    print("Prototype loaded: Ckalculator with AR hook 0.3")
     print("CodeKlavier is ready and LISTENING.")
     codeK.print_lines(20, 1)
 
     print("\nPress Control-C to exit.\n")       
     
-    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=ar_hook)
-    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=ar_hook)
+    cKalc = Ckalculator(noteon_id, noteoff_id, pedal_id, print_functions=True, ar_hook=(ar_hook, True))
+    cKost = Ckalculator(noteon_id, noteoff_id, pedal_id, ar_hook=(ar_hook, False))
 
     per_note = 0
     ck_deltatime = 0
@@ -66,12 +65,9 @@ def main(configfile='default_setup.ini', ar_hook=False):
             msg = codeK.get_message()
 
             if msg:
-                #print(msg)
                 message, deltatime = msg
                 per_note += deltatime
                 ck_deltatime += deltatime
-                #print('delta per note:', per_note)
-                #print('delta ck:', ck_deltatime)
 
                 if message[0] in (noteoff_id, noteon_id, pedal_id):                          
                     #note offs:
@@ -81,7 +77,7 @@ def main(configfile='default_setup.ini', ar_hook=False):
                         if midinote in ck_note_dur:
                             note_duration = ck_deltatime - ck_note_dur.pop(midinote)
                             #print(ck_deltatime)
-                            #print('dur:', note_duration)
+                            #print('dur:', note_duration)                     
 
                         cKalc.parse_midi(msg, 'full', ck_deltatime_per_note=note_duration,
                                          ck_deltatime=ck_deltatime, articulation=articulation)
@@ -127,10 +123,18 @@ def main(configfile='default_setup.ini', ar_hook=False):
                             cKost.parse_midi(msg, 'ostinatos', ck_deltatime_per_note=per_note, 
                                              ck_deltatime=dif, articulation=articulation, sendToDisplay=False)       
                             
+                                
+                            #print('\n*************')
+                            #print('note', message[1])
+                            #print('deltatime ck:', ck_deltatime)
+                            #print(cKalc._noteon_delta)
+                            #print('\n*************')   
+                            
                             cKalc._noteon_delta[message[1]] = per_note
-                            cKalc._noteon_velocity[message[1]] = message[2]                    
+                            cKalc._noteon_velocity[message[1]] = message[2]   
 
-
+            time.sleep(0.01)
+            
     except KeyboardInterrupt:
         print('')
     finally:

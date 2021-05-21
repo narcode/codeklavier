@@ -626,7 +626,7 @@ class Mapping_Ckalculator:
 class Mapping_CKAR:
     """Mapping for the AR extension
     """
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, connect=False):
         
         if debug:
             print("## Using the AR mapping ##")
@@ -638,22 +638,23 @@ class Mapping_CKAR:
         chan = self._config['ar'].get('channel')
         self.even = self._config['ar'].getint('transpositon_even')
         self.odd = self._config['ar'].getint('transposition_odd')
-                
-        if server not in ('local', 'keyboardsunite.com'):
-            with urllib.request.urlopen(f'https://ar.codeklavier.space/master/channel?id={chan}') as u:
-                resp = json.load(u)
-                print(resp)  
-                self._wsUri = resp['websocketBaseURL']
-        elif server == 'local':
-            print('server:', server)    
-            host = socket.gethostbyname(socket.gethostname())
-            self._wsUri = {'host': host, 'port': '8081'}
-            print(self._wsUri)
-        else:
-            print('server:', server)    
-            self._wsUri = {'host': server, 'port': '8081'}
-            print(self._wsUri)            
-        
+         
+        if connect:       
+            if server not in ('local', 'keyboardsunite.com'):
+                with urllib.request.urlopen(f'https://ar.codeklavier.space/master/channel?id={chan}') as u:
+                    resp = json.load(u)
+                    print(resp)  
+                    self._wsUri = resp['websocketBaseURL']
+            elif server == 'local':
+                print('server:', server)    
+                host = socket.gethostbyname(socket.gethostname())
+                self._wsUri = {'host': host, 'port': '8081'}
+                print(self._wsUri)
+            else:
+                print('server:', server)    
+                self._wsUri = {'host': server, 'port': '8081'}
+                print(self._wsUri)            
+            
     async def cue(self):
         self._cue = asyncio.Queue()
         await asyncio.create_task(self.websocketloop())

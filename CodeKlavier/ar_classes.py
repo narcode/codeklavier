@@ -13,9 +13,9 @@ import time
 class CkAR(object):
     """Main class for the AR extension"""
     
-    def __init__(self, config='default_setup.ini'):
+    def __init__(self, config='default_setup.ini', connect=False):
         self.trees = 1
-        self.mapping = Mapping_CKAR()
+        self.mapping = Mapping_CKAR(False, connect)
         self.navigate = 0
         self._parallelTrees = []
         self.loop = asyncio.get_event_loop()
@@ -33,7 +33,8 @@ class CkAR(object):
         self._erick = False
         self._abraham = False
         
-        self.receiveState()        
+        if connect:
+            self.receiveState()        
         
     def run_in_loop(self, json):
         try:
@@ -269,11 +270,9 @@ class CkAR(object):
         #x = random.uniform(-1, 1)
         current = self.currentTree()
         self.root = self._roots[str(current)]['root']
-        print('root b4:',self.root)
         self.root += 1
-        print('root after:',self.root)
-        new_root = self.roots[self.root%len(self.roots)]         
         
+        x = self.roots[self.root%len(self.roots)]         
         y = random.uniform(0, 1)
         z = random.uniform(-1, 1)
         
@@ -282,17 +281,17 @@ class CkAR(object):
         r3 = random.uniform(0, 360)
         
         if len(self._parallelTrees) == 0:
-            self._roots[str(current)]['root'] = new_root
-            self.console('root shift: ' + str(new_root))   
+            self._roots[str(current)]['root'] = x
+            self.console('transform: ' + str(x))   
             
-            self.run_in_loop(self.makeJsonTransform(str(current), [new_root, z, y], [r1,r2,r3]))
+            self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
             print('transform tree', current)
             
         else:
             for t in self._parallelTrees:
                 if str(t) in self._roots:
-                    self._roots[str(t)]['root'] = new_root
-                    self.run_in_loop(self.makeJsonTransform(str(t), [new_root, 0, y], [r1,r2,r3]))
+                    self._roots[str(t)]['root'] = x
+                    self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y], [r1,r2,r3]))
        
     def erick(self):
         """ open a bracket """
@@ -300,7 +299,7 @@ class CkAR(object):
         print('erick called')
         
     def abraham(self):
-        """ open a bracket """
+        """ close a bracket """
         self._abraham = True
         print('abraham called')
        

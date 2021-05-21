@@ -145,39 +145,42 @@ class CK_Parser(object):
         incoming notes a chord (i.e. simultanously played)
         """
 
-        for note in notes:
-            if note not in self._chordmemory:
-                self._chordmemory.append(note)
-        for deltatime in deltatimes:
-            if deltatime not in self._deltamemory:
-                self._deltamemory.append(deltatime)
+        #for note in notes:
+            #if note not in self._chordmemory:
+                #self._chordmemory.append(note)
+        #for deltatime in deltatimes:
+            #if deltatime not in self._deltamemory:
+                #self._deltamemory.append(deltatime)
         
-        if len(self._chordmemory) > size:
-            self._chordmemory = self._chordmemory[1:]
-        if len(self._deltamemory) > size:
-            self._deltamemory = self._deltamemory[1:]
-        
-        if debug:
-            print('b chordmem: ', self._chordmemory, 'b deltamem', self._deltamemory)
+        #if len(self._chordmemory) > size:
+            #self._chordmemory = self._chordmemory[1:]
+        #if len(self._deltamemory) > size:
+            #self._deltamemory = self._deltamemory[1:]
             
-        if len(self._chordmemory) > 1:
-            average = np.average(np.diff(self._deltamemory))
-            if debug:
-                print('average:', average)
-            if average > deltatolerance:
-                self._chordmemory.pop(0)
-                self._deltamemory.pop(0)
-                #self._chordmemory = []
-                #self._deltamemory = []
+        self._chordmemory = notes 
+        self._deltamemory = deltatimes
+        #if debug:
+            #print('b chordmem: ', self._chordmemory, 'b deltamem', self._deltamemory)
+            
+        #if len(self._chordmemory) > 1:
+            #average = np.average(np.diff(sorted(self._deltamemory)))
+            #if debug:
+                #print('average:', average)
+            #if average > deltatolerance:
+                #self._chordmemory.pop(0)
+                #self._deltamemory.pop(0)
+                ##self._chordmemory = []
+                ##self._deltamemory = []
 
         if len(self._chordmemory) == size:
-            average = np.average(np.diff(self._deltamemory))
+            average = np.average(np.diff(sorted(self._deltamemory)))
             
             if average < deltatolerance:
                 chord = self._chordmemory
                 self._chordmemory = []
                 self._deltamemory = []
-                print('detected!', chord)
+                if debug:
+                    print('detected!', chord)
                 return True, chord
             #else:
                 #chord = self._chordmemory
@@ -186,7 +189,7 @@ class CK_Parser(object):
             
         if debug:
             print('chordmem: ', self._chordmemory, 'deltamem', 
-                  self._deltamemory)
+                  self._deltamemory, 'average', average)
 
 
         return False, None 
