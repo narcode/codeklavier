@@ -10,8 +10,9 @@ Codeklavier’s ‘ARquatic Live’ is an audio and Augmented Reality experience
 
 ## Shows
 Sunday June 6
-"ARquatic Live" at the [Pinetum, Hilversum](https://pinetum.nl/)
+"ARquatic Live" at the [Pinetum Blijdenstein, Hilversum](https://pinetum.nl/)
 Times: 14.00, 15.00, 16.00
+Click [here](https://docs.google.com/forms/d/e/1FAIpQLSeAYk1hxl8dgQnCNXU6J_PYcoqnBeAUuDKNK2jzGA3xLDZ22w/viewform) to make your reservation
 
 Sunday June 13th \
 ["More than just Music" Festival at Toets des Tijds, Amsterdam](toetsdestijds.com) and in combination with other performances. \
@@ -36,4 +37,9 @@ These structures, along with some characteristics of the piano playing, are then
 [Anne Veinberg](https://anneveinberg.com/) - piano/CodeKlavier creator \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - laptop audio/CodeKlavier creator \
 [Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals
+
+## Sponsors
+CodeKlavier was made possible by the Creative Industries Fonds NL and out angel sponsor
+
+The performances in June are made possible the Fonds Podium Kunsten Balkonscenes grant
 
