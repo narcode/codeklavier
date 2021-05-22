@@ -64,8 +64,7 @@ class Ckalculator(object):
         self._developedOstinato = (False,0)
         self._functionBody = {}
         self._numForFunctionBody = None
-        self._pool = ThreadPool(processes=8)
-        self._poolFuncs = ThreadPool(processes=8)
+        self._pool = ThreadPool(processes=None)
         self._memories = {}
         self.parser = CK_Parser()
         self._noteon_delta = {}
@@ -308,7 +307,7 @@ class Ckalculator(object):
                             for f in self.ckFunc():
                                 result = self._pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
                                 #print('process result for ' + f['ref'], result.get())
-                                self._poolFuncs.apply_async(self.parallelFunctionExec, (result, f))
+                                self._pool.apply_async(self.parallelFunctionExec, (result, f))
                                                                               
                         ########################
                 ########### lambda calculus  ###########
