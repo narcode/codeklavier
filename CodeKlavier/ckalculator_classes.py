@@ -8,6 +8,7 @@ import configparser
 import numpy as np
 #from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
+import concurrent.futures
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -299,14 +300,17 @@ class Ckalculator(object):
                                                                                                0.02, True)) 
                     
                         self._lastdeltas = []
-                        self._lastnotes = []                        
+                        self._lastnotes = []                      
                 
                         chordfound, chord = chordparse.get()
                         
                         if chordfound:
                             for f in self.ckFunc():
-                                result = self._pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
-                                #print('process result for ' + f['ref'], result.get())
+                                with concurrent.futures.ThreadPoolExecutor() as executor:
+                                    future = executor.submit(self.parser.compareChords, f['name'], chord)
+                                    result = future.result()                              
+                                #result = self._pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
+                                #print('process result for ' + f['ref'], result)
                                 self._pool.apply_async(self.parallelFunctionExec, (result, f))
                                                                               
                         ########################
@@ -623,7 +627,7 @@ class Ckalculator(object):
     ###### parallelism 
     
     def parallelFunctionExec(self, result=None, f=None):       
-        if result.get():
+        if result:
             try:
                 function_to_call = getattr(self, f['body']['func'])
                 func_exists = (True, 'ckalc')

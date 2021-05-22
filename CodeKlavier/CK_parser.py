@@ -195,24 +195,17 @@ class CK_Parser(object):
         return False, None 
     
     
-    def compareChordRecursive(self, basechord, chord, compare=None, debug=False):
+    def compareChords(self, basechord, chord, compare=None, debug=False):
         """
         compare 2 arrays representing chords.
         """
         if debug:
             print('base:', basechord, 'chord:', chord)
 
-        if len(chord) == 0 or compare == False:
-            return compare
-        
-        note = chord.pop()
-        if note in basechord:
-            basechord.pop(basechord.index(note))
-            compare = True
+        if np.sum(chord) == np.sum(basechord):
+            return True 
         else:
-            compare = False
-            
-        return self.compareChordRecursive(basechord, chord, compare)
+            return False
 
 
 # handy functions
