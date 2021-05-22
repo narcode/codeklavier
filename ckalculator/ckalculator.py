@@ -66,6 +66,7 @@ def main(configfile='default_setup.ini', ar_hook=(False, False)):
 
             if msg:
                 message, deltatime = msg
+                #print(msg)
                 per_note += deltatime
                 ck_deltatime += deltatime
 
