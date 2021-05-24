@@ -283,6 +283,7 @@ class CkAR(object):
                 if str(t) in self._roots:
                     self._roots[str(t)]['root'] = x
                     self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y], [r1,r2,r3]))
+                    self.console('transform tree', current)
        
     def erick(self):
         """ open a bracket """
