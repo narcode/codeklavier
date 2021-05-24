@@ -276,14 +276,14 @@ class CkAR(object):
         
         if len(self._parallelTrees) == 0:
             self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
-            self.console('transform tree', current)
+            self.console('transform tree')
             
         else:
             for t in self._parallelTrees:
                 if str(t) in self._roots:
                     self._roots[str(t)]['root'] = x
                     self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y], [r1,r2,r3]))
-                    self.console('transform tree', current)
+                    self.console('transform tree')
        
     def erick(self):
         """ open a bracket """
