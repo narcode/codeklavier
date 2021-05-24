@@ -262,13 +262,11 @@ class CkAR(object):
         self.console('collected trees: ' + str(self._parallelTrees), True) 
         
     def transform(self):
-        """Send a transorm X Y mesage to the AR engine. X and Y are generated randomly"""
+        """Send a transorm X Y message to the AR engine. X and Y are generated randomly"""
         #x = random.uniform(-1, 1)
         current = self.currentTree()
-        self.root = self._roots[str(current)]['root']
-        self.root += 1
         
-        x = self.roots[self.root%len(self.roots)]         
+        x = random.uniform(-1, 1)         
         y = random.uniform(-1, 1)
         z = random.uniform(-1, 1)
         
