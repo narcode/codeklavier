@@ -269,7 +269,7 @@ class CkAR(object):
         self.root += 1
         
         x = self.roots[self.root%len(self.roots)]         
-        y = random.uniform(0, 1)
+        y = random.uniform(-1, 1)
         z = random.uniform(-1, 1)
         
         r1 = random.uniform(0, 360)
