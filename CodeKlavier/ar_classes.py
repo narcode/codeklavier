@@ -275,11 +275,8 @@ class CkAR(object):
         r3 = random.uniform(0, 360)
         
         if len(self._parallelTrees) == 0:
-            self._roots[str(current)]['root'] = x
-            self.console('transform: ' + str(x))   
-            
             self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
-            print('transform tree', current)
+            self.console('transform tree', current)
             
         else:
             for t in self._parallelTrees:
