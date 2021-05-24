@@ -40,7 +40,6 @@ Anne Veinberg - piano \
 Felipe Ignacio Noriega - laptop audio \
 Patrick Borgeat - visuals \
 
-
 ## Sponsors
 
 Met dank aan het Stimulerings Fonds NL en onze angel sponsor voor het mogelijk maken van de CodeKlavier project.
