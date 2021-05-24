@@ -262,7 +262,7 @@ class Ckalculator(object):
                 if len(self._lastioi) > 2:
                     self._lastioi = self._lastioi[-2:]
                 
-                if note > 95:
+                if note > 40: # send to ini
                     if np.diff(self._lastioi) > 4:
                         self.ar._deltaMemory = [];
                     if np.diff(self._lastioi) > 0.03:    
