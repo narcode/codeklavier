@@ -266,23 +266,29 @@ class CkAR(object):
         #x = random.uniform(-1, 1)
         current = self.currentTree()
         
-        x = random.uniform(-1, 1)         
-        y = random.uniform(-1, 1)
-        z = random.uniform(-1, 1)
-        
-        r1 = random.uniform(0, 360)
-        r2 = random.uniform(0, 360)
-        r3 = random.uniform(0, 360)
-        
         if len(self._parallelTrees) == 0:
+            x = random.uniform(-1, 1)         
+            y = random.uniform(-1, 1)
+            z = random.uniform(-1, 1)
+            
+            r1 = random.uniform(0, 360)
+            r2 = random.uniform(0, 360)
+            r3 = random.uniform(0, 360)            
             self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
             self.console('transform tree')
             
         else:
             for t in self._parallelTrees:
                 if str(t) in self._roots:
+                    x = random.uniform(-1, 1)         
+                    y = random.uniform(-1, 1)
+                    z = random.uniform(-1, 1)
+                    
+                    r1 = random.uniform(0, 360)
+                    r2 = random.uniform(0, 360)
+                    r3 = random.uniform(0, 360)                    
                     self._roots[str(t)]['root'] = x
-                    self.run_in_loop(self.makeJsonTransform(str(t), [x, 0, y], [r1,r2,r3]))
+                    self.run_in_loop(self.makeJsonTransform(str(t), [x, z, y], [r1,r2,r3]))
                     self.console('transform tree')
        
     def erick(self):
