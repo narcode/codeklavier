@@ -5,7 +5,11 @@ permalink: /arquaticnl
 # ARquatic
 
 ## Over ARquatic
-'ARquatic Live' van de CodeKlavier is een audio en Augmented Reality (AR) ervaring waarin de muziek voorziet in het DNA van het onderwater wereld die zich ontvouwt voor je ogen. Vol met speculatieve en fantasie structuren die kunstmatig zijn opgebouwd uit regels van het Lindenmayer-systeem, legt ‘ARquatic Live’ ongebruikelijke, op het water geïnspireerde objecten over alledaagse omgevingen heen. Of je nu een live optreden bijwoont of thuis afstemt voor een gestreamde ervaring, de nevenschikking van de omgeving met de AR-objecten zal de verbeelding stimuleren door de contrasterende schoonheid van de natuurlijke en de onnatuurlijke wereld te benadrukken.
+‘ARquatic Live’ van de CodeKlavier biedt het publiek een totaalervaring van geluid, muziek en Augmented Reality (AR). Live muziek levert de input voor een fantasierijke, associatieve onderwaterwereld, die zich voor uw ogen ontvouwt op uw smartphone. 
+
+De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer-systemen, die o.a. gebruikt worden om 3D-bomen te creëren.
+‘ARquatic Live’ legt ongebruikelijke objecten, geïnspireerd op water, over alledaagse omgevingen. De combinatie van de natuurlijke verschijning van de wereld om ons heen met de artificiële schoonheid van de AR-objecten stimuleert de verbeelding: zowel live als online.
+
 
 ## Shows
 Zondag 6 Juni \
@@ -21,10 +25,12 @@ Kaartjes [bestellen](www.toetsdestijds.com)
 
 ## Download de app
 
-De ARquatic app is binnenkort te downloaden [hier voor apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) en [hier voor android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). Wij raden u aan om de app vlak voor het optreden te installeren in verbrand met eventueele updates. Om de app te kunnen gebruiken heeft u een Apple iphone SE/6S of later nodig of een Android 8.1 of later. 
+De ARquatic app is binnenkort te downloaden: klik [hier voor Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) en [hier voor Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). Wij raden aan om de app pas vlak voor het optreden te installeren. U heeft een Apple iPhone SE/6S (of later) of een Android 8.1 (of later) nodig.
 
 ## Motivatie
-Wij zijn geïnspireerd om te werken met L-systemen vanwege de oorsprong vanuit de natuur en organische groei - die nemen wij graag mee naar de muzikale en programmeerparadigma's. Hoewel L-systemen al op grote schaal worden gebruikt in generatieve kunst en muziek, zijn we geïnteresseerd in het onderzoeken hoe dit eenvoudige model kan worden gebruikt door de piano-codeur om complexe structuren uit te drukken en hoe de regels ervan de pianistische improvisatie zullen vormen. Bovendien werd het werk van Lindenmayer hier in Nederland aan de Universiteit van Utrecht in 1968 gedaan en voortbouwend daarop door middel van artistieke verkenning, maakt Nederland een bijzondere locatie voor de presentatie van dit project.
+L-systemen vinden hun oorsprong in de natuur en organische groei: daarom nemen wij deze principes in onze muzikale- en programmeerparadigma’s. L-systemen worden op dit moment al op grote schaal gebruikt in generatieve kunst en muziek. 
+Wij onderzoeken hoe de piano-codeur met dit model complexe structuren tot uitdrukking kan brengen en hoe de regels van het systeem de improvisatie aan de piano beïnvloeden. Lindenmayer werkte aan de Universiteit van Utrecht in 1968. Daarom is Nederland een bijzondere locatie voor de presentatie van dit project.
+
 
 ## Over de technologie
 De ‘ARquatic Live’-ervaring wordt mogelijk gemaakt door drie belangrijke technologische elementen en fasen; CodeKlavier, Lindemayer en Unity. 
@@ -38,7 +44,7 @@ Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens
 ## Credits
 Anne Veinberg - piano \
 Felipe Ignacio Noriega - laptop audio \
-Patrick Borgeat - visuals \
+Patrick Borgeat - visuals 
 
 ## Sponsors
 
