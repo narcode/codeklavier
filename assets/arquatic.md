@@ -11,14 +11,13 @@ Codeklavier’s ‘ARquatic Live’ is an audio and Augmented Reality experience
 ## Shows
 Sunday June 6
 "ARquatic Live" at the [Pinetum Blijdenstein, Hilversum](https://pinetum.nl/) \
-Times: 14.00, 15.00, 16.00 \
+Times: 14.00, 15.00& 16.00 \
 Click [here](https://docs.google.com/forms/d/e/1FAIpQLSeAYk1hxl8dgQnCNXU6J_PYcoqnBeAUuDKNK2jzGA3xLDZ22w/viewform) to make your reservation
 
 Sunday June 13th \
 ["More than just Music" Festival at Toets des Tijds, Amsterdam](toetsdestijds.com) and in combination with other performances. \
-Times: 14.30, 16.30, 19.00 and 21.00 \
-Also streamed online.
-
+Times: 17.00 & 20.00 
+Tickets available [here](https://toetsdestijds.com/2021/04/22/whats-on-my-desk/)
 
 ## Motivation
 Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interested in exploring how this simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation. Furthermore, Lindenmayer’s work was done here at the University of Utrecht in 1968 and building upon it through artistic exploration, makes the Netherlands a particularly special location for the presentation of this project.
