@@ -16,7 +16,7 @@ Click [here](https://docs.google.com/forms/d/e/1FAIpQLSeAYk1hxl8dgQnCNXU6J_PYcoq
 
 Sunday June 13th \
 ["More than just Music" Festival at Toets des Tijds, Amsterdam](toetsdestijds.com) and in combination with other performances. \
-Times: 17.00 & 20.00 
+Times: 17.00 & 20.00 \
 Tickets available [here](https://toetsdestijds.com/2021/04/22/whats-on-my-desk/)
 
 ## Motivation
