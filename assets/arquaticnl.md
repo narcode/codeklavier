@@ -1,8 +1,7 @@
 ---
 permalink: /arquaticnl
 ---
-
-# ARquatic
+# ARquatic Live - A CodeKlavier Augmented Reality Experience
 
 ## Over ARquatic
 ‘ARquatic Live’ van de CodeKlavier biedt het publiek een totaalervaring van geluid, muziek en Augmented Reality (AR). Live muziek levert de input voor een fantasierijke, associatieve onderwaterwereld, die zich voor uw ogen ontvouwt op uw smartphone. 
