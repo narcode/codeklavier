@@ -116,8 +116,7 @@ class CkAR(object):
             self.console('shape: ' + str(new_shape))          
 
         else:
-            if self._parallelTrees == 1:
-                self.shape = self._shapes[str(self._parallelTrees[0])]['shape'] - 1
+            self.shape = self._shapes[str(self._parallelTrees[0])]['shape'] - 1
                 
             self.shape -= 1
             
@@ -149,8 +148,7 @@ class CkAR(object):
             self.console('shape: ' + str(new_shape))          
 
         else:
-            if self._parallelTrees == 1:
-                self.shape = self._shapes[str(self._parallelTrees[0])]['shape'] - 1
+            self.shape = self._shapes[str(self._parallelTrees[0])]['shape'] - 1
                 
             self.shape += 1
             
