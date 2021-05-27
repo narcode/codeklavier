@@ -1,6 +1,9 @@
 ---
 permalink: /arquaticnl
 ---
+
+For [English](https://codeklavier.space/arquatic)🇬🇧
+
 # ARquatic Live - A CodeKlavier Augmented Reality Experience
 
 ## Over ARquatic
