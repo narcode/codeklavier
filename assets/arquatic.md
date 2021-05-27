@@ -2,7 +2,8 @@
 permalink: /arquatic
 ---
 
-Voor[Nederlands](https://codeklavier.space/arquaticnl)🇳🇱
+Voor [Nederlands](https://codeklavier.space/arquaticnl)🇳🇱
+
 # ARquatic Live - A CodeKlavier Augmented Reality Experience
 
 ## Concept
