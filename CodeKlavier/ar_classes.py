@@ -46,7 +46,7 @@ class CkAR(object):
         try:
             state = self.loop.run_until_complete(self.mapping.receive_new())
             print(state)
-            self.trees = state['numTrees']
+            self.trees = 7
 
             for shape in range(0, state['numShapes']):
                 self.shapes.append(shape+1)
@@ -242,7 +242,8 @@ class CkAR(object):
         """ store a collection of trees for future calling. Meant to be used inside 
         a function definition
         """
-        self._parallelTrees = collection
+        sanitized = [x for x in collection if x <= self.trees]
+        self._parallelTrees = sanitized
         print('collection loaded', collection)
         self.console('collected trees: ' + str(self._parallelTrees), True)
       
