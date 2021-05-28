@@ -64,6 +64,8 @@ def miditest(configfile='default_setup.ini'):
     try:
         myPort = config['midi'].getint('port')
         device_id = config['midi'].getint('noteon_id')
+        pedal = config['midi'].getint('pedal_id')
+        sostenuto = config['midi'].getint('pedal_midi_id')
     except KeyError:
         raise LookupError('Missing key information in the config file.')
 
@@ -80,7 +82,8 @@ def miditest(configfile='default_setup.ini'):
 
             if msg:
                 message, deltatime = msg
-                print('deltatime: ', deltatime, 'msg: ', message)
+                if message[0] in [device_id, pedal, sostenuto]:
+                    print('deltatime: ', deltatime, 'msg: ', message)
 
             time.sleep(0.01)
 
@@ -124,7 +127,7 @@ if __name__ == '__main__':
     play = None
 
     try:
-        options, args = getopt.getopt(sys.argv[1:],'h:p:i:rt:',['help', 'play=', 'ini=', 'rec', 'test'])
+        options, args = getopt.getopt(sys.argv[1:],'h:p:i:rt',['help', 'play=', 'ini=', 'rec', 'test'])
         selected_options = [x[0] for x in options]
         
         for o, a in options:
@@ -156,7 +159,7 @@ if __name__ == '__main__':
         sys.exit(0)
         
     if record:
-        rec = CK_Rec(configfile=config)
+        rec = CK_Rec(configfile=CK_config.inifile)
         rec.record(framesize=1)
         sys.exit(0)        
 
