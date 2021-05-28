@@ -270,9 +270,9 @@ class CkAR(object):
             y = random.uniform(-1, 1)
             z = random.uniform(-1, 1)
             
-            r1 = random.uniform(0, 360)
+            r1 = random.uniform(-45, 45)
             r2 = random.uniform(0, 360)
-            r3 = random.uniform(0, 360)            
+            r3 = random.uniform(-45, 45)            
             self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
             self.console('transform tree')
             
