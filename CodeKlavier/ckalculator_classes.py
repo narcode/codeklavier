@@ -33,7 +33,7 @@ class Ckalculator(object):
         """
         hook, ar_connect = ar_hook
         if hook:
-            self.ar = CkAR(config, ar_connect)
+            self.ar = CkAR(ar_connect)
                     
         self.mapscheme = Mapping_Ckalculator(True, False)
         self.note_on = noteonid

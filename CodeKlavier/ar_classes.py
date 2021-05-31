@@ -8,12 +8,14 @@ import asyncio
 from threading import Thread, Event
 import math
 import numpy as np
+import configparser
 import time
+from CK_config import inifile
 
 class CkAR(object):
     """Main class for the AR extension"""
     
-    def __init__(self, config='default_setup.ini', connect=False):
+    def __init__(self, connect=False):
         self.trees = 1
         self.mapping = Mapping_CKAR(False, connect)
         self.navigate = 0
@@ -262,30 +264,41 @@ class CkAR(object):
         
     def transform(self):
         """Send a transorm X Y message to the AR engine. X and Y are generated randomly"""
-        #x = random.uniform(-1, 1)
+        config = configparser.ConfigParser()
+        config.read(inifile, encoding='utf8')
+        try:
+            valuesX = list(map(float, config['ar'].get('transform_x').split(',') ))
+            valuesY = list(map(float, config['ar'].get('transform_y').split(',') ))
+            valuesZ = list(map(float, config['ar'].get('transform_z').split(',') ))
+            valuesR1 = list(map(float, config['ar'].get('transform_r1').split(',') ))
+            valuesR2 = list(map(float, config['ar'].get('transform_r2').split(',') ))
+            valuesR3 = list(map(float, config['ar'].get('transform_r3').split(',') ))
+        except:
+            raise Exception("missing transfrom random limits in the .ini file!")
+        
         current = self.currentTree()
         
         if len(self._parallelTrees) == 0:
-            x = random.uniform(-1, 1)         
-            y = random.uniform(-1, 1)
-            z = random.uniform(-1, 1)
+            x = random.uniform(valuesX[0], valuesX[1])         
+            y = random.uniform(valuesY[0], valuesY[1])
+            z = random.uniform(valuesZ[0], valuesZ[1])
             
-            r1 = random.uniform(-45, 45)
-            r2 = random.uniform(0, 360)
-            r3 = random.uniform(-45, 45)            
+            r1 = random.uniform(valuesR1[0], valuesR1[1])
+            r2 = random.uniform(valuesR2[0], valuesR2[1])
+            r3 = random.uniform(valuesR3[0], valuesR3[1])
             self.run_in_loop(self.makeJsonTransform(str(current), [x, z, y], [r1,r2,r3]))
             self.console('transform tree')
             
         else:
             for t in self._parallelTrees:
                 if str(t) in self._roots:
-                    x = random.uniform(-1, 1)         
-                    y = random.uniform(-1, 1)
-                    z = random.uniform(-1, 1)
+                    x = random.uniform(valuesX[0], valuesX[1])         
+                    y = random.uniform(valuesY[0], valuesY[1])
+                    z = random.uniform(valuesZ[0], valuesZ[1])
                     
-                    r1 = random.uniform(0, 360)
-                    r2 = random.uniform(0, 360)
-                    r3 = random.uniform(0, 360)                    
+                    r1 = random.uniform(valuesR1[0], valuesR1[1])
+                    r2 = random.uniform(valuesR2[0], valuesR2[1])
+                    r3 = random.uniform(valuesR3[0], valuesR3[1])                    
                     self._roots[str(t)]['root'] = x
                     self.run_in_loop(self.makeJsonTransform(str(t), [x, z, y], [r1,r2,r3]))
                     self.console('transform tree')
