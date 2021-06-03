@@ -21,6 +21,9 @@ Sunday June 13th \
 Times: 17.00 & 20.00 \
 Tickets available [here](https://toetsdestijds.com/2021/04/22/whats-on-my-desk/)
 
+## Download
+The ARquatic app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and see if the AR app works. It is useful to do this in advance in case your phone does not support AR but your tablet does - in which case, we advise you to bring your tablet! If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
+
 ## Motivation
 Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interested in exploring how this simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation. Furthermore, Lindenmayer’s work was done here at the University of Utrecht in 1968 and building upon it through artistic exploration, makes the Netherlands a particularly special location for the presentation of this project.
 
