@@ -54,4 +54,7 @@ Met dank aan het Stimulerings Fonds NL en onze angel sponsor voor het mogelijk m
 
 Met dank aan het Fonds Podium kunsten Balkonscenes Fonds voor het mogelijk maken van de optredens in Juni 2021.
 
+## Vragen?
+Contact arquatic@codeklavier.space
+
 
