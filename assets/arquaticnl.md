@@ -27,7 +27,7 @@ Kaartjes [bestellen](www.toetsdestijds.com)
 
 ## Download de app
 
-De ARquatic app is binnenkort te downloaden: klik [hier voor Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) en [hier voor Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). U heeft een Apple iPhone SE/6S (of later) of een Android van [deze](https://developers.google.com/ar/devices) lijst nodig.
+De ARquatic app is beschikbaar te downloaden: klik [hier voor Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) en [hier voor Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). U heeft een Apple iPhone SE/6S (of later) of een Android van [deze](https://developers.google.com/ar/devices) lijst nodig. U kunt ook gewoon de link voor de app volgen en kijken of de demo op uw telefoon werkt. In dat geval werkt de app ook voor het live optreden. Als u geen geschikte mobiele telefoon heeft, dan kunt u nog steeds genieten van de visuals in 2D, maar niet van Augmented Reality. 
 
 ## Motivatie
 L-systemen vinden hun oorsprong in de natuur en organische groei: daarom nemen wij deze principes in onze muzikale- en programmeerparadigma’s. L-systemen worden op dit moment al op grote schaal gebruikt in generatieve kunst en muziek. 
