@@ -50,3 +50,8 @@ The performances in June are made possible the Fonds Podium Kunsten Balkonscenes
 ## Questions?
 Email arquatic@codeklavier.space
 
+## Support
+This project was made possible by the Creative Industries Fonds NL and our angel sponsor. Ongoing work is limited to preparations for gigs at festivals and venues that book us for concerts. Do you believe in the project and would like to support us further? please consider "buying us a coffee". Every little bit counts and we greatly appreciate your support!
+
+[![ko-fi](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/J3J7PGIE)
+
