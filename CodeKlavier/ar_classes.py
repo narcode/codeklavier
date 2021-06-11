@@ -32,8 +32,8 @@ class CkAR(object):
         self._memory = []
         self._memorize = False
         self._delayerRunning = False
-        self._erick = False
-        self._abraham = False
+        self._bracketOpen = False
+        self._bracketClose = False
         
         if connect:
             self.receiveState()        
@@ -303,15 +303,15 @@ class CkAR(object):
                     self.run_in_loop(self.makeJsonTransform(str(t), [x, z, y], [r1,r2,r3]))
                     self.console('transform tree')
        
-    def erick(self):
+    def openBracket(self):
         """ open a bracket """
-        self._erick = True
-        print('erick called')
+        self._bracketOpen = True
+        print('openBrackey called')
         
-    def abraham(self):
+    def closeBracket(self):
         """ close a bracket """
-        self._abraham = True
-        print('abraham called')
+        self._bracketClose = True
+        print('closeBracket called')
        
     def mappingTransposition(self, notes, debug=False):
         """ apply a tranposition offset based on the current view """

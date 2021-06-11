@@ -140,9 +140,9 @@ class Ckalculator(object):
         
         message, deltatime = event
 
-        if (message[0] == self.pedal or self.ar._erick or self.ar._abraham):
-            if ( message[2] > 90 and (')' in self._fullStack or self._temp == False) ) or self.ar._erick:
-                self.ar._erick = False
+        if (message[0] == self.pedal or self.ar._bracketClose or self.ar._bracketOpen):
+            if ( message[2] > 90 and (')' in self._fullStack or self._temp == False) ) or self.ar._bracketOpen:
+                self.ar._bracketOpen = False
                 print('(')
                 self.ar.console('(')
                 if sendToDisplay:
@@ -151,8 +151,8 @@ class Ckalculator(object):
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif (message[2] < 30 and '(' in self._fullStack) or self.ar._abraham: #could also be: and self._temp = True
-                self.ar._abraham = False
+            elif (message[2] < 30 and '(' in self._fullStack) or self.ar._bracketClose: #could also be: and self._temp = True
+                self.ar._bracketClose = False
                 print(')')
                 self.ar.console(')')
                 if sendToDisplay:
