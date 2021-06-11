@@ -306,7 +306,7 @@ class CkAR(object):
     def openBracket(self):
         """ open a bracket """
         self._bracketOpen = True
-        print('openBrackey called')
+        print('openBracket called')
         
     def closeBracket(self):
         """ close a bracket """
