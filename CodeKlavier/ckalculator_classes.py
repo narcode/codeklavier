@@ -666,9 +666,9 @@ class Ckalculator(object):
                     else:
                         function_to_call()
                     #clear the rule stack
-                    self._ckar = []
-                    self._rules = []
-                    self._dynamics = []    
+                    #self._ckar = []
+                    #self._rules = []
+                    #self._dynamics = []    
         
     
     
