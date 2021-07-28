@@ -11,6 +11,13 @@ Voor [Nederlands](https://codeklavier.space/arquaticnl)🇳🇱
 Codeklavier’s ‘ARquatic Live’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater world unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic Live’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance or tune in at home for a streamed experience, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
 
 ## Shows
+
+Friday August 27
+"ARquatic" at [de Kwekerij Hilverum](https://www.dekwekerijhilversum.nl/agenda/) \
+Times: 16.00, 17.00 & 18.00 
+
+----PAST---- 
+
 Sunday June 6
 "ARquatic Live" at the [Pinetum Blijdenstein, Hilversum](https://pinetum.nl/) \
 Times: 14.00, 15.00 & 16.00 \
@@ -45,7 +52,7 @@ These structures, along with some characteristics of the piano playing, are then
 ## Sponsors
 CodeKlavier was made possible by the Creative Industries Fonds NL and out angel sponsor
 
-The performances in June are made possible the Fonds Podium Kunsten Balkonscenes grant
+The performances in June and August are made possible the Fonds Podium Kunsten Balkonscenes grant
 
 ## Questions?
 Email arquatic@codeklavier.space
