@@ -39,7 +39,7 @@ These structures, along with some characteristics of the piano playing, are then
 
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
-[Felipe Ignacio Noriega](https://felipeignacio.info/) - laptop audio, CodeKlavier creator \
+[Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
 [Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer \
 Simon Kelaita - audio mixing, video recording
 
