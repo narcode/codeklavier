@@ -12,9 +12,14 @@ Codeklavier’s ‘ARquatic Live’ is an audio and Augmented Reality experience
 
 ## Shows
 
+Friday August 6 \
+"ARquatic at Home" - streamed version online \
+More info [here](https://codeklavier.space/arquaticathome)
+
 Friday August 27
 "ARquatic" at [de Kwekerij Hilverum](https://www.dekwekerijhilversum.nl/agenda/) \
-Times: 16.00, 17.00 & 18.00 
+Times: 16.00, 17.00 & 18.00 \
+Click [here](https://forms.gle/kDPZUJiEVHvyEyVZ6) to make your reservation
 
 ----PAST---- 
 
