@@ -3,18 +3,26 @@ permalink: /arquaticathome
 ---
 
 
-# ARquatic at Home - A CodeKlavier Augmented Reality Home Experience
+## ARquatic at Home - A CodeKlavier Augmented Reality Home Experience
 
-## Concept
+Codeklavier’s ‘ARquatic at Home’ is an online event that brings music and Augmented Reality (AR) together to provide a unique live experience in the comfort of one's own home.
 
-Codeklavier’s ‘ARquatic’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater world unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic Live’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance or tune in at home for a streamed experience, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
+In ARquatic, music provides the DNA of an underwater world that unfolds before your eyes. Full of fantasy structures artificially built from L-system rules, ‘ARquatic at Home’ will transform your home into a new-age theater you never imagined it to be.  
 
-## Shows
 
-Friday August 27
-"ARquatic" at [de Kwekerij Hilverum](https://www.dekwekerijhilversum.nl/agenda/) \
-Times: 16.00, 17.00 & 18.00 
 
+## Streams
+
+Friday August 6 \
+'ARquatic at Home' \
+Special stream for those in lockdown or stuck at home due to bad weather \
+Time: 20:30 Sydney/Melbourne (AUS) or 12:30  Central European Time 
+
+Link for the stream will be announced on the 6th and embedded on this page
+
+## Setting Up
+
+'ARquatic at Home' is best experienced when having the streamed video page set up on a desktop or TV connected to a sound system for the duration of the show. The ARquatic App should be downloaded on a separate mobile device.
 
 ## Download
 The ARquatic app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. It is useful to do this in advance in case your phone does not support AR but your tablet does - in which case, we advise you to bring your tablet! If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
@@ -33,13 +41,13 @@ The L-systems engine is the second element and transforms the symbols into forma
 These structures, along with some characteristics of the piano playing, are then applied to the visuals designed by Patrick Borgeat and rendered in Unity. This is the final step of the technological process and produces the AR visuals which you experience during the show on the ARquatic app.
 
 ## Credits
-[Anne Veinberg](https://anneveinberg.com/) - piano/CodeKlavier creator \
-[Felipe Ignacio Noriega](https://felipeignacio.info/) - laptop audio/CodeKlavier creator \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals
-Simon Kelaita - audio mixing and video recording
+[Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
+[Felipe Ignacio Noriega](https://felipeignacio.info/) - laptop audio, CodeKlavier creator \
+[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer \
+Simon Kelaita - audio mixing, video recording
 
 ## Sponsors
-CodeKlavier was made possible by the Creative Industries Fonds NL and out angel sponsor
+CodeKlavier was made possible by the Creative Industries Fonds NL and our angel sponsor
 
 The performances in June and August are made possible the Fonds Podium Kunsten Balkonscenes grant
 
