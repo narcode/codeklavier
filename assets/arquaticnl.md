@@ -14,6 +14,18 @@ De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer
 
 
 ## Shows
+
+Vrijdag 6 Augustus \
+ARquatic at Home - streamed event. \
+[Meer info](https://codeklavier.space/arquaticathome)
+
+Vrijdag 27 Augustus \
+ARquatic in [de Kwekerij](https://www.dekwekerijhilversum.nl/agenda/) \
+Tijd: 16.00, 17.00, 18.00 \
+Klik [hier](https://forms.gle/1mtK5oPnPk34KYtC9) te reserveren
+
+---Eedere shows---
+
 Zondag 6 Juni \
 ARquatic Live in het [Pinetum, Hilversum](https://pinetum.nl/) \
 Tijd: 14.00, 15.00, 16.00 \
