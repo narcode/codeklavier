@@ -25,11 +25,16 @@ ARquatic can also be a live experience, for live show dates please visit our [AR
 
 
 ## Motivation
-Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interested in exploring how this simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation. Furthermore, Lindenmayer’s work was done here at the University of Utrecht in 1968 and building upon it through artistic exploration, makes the Netherlands a particularly special location for the presentation of this project.
+Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interested in exploring how this simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation. Furthermore, Lindenmayer’s work was done at the University of Utrecht in 1968 and building upon it through artistic exploration, makes the Netherlands a particularly special location for the presentation of this project.
 
 
-## About the technology
-The ‘ARquatic Live’ experience is made possible by three key technological elements and stages; CodeKlavier, Lindemayer and Unity.
+## About the Project
+
+ARquatic is a CodeKlavier project which combines live music, live coding and AR as an artistic experience unlike any other. The [CodeKlavier](https://codeklavier.space/) enables the pianist to grow the AR creatures by coding their structures through her playing with L-system rules. At the same time,  the pianist and collaborating laptop musician are taking the audience on an enchanting musical and visual journey.
+
+### About the technology
+
+The ‘ARquatic’ experience is made possible by three key technological elements and stages; CodeKlavier, Lindemayer and Unity.
 
 CodeKlavier: a system that enables the pianist to code by playing the piano. In ‘ARquatic Live’, this pianist is coding with lambda calculus to create numbers. These numbers are then translated into symbols used in the Lindenmayer systems engine. 
 
