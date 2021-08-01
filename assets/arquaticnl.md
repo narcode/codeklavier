@@ -22,7 +22,7 @@ ARquatic at Home - streamed event. \
 Vrijdag 27 Augustus \
 ARquatic in [de Kwekerij](https://www.dekwekerijhilversum.nl/agenda/) \
 Tijd: 16.00, 17.00, 18.00 \
-Klik [hier](https://forms.gle/1mtK5oPnPk34KYtC9) te reserveren
+Klik [hier](https://forms.gle/kDPZUJiEVHvyEyVZ6) te reserveren
 
 ---Eedere shows---
 
