@@ -13,10 +13,8 @@ In ARquatic, music provides the DNA of an underwater world that unfolds before y
 ## Streams
 
 Friday August 6 \
-'ARquatic at Home' \
-Special stream for those in lockdown or stuck at home due to bad weather \
+'ARquatic at Home' - Special stream for those in lockdown or stuck at home due to bad weather \
 Time: 20:30 Sydney/Melbourne (AUS) or 12:30  Central European Time 
-
 Link for the stream will be announced on the 6th and embedded on this page
 
 ARquatic can also be a live experience, for live show dates please visit our [ARquatic website](https://codeklavier.space/arquatic)
