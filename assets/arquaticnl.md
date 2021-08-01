@@ -44,9 +44,9 @@ De L-systeemengine is het tweede element en zet de symbolen om in formele gramma
 Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens toegepast op de visuals ontworpen door Patrick Borgeat en weergegeven in Unity. Dit is de laatste stap van het technologische proces en levert de AR-visuals op die je tijdens de show ervaart via de ARquatic app.
 
 ## Credits
-Anne Veinberg - piano \
-Felipe Ignacio Noriega - laptop audio \
-Patrick Borgeat - visuals 
+[Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
+[Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
+[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer \
 
 ## Sponsors
 
