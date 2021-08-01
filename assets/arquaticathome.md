@@ -10,7 +10,6 @@ Codeklavier’s ‘ARquatic at Home’ is an online event that brings music and 
 In ARquatic, music provides the DNA of an underwater world that unfolds before your eyes. Full of fantasy structures artificially built from L-system rules, ‘ARquatic at Home’ will transform your home into a new-age theater you never imagined it to be.  
 
 
-
 ## Streams
 
 Friday August 6 \
@@ -20,12 +19,12 @@ Time: 20:30 Sydney/Melbourne (AUS) or 12:30  Central European Time
 
 Link for the stream will be announced on the 6th and embedded on this page
 
+ARquatic can also be a live experience, for live show dates please visit our [ARquatic website](https://codeklavier.space/arquatic)
+
 ## Setting Up
 
-'ARquatic at Home' is best experienced when having the streamed video page set up on a desktop or TV connected to a sound system for the duration of the show. The ARquatic App should be downloaded on a separate mobile device.
+'ARquatic at Home' is best experienced when having the streamed video page set up on a desktop or TV connected to a sound system for the duration of the show. The ARquatic App should be downloaded on a separate mobile device. The app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
 
-## Download
-The ARquatic app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. It is useful to do this in advance in case your phone does not support AR but your tablet does - in which case, we advise you to bring your tablet! If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
 
 ## Motivation
 Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interested in exploring how this simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation. Furthermore, Lindenmayer’s work was done here at the University of Utrecht in 1968 and building upon it through artistic exploration, makes the Netherlands a particularly special location for the presentation of this project.
