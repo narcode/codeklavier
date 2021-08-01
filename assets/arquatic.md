@@ -36,9 +36,6 @@ Tickets available [here](https://toetsdestijds.com/2021/04/22/whats-on-my-desk/)
 ## Download
 The ARquatic app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. It is useful to do this in advance in case your phone does not support AR but your tablet does - in which case, we advise you to bring your tablet! If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
 
-## Motivation
-Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interested in exploring how this simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation. Furthermore, Lindenmayer’s work was done here at the University of Utrecht in 1968 and building upon it through artistic exploration, makes the Netherlands a particularly special location for the presentation of this project.
-
 
 ## About the technology
 The ‘ARquatic Live’ experience is made possible by three key technological elements and stages; CodeKlavier, Lindemayer and Unity.
@@ -49,11 +46,14 @@ The L-systems engine is the second element and transforms the symbols into forma
 
 These structures, along with some characteristics of the piano playing, are then applied to the visuals designed by Patrick Borgeat and rendered in Unity. This is the final step of the technological process and produces the AR visuals which you experience during the show on the ARquatic app.
 
+## Motivation
+Our inspiration for working with L-systems comes primarily from its roots in nature and organic growth which we would like to bring to the musical and programming paradigms. Whilst L-systems are already widely used in generative art and music, we are interested in exploring how this simple model can be used by the piano coder to express complex structures and how its rules will shape the pianistic improvisation. Furthermore, Lindenmayer’s work was done here at the University of Utrecht in 1968 and building upon it through artistic exploration, makes the Netherlands a particularly special home for the development and presentation of this project.
+
 
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer \
+[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer 
 
 ## Sponsors
 CodeKlavier was made possible by the Creative Industries Fonds NL and our angel sponsor
