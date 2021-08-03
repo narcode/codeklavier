@@ -21,7 +21,7 @@ ARquatic can also be a live experience, for live show dates please visit our [AR
 
 ## Setting Up
 
-'ARquatic at Home' is best experienced when having the streamed video page set up on a desktop or TV connected to a sound system for the duration of the show. The ARquatic App should be downloaded on a separate mobile device. The app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
+'ARquatic at Home' is best experienced when having the streamed video page set up on a desktop or TV connected to a sound system for the duration of the show. The ARquatic App should be downloaded on a separate mobile device. For an optimal AR experience, a well-lit room is best. The app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
 
 
 ## Motivation
