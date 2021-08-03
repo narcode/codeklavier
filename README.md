@@ -1,4 +1,9 @@
 # CodeKlavier
+
+
+## For ARQUATIC AT HOME on June 8th go [here](https://codeklavier.space/arquaticathome)
+
+
 ### Live coding with the piano as interface.
 
 An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL** and other sponsors.
