@@ -14,7 +14,7 @@ In ARquatic, music provides the DNA of an underwater world that unfolds before y
 
 Friday August 6 \
 'ARquatic at Home' - Special stream for those in lockdown or stuck at home due to bad weather \
-Time: 20:30 Sydney/Melbourne (AUS) or 12:30  Central European Time 
+Time: 20:30 Sydney/Melbourne (AUS) or 12:30  Central European Time. 
 The link of the stream is here [https://youtu.be/F4cGi9Xy0_E](https://youtu.be/F4cGi9Xy0_E) or click on the video below.
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/F4cGi9Xy0_E?rel=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
