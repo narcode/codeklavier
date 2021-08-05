@@ -17,6 +17,8 @@ Friday August 6 \
 Time: 20:30 Sydney/Melbourne (AUS) or 12:30  Central European Time 
 The link of the stream is here https://youtu.be/F4cGi9Xy0_E
 
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/F4cGi9Xy0_E?rel=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 ARquatic can also be a live experience, for live show dates please visit our [ARquatic website](https://codeklavier.space/arquatic)
 
 ## Setting Up
