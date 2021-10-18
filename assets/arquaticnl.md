@@ -7,10 +7,10 @@ For [English](https://codeklavier.space/arquatic)🇬🇧
 # ARquatic Live - A CodeKlavier Augmented Reality Experience
 
 ## Over ARquatic
-‘ARquatic Live’ van de CodeKlavier biedt het publiek een totaalervaring van geluid, muziek en Augmented Reality (AR). Live muziek levert de input voor een fantasierijke, associatieve onderwaterwereld, die zich voor uw ogen ontvouwt op uw smartphone. 
+‘ARquatic’ van de CodeKlavier biedt het publiek een totaalervaring van geluid, muziek en Augmented Reality (AR). Live muziek levert de input voor een fantasierijke, associatieve onderwaterwereld, die zich voor uw ogen ontvouwt op uw smartphone. 
 
 De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer-systemen, die o.a. gebruikt worden om 3D-bomen te creëren.
-‘ARquatic Live’ legt ongebruikelijke objecten, geïnspireerd op water, over alledaagse omgevingen. De combinatie van de natuurlijke verschijning van de wereld om ons heen met de artificiële schoonheid van de AR-objecten stimuleert de verbeelding.
+‘ARquatic’ legt ongebruikelijke objecten, geïnspireerd op water, over alledaagse omgevingen. De combinatie van de natuurlijke verschijning van de wereld om ons heen met de artificiële schoonheid van de AR-objecten stimuleert de verbeelding.
 
 
 ## Shows
@@ -69,7 +69,7 @@ Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer \
+[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer 
 
 ## Sponsors
 
