@@ -10,7 +10,7 @@ Voor [Nederlands](https://codeklavier.space/arquaticnl)🇳🇱
 
 Codeklavier’s ‘ARquatic ’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater world unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance or tune in at home for a streamed experience, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
 
-<iframe width="640" height="360" src="https://www.youtube.com/watch?v=im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
 ## Past Shows
 Friday August 27
