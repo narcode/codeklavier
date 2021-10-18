@@ -17,7 +17,7 @@ De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer
 
 Donderdag December 2 \
 ARquatic at Home - streamed event. \
-[Meer info](https://codeklavier.space/arquaticathome)
+[Meer info](https://codeklavier.space/arquaticathome) \
 Tijd: te volgen
 
 
