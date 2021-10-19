@@ -12,6 +12,8 @@ For [English](https://codeklavier.space/arquatic)🇬🇧
 De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer-systemen, die o.a. gebruikt worden om 3D-bomen te creëren.
 ‘ARquatic’ legt ongebruikelijke objecten, geïnspireerd op water, over alledaagse omgevingen. De combinatie van de natuurlijke verschijning van de wereld om ons heen met de artificiële schoonheid van de AR-objecten stimuleert de verbeelding.
 
+## Trailer
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
 ## Shows
