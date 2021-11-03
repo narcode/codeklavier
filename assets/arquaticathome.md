@@ -47,7 +47,7 @@ These structures, along with some characteristics of the piano playing, are then
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier development \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier development \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app development \
+[Patrick Borgeat](https://borgeat.de/) - visuals, app development \
 Simon Kelaita - audio mixing, video recording
 
 ## Sponsors
