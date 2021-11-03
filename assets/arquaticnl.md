@@ -72,7 +72,7 @@ Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer 
+[Patrick Borgeat](https://borgeat.de/) - visuals, app developer 
 
 ## Sponsors
 
