@@ -54,7 +54,7 @@ Our inspiration for working with L-systems comes primarily from its roots in nat
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer 
+[Patrick Borgeat](https://borgeat.de/) - visuals, app developer 
 
 ## Sponsors
 CodeKlavier was made possible by the Creative Industries Fonds NL and our angel sponsor
