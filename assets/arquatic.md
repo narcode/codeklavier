@@ -24,7 +24,7 @@ ARquatic: Mixed Reality and Music \
 Talk and stream of [ARquatic at Home](https://codeklavier.space/arquaticathome) for the Mixed Reality symposium at Nottingham University \
 Time: 16h 
 
-Sunday December 6 \
+Sunday December 5 \
 ARquatic and CodeKlavier collaboration discussion \
 With Joana Chicau, Renick Bell, Timo Hoogland and Saskia Freeke \
 More info to follow \
