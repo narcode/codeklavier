@@ -14,6 +14,22 @@ Codeklavier’s ‘ARquatic ’ is an audio and Augmented Reality experience whe
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
+## Upcoming events
+Thursday November 27 \
+Discourse on XR/AR/VR \
+Talk about ARquatic by Patrick Borgeat at [Update Festival](https://update.mplab.lv/program-2/)
+
+Thursday December 2 \
+ARquatic: Mixed Reality and Music \ 
+Talk and stream of [ARquatic at Home](https://codeklavier.space/arquaticathome) for the Mixed Reality symposium at Nottingham University \
+Time: 16h 
+
+Sunday December 6 \
+ARquatic and CodeKlavier collaboration discussion \
+With Joana Chicau, Renick Bell, Timo Hoogland and Saskia Freeke \
+More info to follow \
+Time: 14-16h 
+
 ## Past Shows
 Friday August 27
 "ARquatic" at [de Kwekerij Hilverum](https://www.dekwekerijhilversum.nl/agenda/) \
