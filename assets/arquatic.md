@@ -20,7 +20,7 @@ Discourse on XR/AR/VR \
 Talk about ARquatic by Patrick Borgeat at [Update Festival](https://update.mplab.lv/program-2/)
 
 Thursday December 2 \
-ARquatic: Mixed Reality and Music \ 
+ARquatic: Mixed Reality and music \
 Talk and stream of [ARquatic at Home](https://codeklavier.space/arquaticathome) for the Mixed Reality symposium at Nottingham University \
 Time: 16h 
 
