@@ -4,24 +4,41 @@ permalink: /arquatic
 
 Voor [Nederlands](https://codeklavier.space/arquaticnl)🇳🇱
 
-# ARquatic Live - A CodeKlavier Augmented Reality Experience
+# ARquatic  - A CodeKlavier Augmented Reality Experience
 
 ## Concept
 
-Codeklavier’s ‘ARquatic Live’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater world unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic Live’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance or tune in at home for a streamed experience, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
+Codeklavier’s ‘ARquatic ’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater world unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance or tune in at home for a streamed experience, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
 
-## Shows
+## Trailer 
 
-Friday August 6 \
-"ARquatic at Home" - streamed version online \
-More info [here](https://codeklavier.space/arquaticathome)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
+## Upcoming events
+Thursday November 27 \
+Discourse on XR/AR/VR \
+Talk about ARquatic by Patrick Borgeat at [Update Festival](https://update.mplab.lv/program-2/)
+
+Thursday December 2 \
+ARquatic: Mixed Reality and music \
+Talk and stream of [ARquatic at Home](https://codeklavier.space/arquaticathome) for the Mixed Reality symposium at Nottingham University \
+Time: 16h 
+
+Sunday December 5 \
+ARquatic and CodeKlavier collaboration discussion \
+With Joana Chicau, Renick Bell, Timo Hoogland and Saskia Freeke \
+More info to follow \
+Time: 14-16h 
+
+## Past Shows
 Friday August 27
 "ARquatic" at [de Kwekerij Hilverum](https://www.dekwekerijhilversum.nl/agenda/) \
 Times: 16.00, 17.00 & 18.00 \
 Click [here](https://forms.gle/kDPZUJiEVHvyEyVZ6) to make your reservation
 
-----PAST---- 
+Friday August 6 \
+"ARquatic at Home" - streamed version online \
+More info [here](https://codeklavier.space/arquaticathome)
 
 Sunday June 6
 "ARquatic Live" at the [Pinetum Blijdenstein, Hilversum](https://pinetum.nl/) \
@@ -38,7 +55,7 @@ The ARquatic app is available for download [here for Apple](https://apps.apple.c
 
 
 ## About the technology
-The ‘ARquatic Live’ experience is made possible by three key technological elements and stages; CodeKlavier, Lindemayer and Unity.
+The ‘ARquatic’ experience is made possible by three key technological elements and stages; CodeKlavier, Lindemayer and the ARquatic App.
 
 CodeKlavier: a system that enables the pianist to code by playing the piano. In ‘ARquatic Live’, this pianist is coding with lambda calculus to create numbers. These numbers are then translated into symbols used in the Lindenmayer systems engine. 
 
@@ -53,7 +70,7 @@ Our inspiration for working with L-systems comes primarily from its roots in nat
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer 
+[Patrick Borgeat](https://borgeat.de/) - visuals, app developer 
 
 ## Sponsors
 CodeKlavier was made possible by the Creative Industries Fonds NL and our angel sponsor

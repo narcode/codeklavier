@@ -38,7 +38,7 @@ class Mapping_Motippets:
 
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
-        self._osc = udp_client.SimpleUDPClient('192.168.0.161', 57120) #standard supercollider OSC listening port
+        self._osc = udp_client.SimpleUDPClient('192.168.2.6', 8000) #standard supercollider OSC listening port
 
     def evaluate(self, what, flash=True, display=5):
         """Evaluate the mapped command 'what' from .ini file
@@ -470,8 +470,8 @@ class Mapping_Motippets:
                     if 'grab_value' in output:
                         self._osc.send_message("/" + output[2], str(mod))
                     else:
-                        # self._osc.send_message("/" + output[2], [ output[3], output[4] ] )
-                        self._osc.send_message("/" + output[2], output[3] )
+                        self._osc.send_message("/" + output[2], [ output[3], output[4] ] )
+                        # self._osc.send_message("/" + output[2], output[3] )
                 else:
                     self.__keyboard.type(output[0])
                     self.evaluate('eval', flash=False)

@@ -7,24 +7,38 @@ For [English](https://codeklavier.space/arquatic)🇬🇧
 # ARquatic Live - A CodeKlavier Augmented Reality Experience
 
 ## Over ARquatic
-‘ARquatic Live’ van de CodeKlavier biedt het publiek een totaalervaring van geluid, muziek en Augmented Reality (AR). Live muziek levert de input voor een fantasierijke, associatieve onderwaterwereld, die zich voor uw ogen ontvouwt op uw smartphone. 
+‘ARquatic’ van de CodeKlavier biedt het publiek een totaalervaring van geluid, muziek en Augmented Reality (AR). Live muziek levert de input voor een fantasierijke, associatieve onderwaterwereld, die zich voor uw ogen ontvouwt op uw smartphone. 
 
 De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer-systemen, die o.a. gebruikt worden om 3D-bomen te creëren.
-‘ARquatic Live’ legt ongebruikelijke objecten, geïnspireerd op water, over alledaagse omgevingen. De combinatie van de natuurlijke verschijning van de wereld om ons heen met de artificiële schoonheid van de AR-objecten stimuleert de verbeelding: zowel live als online.
+‘ARquatic’ legt ongebruikelijke objecten, geïnspireerd op water, over alledaagse omgevingen. De combinatie van de natuurlijke verschijning van de wereld om ons heen met de artificiële schoonheid van de AR-objecten stimuleert de verbeelding.
 
+## Trailer
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
 ## Shows
 
-Vrijdag 6 Augustus \
+Donderdag December 2 \
 ARquatic at Home - streamed event. \
-[Meer info](https://codeklavier.space/arquaticathome)
+[Meer info](https://codeklavier.space/arquaticathome) \
+Tijd: te volgen
+
+
+---Eedere shows---
+
+Dinsdag 7 September \
+ARquatic in de Rode Bioscoop \
+Tijd: 20.00 \
+Prive evenement voor het Amsterdams Young Artist Foundation
 
 Vrijdag 27 Augustus \
 ARquatic in [de Kwekerij](https://www.dekwekerijhilversum.nl/agenda/) \
 Tijd: 16.00, 17.00, 18.00 \
 Klik [hier](https://forms.gle/kDPZUJiEVHvyEyVZ6) te reserveren
 
----Eedere shows---
+Vrijdag 6 Augustus \
+ARquatic at Home - streamed event. \
+[Meer info](https://codeklavier.space/arquaticathome)
 
 Zondag 6 Juni \
 ARquatic Live in het [Pinetum, Hilversum](https://pinetum.nl/) \
@@ -47,24 +61,24 @@ Wij onderzoeken hoe de piano-codeur met dit model complexe structuren tot uitdru
 
 
 ## Over de technologie
-De ‘ARquatic Live’-ervaring wordt mogelijk gemaakt door drie belangrijke technologische elementen en fasen; CodeKlavier, Lindemayer en Unity. 
+De ‘ARquatic Live’-ervaring wordt mogelijk gemaakt door drie belangrijke technologische elementen en fasen; CodeKlavier, Lindemayer en de ARquatic App. 
 
 CodeKlavier: een systeem waarmee de pianist kan coderen door piano te spelen. In ‘ARquatic Live’ codeert de pianist met lambda-calculus om getallen te creëren. Deze nummers worden vervolgens vertaald in symbolen die worden gebruikt in de L-systeemengine.
 
 De L-systeemengine is het tweede element en zet de symbolen om in formele grammatica's die het startpunt en de L-systeemregels definiëren. Samen vormen deze de L-systeembomen die de structuren creëren van de AR-visuele elementen die u ziet.
 
-Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens toegepast op de visuals ontworpen door Patrick Borgeat en weergegeven in Unity. Dit is de laatste stap van het technologische proces en levert de AR-visuals op die je tijdens de show ervaart via de ARquatic app.
+Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens toegepast op de visuals ontworpen door Patrick Borgeat en weergegeven in de ARquatic App. Dit is de laatste stap van het technologische proces en levert de AR-visuals op die je tijdens de show ervaart op uw telefoon.
 
 ## Credits
 [Anne Veinberg](https://anneveinberg.com/) - piano, CodeKlavier creator \
 [Felipe Ignacio Noriega](https://felipeignacio.info/) - live electronics, CodeKlavier creator \
-[Patrick Borgeat](http://www.cappel-nord.de/b/) - visuals, app developer \
+[Patrick Borgeat](https://borgeat.de/) - visuals, app developer 
 
 ## Sponsors
 
 Met dank aan het Stimulerings Fonds NL en onze angel sponsor voor het mogelijk maken van de CodeKlavier project.
 
-Met dank aan het Fonds Podium kunsten Balkonscenes Fonds voor het mogelijk maken van de optredens in Juni 2021.
+Met dank aan het Fonds Podium kunsten Balkonscenes Fonds voor het mogelijk maken van de optredens in Juni en Augustus 2021.
 
 ## Vragen?
 Contact arquatic@codeklavier.space
