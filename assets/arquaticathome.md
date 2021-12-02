@@ -9,8 +9,21 @@ Codeklavier’s ‘ARquatic at Home’ is an online event that brings music and 
 
 In ARquatic, music provides the DNA of an underwater world that unfolds before your eyes. Full of fantasy structures artificially built from L-system rules, ‘ARquatic at Home’ will transform your home into a new-age theater you never imagined it to be.  
 
-
 ## Streams
+
+Thursday December 2 \
+'ARquatic at Home' - Special stream for Music and Mixed Reality seminar, Nottingham University \
+Time: 16:20 British Time
+The link of the stream is here [https://youtu.be/0sU8zzKJWyA](https://youtu.be/0sU8zzKJWyA) or click on the video below.
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/0sU8zzKJWyA?rel=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+Sunday December 5 \
+'ARquatic at Home' - part of [ChOre0graph|ing C0d|ing](http://varia.zone/en/cc-nlcl.html) \
+Time: 14-16h GMT+1
+
+
+##  Past Streams
 
 Friday August 6 \
 'ARquatic at Home' - Special stream for those in lockdown or stuck at home due to bad weather \
