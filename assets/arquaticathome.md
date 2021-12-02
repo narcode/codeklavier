@@ -19,7 +19,7 @@ The link of the stream is here [https://youtu.be/0sU8zzKJWyA](https://youtu.be/0
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/0sU8zzKJWyA?rel=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Sunday December 5 \
-'ARquatic at Home' - part of [ChOre0graph|ing C0d|ing](http://varia.zone/en/cc-nlcl.html) \
+'ARquatic at Home' - part of [ChOreOgraph|ng COd|ng](http://varia.zone/en/cc-nlcl.html) \
 Time: 14-16h GMT+1
 
 
