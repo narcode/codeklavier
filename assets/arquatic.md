@@ -15,6 +15,18 @@ Codeklavier’s ‘ARquatic ’ is an audio and Augmented Reality experience whe
 <iframe width="560" height="315" src="https://www.youtube.com/embed/im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
 ## Upcoming events
+
+Friday Januari 28 \
+ARquatic at the [on-the-fly: Live Coding Hacklab](https://zkm.de/en/event/2022/01/on-the-fly-live-coding-hacklab) \
+Zentrum voor Kunst en Media, Karlsruhe \
+Tijd: 20.00
+
+Summer Tour July - September 2022 \
+Gardens and Festivals throughout the Netherlands \
+More details to follow 
+
+---Past Events---
+
 Thursday November 27 \
 Discourse on XR/AR/VR \
 Talk about ARquatic by Patrick Borgeat at [Update Festival](https://update.mplab.lv/program-2/)
