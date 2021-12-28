@@ -18,6 +18,11 @@ De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer
 
 ## Shows
 
+Vrijdag Januari 28 \
+ARquatic tijdens [on-the-fly: Live Coding Hacklab](https://zkm.de/en/event/2022/01/on-the-fly-live-coding-hacklab) \
+Zentrum voor Kunst en Media, Karlsruhe \
+Tijd: 20.00
+
 Zomer Tour Juli - September 2022 \
 Tuinen en buiten locaties in Nederland \
 Meer info te volgen
