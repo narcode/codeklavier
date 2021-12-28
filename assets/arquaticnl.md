@@ -18,13 +18,26 @@ De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer
 
 ## Shows
 
+Zomer Tour Juli - September 2022 \
+Tuinen en buiten locaties in Nederland \
+Meer info te volgen
+
+---Eedere shows---
+
+
+Zondag December 5 \
+Discussie over het CodeKlavier en ARquatic at Home - streamed event. \
+Met Joana Chicau, Renick Bell, Timo Hoogland and Saskia Freeke
+Tijd: 14.00-16.00
+
 Donderdag December 2 \
 ARquatic at Home - streamed event. \
 [Meer info](https://codeklavier.space/arquaticathome) \
-Tijd: te volgen
+Tijd: 17.00
 
-
----Eedere shows---
+Donderdag November 25 \
+Discourse on XR/AR/VR \
+Gesprek over ARquatic door Patrick Borgeat in [Update Festival](https://update.mplab.lv/program-2/)
 
 Dinsdag 7 September \
 ARquatic in de Rode Bioscoop \
