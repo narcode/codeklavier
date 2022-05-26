@@ -14,7 +14,8 @@ permalink: /publications
 ## The sound of lambda
 **Authors:** Felipe Ignacio Noriega, Anne Veinberg<br>
 **Publication:** FARM 2019: Proceedings of the 7th ACM SIGPLAN International Workshop on Functional Art, Music, Modeling, and DesignAugust 2019 Pages 56–60<br>
-[link](https://dl.acm.org/doi/abs/10.1145/3331543.3342583)
+[link](https://dl.acm.org/doi/abs/10.1145/3331543.3342583) \
+[Paper download](https://drive.google.com/file/d/1lEfXXN59y1iKI3wrd--RE0UZrG3-yzk4/view?usp=sharing)
 
 <br><br>
 ## Coding with the piano: The first phase of the CodeKlavier's development

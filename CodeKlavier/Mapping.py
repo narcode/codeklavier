@@ -38,7 +38,7 @@ class Mapping_Motippets:
 
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120) #standard supercollider OSC listening port
-        self._osc = udp_client.SimpleUDPClient('192.168.1.28', 8000) #standard supercollider OSC listening port
+        self._osc = udp_client.SimpleUDPClient('192.168.2.6', 8000) #standard supercollider OSC listening port
 
     def evaluate(self, what, flash=True, display=5):
         """Evaluate the mapped command 'what' from .ini file
@@ -471,6 +471,7 @@ class Mapping_Motippets:
                         self._osc.send_message("/" + output[2], str(mod))
                     else:
                         self._osc.send_message("/" + output[2], [ output[3], output[4] ] )
+                        # self._osc.send_message("/" + output[2], output[3] )
                 else:
                     self.__keyboard.type(output[0])
                     self.evaluate('eval', flash=False)
@@ -571,7 +572,7 @@ class Mapping_Ckalculator:
         if use_display:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        self._osc = udp_client.SimpleUDPClient('127.0.0.1', 57120)
+        self._osc = udp_client.SimpleUDPClient('192.168.0.161', 57120)
 
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):
