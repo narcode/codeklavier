@@ -563,7 +563,7 @@ class Mapping_Motippets:
 class Mapping_Ckalculator:
     """Mapping for the Ckalculator prototype.
     """
-    def __init__(self, use_display=False, debug=True):
+    def __init__(self, use_display=False, debug=True, osc_port=57120):
         if debug:
             print("## Using the Ckalculator mapping ##")
 
@@ -572,7 +572,7 @@ class Mapping_Ckalculator:
         if use_display:
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        self._osc = udp_client.SimpleUDPClient('192.168.0.161', 57120)
+        self._osc = udp_client.SimpleUDPClient('127.0.0.1', osc_port, True)
 
 
     def formatAndSend(self, msg='', encoding='utf-8', host='localhost', display=1, syntax_color=':', spacing=True, spacechar=' '):

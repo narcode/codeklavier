@@ -30,7 +30,7 @@ class Ckalculator(object):
         """
         self.ar = CkAR(config, ar_hook)
         
-        self.mapscheme = Mapping_Ckalculator(True, False)
+        self.mapscheme = Mapping_Ckalculator(True, False, 57120) # 57140 for ckar
         self.note_on = noteonid
         self.note_off = noteoffid
         self.pedal = pedal_id
