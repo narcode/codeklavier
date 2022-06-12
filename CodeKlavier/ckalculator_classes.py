@@ -8,6 +8,7 @@ import configparser
 import numpy as np
 #from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool, Pool
+import concurrent.futures
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
 #import operator
@@ -28,11 +29,7 @@ class Ckalculator(object):
     def __init__(self, noteonid, noteoffid, pedal_id, config='default_setup.ini', debug=False, print_functions=False, ar_hook=False):
         """The method to initialise the class and prepare the class variables.
         """
-        hook, ar_connect = ar_hook
-        if hook:
-            self.ar = CkAR(config, ar_connect)
-        else:
-            self.ar = 
+        self.ar = CkAR(config, ar_hook)
         
         self.mapscheme = Mapping_Ckalculator(True, False)
         self.note_on = noteonid
@@ -139,34 +136,74 @@ class Ckalculator(object):
         
         message, deltatime = event
 
-        if (message[0] == self.pedal):
-            if message[2] == 127 and (')' in self._fullStack or self._temp == False):
+        if (message[0] == self.pedal or self.ar._erick or self.ar._abraham):
+            if ( message[2] > 90 and (')' in self._fullStack or self._temp == False) ) or self.ar._erick:
+                self.ar._erick = False
                 print('(')
+                self.ar.console('(')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend('(', display=2, syntax_color='int:', spacing=False)
                 self._fullStack.append('(')
                 self._tempStack = []
                 self._tempStack.append('(')                
                 self._temp = True
-            elif message[2] == 0 and '(' in self._fullStack: #could also be: and self._temp = True
+            elif (message[2] < 30 and '(' in self._fullStack) or self.ar._abraham: #could also be: and self._temp = True
+                self.ar._abraham = False
                 print(')')
+                self.ar.console(')')
                 if sendToDisplay:
                     self.mapscheme.formatAndSend(')', display=2, syntax_color='int:', spacing=False)                
                 self._fullStack.append(')')
                 # to main stack
-                print('temp num stack:', self._tempNumberStack);
+                # print('temp num stack:', self._tempNumberStack);
                 if len(self._tempNumberStack) > 0:
+
+                    if self.ar.connected:
+                        if '.' in self._rules:
+                            self._tempEvalStack.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
+                            #print('eval stack: ', self._tempEvalStack)
+                            if (type(self._tempEvalStack[-1]) == int):
+                                self._rules.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
+                        
+                        if len(self._tempdynamics) > 0:
+                            velocity = int(numpy.average(self._tempdynamics).round())
+                            self._rule_dynamics.append(velocity)
+                            
+                        print('rule till now: ', self._rules)
+                        self.mapscheme._osc.send_message("/ckconsole", str(self._rules))
+                        self.ar.console(str(self._rules))
+                        print('vel till now: ', self._rule_dynamics)
+                        self.mapscheme._osc.send_message("/ckconsole", str(self._rule_dynamics))
+                        self.ar.console(str(self._rule_dynamics))
+                                                
+                        if len(self._ckar) == 0:
+
+                            if len(self._rule_dynamics) > 0:                            
+                                velocity = ('|').join(map(str, self._rule_dynamics))
+                                
+                            if velocity != '':
+                                rule_dynamics = 'd' + velocity
+                            else:
+                                rule_dynamics = ''
+                            
+                            axiom = 'axiom: ', '*' + ('').join(map(str, self._ckar)) + rule_dynamics 
+                            print(axiom)
+                            self.mapscheme._osc.send_message("/ckconsole", axiom)
+                            self.ar.console(axiom)
+
                     self._numberStack.append(self._tempNumberStack.pop())
                 #self.evaluateTempStack(self._tempStack)
                 self._tempFunctionStack = []
                 self._tempNumberStack = []
                 self._temp = False
+                self._tempEvalStack = []
                 self._fullStack = []
+                self._tempdynamics = []
             
         if message[0] == self.note_on and message[2] > 0:
 
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._note_on_cue.append(message[1])
                     #self.find_ostinato(self._fullMemory, debug=True)
                     #print('note on mem:', self._note_on_cue)
@@ -181,6 +218,7 @@ class Ckalculator(object):
         if message[0] == self.note_off or (message[0] == self.note_on and message[2] == 0):
             note = message[1]
             self._deltatime = ck_deltatime_per_note 
+
             #print('note: ', note, 'Articulation delta: ', ck_deltatime_per_note)
 
             
@@ -192,80 +230,81 @@ class Ckalculator(object):
             #else: #no worng note for now... 
             
             if section == 'ostinatos':
-                if not self._developedOstinato:
+                if not self._developedOstinato[0]:
                     self._fullMemory.append(note)
                     self.find_ostinato(self._fullMemory, debug=False)                        
                 else:
                     if len(self._functionBody) < 2:
                         print('define func body...')
+                        self.ar.console('define func body...')
                         if self._defineCounter == 0:
                             self.mapscheme.formatAndSend('define func body...', display=4, syntax_color='function:')
                             self._defineCounter += 1
-                        self.define_function_body(note, articulation)
+                        if self._developedOstinato[1] == 1:
+                            self.define_function_body(note, articulation)
+                        else:
+                            self.define_function_bodyAR(note, articulation)
                     
                              
-            if section == 'full':        
+            if section == 'full':      
+
+                note_on_vel = self._noteon_velocity[note]
+                self.ar._velocityMemory.append(note_on_vel)
+                                    
+                self._lastioi.append(ck_deltatime)
+                if len(self._lastioi) > 2:
+                    self._lastioi = self._lastioi[-2:]
+                
+                if note > 40: # send to ini
+                    if np.diff(self._lastioi) > 4:
+                        self.ar._deltaMemory = [];
+                    if np.diff(self._lastioi) > 0.03:    
+                        self.ar._deltaMemory.append(ck_deltatime)
+                
+                max_notes = 10 #send to ini
+                if len(self.ar._velocityMemory) > max_notes:
+                    self.ar._velocityMemory = self.ar._velocityMemory[-max_notes:]
+                    self.ar.averageVelocity()
+                    
+                if len(self.ar._deltaMemory) > max_notes:
+                    self.ar._deltaMemory = self.ar._deltaMemory[-max_notes:]
+                    self.ar.averageSpeed(False)
+                    
+                if self.ar._memorize:
+                    self.ar._memory.append(note)
+                    if len(self.ar._memory) > max_notes:
+                        self.ar._memory = self.ar._memory[-max_notes:]   
                 
         ########### CK function definition ############
-                #print('incoming:', note)
                 self._lastnotes.append(note) # coming from note on messages in main()
                 self._lastdeltas.append(self._noteon_delta[note])
-                if len(self._lastnotes) > 2:
-                    self._lastnotes = self._lastnotes[-2:]
-                if len(self._lastdeltas) > 2:
-                    self._lastdeltas = self._lastdeltas[-2:]
+                if len(self._lastnotes) > 4:
+                    self._lastnotes = self._lastnotes[-4:]
+                if len(self._lastdeltas) > 4:
+                    self._lastdeltas = self._lastdeltas[-4:]
                     
-                last_events = sorted(self._noteon_delta.values())[-2:]
-                last_events_new = np.diff(sorted(self._lastdeltas))
-                #for n in self._noteon_delta.items():
-                    #for l in last_events:
-                        #if l in n:
-                            #self._lastnotes.append(n)
-                #print(self._noteon_delta[note])
-                #print('last events:', last_events)
-                #print('last notes:', self._lastnotes)
-                #print('last deltas:', self._lastdeltas)
-                #print('diff: ', last_events[-1] - last_events[0])
-                #print('diff new: ', last_events_new)
+                if len(self._lastnotes) == 4:
+                    last_events = sorted(self._lastdeltas)
+                    last_events_new = np.average(np.diff(sorted(last_events)))
 
+                if abs(last_events_new) < 0.02: #deltatime tolerance between the notes of a chord ### send to .ini
+                        chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
+                                                                                               last_events, 
+                                                                                               0.02, True)) 
+                    
+                        self._lastdeltas = []
+                        self._lastnotes = []                      
                 
-                if last_events_new < 0.03: #deltatime tolerance between the notes of a chord
-                    chordparse = self._pool.apply_async(self.parser.parseChordTuple, args=(self._lastnotes, 4, 
-                                                                                self._lastdeltas, 
-                                                                                0.03, True)) 
-                
-                #if last_events[-1] - last_events[0] < 0.03:                    
-                    ##spawn thread for detecting chords:
-                    #chordparse = self._pool.apply_async(self.parser.parseChord, args=(note, 4, 
-                                                                                #self._noteon_delta[note], 
-                                                                                #0.03, True))
-                    chordfound, chord = chordparse.get()
+                        chordfound, chord = chordparse.get()
 
-                    if chordfound:
-                        for f in self.ckFunc():
-                            with Pool(len(self.ckFunc())) as pool:
-                                result = pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
-                                #print('process result for ' + f['ref'], result.get())
-                                if result.get():
-                                    
-                                    try:
-                                        function_to_call = getattr(self, f['body']['func'])
-                                        func_exists = True
-                                    except AttributeError:
-                                        #raise NotImplementedError("Class `{}` does not implement `{}`".
-                                                                  #format(self.__class__.__name__, 
-                                                                         #function_to_call))
-                                        func_exists = False
-                                        print('function not implemented for now... ')
-                                    
-                                    if func_exists:
-                                        if function_to_call.__name__ not in ['successor', 'predecessor']:
-                                            function_to_call(False, sendToDisplay)
-                                    
-                                            if f['body']['arg1'].__name__ == 'succ1':
-                                                self.append_successor(f['body']['arg1'])
-                                                self.zeroPlusRec(False, True) ## check 2nd argument    
-                                                self._successorHead = []
+                        if chordfound:
+                            for f in self.ckFunc():
+                                with concurrent.futures.ThreadPoolExecutor() as executor:
+                                    future = executor.submit(self.parser.compareChords, f['name'], chord)
+                                    result = future.result()                              
+                                #result = self._pool.apply_async(self.parser.compareChordRecursive, (f['name'], chord))                              
+                                #print('process result for ' + f['ref'], result)
+                                self._pool.apply_async(self.parallelFunctionExec, (result, f))
                                     
                         ########################
                 ########### lambda calculus  ###########

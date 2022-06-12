@@ -30,9 +30,7 @@ class Ckalculator(object):
     def __init__(self, noteonid, noteoffid, pedal_id, config='default_setup.ini', debug=False, print_functions=False, ar_hook=False):
         """The method to initialise the class and prepare the class variables.
         """
-        hook, ar_connect = ar_hook
-        if hook:
-            self.ar = CkAR(config, ar_connect)
+        self.ar = CkAR(config, ar_hook)
                     
         self.mapscheme = Mapping_Ckalculator(True, False)
         self.note_on = noteonid
