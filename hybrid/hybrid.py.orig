@@ -35,8 +35,6 @@ try:
 except KeyError:
     raise LookupError('Missing key information in the config file.')
 
-if (myPort == None or noteon_id == None):
-    raise LookupError('Missing key information in the config file.')
 
 # activesense compensation
 ck_deltatime_mem = {'all': [], 'low': [], 'mid': [], 'hi': []}
@@ -127,6 +125,7 @@ def main():
                     for register in ck_deltatime:
                         ck_deltatime[register] += deltatime
     
+<<<<<<< HEAD
                     if message[0] in (noteoff_id, noteon_id, pedal_id):
        
                         #note offs:
@@ -138,6 +137,9 @@ def main():
                                 
                             cKalc.parse_rt_values(msg, 'full', ck_deltatime_per_note=note_duration,
                                                   ck_deltatime=ck_deltatime_internal, articulation=articulation, debug=False)     
+=======
+                    if message[0] != 248:
+>>>>>>> master
     
                         if message[0] == noteon_id:
                             ck_note_dur[message[1]] = ck_deltatime['all']
@@ -257,11 +259,13 @@ def main():
                                                     perpetual = bool(int(conditional_settings[1].strip()))
                                                     if len(conditional_settings) > 2:
                                                         totalNotes = int(conditional_settings[2])
+                                                    else:
+                                                        totalNotes = None
                                                     
                                                 threads['set_param'] = Thread(target=ckonditionals.set_parameters, 
                                                                               name='set timer value', 
                                                                               args=(conditional_params, cond_type, 
-                                                                                    mapping, parameters) )
+                                                                                    mapping, parameters, totalNotes) )
                                                 threads['set_param'].start()
 
                                     if ckonditionals.param_interval > 0:
@@ -335,7 +339,7 @@ def ck_loop(version='hello world'):
                 if msg:
                     message, deltatime = msg
 
-                    if message[0] != 254 and message[0] != 208:
+                    if message[0] != 254 and message[0] != 208 and message[0] != 248:
                         if message[2] > 0: #only noteOn
                             if (message[0] == noteon_id):
                                 

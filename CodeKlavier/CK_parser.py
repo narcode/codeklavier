@@ -135,7 +135,7 @@ class CK_Parser(object):
         return False, None 
 
 
-    def parseChordTuple(self, notes=None, size=4, deltatimes=None, deltatolerance=0.03, debug=False):
+    def parseChordTuple(self, notes=None, size=4, deltatimes=None, deltatolerance=0.02, debug=False):
         """
         Parse notes than are played simultanously and store them in a list
         param int notes: The incoming MIDI notes as a tuple
@@ -144,39 +144,43 @@ class CK_Parser(object):
         param float deltatolerance: the minimum deltatime tolerance to consider the 
         incoming notes a chord (i.e. simultanously played)
         """
+
+        #for note in notes:
+            #if note not in self._chordmemory:
+                #self._chordmemory.append(note)
+        #for deltatime in deltatimes:
+            #if deltatime not in self._deltamemory:
+                #self._deltamemory.append(deltatime)
         
-        for note in notes:
-            if note not in self._chordmemory:
-                self._chordmemory.append(note)
-        for deltatime in deltatimes:
-            if deltatime not in self._deltamemory:
-                self._deltamemory.append(deltatime)
-        
-        if len(self._chordmemory) > size:
-            self._chordmemory = self._chordmemory[1:]
-        if len(self._deltamemory) > size:
-            self._deltamemory = self._deltamemory[1:]
-        
-        if debug:
-            print('b chordmem: ', self._chordmemory, 'b deltamem', self._deltamemory)
+        #if len(self._chordmemory) > size:
+            #self._chordmemory = self._chordmemory[1:]
+        #if len(self._deltamemory) > size:
+            #self._deltamemory = self._deltamemory[1:]
             
-        if len(self._chordmemory) > 1:
-            average = np.average(np.diff(self._deltamemory))
-            if debug:
-                print('average:', average)
-            if average > deltatolerance:
-                self._chordmemory.pop(0)
-                self._deltamemory.pop(0)
-                #self._chordmemory = []
-                #self._deltamemory = []
+        self._chordmemory = notes 
+        self._deltamemory = deltatimes
+        #if debug:
+            #print('b chordmem: ', self._chordmemory, 'b deltamem', self._deltamemory)
+            
+        #if len(self._chordmemory) > 1:
+            #average = np.average(np.diff(sorted(self._deltamemory)))
+            #if debug:
+                #print('average:', average)
+            #if average > deltatolerance:
+                #self._chordmemory.pop(0)
+                #self._deltamemory.pop(0)
+                ##self._chordmemory = []
+                ##self._deltamemory = []
 
         if len(self._chordmemory) == size:
-            average = np.average(np.diff(self._deltamemory))
+            average = np.average(np.diff(sorted(self._deltamemory)))
             
             if average < deltatolerance:
                 chord = self._chordmemory
                 self._chordmemory = []
                 self._deltamemory = []
+                if debug:
+                    print('detected!', chord)
                 return True, chord
             #else:
                 #chord = self._chordmemory
@@ -185,31 +189,23 @@ class CK_Parser(object):
             
         if debug:
             print('chordmem: ', self._chordmemory, 'deltamem', 
-                  self._deltamemory)
+                  self._deltamemory, 'average', average)
 
 
         return False, None 
     
     
-    def compareChordRecursive(self, basechord, chord, compare=None, debug=False):
+    def compareChords(self, basechord, chord, compare=None, debug=False):
         """
         compare 2 arrays representing chords.
         """
         if debug:
             print('base:', basechord, 'chord:', chord)
 
-        if len(chord) == 0 or compare == False:
-            return compare
-        
-        note = chord.pop()
-        if note in basechord:
-            basechord.pop(basechord.index(note))
-            compare = True
+        if np.sum(chord) == np.sum(basechord):
+            return True 
         else:
-            compare = False
-            
-        return self.compareChordRecursive(basechord, chord, compare)
-    
+            return False
 
 
 # handy functions

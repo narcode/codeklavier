@@ -401,13 +401,22 @@ def parseCKfunc(function_string, functionnum):
     body = re.findall(r'[\(\)].*', function_string)[0]
     args = re.findall(r'\w+', body)
     func = args[0]
-    arg1 = args[1]
-    arg1str = args[1]
-    variable = args[2]
+    arg = {}
     
-    if re.match(r'\d', arg1):
-        #arg1 = int(arg1)
-        arg1 = numToLambda(int(arg1))
+    if func in ['storeCollect', 'sendRuleAR']:
+        arg = {}
+        for x in range(len(args)):
+            arg[x] = args[x]    
+    
+    else:
+        if len(args) > 1:
+            arg1 = args[1]
+            arg1str = args[1]
+            variable = args[2]
+        
+            if re.match(r'\d', arg1):
+                #arg1 = int(arg1)
+                arg1 = numToLambda(int(arg1))
     
     # make name integers:
     name = list(map(int, name))
@@ -418,10 +427,16 @@ def parseCKfunc(function_string, functionnum):
     parsed['name'] = name
     parsed['body'] = {}
     parsed['body']['func'] = func
-    parsed['body']['arg1'] = arg1
-    parsed['body']['var'] = variable
     
-    parsed['body']['arg1str'] = arg1str
+    if (len(arg) > 0):
+        arg.pop(0)
+        for x in range(1, len(arg)+1):
+            parsed['body']['arg'+str(x)] = arg[x]
+    else:        
+        if len(args) > 1:
+            parsed['body']['arg1'] = arg1
+            parsed['body']['var'] = variable
+            parsed['body']['arg1str'] = arg1str
    
     return parsed 
     
