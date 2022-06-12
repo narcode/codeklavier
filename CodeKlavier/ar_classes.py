@@ -305,35 +305,38 @@ class CkAR(object):
         """ apply a tranposition offset based on the current view """
         if debug:
             print('notes: ', notes)
-        if self.currentTree()%2 == 0:
-            if type(notes).__name__ == 'list':
-                notes_trans = []
-                for note in notes:
-                    tranposition = note + (self.mapping.even * self.viewToTransposition())
-                    notes_trans.append(tranposition)
-                if debug:
-                    print('mapping list even: ', notes_trans)
-                return notes_trans
-            else:
-                tranposition = notes + (self.mapping.even * self.viewToTransposition())
-                if debug:
-                    print('mapping even: ', tranposition)
-                return tranposition                
-                
-        else:
-            if type(notes).__name__ == 'list':
-                notes_trans = []
-                for note in notes:
-                    tranposition = note + (self.mapping.odd * self.viewToTransposition())
-                    notes_trans.append(tranposition)
+        if self.connected:
+            if self.currentTree()%2 == 0:
+                if type(notes).__name__ == 'list':
+                    notes_trans = []
+                    for note in notes:
+                        tranposition = note + (self.mapping.even * self.viewToTransposition())
+                        notes_trans.append(tranposition)
                     if debug:
-                        print('mapping list odd: ', notes_trans)
-                return notes_trans
+                        print('mapping list even: ', notes_trans)
+                    return notes_trans
+                else:
+                    tranposition = notes + (self.mapping.even * self.viewToTransposition())
+                    if debug:
+                        print('mapping even: ', tranposition)
+                    return tranposition                
+                    
             else:
-                tranposition = notes + (self.mapping.odd * self.viewToTransposition())
-                if debug:
-                    print('mapping odd: ', tranposition)
-                return tranposition 
+                if type(notes).__name__ == 'list':
+                    notes_trans = []
+                    for note in notes:
+                        tranposition = note + (self.mapping.odd * self.viewToTransposition())
+                        notes_trans.append(tranposition)
+                        if debug:
+                            print('mapping list odd: ', notes_trans)
+                    return notes_trans
+                else:
+                    tranposition = notes + (self.mapping.odd * self.viewToTransposition())
+                    if debug:
+                        print('mapping odd: ', tranposition)
+                    return tranposition 
+        else:
+            return notes
      
        
     def viewToTransposition(self):
