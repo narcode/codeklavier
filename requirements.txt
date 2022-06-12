@@ -3,9 +3,9 @@ fn==0.4.3
 numpy>=1.21
 sphinx
 websockets
-pyobjc-core==5.2
-pyobjc-framework-Cocoa==5.2
-pyobjc-framework-Quartz==5.2
-python-osc==1.7.2
+pyobjc-core
+pyobjc-framework-Cocoa
+pyobjc-framework-Quartz
+python-osc
 python-rtmidi
-six==1.12.0
+six
