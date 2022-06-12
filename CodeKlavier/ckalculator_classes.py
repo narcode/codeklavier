@@ -6,8 +6,7 @@ from inspect import signature
 import random
 import configparser
 import numpy as np
-#from multiprocessing import Pool
-from multiprocessing.pool import ThreadPool, Pool
+from multiprocessing.pool import ThreadPool
 import concurrent.futures
 #from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
     #ZeroOrMore,Forward,nums,alphas
