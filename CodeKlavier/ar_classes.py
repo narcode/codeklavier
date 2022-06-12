@@ -32,6 +32,7 @@ class CkAR(object):
         self._delayerRunning = False
         self._erick = False
         self._abraham = False
+        self.connected = connect
         
         if connect:
             self.receiveState()        
@@ -412,10 +413,11 @@ class CkAR(object):
       
     def console(self, string, permanent=False):
         """ send a string to the LS console via websocket"""
-        if not permanent:
-            self.run_in_loop(self.makeJson('console', string))        
-        else:
-            self.run_in_loop(self.makeJson('consoleStatus', string))             
+        if self.connected:
+            if not permanent:
+                self.run_in_loop(self.makeJson('console', string))        
+            else:
+                self.run_in_loop(self.makeJson('consoleStatus', string))             
     
     #TODO: merge these 3 into 1 func:
     def makeJsonTransform(self, tree, position, rotation):
