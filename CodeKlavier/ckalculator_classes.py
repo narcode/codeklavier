@@ -2,16 +2,12 @@
 
 import functools
 import array
-#from inspect import signature
 import random
 import configparser
 import numpy as np
 from multiprocessing import Pool
 from multiprocessing.pool import ThreadPool
 import concurrent.futures
-#from pyparsing import Literal,CaselessLiteral,Word,Combine,Group,Optional,\
-    #ZeroOrMore,Forward,nums,alphas
-#import operator
 from Motifs import motifs_lambda as LambdaMapping
 from Motifs import motifs_ar as AR
 from Mapping import Mapping_Ckalculator
