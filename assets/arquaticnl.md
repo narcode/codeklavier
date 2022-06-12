@@ -18,17 +18,40 @@ De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer
 
 ## Shows
 
+3 September: 12.30, 13.30, 14:30 & 15.30 \
+NME-Centrum InBredius, Woerden 
+
+4 september: 15.00 \
+[Botanische Tuin Pinetum Blijdenstein](https://pinetum.nl/), Hilversum \
+Concert met werken van Einaudi, Gershwin/Wild en eigen muziek
+
+17 september: 19.30, 20.15, 21.00, 21.45, 22.30 \
+ARquatic tijdens [Nacht van Ontdekingen](https://www.nachtvanontdekkingen.nl/portfolio/arquatic/)\
+Wintertuin - Hortus Botanicus, Leiden 
+
+24 september: 12.30, 13.30, 14:30 & 15.30 \
+[Vlinderhof](https://vlinderhof.com/) in Maximapark, Utrecht 
+
+25 september: 15.00 \
+Hortus Alkmaar, Alkmaar \
+Programma met werken van Einaudi, Gershwin/Wild en eigen muziek
+
+9 oktober: 12.30, 13.30, 14:30 & 15.30 \
+ARquatic op de Trostsmarkt \
+Kasteel Groeneveld, Baarn 
+
+16 oktober: 12.30, 13.30, 14:30 & 15.30 \
+ARquatic op de Trostsmarkt \
+Kasteel Rosendael, Rozendaal  
+
+
+---Eedere shows---
+
+
 Vrijdag Januari 28 \
 ARquatic tijdens [on-the-fly: Live Coding Hacklab](https://zkm.de/en/event/2022/01/on-the-fly-live-coding-hacklab) \
 Zentrum voor Kunst en Media, Karlsruhe \
 Tijd: 20.00
-
-Zomer Tour Juli - September 2022 \
-Tuinen en buiten locaties in Nederland \
-Meer info te volgen
-
----Eedere shows---
-
 
 Zondag December 5 \
 Discussie over het CodeKlavier en ARquatic at Home - streamed event. \
