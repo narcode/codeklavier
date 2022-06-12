@@ -18,7 +18,6 @@ from Mapping import Mapping_Ckalculator
 from ar_classes import CkAR
 from CK_lambda import *
 from CK_parser import *
-import numpy
 from inspect import signature
 
 class Ckalculator(object):
