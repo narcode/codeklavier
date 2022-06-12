@@ -643,7 +643,7 @@ class Ckalculator(object):
     
     ###### parallelism 
     
-    def parallelFunctionExec(self, result=None, f=None):       
+    def parallelFunctionExec(self, result=None, f=None, sendToDisplay=True):       
         if result:
             try:
                 function_to_call = getattr(self, f['body']['func'])
