@@ -7,13 +7,15 @@ permalink: /publications
 <br><br>
 ## 'The CodeKlavier: Appropriating the piano as a live coding instrument' 
 **Authors:** Felipe Ignacio Noriega, Anne Veinberg<br>
-**Publication:**  In process: Chapter 17 in book 'Re-thinking The Musical Instrument'edited by Mine Doganton-Dack<br>
+**Publication:**  Chapter 17 in book 'Re-thinking The Musical Instrument'edited by Mine Doganton-Dack<br>
+[link](https://www.cambridgescholars.com/product/978-1-5275-7789-3)
 
 <br><br>
 ## The sound of lambda
 **Authors:** Felipe Ignacio Noriega, Anne Veinberg<br>
 **Publication:** FARM 2019: Proceedings of the 7th ACM SIGPLAN International Workshop on Functional Art, Music, Modeling, and DesignAugust 2019 Pages 56–60<br>
-[link](https://doi.org/10.1145/3331543.3342583D)
+[link](https://dl.acm.org/doi/abs/10.1145/3331543.3342583) \
+[Paper download](https://drive.google.com/file/d/1lEfXXN59y1iKI3wrd--RE0UZrG3-yzk4/view?usp=sharing)
 
 <br><br>
 ## Coding with the piano: The first phase of the CodeKlavier's development
