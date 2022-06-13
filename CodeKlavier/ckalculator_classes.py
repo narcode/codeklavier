@@ -163,7 +163,7 @@ class Ckalculator(object):
                                 self._rules.append(trampolineRecursiveCounter(self._tempNumberStack[-1]))
                         
                         if len(self._tempdynamics) > 0:
-                            velocity = int(numpy.average(self._tempdynamics).round())
+                            velocity = int(np.average(self._tempdynamics).round())
                             self._rule_dynamics.append(velocity)
                             
                         print('rule till now: ', self._rules)
@@ -1733,7 +1733,7 @@ class Ckalculator(object):
 
                 if '.' in self._rules:
                     if len(self._dynamics) > 0:
-                        velocity = int(numpy.average(self._dynamics).round())                                    
+                        velocity = int(np.average(self._dynamics).round())                                    
                         self._rule_dynamics.append(velocity) 
                     
                 self._numberStack = []                                
@@ -1795,7 +1795,7 @@ class Ckalculator(object):
                 self._rules.append(trampolineRecursiveCounter(zero))
 
                 if '.' in self._rules:
-                    #velocity = int(numpy.average(self._dynamics).round())                                    
+                    #velocity = int(np.average(self._dynamics).round())                                    
                     self._rule_dynamics.append(0)                    
                 #self._rule_dynamics.append(0)
                 self._dynamics = []
@@ -1826,7 +1826,7 @@ class Ckalculator(object):
 
                     if '.' in self._rules:
                         if len(self._dynamics) > 0:
-                            velocity = int(numpy.average(self._dynamics).round())                                    
+                            velocity = int(np.average(self._dynamics).round())                                    
                             self._rule_dynamics.append(velocity) 
                         
                     self._numberStack = []                                
@@ -1888,7 +1888,7 @@ class Ckalculator(object):
                     self._rules.append(trampolineRecursiveCounter(zero))
 
                     if '.' in self._rules:
-                        #velocity = int(numpy.average(self._dynamics).round())                                    
+                        #velocity = int(np.average(self._dynamics).round())                                    
                         self._rule_dynamics.append(0)                    
                     #self._rule_dynamics.append(0)
                     self._dynamics = []
