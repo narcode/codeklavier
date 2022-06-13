@@ -28,7 +28,12 @@ class Ckalculator(object):
         """
         self.ar = CkAR(config, ar_hook)
         
-        self.mapscheme = Mapping_Ckalculator(True, False, 57120) # 57140 for ckar
+        if ar_hook:
+            osc_port = 57140
+        else:
+            osc_port = 57120
+
+        self.mapscheme = Mapping_Ckalculator(True, False, osc_port)
         self.note_on = noteonid
         self.note_off = noteoffid
         self.pedal = pedal_id
