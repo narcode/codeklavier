@@ -1966,7 +1966,7 @@ class Ckalculator(object):
                   
 class CK_lambda(object):
     """CK_lambda Class
-    *DEPRECATEDE CLASS* 
+    *DEPRECATADE CLASS* 
     The main class containing basic Lambda calculus expressions
     """    
     
