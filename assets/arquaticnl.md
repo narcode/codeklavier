@@ -23,6 +23,10 @@ De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer
 [Botanische Tuin Pinetum Blijdenstein](https://pinetum.nl/), Hilversum \
 Concert met werken van Einaudi, Gershwin/Wild en eigen muziek
 
+11 september: 13.00, 14.00, 15.00, 16.00 \
+ARquatic tijdens Open Monumentendag \
+Arboretum Oudenbosch
+
 17 september: 19.30, 20.15, 21.00, 21.45, 22.30 \
 ARquatic tijdens [Nacht van Ontdekingen](https://www.nachtvanontdekkingen.nl/portfolio/arquatic/)\
 Wintertuin - Hortus Botanicus, Leiden 
@@ -33,14 +37,6 @@ Wintertuin - Hortus Botanicus, Leiden
 25 september: 15.00 \
 Hortus Alkmaar, Alkmaar \
 Programma met werken van Einaudi, Gershwin/Wild en eigen muziek
-
-9 oktober: 12.30, 13.30, 14:30 & 15.30 \
-ARquatic op de Trostsmarkt \
-Kasteel Groeneveld, Baarn 
-
-16 oktober: 12.30, 13.30, 14:30 & 15.30 \
-ARquatic op de Trostsmarkt \
-Kasteel Rosendael, Rozendaal  
 
 23 oktober: 12.30, 13.30, 14:30 & 15.30 \
 NME-Centrum InBredius, Woerden 
@@ -122,7 +118,7 @@ Met dank aan het Stimuleringsfonds Creative Industrie en onze angel sponsor voor
 
 Met dank aan het Fonds Podium kunsten Balkonscenes Fonds voor het mogelijk maken van de optredens in Juni en Augustus 2021.
 
-Met dank aan het Stimuleringsfonds Creative Industrie, het Prins Bernhard Cultuurfonds en de Gemeente Utrecht voor het mogelijk maken van de optredens in september en oktober 2022.
+Met dank aan het Stimuleringsfonds Creative Industrie, het Prins Bernhard Cultuurfonds en de Gemeente Utrecht voor het mogelijk maken van de optredens in september en oktober 2022. Dit tournee is een samen werking met Stichting Present Sound.
 
 ## Vragen?
 Contact arquatic@codeklavier.space
