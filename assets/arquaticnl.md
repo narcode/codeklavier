@@ -25,7 +25,7 @@ Concert met werken van Einaudi, Gershwin/Wild en eigen muziek
 
 11 september: 13.00, 14.00, 15.00, 16.00 \
 ARquatic tijdens Open Monumentendag \
-Arboretum Oudenbosch
+[Arboretum Oudenbosch](https://www.arboretumoudenbosch.nl/)
 
 17 september: 19.30, 20.15, 21.00, 21.45, 22.30 \
 ARquatic tijdens [Nacht van Ontdekingen](https://www.nachtvanontdekkingen.nl/portfolio/arquatic/)\
@@ -35,11 +35,12 @@ Wintertuin - Hortus Botanicus, Leiden
 [Vlinderhof](https://vlinderhof.com/) in Maximapark, Utrecht 
 
 25 september: 15.00 \
-Hortus Alkmaar, Alkmaar \
-Programma met werken van Einaudi, Gershwin/Wild en eigen muziek
+[Hortus Alkmaar](https://www.hortusalkmaar.nl/events/zondagmiddagconcert-arquatic/), Alkmaar \
+Programma met werken van Einaudi, Gershwin/Wild en eigen muziek \
+Kaartjes [hier](https://eventix.shop/s7r8q6k6)
 
-23 oktober: 12.30, 13.30, 14:30 & 15.30 \
-NME-Centrum InBredius, Woerden 
+2 oktober: 12.00, 13.00, 14.00, 15.00 \
+[Hortus Nijmegen](https://www.hortusnijmegen.nl/agenda/), Nijmegen
 
 
 ---Eedere shows---
