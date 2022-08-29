@@ -18,31 +18,29 @@ De AR-objecten en structuren worden gecreëerd volgens de regels van Lindenmayer
 
 ## Shows
 
-3 September: 12.30, 13.30, 14:30 & 15.30 \
-NME-Centrum InBredius, Woerden 
 
 4 september: 15.00 \
 [Botanische Tuin Pinetum Blijdenstein](https://pinetum.nl/), Hilversum \
 Concert met werken van Einaudi, Gershwin/Wild en eigen muziek
 
+11 september: 13.00, 14.00, 15.00, 16.00 \
+ARquatic tijdens Open Monumentendag \
+[Arboretum Oudenbosch](https://www.arboretumoudenbosch.nl/)
+
 17 september: 19.30, 20.15, 21.00, 21.45, 22.30 \
 ARquatic tijdens [Nacht van Ontdekingen](https://www.nachtvanontdekkingen.nl/portfolio/arquatic/)\
 Wintertuin - Hortus Botanicus, Leiden 
 
-24 september: 12.30, 13.30, 14:30 & 15.30 \
+24 september: 13.00, 14.00, 15.00, 16.00 \
 [Vlinderhof](https://vlinderhof.com/) in Maximapark, Utrecht 
 
 25 september: 15.00 \
-Hortus Alkmaar, Alkmaar \
-Programma met werken van Einaudi, Gershwin/Wild en eigen muziek
+[Hortus Alkmaar](https://www.hortusalkmaar.nl/events/zondagmiddagconcert-arquatic/), Alkmaar \
+Programma met werken van Einaudi, Gershwin/Wild en eigen muziek \
+Kaartjes [hier](https://eventix.shop/s7r8q6k6)
 
-9 oktober: 12.30, 13.30, 14:30 & 15.30 \
-ARquatic op de Trostsmarkt \
-Kasteel Groeneveld, Baarn 
-
-16 oktober: 12.30, 13.30, 14:30 & 15.30 \
-ARquatic op de Trostsmarkt \
-Kasteel Rosendael, Rozendaal  
+2 oktober: 12.00, 13.00, 14.00, 15.00 \
+[Hortus Nijmegen](https://www.hortusnijmegen.nl/agenda/), Nijmegen
 
 
 ---Eedere shows---
@@ -117,9 +115,11 @@ Deze structuren, samen met enkele kenmerken van het pianospel, worden vervolgens
 
 ## Sponsors
 
-Met dank aan het Stimulerings Fonds NL en onze angel sponsor voor het mogelijk maken van de CodeKlavier project.
+Met dank aan het Stimuleringsfonds Creative Industrie en onze angel sponsor voor het mogelijk maken van de CodeKlavier project.
 
 Met dank aan het Fonds Podium kunsten Balkonscenes Fonds voor het mogelijk maken van de optredens in Juni en Augustus 2021.
+
+Met dank aan het Stimuleringsfonds Creative Industrie, het Prins Bernhard Cultuurfonds en de Gemeente Utrecht voor het mogelijk maken van de optredens in september en oktober 2022. Dit tournee is een samen werking met Stichting Present Sound.
 
 ## Vragen?
 Contact arquatic@codeklavier.space
