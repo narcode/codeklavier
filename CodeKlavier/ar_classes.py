@@ -204,6 +204,7 @@ class CkAR(object):
                 self._delayerRunning = False
                 if parallelTrees:
                     for t in self._parallelTrees:
+                        last_shape = self._shapes[str(t)]['shape']
                         self.run_in_loop(self.makeJsonShape(str(t), str(last_shape)))
                 else:
                     self.run_in_loop(self.makeJsonShape(str(tree), str(last_shape)))
