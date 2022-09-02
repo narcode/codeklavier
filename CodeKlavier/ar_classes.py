@@ -163,7 +163,7 @@ class CkAR(object):
             delayer = Thread(target=self.delayToggle, name='delayer', args=(tree,1, parallelTrees))
             delayer.start()       
                 
-    def toggleIndependentShapeNext(self, parallelTrees=False):
+    def toggleIndependentShapeNext(self, parallelTrees=True):
         """
         Traverse the possible rendering modes or "shapes" for the AR objects independently
         
