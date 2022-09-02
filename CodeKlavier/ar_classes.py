@@ -161,8 +161,38 @@ class CkAR(object):
         if not self._delayerRunning:
             self._delayerRunning = True
             delayer = Thread(target=self.delayToggle, name='delayer', args=(tree,1, parallelTrees))
-            delayer.start()        
+            delayer.start()       
                 
+    def toggleIndependentShapeNext(self, parallelTrees=False):
+        """
+        Traverse the possible rendering modes or "shapes" for the AR objects independently
+        
+        :param bool parallelTrees: 
+        """
+        tree = self.currentTree()
+        
+        if not parallelTrees:
+            self.shape = self._shapes[str(tree)]['shape'] - 1
+            
+            self.shape += 1
+            
+            new_shape = self.shapes[self.shape%len(self.shapes)]
+            self._shapes[str(tree)]['shape'] = new_shape
+            self.console('shape: ' + str(new_shape))          
+
+        else:
+            for t in self._parallelTrees:
+                shape = self._shapes[str(t)]['shape'] - 1
+                shape += 1
+                new_shape = self.shapes[shape%len(self.shapes)]
+                self.console('shape: ' + str(new_shape))
+                self._shapes[str(t)]['shape'] = new_shape
+        
+        if not self._delayerRunning:
+            self._delayerRunning = True
+            delayer = Thread(target=self.delayToggle, name='delayer', args=(tree,1, parallelTrees))
+            delayer.start()
+
     def delayToggle(self, tree, delay=1, parallelTrees=False):
         """ delay the sending of the shape to the server"""
         print("thread started")
