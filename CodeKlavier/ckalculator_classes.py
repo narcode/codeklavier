@@ -577,7 +577,7 @@ class Ckalculator(object):
                 elif self.ar.connected and note in AR.get('shape'):
                     if self._deltatime <= articulation['staccato']:
                         if len(self.ar._parallelTrees) > 0:
-                            self.ar.toggleShapeNext(parallelTrees=True)
+                            self.ar.toggleIndependentShapeNext(parallelTrees=True)
                         else:
                             print(self._deltatime)
                             self.ar.toggleShapeNext()
