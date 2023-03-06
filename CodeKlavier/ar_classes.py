@@ -46,11 +46,12 @@ class CkAR(object):
     def receiveState(self):
         try:
             state = self.loop.run_until_complete(self.mapping.receive_new())
-            print(state)
-            self.trees = state['numTrees']
+            if state:
+                print(state)
+                self.trees = state['numTrees']
 
-            for shape in range(0, state['numShapes']):
-                self.shapes.append(shape+1)
+                for shape in range(0, state['numShapes']):
+                    self.shapes.append(shape+1)
                 
         except:
             print('error receiving')

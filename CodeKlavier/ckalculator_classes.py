@@ -182,9 +182,9 @@ class Ckalculator(object):
 
                             if len(self._rule_dynamics) > 0:                            
                                 velocity = ('|').join(map(str, self._rule_dynamics))
-                                
-                            if velocity != '':
-                                rule_dynamics = 'd' + velocity
+                            
+                            if velocity != "":
+                                rule_dynamics = "d" + velocity
                             else:
                                 rule_dynamics = ''
                             
