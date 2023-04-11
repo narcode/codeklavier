@@ -203,7 +203,7 @@ class Motippets(object):
                                 self.mapscheme.miniSnippets(motif, section)
 
                             elif self._miniMotifsLow[motif]['played'] and np_others.sum() > 0:
-                                if mapped_mini != None:
+                                if mapped_mini is not None:
                                     self.mapscheme.miniSnippets(motif, section, m)
 
                         else:
@@ -212,7 +212,7 @@ class Motippets(object):
                                                                                               note, deltatime=self._deltatime,
                                                                                               pianosection='low', debug=False)
                             other_minis_count = []
-                            mapped_mini = None
+                            # mapped_mini = None
                             for m in self._miniMotifsLow:
                                 if m != motif:
                                     other_minis_count.append(self._miniMotifsLow[m]['count'])
@@ -225,7 +225,7 @@ class Motippets(object):
                                 self.mapscheme.miniSnippets(motif, section)
 
                             elif self._miniMotifsLow[motif]['played'] and np_others.sum() > 0:
-                                if mapped_mini != None:
+                                if mapped_mini is not None:
                                     self.mapscheme.miniSnippets(motif, section, m)
 
             ### MID SECTION
@@ -243,7 +243,7 @@ class Motippets(object):
                                 note, section)
 
                             other_minis_count = []
-                            mapped_mini = None
+                            # mapped_mini = None
                             for m in self._miniMotifsMid:
                                 if m != motif:
                                     other_minis_count.append(self._miniMotifsMid[m]['count'])
@@ -256,7 +256,7 @@ class Motippets(object):
                                 self.mapscheme.miniSnippets(motif, section)
 
                             elif self._miniMotifsMid[motif]['played'] and np_others.sum() > 0:
-                                if mapped_mini != None:
+                                if mapped_mini is not None:
                                     self.mapscheme.miniSnippets(motif, section, m)
 
                         else:
@@ -266,7 +266,7 @@ class Motippets(object):
                                                                                               pianosection='mid',
                                                                                               debug=False)
                             other_minis_count = []
-                            mapped_mini = None
+                            # mapped_mini = None
                             for m in self._miniMotifsMid:
                                 if m != motif:
                                     other_minis_count.append(self._miniMotifsMid[m]['count'])
@@ -279,7 +279,7 @@ class Motippets(object):
                                 self.mapscheme.miniSnippets(motif, section)
 
                             elif self._miniMotifsMid[motif]['played'] and np_others.sum() > 0:
-                                if mapped_mini != None:
+                                if mapped_mini is not None:
                                     self.mapscheme.miniSnippets(motif, section, m)
 
             ### HI SECTION
@@ -309,7 +309,7 @@ class Motippets(object):
                                 self.mapscheme.miniSnippets(motif, section)
 
                             elif self._miniMotifsHi[motif]['played'] and np_others.sum() > 0:
-                                if mapped_mini != None:
+                                if mapped_mini is not None:
                                     self.mapscheme.miniSnippets(motif, section, m)
                         else:
                             self._miniMotifsHi[motif]['played'] = self.compare_chordal_motif(None, motif,
@@ -330,7 +330,7 @@ class Motippets(object):
                                 self.mapscheme.miniSnippets(motif, section)
 
                             elif self._miniMotifsHi[motif]['played'] and np_others.sum() > 0:
-                                if mapped_mini != None:
+                                if mapped_mini is not None:
                                     self.mapscheme.miniSnippets(motif, section, m)
 
             ### TREMOLO
@@ -479,7 +479,7 @@ class Motippets(object):
         if len(self._memory) > length:
             self._memory = self._memory[-length:]
 
-        if debug == True:
+        if debug is True:
             print(debugname, ','.join(map(str, self._memory)))
             if conditional == "on":
                 print(debugname + ','.join(map(str, self._conditionalsBuffer)))
@@ -503,7 +503,7 @@ class Motippets(object):
             if len(self._memoryCond[pianosection]) > length:
                 self._memoryCond[pianosection] = self._memoryCond[pianosection][-length:]
                 
-            if debug == True:
+            if debug is True:
                 print(pianosection, ','.join(map(str, self._memoryCond[pianosection])))            
         else:
             self._memoryCondDeltas[pianosection].append(midinote)
@@ -511,7 +511,7 @@ class Motippets(object):
             if len(self._memoryCondDeltas[pianosection]) > length:
                 self._memoryCondDeltas[pianosection] = self._memoryCondDeltas[pianosection][-length:]            
 
-            if debug == True:
+            if debug is True:
                 print(pianosection, ','.join(map(str, self._memoryCondDeltas[pianosection])))
 
 
@@ -546,7 +546,7 @@ class Motippets(object):
         :param boolean debug: flag to print console debug messages
         """
         compare = False
-        if array == None:
+        if array is None:
             if note in motif:
                 self._allMotifs[motif_name].append(note)
             else:
@@ -571,7 +571,7 @@ class Motippets(object):
             played = played[-len(motif):]
             if played == motif:
                 compare = True
-                if array == None:
+                if array is None:
                     if pianosection == 'low':
                         self._miniMotifsLow[motif_name]['count'] += 1
                         for m in self._miniMotifsLow:
@@ -604,7 +604,7 @@ class Motippets(object):
         TODO: describe input/output params
         """
         compare = False
-        if array == None and not isinstance(deltatime, list):
+        if array is None and not isinstance(deltatime, list):
             if note in motif:
                 self._allMotifs[motif_name].append(note)
                 self._deltaHelper[motif_name].append(deltatime)
