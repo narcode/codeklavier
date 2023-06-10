@@ -4,10 +4,10 @@
 
 An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL** and other sponsors.
 
-CodeKlavier development started in April 2017 and currently has five incarnations (newest on top):
-+  *ARquaticLive* (A CodeKlavier Augmented Reality experience! More [here](https://codeklavier.space/arquatic))
+CodeKlavier development started in April 2017 and currently has five modules (newest on top):
++  *ARquatic* (A CodeKlavier Augmented Reality experience! More [here](https://codeklavier.space/arquatic))
 +  *Ckalcuλator* (Lambda-calculus with the piano!)
-+  *Hybrid* (switching between the two prototypes and includes a custom code display via udp sockets)
++  *Hybrid* (switching between the first two prototypes and includes a custom code display via udp sockets)
 +  *Motippets* (coding via pianistic gestures/motifs)
 +  *hello world* (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
 
