@@ -7,6 +7,16 @@ permalink: /activities
 ### This page gives a run down of public CodeKlavier presentations and milestones to date:
 (newest on top)
 
+May/June 2023: Recording videos of ARquatic and MercTippets for HashiCorps HashiDays 2023
+
+February 2022: Release book chapter "The CodeKlavier: Appropriating the piano as a live coding instrument" in [Rethinking the Musial Instrument](https://www.cambridgescholars.com/product/978-1-5275-7789-3)
+
+Summer 2021: ARquatic, CodeKlavier's music and augmented reality experience, has its premier and performances in the Netherlands.
+
+January 2021: CodeKlavier meets Mercury, Mercury Live Coding Sessions. Watch the video [here](https://youtu.be/e4sPKOlaYS8)
+
+October 2020: CodeKlavier meets Fokker organ. [Muziekgebouw Amsterdam](https://www.muziekgebouw.nl/nl/agenda/9130/Anne_Veinberg_Felipe_Ignacio_Noriega_Alcaraz/Anne_Veinberg_in_de_hoofdrol)
+
 August 2019: Paper, lecture and performance at [FARM Berlin 2019](https://icfp19.sigplan.org/home/farm-2019). Watch the video [here](https://youtu.be/K1ai2N9bSqI). Third residency with Patrick Borgeat working on the AR extension
 
 June 2019: Second residency with Patrick Borgeat working on the AR extension.
