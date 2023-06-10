@@ -9,6 +9,8 @@ permalink: /activities
 
 May/June 2023: Recording videos of ARquatic and MercTippets for HashiCorps HashiDays 2023
 
+Winter 2022/23: "The Pianist Gardener" version of ARquatic in [ART+](https://artplus.app/)
+
 September/October 2022: ARquatic tour of botanical gardens around the Netherlands
 
 February 2022: Release book chapter "The CodeKlavier: Appropriating the piano as a live coding instrument" in [Rethinking the Musial Instrument](https://www.cambridgescholars.com/product/978-1-5275-7789-3)
