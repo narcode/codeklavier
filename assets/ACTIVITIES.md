@@ -9,6 +9,8 @@ permalink: /activities
 
 May/June 2023: Recording videos of ARquatic and MercTippets for HashiCorps HashiDays 2023
 
+September/October 2022: ARquatic tour of botanical gardens around the Netherlands
+
 February 2022: Release book chapter "The CodeKlavier: Appropriating the piano as a live coding instrument" in [Rethinking the Musial Instrument](https://www.cambridgescholars.com/product/978-1-5275-7789-3)
 
 Summer 2021: ARquatic, CodeKlavier's music and augmented reality experience, has its premier and performances in the Netherlands.
