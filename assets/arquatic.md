@@ -16,16 +16,20 @@ Codeklavier’s ‘ARquatic’ is an audio and Augmented Reality experience wher
 
 ## Upcoming events
 
+Tuesday June 13
+ARquatic will be streamed during HashiCorp's HashiDays Online and on site
+You can register for the online event for free [here](https://hashidays.com/online/)
+
+---Past Events---
+
 Friday Januari 28 \
 ARquatic at the [on-the-fly: Live Coding Hacklab](https://zkm.de/en/event/2022/01/on-the-fly-live-coding-hacklab) \
 Zentrum voor Kunst en Media, Karlsruhe \
 Tijd: 20.00
 
-Summer Tour July - September 2022 \
+Summer Tour September - October 2022 \
 Gardens and Festivals throughout the Netherlands \
-More details to follow 
-
----Past Events---
+More details on [Dutch site](https://codeklavier.space/arquaticnl) 
 
 Thursday November 27 \
 Discourse on XR/AR/VR \
@@ -69,7 +73,7 @@ The ARquatic app is available for download [here for Apple](https://apps.apple.c
 ## About the technology
 The ‘ARquatic’ experience is made possible by three key technological elements and stages; CodeKlavier, Lindemayer and the ARquatic App.
 
-CodeKlavier: a system that enables the pianist to code by playing the piano. In ‘ARquatic Live’, this pianist is coding with lambda calculus to create numbers. These numbers are then translated into symbols used in the Lindenmayer systems engine. 
+CodeKlavier: a system that enables the pianist to code by playing the piano. In ‘ARquatic’, this pianist is using the [CKalcuλator](https://github.com/narcode/codeklavier/tree/master/ckalculator) module to create numbers using lambda calculus. These numbers are then translated into symbols used in the Lindenmayer systems engine. 
 
 The L-systems engine is the second element and transforms the symbols into formal grammars defining the starting point and L-system rules. Together these form the L-system trees creating the structures of the AR visual elements which you see.
 
@@ -85,9 +89,9 @@ Our inspiration for working with L-systems comes primarily from its roots in nat
 [Patrick Borgeat](https://borgeat.de/) - visuals, app developer 
 
 ## Sponsors
-CodeKlavier was made possible by the Creative Industries Fonds NL and our angel sponsor
+CodeKlavier was made possible by the Creative Industries Fonds NL and our angel sponsor.
 
-The performances in June and August are made possible the Fonds Podium Kunsten Balkonscenes grant
+The summer tour of 2023 was made possible by Prins Bernhard Cultuurfonds, Gemeente Utrecht and the Creative Industries Funds NL. The performances in June and August 2021 are made possible the Fonds Podium Kunsten Balkonscenes grant.
 
 ## Questions?
 Email arquatic@codeklavier.space
