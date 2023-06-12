@@ -13,6 +13,8 @@ CodeKlavier development started in April 2017 and currently has five modules (ne
 
 More information about the specific prototypes can be found in their respective directories.
 
+### Latest
+CodeKlavier made two videos for this year's HashiDays event. More about about the videos [here](https://codeklavier.space/hdinfo)
 
 Checkout our [videos page](https://codeklavier.space/videos) to see the Codeklavier in action or visit the [Activities page](https://codeklavier.space/activities) for info on past and future performances.
 
