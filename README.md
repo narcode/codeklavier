@@ -2,12 +2,12 @@
 
 ### Live coding with the piano as interface.
 
-An open source project by Felipe Ignacio Noriega and Anne Veinberg. Supported By **Stimuleringsfonds Creatieve Industrie NL** and other sponsors.
+An open source project by Felipe Ignacio Noriega and Anne Veinberg. 
 
 CodeKlavier development started in April 2017 and currently has five modules (newest on top):
-+  *ARquatic* (A CodeKlavier Augmented Reality experience! More [here](https://codeklavier.space/arquatic))
-+  *Ckalcuλator* (Lambda-calculus with the piano!)
-+  *Hybrid* (switching between the first two prototypes and includes a custom code display via udp sockets)
++  [*ARquatic*](https://codeklavier.space/arquatic) (A CodeKlavier Augmented Reality experience!)
++  [*Ckalcuλator*](https://github.com/narcode/codeklavier/tree/master/ckalculator) (Lambda-calculus with the piano!)
++  [*Hybrid*](https://github.com/narcode/codeklavier/blob/master/hybrid/README.md) (switching between the first two prototypes and includes a custom code display via udp sockets)
 +  [*Motippets*](https://github.com/narcode/codeklavier/tree/master/motippets) (coding via pianistic gestures/motifs)
 +  [*hello world*](https://github.com/narcode/codeklavier/blob/master/hello_world) (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
 
@@ -80,6 +80,6 @@ After installing the libraries, plug in your midi device and run the miditest by
 [Publications page](https://codeklavier.space/publications)
 
 ## Support
-This project is made possible by the Creative Industries Fonds NL, our angel sponsor and the festivals and venues that book us for paid concerts. However, our funding will soon run out so if you believe in the project and would like to support it, please consider "buying us a coffee". Every little bit counts and we greatly appreciate your support!
+This project was made possible by the Creative Industries Fund NL, our angel sponsor and the festivals and venues that book us for paid concerts. However, our initial funding has come to an end so if you believe in the project and would like to support it, please consider "buying us a coffee". Every little bit counts and we greatly appreciate your support!
 
 [![ko-fi](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/J3J7PGIE)
