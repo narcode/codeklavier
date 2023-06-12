@@ -16,11 +16,11 @@ Codeklavier’s ‘ARquatic’ is an audio and Augmented Reality experience wher
 
 ## Upcoming events
 
-Tuesday June 13
-ARquatic will be streamed during HashiCorp's HashiDays Online and on site
+Tuesday June 13 \
+ARquatic will be streamed during HashiCorp's HashiDays Online and on site. \
 You can register for the online event for free [here](https://hashidays.com/online/)
 
----Past Events---
+## Past Shows
 
 Friday Januari 28 \
 ARquatic at the [on-the-fly: Live Coding Hacklab](https://zkm.de/en/event/2022/01/on-the-fly-live-coding-hacklab) \
@@ -46,7 +46,6 @@ With Joana Chicau, Renick Bell, Timo Hoogland and Saskia Freeke \
 More info to follow \
 Time: 14-16h 
 
-## Past Shows
 Friday August 27
 "ARquatic" at [de Kwekerij Hilverum](https://www.dekwekerijhilversum.nl/agenda/) \
 Times: 16.00, 17.00 & 18.00 \
