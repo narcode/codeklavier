@@ -14,10 +14,12 @@ CodeKlavier development started in April 2017 and currently has five modules (ne
 More information about the specific prototypes can be found in their respective directories.
 
 ### Latest
-CodeKlavier made two videos for this year's HashiDays event. More about about the videos [here](https://codeklavier.space/hdinfo)
+CodeKlavier made two videos for this year's [HashiDays event](https://hashidays.com/online/). The first is [ARquatic](https://codeklavier.space/arquatic) and the second uses the [Motippets](https://github.com/narcode/codeklavier/tree/master/motippets) module to code in [Mercury](https://www.timohoogland.com/mercury-livecoding/). With thanks to Simon Kelaita and Patrick Borgeat for the audio and video editing respectively.
 
+### CodeKlavier in action
 Checkout our [videos page](https://codeklavier.space/videos) to see the Codeklavier in action or visit the [Activities page](https://codeklavier.space/activities) for info on past and future performances.
 
+### Goals
 <div class='dream'>
 <div><strong>The dream:</strong></div><div>🐍🎹 An intuitive programming language with the piano as interface.</div></div>
 <div class='dream'>
