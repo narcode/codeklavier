@@ -8,8 +8,8 @@ CodeKlavier development started in April 2017 and currently has five modules (ne
 +  *ARquatic* (A CodeKlavier Augmented Reality experience! More [here](https://codeklavier.space/arquatic))
 +  *Ckalcuλator* (Lambda-calculus with the piano!)
 +  *Hybrid* (switching between the first two prototypes and includes a custom code display via udp sockets)
-+  *Motippets* (coding via pianistic gestures/motifs)
-+  *hello world* (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
++  [*Motippets*](https://github.com/narcode/codeklavier/tree/master/motippets) (coding via pianistic gestures/motifs)
++  [*hello world*](https://github.com/narcode/codeklavier/blob/master/hello_world) (proof of concept prototype, with 1-1 mapping of piano keys to alphanumeric characters)
 
 More information about the specific prototypes can be found in their respective directories.
 
