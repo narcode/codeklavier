@@ -8,19 +8,24 @@ Voor [Nederlands](https://codeklavier.space/arquaticnl)🇳🇱
 
 ## Concept
 
-Codeklavier’s ‘ARquatic’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater creatures unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance or tune in at home for a streamed experience, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
+Codeklavier’s ‘ARquatic’ is an audio and Augmented Reality experience where the live music provides the DNA of the underwater creatures unfolding before your eyes. Full of speculative, fantasy structures artificially built from [L-system](https://en.wikipedia.org/wiki/L-system) rules, ‘ARquatic’ superimposes unusual aquatic inspired objects in everyday environments. Whether you attend a live performance, tune in at home for a streamed experience or use ARquatic Anytime, the juxtaposition from the surroundings with the AR objects will stimulate one’s imagination by highlighting the contrasting beauty of the natural and the unnatural world.
 
 ## Trailer 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/im6d3-9jmD0" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
-## Upcoming events
+## ARquatic Anytime
+
+After two summer tours, several live streams and conference presentations, we have now released a version of ARquatic that one can listen to and watch anytime, anywhere. Similar to the work we made for [ART+](https://artplus.app/) under "The pianist gardener", in ARquatic Anytime one can experience on demand. Just download the app, grab your headphones and you are good to go.
+
+## Download
+The ARquatic app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. It is useful to do this in advance in case your phone does not support AR but your tablet does - in which case, we advise you to bring your tablet! If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
+
+## Past Shows
 
 Tuesday June 13 \
 ARquatic will be streamed during HashiCorp's HashiDays Online and on site. \
 You can register for the online event for free [here](https://hashidays.com/online/)
-
-## Past Shows
 
 Friday Januari 28 \
 ARquatic at the [on-the-fly: Live Coding Hacklab](https://zkm.de/en/event/2022/01/on-the-fly-live-coding-hacklab) \
@@ -64,9 +69,6 @@ Sunday June 13th \
 ["More than just Music" Festival at Toets des Tijds, Amsterdam](toetsdestijds.com) and in combination with other performances. \
 Times: 17.00 & 20.00 \
 Tickets available [here](https://toetsdestijds.com/2021/04/22/whats-on-my-desk/)
-
-## Download
-The ARquatic app is available for download [here for Apple](https://apps.apple.com/nl/app/arquatic/id1557620712?l=en) and [here for Android](https://play.google.com/store/apps/details?id=space.codeklavier.arquatic&hl=en_US&gl=US). You will need an Apple iPhone SE/6S model (or later) or one of the Android phones listed [here](https://developers.google.com/ar/devices). You can also simply follow the link for the app download and try out the demo channel. It is useful to do this in advance in case your phone does not support AR but your tablet does - in which case, we advise you to bring your tablet! If you do not own an AR supported device, a non-AR version will still show visuals on your Android phone.
 
 
 ## About the technology
